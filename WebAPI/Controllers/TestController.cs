@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = JsonConvert.SerializeObject(model), status = HttpStatusCode.OK });
         }
         [HttpGet]
-        [Route("getsingledata")]
+        [Route("getsingledataorderby")]
         public IActionResult GetSingleDataOrderBy(string orderBy)
         {
             TestModel? model = new TestModel();
