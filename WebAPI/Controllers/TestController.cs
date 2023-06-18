@@ -41,5 +41,13 @@ namespace WebAPI.Controllers
             model = testService.GetAllData().FirstOrDefault(x => x.Id == id);
             return new JsonResult(new { data = JsonConvert.SerializeObject(model), status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("getsingledata")]
+        public IActionResult GetSingleDataOrderBy(string orderBy)
+        {
+            TestModel? model = new TestModel();
+            model = testService.GetAllData().OrderBy(x => x.Id).FirstOrDefault();
+            return new JsonResult(new { data = JsonConvert.SerializeObject(model), status = HttpStatusCode.OK });
+        }
     }
 }
