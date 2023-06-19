@@ -24,5 +24,14 @@ namespace WebAPI.Controllers
             model = _userService.GetAllUsers();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("getallroles")]
+        public IActionResult GetAllRoles()
+        {
+            List<UserRole> model = new List<UserRole>();
+            model = _userService.GetAllUserRole();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }

@@ -10,5 +10,6 @@ namespace Service.Interface
     public interface IUserService
     {
         List<UserListModel> GetAllUsers();
+        List<UserRole> GetAllUserRole();
     }
 }

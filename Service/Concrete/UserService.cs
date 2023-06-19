@@ -22,8 +22,32 @@ namespace Service.Concrete
                 MobileNumber = 1234567890,
                 CivilId = 4567,
                 Status = "Block"
-            }); ;
+            });
+            return model;
+        }
+            public List<UserRole> GetAllUserRole()
+        {
+            List<UserRole> model = new List<UserRole>();
 
+            model.Add(new UserRole()
+            {
+                Role = "Addministrator",
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\t\r\n"
+
+            });
+
+            model.Add(new UserRole()
+            {
+                Role = "Customer Role\t",
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\t\r\n"
+
+            });
+            model.Add(new UserRole()
+            {
+                Role = "Guest / Visitor\t",
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\t\r\n"
+
+            });
             return model;
         }
     }

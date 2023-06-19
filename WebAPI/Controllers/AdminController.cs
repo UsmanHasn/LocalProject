@@ -32,5 +32,35 @@ namespace WebAPI.Controllers
             model = _AdminService.GetAllCases();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("getallcalendar")]
+        public IActionResult GetAllCalendar()
+        {
+            List<Calendar> model = new List<Calendar>();
+            model = _AdminService.GetAllCalendar();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+
+        [HttpGet]
+        [Route("getallannouncement")]
+        public IActionResult GetAllAccouncement()
+        {
+            List<Announcement> model = new List<Announcement>();
+            model = _AdminService.GetAllAnnouncements();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+
+        [HttpGet]
+        [Route("getalluseractivitylog")]
+        public IActionResult GetAllUseractivitylog()
+        {
+            List<UserActivityLog> model = new List<UserActivityLog>();
+            model = _AdminService.GetActivityLogs();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }
