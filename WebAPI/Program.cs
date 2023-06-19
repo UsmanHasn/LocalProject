@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Service.Concrete;
 using Service.Interface;
@@ -42,6 +43,7 @@ builder.Services.AddSingleton<IAdminService>(new AdminService());
 builder.Services.AddSingleton<IPermissionService>(new PermissionService());
 builder.Services.AddSingleton<IRoleService>(new RoleService());
 builder.Services.AddSingleton<IUserProfileService>(new UserProfileService());
+builder.Services.AddSingleton<IUserService>(new UserService());
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
