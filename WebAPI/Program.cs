@@ -39,6 +39,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<ITestService>(new TestService());
 builder.Services.AddSingleton<IMenuService>(new MenuService());
 builder.Services.AddSingleton<IAdminService>(new AdminService());
+builder.Services.AddSingleton<IPermissionService>(new PermissionService());
+builder.Services.AddSingleton<IRoleService>(new RoleService());
+builder.Services.AddSingleton<IUserProfileService>(new UserProfileService());
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
