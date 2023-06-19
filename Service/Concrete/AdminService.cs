@@ -24,5 +24,18 @@ namespace Service.Concrete
             });
             return model;
         }
+        public List<CaseListModel> GetAllCases()
+        {
+            List<CaseListModel> model = new List<CaseListModel>();
+            model.Add(new CaseListModel()
+            {
+                Case_No = "Case I",
+                Case_Type = "Civil",
+                Description = "file description here",
+                Lawyers = "Lawyer1"
+            });
+
+            return model;
+        }
     }
 }

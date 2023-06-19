@@ -9,11 +9,11 @@ namespace WebAPI.Controllers
     [Route("api/admin/")]
     public class AdminController : Controller
     {
-        private readonly IAdminService? courtList;
+        private readonly IAdminService? _AdminService;
         
-        public AdminController(IAdminService _courtList)
+        public AdminController(IAdminService adminService)
         {
-            courtList = _courtList;
+            _AdminService = adminService;
         }
 
         [HttpGet]
@@ -21,9 +21,16 @@ namespace WebAPI.Controllers
         public IActionResult  GetAllCourt()
         {
             List<CourtList> model = new List<CourtList>();
-            model = courtList.GetAllCourts();
+            model = _AdminService.GetAllCourts();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
-       
+        [HttpGet]
+        [Route("getallcases")]
+        public IActionResult GetAllCases()
+        {
+            List<CaseListModel> model = new List<CaseListModel>();
+            model = _AdminService.GetAllCases();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }

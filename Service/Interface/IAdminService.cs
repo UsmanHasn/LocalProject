@@ -10,5 +10,6 @@ namespace Service.Interface
     public interface IAdminService
     {
         List<CourtList> GetAllCourts();
+        List<CaseListModel> GetAllCases();
     }
 }
