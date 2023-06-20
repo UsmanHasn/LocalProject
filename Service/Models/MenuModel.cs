@@ -11,9 +11,10 @@ namespace Service.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string URL { get; set; }
+        public string UrlPath { get; set; }
         public string Description { get; set; }
-        public int? ParentId {get; set;}
+        public List<MenuModel>? Childrens { get;set; }
         public string Type { get; set; }
+        public int Sequence { get; set; }
     }
 }

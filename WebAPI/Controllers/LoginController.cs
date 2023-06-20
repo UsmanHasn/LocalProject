@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models;
 using WebAPI.Helper;
+using Newtonsoft.Json;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -22,15 +25,16 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
             var user = Authenticate(userLogin);
             if (user != null)
             {
                 var token = GenerateToken(user);
-                return Ok(token);
+                return new JsonResult(new { token = token, success = true, status = HttpStatusCode.OK });
             }
-            return NotFound("user not found");
+            return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
         }
 
         // To generate token
