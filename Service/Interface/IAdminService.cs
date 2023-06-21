@@ -11,10 +11,14 @@ namespace Service.Interface
     {
         List<CourtList> GetAllCourts();
         List<CaseListModel> GetAllCases();
+
+
         List<Calendar> GetAllCalendar();
+
+
         List<Announcement> GetAllAnnouncements();
+
         List<UserActivityLog> GetActivityLogs();
-        List<LawyersModels> GetAllLawyers();
 
        
     }
