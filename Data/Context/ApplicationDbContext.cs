@@ -35,7 +35,18 @@ namespace Data.Context
             modelBuilder.Entity<IdentityModel.CustomRole>().Property(p => p.Id).HasColumnName("RoleId");
             modelBuilder.Entity<UserProfile>().Property(p => p.Id).HasColumnName("UserId");
             modelBuilder.Entity<UserProfile>().HasRequired(e => e.User).WithRequiredDependent(r => r.User);
+
         }
+        //Define all entitys as DBSet
+        //User and UserProfile
+        public DbSet<PasswordHistory> PasswordHistory { get; set; }
+        public DbSet<UserProfile> UserProfile { get; set; }
+        public DbSet<UserTimeInInfoLog> UserTimeInInfoLog { get; set; }
+        //Creates a ApplicationDBContext
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
+
     }
-  
 }

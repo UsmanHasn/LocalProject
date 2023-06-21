@@ -1,9 +1,13 @@
+using Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Service.Concrete;
 using Service.Interface;
+using System.Configuration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +28,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddMvcCore()
     .AddApiExplorer();
+//IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json, true, true").Build();
+//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+//builder.Services.AddDbContext<ApplicationDbContext>(
+//    options =>
+//        options.UseSqlServer(
+//            configuration.GetConnectionString("DefaultConnection"),
+//            x => x.MigrationsAssembly("Data.Migrations")));
 //Allow CORS
 builder.Services.AddCors(options =>
 {
