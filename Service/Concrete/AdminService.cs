@@ -19,7 +19,7 @@ namespace Service.Concrete
                 Name = "Waqas Yaqoob",
                 Email = "abc@xyz.com",
                 Role = "Administrator",
-                Date = "06/13-2023",
+                Date = "06-13-2023",
                 IPAddress = "192.168.2.6",
                 Location = "10.15456856, 36542145235",
                 Device = "Iphone8"
@@ -176,6 +176,22 @@ namespace Service.Concrete
                 Description = "file description here",
                 CaseType = "Material"
             });
+            return model;
+        }
+
+        public List<Notification> GetAllNotifications()
+        {
+            List<Notification> model = new List<Notification>();
+            model.Add(new Notification() { CaseID = "172488", Type = "Marriage", Date = "20-10-2019", Description= "Your application has been registered No.: 2054/9101/2018, the Department of Execution of Legal Claims Registration at the First Instance Court in Seeb", LastViewedOn="21-11-2019"});
+            model.Add(new Notification() { CaseID = "291915", Type = "Power of attorney", Date = "21-10-2019", Description = "The decision was taken to postpone the response to a session in file No. 308/1309/2019 for a session on 05/11/2019, the Sessions Affairs Department of the Court, the Court of First Instance in Sohar", LastViewedOn = "12-11-2019" });
+            model.Add(new Notification() { CaseID = "352528", Type = "Commandment", Date = "13-11-2019", Description = "The decision was taken to postpone the publication of a session in file No. 406/1301/2019 for a session on 11/12/2019, the Sessions Affairs Department of the Court of First Instance Court in Sohar", LastViewedOn = "14-12-2019" });
+            model.Add(new Notification() { CaseID = "172495", Type = "Other civil claims", Date = "21-10-2019", Description = "Your application has been registered No.: 1253/9103/2019, the Department of Commercial Execution, Registration of Claims in the Court of First Instance in Muscat", LastViewedOn = "22-12-2019" });
+            model.Add(new Notification() { CaseID = "173917", Type = "Property", Date = "11-12-2019", Description = "Your request has been accepted in File No. 43/1208/2019. Please refer to the Court of First Instance in Buraimi", LastViewedOn = "02-02-2020" });
+            model.Add(new Notification() { CaseID = "234280", Type = "Other civil claims", Date = "29-12-2019", Description = "The decision was taken to postpone the announcement of a session in File No. 621/7102/2019 for a session on 11/10/2019, the Sessions Affairs Department of the Court, Sohar Court of Appeal", LastViewedOn = "02-04-2020" });
+            model.Add(new Notification() { CaseID = "441295", Type = "Building Contracting", Date = "09-03-2021", Description = "Your application No.: 196/1506/2019 has been registered, the department is individual for rents, and the session has been scheduled for 04/11/2019 to register lawsuits in the Court of First Instance in Sohar", LastViewedOn = "10-04-2021" });
+            model.Add(new Notification() { CaseID = "336797", Type = "Other commercial lawsuits", Date = "22-05-2022", Description = "Your application has been accepted in File No. 114/1401/2019. Please refer to the Court of First Instance in Buraimi", LastViewedOn = "24-05-2022" });
+            model.Add(new Notification() { CaseID = "172500", Type = "Property", Date = "19-07-2022", Description = "Your application has been registered No.: 432/9102/2019, the Department of Civil Execution, Registration of Claims at the First Instance Court in Suwaiq", LastViewedOn = "22-08-2022" });
+            model.Add(new Notification() { CaseID = "172242", Type = "Divorce", Date = "21-08-2022", Description = "The executor has been announced against him, File No.: 1030/9101/2019, the Department of Sharia Implementation, Registration of Claims in the Court of First Instance in Al-Buraimi, The procedure is in progress", LastViewedOn = "20-09-2022" });
             return model;
         }
     }

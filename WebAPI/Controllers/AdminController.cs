@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
         
         public AdminController(IAdminService adminService)
         {
-            _AdminService = adminService;
+            _AdminService = adminService;  
         }
 
         [HttpGet]
@@ -49,6 +49,17 @@ namespace WebAPI.Controllers
         {
             List<Announcement> model = new List<Announcement>();
             model = _AdminService.GetAllAnnouncements();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+
+
+        [HttpGet]
+        [Route("getallnotification")]
+        public IActionResult GetAllNotification()
+        {
+            List<Notification> model = new List<Notification>();
+            model = _AdminService.GetAllNotifications();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 

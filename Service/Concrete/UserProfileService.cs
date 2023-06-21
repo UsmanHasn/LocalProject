@@ -1,5 +1,6 @@
 ﻿using Data.Interface;
 using Domain.Helper;
+using Service.Helper;
 using Service.Interface;
 using Service.Models;
 using System;
@@ -13,6 +14,8 @@ namespace Service.Concrete
 {
     public class UserProfileService : IUserProfileService
     {
+        private readonly List<UserProfileModel> _UserProfileModel = new List<UserProfileModel>();
+
         public Task<bool> Add(UserProfileModel UserProfileViewModel)
         {
             throw new NotImplementedException();
@@ -42,7 +45,7 @@ namespace Service.Concrete
             return model;
         }
 
-        public Task<UserProfileModel> GetUserProfileById(int Id)
+        public UserProfileModel GetUserProfileById(int Id)
         {
             throw new NotImplementedException();
         }

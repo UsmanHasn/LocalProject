@@ -16,6 +16,8 @@ namespace Service.Interface
         List<UserActivityLog> GetActivityLogs();
         List<LawyersModels> GetAllLawyers();
 
-       
+        List<Notification> GetAllNotifications();
+
+
     }
 }

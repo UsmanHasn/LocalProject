@@ -11,7 +11,7 @@ namespace Service.Interface
     {
         List<UserProfileModel> GetAllUserFile();
         Task<bool> Add(UserProfileModel UserProfileViewModel);
-        Task<UserProfileModel> GetUserProfileById(int Id);
+        UserProfileModel GetUserProfileById(int Id);
         Task<bool> UpdateUserProfile(int Id, UserProfileModel UserProfileViewModel);
         Task<bool> DeleteUserProfile(int Id);
     }
