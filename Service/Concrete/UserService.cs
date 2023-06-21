@@ -10,18 +10,79 @@ namespace Service.Concrete
 {
     public class UserService : IUserService
     {
-        public List<UserListModel> GetAllUsers()
+       public List<UserListModel> GetAllUsers()
         {
             List<UserListModel> model = new List<UserListModel>();
             model.Add(new UserListModel()
             {
                 ID = 0001,
-                Name = "Cameron Williams",
-                Email = "CW@123gmail.com",
-                Role = "User",
+                Name = "Irfan",
+                Email = "Addministrator@gmail.com",
+                Role = "Addministrator",
+                MobileNumber =1234567890,
+                CivilId = 6789,
+                Status = "unblock"
+            });
+            model.Add(new UserListModel()
+            {
+                ID = 0002,
+                Name = "Muneeb",
+                Email = "admin@admincourt.com",
+                Role = "Admin",
                 MobileNumber = 1234567890,
                 CivilId = 4567,
-                Status = "Block"
+                Status = "unblock"
+            });
+            
+            model.Add(new UserListModel()
+            {
+                ID = 0003,
+                Name = "Owais",
+                Email = "company@admincourt.com",
+                Role = "Company Manager",
+                MobileNumber = 1234567890,
+                CivilId = 4578,
+                Status = "unblock"
+            });
+            model.Add(new UserListModel()
+            {
+                ID = 0004,
+                Name = "Ammar",
+                Email = "lawyer@admincourt.com",
+                Role = "Lawyer",
+                MobileNumber = 1234567890,
+                CivilId = 4566,
+                Status = "unblock"
+            });
+            model.Add(new UserListModel()
+            {
+                ID = 0005,
+                Name = "Yassen",
+                Email = "systemadmin@admincourt.com",
+                Role = "System Admin",
+                MobileNumber = 1234567890,
+                CivilId = 8766,
+                Status = "unblock"
+            });
+            model.Add(new UserListModel()
+            {
+                ID = 0005,
+                Name = "Amir",
+                Email = "legaloffice@admincourt.com",
+                Role = "Legal Office",
+                MobileNumber = 1234567890,
+                CivilId = 0766,
+                Status = "unblock"
+            });
+            model.Add(new UserListModel()
+            {
+                ID = 0006,
+                Name = "Yassen",
+                Email = "legaladmin@admincourt.com",
+                Role = "legal Admin",
+                MobileNumber = 1234567890,
+                CivilId = 1766,
+                Status = "unblock"
             });
             return model;
         }
