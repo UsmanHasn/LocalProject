@@ -62,5 +62,14 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+        [HttpGet]
+        [Route("getalllawyers")]
+        public IActionResult GetAllLawyers()
+        {
+            List<LawyersModels> model = new List<LawyersModels>();
+            model = _AdminService.GetAllLawyers();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }
