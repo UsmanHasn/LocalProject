@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
             if (user != null)
             {
                 var token = GenerateToken(user);
-                return new JsonResult(new { token = token, success = true, status = HttpStatusCode.OK });
+                return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
         }
