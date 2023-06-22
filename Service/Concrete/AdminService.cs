@@ -144,8 +144,24 @@ namespace Service.Concrete
             model.Add(new CourtList()
             {
                 CaseID = "0001",
-                CourtName = "Abc",
-                Description = "Abc",
+                CourtName = "Administrative Court",
+                Description = "Description file here",
+                TotalNoCases = "10"
+
+            });
+            model.Add(new CourtList()
+            {
+                CaseID = "0001",
+                CourtName = "Supreme Court",
+                Description = "Description file here",
+                TotalNoCases = "10"
+
+            });
+            model.Add(new CourtList()
+            {
+                CaseID = "0001",
+                CourtName = "Commercial Court",
+                Description = "Description file here",
                 TotalNoCases = "10"
 
             });
@@ -159,9 +175,15 @@ namespace Service.Concrete
                 Case_No = "Case I",
                 Case_Type = "Civil",
                 Description = "file description here",
-                Lawyers = "Lawyer1"
+                Lawyers ="Fahad"
             });
-
+            model.Add(new CaseListModel()
+            {
+                Case_No = "Case I",
+                Case_Type = "Material",
+                Description = "file description here",
+                Lawyers = "Kamran"
+            });
             return model;
         }
 
