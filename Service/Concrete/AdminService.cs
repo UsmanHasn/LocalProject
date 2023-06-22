@@ -34,28 +34,31 @@ namespace Service.Concrete
             model.Add(new Announcement()
             {
                 ID = "0001",
-                Type = "marriage",
+                Type = "Marriage",
                 Date = "15/9/2022",
                 Description = "The decision was taken to postpone announcing a hearing in file No. 191/1208/2019 for a session on 05/11/2019, the Sessions Affairs " +
-                "Department of the Court, the Court of First Instance in Al-Khaboura"
+                "Department of the Court, the Court of First Instance in Al-Khaboura",
+                LastViewedOn = "11/10/2022"
             });
 
             model.Add(new Announcement()
             {
                 ID = "0002",
-                Type = "revision",
+                Type = "Revision",
                 Date = "03/05/2022",
                 Description = "Your application has been registered No.: 40/9103/2019, the Department of Commercial" +
-                " Execution, Registration of Claims in the Court of First Instance in Haima"
+                " Execution, Registration of Claims in the Court of First Instance in Haima",
+                LastViewedOn = "08/6/2022"
             });
 
             model.Add(new Announcement()
             {
                 ID = "0003",
-                Type = "compensation",
+                Type = "Compensation",
                 Date = "06/8/2022",
                 Description = "The decision was made, a decision to write off the case in File No. 529/1109/2019 for a session dated by the " +
-                "Sessions Affairs Department of the Court of First Instance in Seeb."
+                "Sessions Affairs Department of the Court of First Instance in Seeb.",
+                LastViewedOn = "09/9/2022"
             });
 
             model.Add(new Announcement()
@@ -64,7 +67,8 @@ namespace Service.Concrete
                 Type = "Ignorant request",
                 Date = "27/6/2022",
                 Description = "Your application No.: 2174/9102/2018 has been registered " +
-                "with the Department of Civil Execution, Registration of Claims in the Court of First Instance in Muscat"
+                "with the Department of Civil Execution, Registration of Claims in the Court of First Instance in Muscat",
+                LastViewedOn = "11/10/2022"
             });
             model.Add(new Announcement()
             {
@@ -72,7 +76,8 @@ namespace Service.Concrete
                 Type = "Shutdown chapter",
                 Date = "02/4/2023",
                 Description = "The decision was taken to postpone reconciliation or settlement in file No. 201/1106/2019 for a session on 10/22/2019," +
-                " the Sessions Affairs Department of the Court, the First Instance Court in Suwaiq"
+                " the Sessions Affairs Department of the Court, the First Instance Court in Suwaiq",
+                LastViewedOn = "6/5/2023"
             });
 
             return model;
