@@ -37,8 +37,8 @@ namespace Service.Concrete
             model.Add(new MenuModel()
             {
                 Id = 2,
-                Name = "Account Details",
-                Description = "Account Details...",
+                Name = "System Admin",
+                Description = "System Admin...",
                 Sequence = 2,
                 UrlPath = "",
                 Type = "M",
@@ -46,38 +46,8 @@ namespace Service.Concrete
                 {
                     new MenuModel()
                     {
-                        Id = 3,
-                        Name = "Activity Log",
-                        Description = "Activity Log...",
-                        Sequence = 1,
-                        UrlPath = "activitylog",
-                        Type = "D",
-                    },
-                    new MenuModel()
-                    {
-                        Id = 4,
-                        Name = "User Profile",
-                        Description = "User Profile...",
-                        Sequence = 1,
-                        UrlPath = "userprofile",
-                        Type = "D",
-                    }
-                }
-            });
-            model.Add(new MenuModel()
-            {
-                Id = 5,
-                Name = "Administration",
-                Description = "Administration...",
-                Sequence = 3,
-                UrlPath = "",
-                Type = "M",
-                Childrens = new List<MenuModel>()
-                {
-                    new MenuModel()
-                    {
                         Id = 6,
-                        Name = "System Admin",
+                        Name = "User Management",
                         Description = "System Admin...",
                         Sequence = 1,
                         UrlPath = "",
@@ -95,15 +65,6 @@ namespace Service.Concrete
                             },
                             new MenuModel()
                             {
-                                Id = 8,
-                                Name = "Permissions",
-                                Description = "Permissions...",
-                                Sequence = 2,
-                                UrlPath = "permissions",
-                                Type = "D",
-                            },
-                            new MenuModel()
-                            {
                                 Id = 9,
                                 Name = "Users",
                                 Description = "Users...",
@@ -113,17 +74,20 @@ namespace Service.Concrete
                             }
                         }
                     },
+                    
+                }
+            });
+            model.Add(new MenuModel()
+            {
+                Id = 5,
+                Name = "Court Admin",
+                Description = "Court Admin...",
+                Sequence = 3,
+                UrlPath = "",
+                Type = "M",
+                Childrens = new List<MenuModel>()
+                {
                     new MenuModel()
-                    {
-                        Id = 10,
-                        Name = "Court Admin",
-                        Description = "Court Admin...",
-                        Sequence = 2,
-                        UrlPath = "",
-                        Type = "M",
-                        Childrens = new List<MenuModel>()
-                        {
-                            new MenuModel()
                             {
                                 Id = 11,
                                 Name = "Courts",
@@ -149,10 +113,26 @@ namespace Service.Concrete
                                 Sequence = 3,
                                 UrlPath = "cases",
                                 Type = "D",
-                            }
-                        }
-                    },
+                            },
 
+                }
+            });
+            model.Add(new MenuModel()
+            {
+                Id = 14,
+                Name = "Reports",
+                Type = "M",
+                UrlPath= "",
+                Childrens = new List<MenuModel>() {
+                new MenuModel()
+                    {
+                        Id = 3,
+                        Name = "Activity Log",
+                        Description = "Activity Log...",
+                        Sequence = 1,
+                        UrlPath = "activitylog",
+                        Type = "D",
+                    }
                 }
             });
             return model;

@@ -1,4 +1,5 @@
 using Data.Context;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -26,10 +27,18 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Testing"  
       });
 });
+
 builder.Services.AddMvcCore()
     .AddApiExplorer();
+//string dbConnection = "Data Source=SJCDEVDB01;User ID=sa;Password=********;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//            options.UseSqlServer(dbConnection, null));
+
+//builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+//    .AddEntityFrameworkStores<ApplicationDbContext>()
+//    .AddDefaultTokenProviders();
 //IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json, true, true").Build();
-//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddIdentity<ApplicationDbContext>(options => options.UseSqlServer("Data Source=SJCDEVDB01;User ID=sa;Password=********;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));//configuration.GetConnectionString("DefaultConnection")));
 
 //builder.Services.AddDbContext<ApplicationDbContext>(
 //    options =>
