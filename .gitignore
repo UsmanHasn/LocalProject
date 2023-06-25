@@ -375,3 +375,6 @@ FodyWeavers.xsd
 /WebAPI/bin/Debug/net6.0
 /WebAPI/obj
 /.vs/WebAPI
+/WebAPI/WebAPI.csproj.user
+/WebAPI/.config/dotnet-tools.json
+/WebAPI/WebAPI.csproj.user

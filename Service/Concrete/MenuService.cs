@@ -138,6 +138,80 @@ namespace Service.Concrete
             return model;
         }
 
+        public List<MenuModel> GetAllMenuCompany()
+        {
+            List<MenuModel> model = new List<MenuModel>();
+            model.Add(new MenuModel()
+            {
+                Id = 1,
+                Name = "Home",
+                Description = "Home...",
+                Sequence = 1,
+                UrlPath = "dashboards",
+                Type = "M",
+                Childrens = null
+            });
+            model.Add(new MenuModel()
+            {
+                Id = 5,
+                Name = "Court Admin",
+                Description = "Court Admin...",
+                Sequence = 3,
+                UrlPath = "",
+                Type = "M",
+                Childrens = new List<MenuModel>()
+                {
+                    new MenuModel()
+                            {
+                                Id = 11,
+                                Name = "Courts",
+                                Description = "Courts...",
+                                Sequence = 1,
+                                UrlPath = "courts",
+                                Type = "D",
+                            },
+                            new MenuModel()
+                            {
+                                Id = 12,
+                                Name = "Lawyers",
+                                Description = "Lawyers...",
+                                Sequence = 2,
+                                UrlPath = "lawyers",
+                                Type = "D",
+                            },
+                            new MenuModel()
+                            {
+                                Id = 13,
+                                Name = "Cases",
+                                Description = "Cases...",
+                                Sequence = 3,
+                                UrlPath = "cases",
+                                Type = "D",
+                            },
+
+                }
+            });
+            model.Add(new MenuModel()
+            {
+                Id = 14,
+                Name = "Reports",
+                Type = "M",
+                UrlPath = "",
+                Childrens = new List<MenuModel>() {
+                new MenuModel()
+                    {
+                        Id = 3,
+                        Name = "Activity Log",
+                        Description = "Activity Log...",
+                        Sequence = 1,
+                        UrlPath = "activitylog",
+                        Type = "D",
+                    }
+                }
+            });
+            return model;
+        }
+
         public Task<MenuModel> GetMenuById(int Id)
         {
             throw new NotImplementedException();

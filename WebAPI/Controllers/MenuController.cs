@@ -22,5 +22,13 @@ namespace WebAPI.Controllers
             model = menuService.GetAllMenu();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetAllMenuCompany")]
+        public IActionResult GetAllMenuCompany()
+        {
+            List<MenuModel> model = new List<MenuModel>();
+            model = menuService.GetAllMenuCompany();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }
