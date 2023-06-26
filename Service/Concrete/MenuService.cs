@@ -1,4 +1,6 @@
-﻿using Service.Interface;
+﻿using Data.Interface;
+using Domain.Entities;
+using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,11 @@ namespace Service.Concrete
 {
     public class MenuService : IMenuService
     {
+        private readonly IRepository<Menu> _menuRepository;
+        public MenuService(IRepository<Menu> menuRepository)
+        {
+            _menuRepository = menuRepository;
+        }
         public Task<bool> Add(MenuModel menuViewModel)
         {
             throw new NotImplementedException();
@@ -21,9 +28,51 @@ namespace Service.Concrete
             throw new NotImplementedException();
         }
 
-        public List<MenuModel> GetAllMenu()
+        public List<MenuModel> GetAllMenu(int RoleId)
         {
-            List<MenuModel> model = new List<MenuModel>();
+            var dataMenu = _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetMenu", new Microsoft.Data.SqlClient.SqlParameter("Role", RoleId));
+            var model = dataMenu.Where(x => x.Type == "M").Select(x => new MenuModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Sequence = x.Sequence,
+                UrlPath = x.UrlPath,
+                Type = x.Type,
+                Childrens = dataMenu.Where(y => y.ParentId == x.Id)
+                .Select(y => new MenuModel()
+                {
+                    Id = y.Id,
+                    Name = y.Name,
+                    NameAr = y.NameAr,
+                    Sequence = y.Sequence,
+                    UrlPath = y.UrlPath,
+                    Type = y.Type,
+                    Childrens = dataMenu.Where(z => z.ParentId == z.Id)
+                    .Select(z => new MenuModel()
+                    {
+                        Id = z.Id,
+                        Name = z.Name,
+                        NameAr = z.NameAr,
+                        Sequence = z.Sequence,
+                        UrlPath = z.UrlPath,
+                        Type = z.Type,
+                        Childrens = dataMenu.Where(a => a.ParentId == a.Id)
+                    .Select(a => new MenuModel()
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        NameAr = a.NameAr,
+                        Sequence = a.Sequence,
+                        UrlPath = a.UrlPath,
+                        Type = a.Type,
+                    }).ToList()
+                    }).ToList()
+                })
+                .ToList()
+            }).ToList();
+            return model;
+            List<MenuModel> _model = new List<MenuModel>();
             model.Add(new MenuModel()
             {
                 Id = 1,

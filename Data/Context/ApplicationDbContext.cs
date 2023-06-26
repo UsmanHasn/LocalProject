@@ -1,52 +1,45 @@
-﻿using System;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using Domain.Entities;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Threading.Tasks;
-using System.Data.Common;
+﻿using Domain.Entities;
+using Domain.Entities.Lookups;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityModel.CustomRole, int,
-            IdentityModel.CustomUserLogin, IdentityModel.CustomUserRole, IdentityModel.CustomUserClaim>
-    {
-        public ApplicationDbContext()
-            : base("SJCContext")
+    public class ApplicationDbContext : DbContext
+       {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            //Check if these values need to be true or false. I would think true as false means eager loading
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
-            //Configuration.AutoDetectChangesEnabled = false;
+            
         }
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            //Configuring ASP NEt Identity Tables
+            //Tables
+            modelBuilder.Entity<Roles>().Property(p => p.Id).HasColumnName("RoleId");
+            modelBuilder.Entity<Users>().Property(p => p.Id).HasColumnName("UserId");
+            modelBuilder.Entity<Menu>().Property(p => p.Id).HasColumnName("MenuId");
+            modelBuilder.Entity<UserInRole>().Property(p => p.Id).HasColumnName("UserRoleId");
 
-            //User and User Profile
-            modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
-            modelBuilder.Entity<IdentityModel.CustomRole>().ToTable("AspNetRoles");
 
-            modelBuilder.Entity<ApplicationUser>().Property(p => p.Id).HasColumnName("UserId");
-            modelBuilder.Entity<IdentityModel.CustomRole>().Property(p => p.Id).HasColumnName("RoleId");
-            modelBuilder.Entity<UserProfile>().Property(p => p.Id).HasColumnName("UserId");
-            modelBuilder.Entity<UserProfile>().HasRequired(e => e.User).WithRequiredDependent(r => r.User);
+            //Lookup
+            modelBuilder.Entity<NationalityLookup>().Property(p => p.Id).HasColumnName("NationalityId");
+            modelBuilder.Entity<CountryLookup>().Property(p => p.Id).HasColumnName("CountryId");
+            modelBuilder.Entity<LanguageLookup>().Property(p => p.Id).HasColumnName("LanguageId");
 
         }
-        //Define all entitys as DBSet
-        //User and UserProfile
-        public DbSet<PasswordHistory> PasswordHistory { get; set; }
-        public DbSet<UserProfile> UserProfile { get; set; }
-        public DbSet<UserTimeInInfoLog> UserTimeInInfoLog { get; set; }
-        //Creates a ApplicationDBContext
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
 
+        // DbSet properties for your entities
+        public DbSet<Roles> Roles { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<UserInRole> UserInRole { get; set; }
+        public DbSet<UserActivityInfoLog> UserActivityInfoLog { get; set; }
+        public DbSet<Menu> Menu { get; set; }
+        public DbSet<NationalityLookup> NationalityLookup { get; set; }
+        public DbSet<CountryLookup> CountryLookup { get; set; }
+        public DbSet<LanguageLookup> LanguageLookup { get; set; }
     }
 }
+

@@ -1,15 +1,14 @@
 using Data.Context;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Service.Concrete;
 using Service.Interface;
-using System.Configuration;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Data.Interface;
+using Data.Concrete;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,21 +29,16 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddMvcCore()
     .AddApiExplorer();
-//string dbConnection = "Data Source=SJCDEVDB01;User ID=sa;Password=********;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//            options.UseSqlServer(dbConnection, null));
 
-//builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>()
-//    .AddDefaultTokenProviders();
-//IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json, true, true").Build();
-//builder.Services.AddIdentity<ApplicationDbContext>(options => options.UseSqlServer("Data Source=SJCDEVDB01;User ID=sa;Password=********;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));//configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            });
 
-//builder.Services.AddDbContext<ApplicationDbContext>(
-//    options =>
-//        options.UseSqlServer(
-//            configuration.GetConnectionString("DefaultConnection"),
-//            x => x.MigrationsAssembly("Data.Migrations")));
+var connectionString = builder.Configuration.GetConnectionString("sjcep");
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
 //Allow CORS
 builder.Services.AddCors(options =>
 {
@@ -57,13 +51,16 @@ builder.Services.AddCors(options =>
     });
 });
 //Service Activator
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<ILookupService, LookupService>();
+builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddSingleton<ITestService>(new TestService());
-builder.Services.AddSingleton<IMenuService>(new MenuService());
 builder.Services.AddSingleton<IAdminService>(new AdminService());
 builder.Services.AddSingleton<IPermissionService>(new PermissionService());
 builder.Services.AddSingleton<IRoleService>(new RoleService());
 builder.Services.AddSingleton<IUserProfileService>(new UserProfileService());
 builder.Services.AddSingleton<IUserService>(new UserService());
+//builder.Services.AddSingleton<ILookupService>(new LookupService);
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>

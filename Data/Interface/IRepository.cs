@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Domain.Entities;
 using Domain.Helper;
+using Microsoft.Data.SqlClient;
 
 namespace Data.Interface
 {
@@ -47,5 +48,7 @@ namespace Data.Interface
         //Dynamic Search
         IEnumerable<T> Search(SearchQuery<T> searchQuery);
         (IEnumerable<T>, int resultCount, decimal? totalAmount) SearchWithCount(SearchQuery<T> searchQuery);
+        void ExecuteStoredProcedure(string storedProcedureName, params SqlParameter[] parameters);
+        IEnumerable<TResult> ExecuteStoredProcedure<TResult>(string storedProcedureName, params SqlParameter[] parameters);
     }
 }

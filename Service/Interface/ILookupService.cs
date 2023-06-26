@@ -1,0 +1,17 @@
+﻿using Domain.Entities.Lookups;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Permissions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Service.Interface
+{
+    public interface ILookupService
+    {
+        List<LanguageLookup> GetLanguageValues();
+        List<NationalityLookup> GetNationalityLookups();
+        List<CountryLookup> GetCountryLookups();
+    }
+}

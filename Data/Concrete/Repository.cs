@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using Data.Interface;
 using log4net;
@@ -10,6 +6,10 @@ using System.Data.Entity.Validation;
 using Domain.Entities;
 using Domain.Helper;
 using Data.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using System.Data.Common;
 
 namespace Data.Concrete
 {
@@ -488,10 +488,119 @@ namespace Data.Concrete
         /// </summary>
         private void Logger()
         {
-            DbContext.Database.Log = message => Log.Debug(message);
+            //DbContext.Database.Log = message => Log.Debug(message);
 
             //To reset Logging
             // DbContext.Database.Log = null;
         }
+        public void ExecuteStoredProcedure(string storedProcedureName, params SqlParameter[] parameters)
+        {
+            DbContext.Database.ExecuteSqlRaw(storedProcedureName, parameters);
+        }
+        public IEnumerable<TResult> ExecuteStoredProcedure<TResult>(string storedProcedureName, params SqlParameter[] parameters)
+        {
+            using var command = DbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = storedProcedureName;
+            command.Parameters.AddRange(parameters);
+            DbContext.Database.OpenConnection();
+
+            using var reader = command.ExecuteReader();
+            var result = new List<TResult>();
+
+            var schemaTable = reader.GetSchemaTable();
+            var columns = schemaTable.Columns;
+            var properties = typeof(TResult).GetProperties();
+
+            while (reader.Read())
+            {
+                var item = Activator.CreateInstance<TResult>();
+
+                foreach (var property in properties)
+                {
+                    var columnName = property.Name;
+
+                    try
+                    {
+                        var columnIndex = reader.GetOrdinal(columnName);
+
+                        if (!reader.IsDBNull(columnIndex))
+                        {
+                            var value = reader.GetValue(columnIndex);
+                            property.SetValue(item, value);
+                        }
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        // Handle non-existent column
+                        // You can throw an exception or handle it based on your requirements
+                        continue;
+                    }
+                }
+
+                result.Add(item);
+            }
+
+            return result;
+        }
+
+        //public IEnumerable<TResult> ExecuteStoredProcedure<TResult>(string storedProcedureName, params SqlParameter[] parameters)
+        //{
+        //    using var command = DbContext.Database.GetDbConnection().CreateCommand();
+        //    command.CommandType = System.Data.CommandType.StoredProcedure;
+        //    command.CommandText = storedProcedureName;
+        //    command.Parameters.AddRange(parameters);
+        //    DbContext.Database.OpenConnection();
+
+        //    using var reader = command.ExecuteReader();
+        //    var result = new List<TResult>();
+
+        //    if (typeof(TResult).IsClass)
+        //    {
+        //        // Reference type
+        //        while (reader.Read())
+        //        {
+        //            var item = Activator.CreateInstance<TResult>();
+        //            var properties = typeof(TResult).GetProperties();
+
+        //            foreach (var property in properties)
+        //            {
+        //                try
+        //                {
+        //                   int ordinal =  reader.GetOrdinal(property.Name);
+        //                    var value = reader[property.Name];
+        //                    property.SetValue(item, value);
+        //                }
+        //                catch (Exception)
+        //                {
+        //                   //ignore exception when result property doesn't exists in reader
+        //                }
+        //                //if (!columns.Contains(property.Name) || reader.IsDBNull(reader.GetOrdinal(property.Name)))
+        //                //    continue;
+
+                        
+        //            }
+
+        //            result.Add(item);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // Value type
+        //        while (reader.Read())
+        //        {
+        //            if (!reader.IsDBNull(0))
+        //            {
+        //                var value = reader.GetFieldValue<TResult>(0);
+        //                result.Add(value);
+        //            }
+        //        }
+        //    }
+
+        //    return result;
+        //}
+        
+
     }
+
 }

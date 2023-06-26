@@ -6,20 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Models
+namespace Domain.Entities
 {
-    public class MenuModel
+    public class Roles : BaseEntity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+        [MaxLength(50)]
+        [Required]
         public string Name { get; set; }
+        [MaxLength(50)]
+        [Required]
         public string NameAr { get; set; }
-        public string UrlPath { get; set; }
-        [NotMapped]
+        [MaxLength(100)]
+        [Required]
         public string Description { get; set; }
-        public int ParentId { get; set; }
-        [NotMapped]
-        public List<MenuModel>? Childrens { get;set; }
-        public string Type { get; set; }
-        public int Sequence { get; set; }
+        [MaxLength(50)]
+        [Required]
+        public string DescriptionAr { get; set; }
+
     }
 }

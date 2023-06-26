@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         public IActionResult GetAllMenu()
         {
             List<MenuModel> model = new List<MenuModel>();
-            model = menuService.GetAllMenu();
+            model = menuService.GetAllMenu(1);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]

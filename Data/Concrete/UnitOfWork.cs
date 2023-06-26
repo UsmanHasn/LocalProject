@@ -1,14 +1,16 @@
 ﻿using Data.Context;
 using Data.Interface;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Data;
-using System.Data.Entity;
+//using System.Data.Entity;
 
 namespace Data.Concrete
 {
     public class UnitOfWork : IDisposable, IUnitOfWork
     {
-        private DbContextTransaction _transaction;
+        private IDbContextTransaction _transaction;
         private DateTime _transactionDateTime;
         public DateTime TransactionDateTime { get { return _transactionDateTime; } }
         private ApplicationDbContext _objectContext;
@@ -16,7 +18,7 @@ namespace Data.Concrete
         public UnitOfWork(ApplicationDbContext context)
         {
             _objectContext = context;
-            _objectContext.Database.CommandTimeout = 0;
+            _objectContext.Database.SetCommandTimeout(0);
         }
         public bool IsTransaction
         {
@@ -103,10 +105,10 @@ namespace Data.Concrete
         }
         private void OpenConnection()
         {
-            if (_objectContext.Database.Connection.State != ConnectionState.Open)
-            {
-                _objectContext.Database.Connection.Open();
-            }
+            //if (_objectContext.Database.Connection.State != ConnectionState.Open)
+            //{
+            //    _objectContext.Database.Connection.Open();
+            //}
         }
 
         #region IDisposable
