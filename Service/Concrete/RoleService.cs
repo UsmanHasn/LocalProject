@@ -19,11 +19,6 @@ namespace Service.Concrete
 {
     public class RoleService : IRoleService
     {
-
-
-
-
-
         public Task<bool> Add(RoleModel roleViewModel)
         {
             throw new NotImplementedException();

@@ -9,15 +9,12 @@ namespace Domain.Entities
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public Users User { get; set; }
         [Required]
         public int UserId { get; set; }
         [Required]
-        [MaxLength(50)]
-        public string UserName { get; set; }
-        [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string PageName { get; set; }
-
         [MaxLength(200)]
         public string Message { get; set; }
         [Required]

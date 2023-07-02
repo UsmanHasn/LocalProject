@@ -14,6 +14,7 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string UserName { get; set; }
         public string UserNameAr { get; set; }
+        public string Password { get; set; }
         public int? CivilNumber { get; set; }
         public NationalityLookup Nationality { get; set; }
         public int? NationalityId { get; set; }

@@ -22,6 +22,7 @@ namespace Data.Context
             modelBuilder.Entity<Users>().Property(p => p.Id).HasColumnName("UserId");
             modelBuilder.Entity<Menu>().Property(p => p.Id).HasColumnName("MenuId");
             modelBuilder.Entity<UserInRole>().Property(p => p.Id).HasColumnName("UserRoleId");
+            modelBuilder.Entity<UserActivityInfoLog>().Property(p => p.Id).HasColumnName("ActivityId");
 
 
             //Lookup
