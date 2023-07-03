@@ -23,12 +23,17 @@ namespace Data.Context
             modelBuilder.Entity<Menu>().Property(p => p.Id).HasColumnName("MenuId");
             modelBuilder.Entity<UserInRole>().Property(p => p.Id).HasColumnName("UserRoleId");
             modelBuilder.Entity<UserActivityInfoLog>().Property(p => p.Id).HasColumnName("ActivityId");
-
+            modelBuilder.Entity<Services>().Property(p => p.Id).HasColumnName("ServiceId");
+            modelBuilder.Entity<Pages>().Property(p => p.Id).HasColumnName("PageId");
+            modelBuilder.Entity<RolePermissions>().Property(p => p.Id).HasColumnName("RolePermissionId");
+            modelBuilder.Entity<SystemSettings>().Property(p => p.Id).HasColumnName("SystemSettingId");
 
             //Lookup
             modelBuilder.Entity<NationalityLookup>().Property(p => p.Id).HasColumnName("NationalityId");
             modelBuilder.Entity<CountryLookup>().Property(p => p.Id).HasColumnName("CountryId");
             modelBuilder.Entity<LanguageLookup>().Property(p => p.Id).HasColumnName("LanguageId");
+            modelBuilder.Entity<ServiceCategoryLookup>().Property(p => p.Id).HasColumnName("ServiceCategoryId");
+            modelBuilder.Entity<ServiceSubCategoryLookup>().Property(p => p.Id).HasColumnName("ServiceSubCategoryId");
 
         }
 
@@ -38,9 +43,16 @@ namespace Data.Context
         public DbSet<UserInRole> UserInRole { get; set; }
         public DbSet<UserActivityInfoLog> UserActivityInfoLog { get; set; }
         public DbSet<Menu> Menu { get; set; }
+        public DbSet<Services> Services { get; set; }
+        public DbSet<Pages> Pages { get; set; }
+        public DbSet<RolePermissions> RolePermissions { get; set; }
+        public DbSet<SystemSettings> SystemSettings { get; set; }
+        //Lookup
         public DbSet<NationalityLookup> NationalityLookup { get; set; }
         public DbSet<CountryLookup> CountryLookup { get; set; }
         public DbSet<LanguageLookup> LanguageLookup { get; set; }
+        public DbSet<ServiceCategoryLookup> ServiceCategoryLookup { get; set; }
+        public DbSet<ServiceSubCategoryLookup> ServiceSubCategoryLookup { get; set; }
     }
 }
 
