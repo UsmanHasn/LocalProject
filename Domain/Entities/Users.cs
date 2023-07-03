@@ -10,7 +10,7 @@ namespace Domain.Entities
 {
     public class Users : BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string UserName { get; set; }
         public string UserNameAr { get; set; }

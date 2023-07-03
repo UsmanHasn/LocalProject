@@ -10,7 +10,7 @@ namespace Domain.Entities
 {
     public class Roles : BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [MaxLength(50)]
         [Required]

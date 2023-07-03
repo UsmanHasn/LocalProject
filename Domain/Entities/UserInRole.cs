@@ -9,7 +9,7 @@ namespace Domain.Entities
 {
     public class UserInRole : BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public Users User { get; set; }
         public int UserId { get; set; }
