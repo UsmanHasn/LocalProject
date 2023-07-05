@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
@@ -24,6 +25,17 @@ namespace WebAPI.Controllers
             model = _userService.GetAllUsers();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+
+        [HttpGet]
+        [Route("getUserbyId")]
+        public IActionResult GetUserById(int Id)
+        {
+            UserModel model = new UserModel();
+            model = _userService.GetUserById(Id);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
         [HttpGet]
         [Route("getallroles")]
         public IActionResult GetAllRoles()
@@ -33,5 +45,22 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+        [HttpPost]
+        [Route("InsertUser")]
+        public IActionResult Add(UserModel model, string userName)
+        {
+            if (model.Id > 0)
+            {
+                UserModel _userModel = _userService.GetUserById(model.Id);
+                model.CreatedDate = _userModel.CreatedDate;
+                model.CreatedBy = _userModel.CreatedBy;
+                _userService.UpdateUser(model, userName);
+            }
+            else
+            {
+                _userService.Add(model, userName);
+            }
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }

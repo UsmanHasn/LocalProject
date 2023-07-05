@@ -10,9 +10,9 @@ namespace Service.Interface
     public interface IRoleService
     {
         List<RoleModel> GetAllRole();
-        Task<bool> Add(RoleModel roleViewModel);
-        Task<RoleModel> GetRoleById(int Id);
-        Task<bool> UpdateRole(int Id, RoleModel roleViewModel);
+        bool Add(RoleModel roleViewModel,string userName);
+        RoleModel GetRoleById(int Id);
+        bool UpdateRole(RoleModel roleModel, string userName);
         Task<bool> DeleteUser(int Id);
     }
 }

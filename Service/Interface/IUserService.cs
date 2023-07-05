@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Domain.Entities.Lookups;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,10 @@ namespace Service.Interface
     {
         List<UserListModel> GetAllUsers();
         List<UserRole> GetAllUserRole();
+        bool Add(UserModel userModel, string userName);
+        bool UpdateUser(UserModel userModel, string userName);
+        UserModel GetUserById(int Id);
+
+
     }
 }

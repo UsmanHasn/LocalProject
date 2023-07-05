@@ -9,6 +9,7 @@ using Data.Interface;
 using Data.Concrete;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,13 +54,14 @@ builder.Services.AddCors(options =>
 //Service Activator
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ILookupService, LookupService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<ITestService>(new TestService());
 builder.Services.AddSingleton<IAdminService>(new AdminService());
 builder.Services.AddSingleton<IPermissionService>(new PermissionService());
-builder.Services.AddSingleton<IRoleService>(new RoleService());
 builder.Services.AddSingleton<IUserProfileService>(new UserProfileService());
-builder.Services.AddSingleton<IUserService>(new UserService());
+//builder.Services.AddSingleton<IUserService>(new UserService());
 //builder.Services.AddSingleton<ILookupService>(new LookupService);
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

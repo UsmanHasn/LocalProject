@@ -19,9 +19,24 @@ namespace Service.Concrete
 {
     public class RoleService : IRoleService
     {
-        public Task<bool> Add(RoleModel roleViewModel)
+        private readonly IRepository<Roles> _rolesRepository;
+        public RoleService(IRepository<Roles> repository)
         {
-            throw new NotImplementedException();
+            _rolesRepository = repository;
+        }
+        public bool Add(RoleModel roleModel, string userName)
+        {
+            Roles role = new Roles()
+            {
+                Id = roleModel.Id,
+                Name = roleModel.Name,
+                NameAr = roleModel.NameAr,
+                Description = roleModel.Description,
+                DescriptionAr = roleModel.DescriptionAr
+            };
+            _rolesRepository.Create(role, userName);
+            _rolesRepository.Save();
+            return true;
         }
 
         public Task<bool> DeleteUser(int Id)
@@ -29,43 +44,66 @@ namespace Service.Concrete
             throw new NotImplementedException();
         }
 
-        public Task<RoleModel> GetRoleById(int Id)
+        public RoleModel GetRoleById(int Id)
         {
-            throw new NotImplementedException();
+            var dataMenu = _rolesRepository.ExecuteStoredProcedure<RoleModel>("sjc_GetRoleById", new Microsoft.Data.SqlClient.SqlParameter("RoleId", Id));
+            return dataMenu.FirstOrDefault();
         }
 
-        public Task<bool> UpdateRole(int Id, RoleModel roleViewModel)
+        public bool UpdateRole(RoleModel roleModel, string userName)
         {
-            throw new NotImplementedException();
+            Roles role = new Roles()
+            {
+                Id = roleModel.Id,
+                Name = roleModel.Name,
+                NameAr = roleModel.NameAr,
+                Description = roleModel.Description,
+                DescriptionAr = roleModel.DescriptionAr,
+                CreatedBy=roleModel.CreatedBy,
+                CreatedDate=roleModel.CreatedDate
+            };
+            _rolesRepository.Update(role, userName);
+            _rolesRepository.Save();
+            return true;
         }
 
         List<RoleModel> IRoleService.GetAllRole()
         {
-            List<RoleModel> model = new List<RoleModel>();
-            model.Add(new RoleModel()
+            // List<RoleModel> model = new List<RoleModel>();
+            //model.Add(new RoleModel()
+            //{
+            //    Id = 1,
+            //    Name = "Admin",
+            //    Description = "Description of One",
+            //});
+            //model.Add(new RoleModel()
+            //{
+            //    Id = 2,
+            //    Name = "Super Admin",
+            //    Description = "Description of Two",
+            //});
+            //model.Add(new RoleModel()
+            //{
+            //    Id = 3,
+            //    Name = "NUser",
+            //    Description = "Description of Three",
+            //});
+            //model.Add(new RoleModel()
+            //{
+            //    Id = 4,
+            //    Name = "Admin",
+            //    Description = "Description of Foure",
+            //});
+
+            var dataMenu = _rolesRepository.ExecuteStoredProcedure<RoleModel>("sjc_GetRole");
+            var model = dataMenu.Select(x => new RoleModel()
             {
-                Id = 1,
-                Name = "Admin",
-                Description = "Description of One",
-            });
-            model.Add(new RoleModel()
-            {
-                Id = 2,
-                Name = "Super Admin",
-                Description = "Description of Two",
-            });
-            model.Add(new RoleModel()
-            {
-                Id = 3,
-                Name = "NUser",
-                Description = "Description of Three",
-            });
-            model.Add(new RoleModel()
-            {
-                Id = 4,
-                Name = "Admin",
-                Description = "Description of Foure",
-            });
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Description = x.Description,
+                DescriptionAr = x.DescriptionAr
+            }).ToList();
             return model;
         }
     }
