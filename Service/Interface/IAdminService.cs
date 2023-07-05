@@ -15,9 +15,7 @@ namespace Service.Interface
         List<Announcement> GetAllAnnouncements();
         List<UserActivityLog> GetActivityLogs();
         List<LawyersModels> GetAllLawyers();
-
         List<Notification> GetAllNotifications();
-
-
+        List<ServicesModel> GetAllServices(int categoryId, int subCategoryId);
     }
 }

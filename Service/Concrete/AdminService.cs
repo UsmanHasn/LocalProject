@@ -1,4 +1,7 @@
-﻿using Service.Interface;
+﻿using Data.Interface;
+using Domain.Entities;
+using Microsoft.Data.SqlClient;
+using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,11 @@ namespace Service.Concrete
 {
     public class AdminService : IAdminService
     {
+        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        public AdminService(IRepository<SystemSettings> systemSettingRepository)
+        {
+            _systemSettingRepository = systemSettingRepository;
+        }
         public List<UserActivityLog> GetActivityLogs()
         {
             List<UserActivityLog> model = new List<UserActivityLog>();
@@ -27,7 +35,6 @@ namespace Service.Concrete
 
             return model;
         }
-
         public List<Announcement> GetAllAnnouncements()
         {
             List<Announcement> model = new List<Announcement>();
@@ -82,7 +89,6 @@ namespace Service.Concrete
 
             return model;
         }
-
         public List<Calendar> GetAllCalendar()
         {
             List<Calendar> model = new List<Calendar>();
@@ -136,7 +142,6 @@ namespace Service.Concrete
             });
             return model;
         }
-
         public List<CourtList> GetAllCourts()
         {
             List<CourtList> model = new List<CourtList>();
@@ -186,7 +191,6 @@ namespace Service.Concrete
             });
             return model;
         }
-
         public List<LawyersModels> GetAllLawyers()
         {
             List<LawyersModels> model = new List<LawyersModels>();
@@ -205,7 +209,6 @@ namespace Service.Concrete
             });
             return model;
         }
-
         public List<Notification> GetAllNotifications()
         {
             List<Notification> model = new List<Notification>();
@@ -220,6 +223,14 @@ namespace Service.Concrete
             model.Add(new Notification() { CaseID = "172500", Type = "Property", Date = "19-07-2022", Description = "Your application has been registered No.: 432/9102/2019, the Department of Civil Execution, Registration of Claims at the First Instance Court in Suwaiq", LastViewedOn = "22-08-2022" });
             model.Add(new Notification() { CaseID = "172242", Type = "Divorce", Date = "21-08-2022", Description = "The executor has been announced against him, File No.: 1030/9101/2019, the Department of Sharia Implementation, Registration of Claims in the Court of First Instance in Al-Buraimi, The procedure is in progress", LastViewedOn = "20-09-2022" });
             return model;
+        }
+        public List<ServicesModel> GetAllServices(int categoryId, int subCategoryId) 
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("CategoryId", categoryId);
+            spParams[1] = new SqlParameter("SubCategoryId", subCategoryId);
+            List<ServicesModel> data = _systemSettingRepository.ExecuteStoredProcedure<ServicesModel>("sp_GetServices", spParams).ToList();
+            return data;
         }
     }
 }

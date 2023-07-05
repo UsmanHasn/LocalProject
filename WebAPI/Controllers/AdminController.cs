@@ -81,6 +81,13 @@ namespace WebAPI.Controllers
             model = _AdminService.GetAllLawyers();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
-
+        [HttpGet]
+        [Route("getallservices")]
+        public IActionResult GetAlServices(int categoryId, int subCategoryId)
+        {
+            List<ServicesModel> model = new List<ServicesModel>();
+            model = _AdminService.GetAllServices(categoryId, subCategoryId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }
