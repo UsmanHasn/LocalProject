@@ -7,4 +7,16 @@
         public string Description { get; set; }
         public string Lawyers { get; set; }
     }
+    public class CasesModel
+    {
+        public long CaseId { get; set; }
+        public string CaseNo { get; set; }
+        public string PendingCaseNo { get; set; }
+        public string CaseTypeEn { get; set; }
+        public string CaseTypeAr { get; set; }
+        public string CaseStatusEn { get; set; }
+        public string CaseStatusAr { get; set; }
+        public string Comments { get; set; }
+        public DateTime CaseFiledDate { get; set; }
+    }
 }
