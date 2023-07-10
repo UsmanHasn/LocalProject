@@ -12,10 +12,15 @@
         public long CaseId { get; set; }
         public string CaseNo { get; set; }
         public string PendingCaseNo { get; set; }
+        public string CaseGroupEn { get; set; }
+        public string CaseGroupAr { get; set; }
         public string CaseTypeEn { get; set; }
         public string CaseTypeAr { get; set; }
         public string CaseStatusEn { get; set; }
         public string CaseStatusAr { get; set; }
+        public string CaseBuildingAr { get; set; }
+        public string CaseBuildingEn { get; set; }
+        public double FeeValue { get; set; }
         public string Comments { get; set; }
         public DateTime CaseFiledDate { get; set; }
     }

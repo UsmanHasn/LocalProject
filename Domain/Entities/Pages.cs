@@ -16,5 +16,7 @@ namespace Domain.Entities
         [Required]
         public string PageName { get; set; }
         public string PageNameAr { get; set; }
+        public string PageModuleEn { get; set; }
+        public string PageModuleAr { get; set; }
     }
 }

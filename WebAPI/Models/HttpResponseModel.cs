@@ -1,8 +1,8 @@
 ﻿namespace WebAPI.Models
 {
-    public class HttpResponseModel
+    public class HttpResponseModel<T> where T : class
     {
-        public List<CasesModel> data { get; set; }
+        public List<T> data { get; set; }
         public bool status { get; set; }
     }
 }
