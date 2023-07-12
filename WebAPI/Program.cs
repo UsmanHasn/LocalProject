@@ -61,6 +61,11 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddSingleton<ITestService>(new TestService());
 builder.Services.AddSingleton<IPermissionService>(new PermissionService());
 builder.Services.AddSingleton<IUserProfileService>(new UserProfileService());
+
+builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
+builder.Services.AddScoped<IPagesService, PagesService>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
 //builder.Services.AddSingleton<ILookupService>(new LookupService);
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

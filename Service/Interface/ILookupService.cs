@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Lookups;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace Service.Interface
         List<LanguageLookup> GetLanguageValues();
         List<NationalityLookup> GetNationalityLookups();
         List<CountryLookup> GetCountryLookups();
+        List<ServicesSubCategoryModel> GetServicesSubCategory();
     }
 }

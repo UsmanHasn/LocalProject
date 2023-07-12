@@ -18,5 +18,10 @@ namespace Service.Models
         public string ServiceNameEn { get; set; }
         public string ServiceNameAr { get; set;}
         public int Sequence { get; set; }
+
+        public string ServiceDescEn { get; set; }
+        public string ServiceDescAr { get; set; }
+         
+
     }
 }

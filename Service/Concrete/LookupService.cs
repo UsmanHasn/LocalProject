@@ -1,6 +1,8 @@
 ﻿using Data.Interface;
 using Domain.Entities.Lookups;
+using Microsoft.Data.SqlClient;
 using Service.Interface;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace Service.Concrete
         private readonly IRepository<CountryLookup> _countryRepository;
         private readonly IRepository<NationalityLookup> _nationalityRepository;
 
-        public LookupService(IRepository<LanguageLookup> languagesRepository, IRepository<CountryLookup> countryRepository, IRepository<NationalityLookup> nationalityRepository) 
+        public LookupService(IRepository<LanguageLookup> languagesRepository, IRepository<CountryLookup> countryRepository, IRepository<NationalityLookup> nationalityRepository)
         {
             _languagesRepository = languagesRepository;
             _countryRepository = countryRepository;
@@ -34,6 +36,14 @@ namespace Service.Concrete
         List<NationalityLookup> ILookupService.GetNationalityLookups()
         {
             return _nationalityRepository.GetAll().ToList();
+        }
+        public List<ServicesSubCategoryModel> GetServicesSubCategory()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+
+
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<ServicesSubCategoryModel>("sjc_GetServicesSubCategory", param);
+            return dataMenu.ToList();
         }
     }
 }
