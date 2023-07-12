@@ -73,6 +73,7 @@ namespace WebAPI.Controllers
                 Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
                 return new UsersModel()
                 {
+                    UserId = currentUser.Id,
                     Username = currentUser.UserName,
                     UsernameAr = currentUser.UserNameAr,
                     CivilID = currentUser.CivilNumber.ToString(),

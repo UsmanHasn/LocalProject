@@ -1,4 +1,5 @@
 ﻿using Data.Interface;
+using Domain.Entities;
 using Domain.Helper;
 using Service.Helper;
 using Service.Interface;
@@ -15,7 +16,11 @@ namespace Service.Concrete
     public class UserProfileService : IUserProfileService
     {
         private readonly List<UserProfileModel> _UserProfileModel = new List<UserProfileModel>();
-
+        private readonly IRepository<Users> _userService;
+        public UserProfileService(IRepository<Users> userService)
+        {
+            _userService = userService;
+        }
         public Task<bool> Add(UserProfileModel UserProfileViewModel)
         {
             throw new NotImplementedException();
@@ -53,6 +58,11 @@ namespace Service.Concrete
         public Task<bool> UpdateUserProfile(int Id, UserProfileModel UserProfileViewModel)
         {
             throw new NotImplementedException();
+        }
+        public List<SwitchProfileModel> GetSwitchProfiles(int UserId)
+        {
+            var dataMenu = _userService.ExecuteStoredProcedure<SwitchProfileModel>("esp_GetSwitchProfiles", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId));
+            return dataMenu.ToList();
         }
     }
 }

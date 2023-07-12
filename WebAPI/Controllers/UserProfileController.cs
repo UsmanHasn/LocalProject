@@ -37,7 +37,14 @@ namespace WebAPI.Controllers
             Models.UsersModel? model = SjdcConstants.Users.FirstOrDefault(x => x.CivilID == CivilID);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
-
+        [HttpGet]
+        [Route("GetSwitchProfiles")]
+        public IActionResult GetSwitchProfiles(int UserId)
+        {
+            List<SwitchProfileModel> model = new List<SwitchProfileModel>();
+            model = userProfileService.GetSwitchProfiles(UserId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
 
     }
 }

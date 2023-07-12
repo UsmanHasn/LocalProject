@@ -2,6 +2,7 @@
 {
     public class UsersModel
     {
+        public int UserId { get; set; }
         public string Username { get; set; }
         public string UsernameAr { get; set; }
         public string Password { get; set; }
