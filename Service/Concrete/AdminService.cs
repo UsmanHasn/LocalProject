@@ -156,7 +156,7 @@ namespace Service.Concrete
             });
             model.Add(new CourtList()
             {
-                CaseID = "0001",
+                CaseID = "0002",
                 CourtName = "Supreme Court",
                 Description = "Description file here",
                 TotalNoCases = "10"
@@ -164,7 +164,7 @@ namespace Service.Concrete
             });
             model.Add(new CourtList()
             {
-                CaseID = "0001",
+                CaseID = "0003",
                 CourtName = "Commercial Court",
                 Description = "Description file here",
                 TotalNoCases = "10"
@@ -184,7 +184,7 @@ namespace Service.Concrete
             });
             model.Add(new CaseListModel()
             {
-                Case_No = "Case I",
+                Case_No = "Case II",
                 Case_Type = "Material",
                 Description = "file description here",
                 Lawyers = "Kamran"
