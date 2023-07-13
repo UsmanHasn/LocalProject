@@ -502,7 +502,7 @@ namespace Data.Concrete
             {
                 command.Parameters.AddRange(parameters);
             }
-            
+
             DbContext.Database.OpenConnection();
             command.ExecuteNonQuery();
         }
@@ -515,6 +515,7 @@ namespace Data.Concrete
             {
                 command.Parameters.AddRange(parameters);
             }
+           
             DbContext.Database.OpenConnection();
 
             using var reader = command.ExecuteReader();
@@ -539,7 +540,30 @@ namespace Data.Concrete
                         if (!reader.IsDBNull(columnIndex))
                         {
                             var value = reader.GetValue(columnIndex);
-                            property.SetValue(item, value);
+                            if (property.PropertyType.Name.ToLower() == "datetime")
+                            {
+                                property.SetValue(item, Convert.ToDateTime(value));
+                            }
+                            else if (property.PropertyType.Name.ToLower() == "double")
+                            {
+                                property.SetValue(item, Convert.ToDouble(value));
+                            }
+                            else if (property.PropertyType.Name.ToLower() == "decimal")
+                            {
+                                property.SetValue(item, Convert.ToDecimal(value));
+                            }
+                            else if (property.PropertyType.Name.ToLower() == "int")
+                            {
+                                property.SetValue(item, Convert.ToInt32(value));
+                            }
+                            else if (property.PropertyType.Name.ToLower() == "long")
+                            {
+                                property.SetValue(item, Convert.ToInt64(value));
+                            }
+                            else
+                            {
+                                property.SetValue(item, value);
+                            }
                         }
                     }
                     catch (IndexOutOfRangeException)
@@ -555,64 +579,6 @@ namespace Data.Concrete
 
             return result;
         }
-
-        //public IEnumerable<TResult> ExecuteStoredProcedure<TResult>(string storedProcedureName, params SqlParameter[] parameters)
-        //{
-        //    using var command = DbContext.Database.GetDbConnection().CreateCommand();
-        //    command.CommandType = System.Data.CommandType.StoredProcedure;
-        //    command.CommandText = storedProcedureName;
-        //    command.Parameters.AddRange(parameters);
-        //    DbContext.Database.OpenConnection();
-
-        //    using var reader = command.ExecuteReader();
-        //    var result = new List<TResult>();
-
-        //    if (typeof(TResult).IsClass)
-        //    {
-        //        // Reference type
-        //        while (reader.Read())
-        //        {
-        //            var item = Activator.CreateInstance<TResult>();
-        //            var properties = typeof(TResult).GetProperties();
-
-        //            foreach (var property in properties)
-        //            {
-        //                try
-        //                {
-        //                   int ordinal =  reader.GetOrdinal(property.Name);
-        //                    var value = reader[property.Name];
-        //                    property.SetValue(item, value);
-        //                }
-        //                catch (Exception)
-        //                {
-        //                   //ignore exception when result property doesn't exists in reader
-        //                }
-        //                //if (!columns.Contains(property.Name) || reader.IsDBNull(reader.GetOrdinal(property.Name)))
-        //                //    continue;
-
-                        
-        //            }
-
-        //            result.Add(item);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // Value type
-        //        while (reader.Read())
-        //        {
-        //            if (!reader.IsDBNull(0))
-        //            {
-        //                var value = reader.GetFieldValue<TResult>(0);
-        //                result.Add(value);
-        //            }
-        //        }
-        //    }
-
-        //    return result;
-        //}
-        
-
     }
 
 }

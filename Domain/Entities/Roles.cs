@@ -12,16 +12,16 @@ namespace Domain.Entities
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [MaxLength(50)]
-        [Required]
-        public string Name { get; set; }
-        [MaxLength(50)]
-        [Required]
-        public string NameAr { get; set; }
         [MaxLength(100)]
         [Required]
+        public string Name { get; set; }
+        [MaxLength(100)]
+        [Required]
+        public string NameAr { get; set; }
+        [MaxLength(500)]
+        [Required]
         public string Description { get; set; }
-        [MaxLength(50)]
+        [MaxLength(500)]
         [Required]
         public string DescriptionAr { get; set; }
 
