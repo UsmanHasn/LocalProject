@@ -54,10 +54,12 @@ builder.Services.AddCors(options =>
 //Service Activator
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ILookupService, LookupService>();
+builder.Services.AddScoped<IDelegationService, DelegationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<ITestService>(new TestService());
 builder.Services.AddSingleton<IPermissionService>(new PermissionService());
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();

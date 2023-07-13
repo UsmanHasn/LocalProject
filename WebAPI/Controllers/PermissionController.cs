@@ -23,5 +23,7 @@ namespace WebAPI.Controllers
             model = permissionService.GetAllPermission();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+       
     }
 }

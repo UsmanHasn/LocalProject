@@ -495,14 +495,26 @@ namespace Data.Concrete
         }
         public void ExecuteStoredProcedure(string storedProcedureName, params SqlParameter[] parameters)
         {
-            DbContext.Database.ExecuteSqlRaw(storedProcedureName, parameters);
+            using var command = DbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = storedProcedureName;
+            if (parameters != null)
+            {
+                command.Parameters.AddRange(parameters);
+            }
+            
+            DbContext.Database.OpenConnection();
+            command.ExecuteNonQuery();
         }
         public IEnumerable<TResult> ExecuteStoredProcedure<TResult>(string storedProcedureName, params SqlParameter[] parameters)
         {
             using var command = DbContext.Database.GetDbConnection().CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = storedProcedureName;
-            command.Parameters.AddRange(parameters);
+            if (parameters != null)
+            {
+                command.Parameters.AddRange(parameters);
+            }
             DbContext.Database.OpenConnection();
 
             using var reader = command.ExecuteReader();

@@ -1,4 +1,5 @@
 ﻿using Data.Interface;
+using Domain.Entities;
 using Service.Interface;
 using Service.Models;
 using System;
@@ -11,11 +12,26 @@ namespace Service.Concrete
 {
     public class PermissionService : IPermissionService
     {
-
-
-        public Task<bool> Add(PermissionModel permissionViewModel)
+        private readonly IRepository<RolePermissions> _rolesPermissionRepository;
+        public PermissionService(IRepository<RolePermissions> rolesPermissionRepository)
         {
-            throw new NotImplementedException();
+            _rolesPermissionRepository = rolesPermissionRepository;
+        }
+
+        public bool Add(AssignRole assignRole, string userName)
+        {
+            RolePermissions role = new RolePermissions()
+            {
+                PageId = assignRole.pageId,
+                RoleId=assignRole.roleId,
+                ReadPermission=assignRole.ReadPermission,
+                WritePermission=assignRole.WritePermission,
+                DeletePermission=assignRole.DeletePermission
+
+            };
+            _rolesPermissionRepository.Create(role, userName);
+            _rolesPermissionRepository.Save();
+            return true;
         }
 
         public Task<bool> DeletePermission(int Id)
@@ -50,17 +66,51 @@ namespace Service.Concrete
                 Name = "Delete",
                 RoleId = 1,
             });
+
+
             return model;
         }
 
-        public Task<PermissionModel> GetPermissionById(int Id)
+        public List<AssignRole> GetAssignRoles(string roleId)
         {
-            throw new NotImplementedException();
+            var dataMenu = _rolesPermissionRepository.ExecuteStoredProcedure<AssignRole>("sjc_GetPagesforAssign", new Microsoft.Data.SqlClient.SqlParameter("RoleId", roleId));
+            var model = dataMenu.Select(x => new AssignRole()
+            {
+                pageId = x.pageId,
+                PageNameEn = x.PageNameEn,
+                pageNameAr = x.pageNameAr,
+                pageModuleEn=x.pageModuleEn,
+                ReadPermission = x.ReadPermission,
+                WritePermission=x.WritePermission,
+                DeletePermission=x.DeletePermission,
+                roleId= Convert.ToInt32(roleId),
+                RolePermissionId = x.RolePermissionId
+
+            }).ToList();
+            return model;
         }
 
-        public Task<bool> UpdatePermission(int Id, PermissionModel permissionViewModel)
+        public AssignRole GetPermissionById(int Id)
         {
-            throw new NotImplementedException();
+            var dataMenu = _rolesPermissionRepository.ExecuteStoredProcedure<AssignRole>("sjc_GetRolePermissionsById", new Microsoft.Data.SqlClient.SqlParameter("RolePermissionId", Id));
+            return dataMenu.FirstOrDefault();
+        }
+
+        public bool UpdatePermission(AssignRole assignRole, string userName)
+        {
+            RolePermissions role = new RolePermissions()
+            {
+                Id=assignRole.RolePermissionId,
+                PageId = assignRole.pageId,
+                RoleId = assignRole.roleId,
+                ReadPermission = assignRole.ReadPermission,
+                WritePermission = assignRole.WritePermission,
+                DeletePermission = assignRole.DeletePermission
+
+            };
+            _rolesPermissionRepository.Update(role, userName);
+            _rolesPermissionRepository.Save();
+            return true;
         }
     }
 }
