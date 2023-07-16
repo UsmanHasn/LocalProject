@@ -38,10 +38,10 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("getallroles")]
-        public IActionResult GetAllRoles()
+        public IActionResult GetAllRoles(int UID)
         {
-            List<UserRole> model = new List<UserRole>();
-            model = _userService.GetAllUserRole();
+            List<UserAssignRole> model = new List<UserAssignRole>();
+            model = _userService.GetAllUserRole(UID);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 

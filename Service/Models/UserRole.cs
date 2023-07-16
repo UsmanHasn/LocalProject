@@ -12,4 +12,14 @@ namespace Service.Models
         public string? Description { get; set; }
 
     }
+    public class UserAssignRole
+    {
+        public int RoleId { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameAr { get; set; }
+        public bool Assigned { get; set; }
+
+    }
+
+
 }

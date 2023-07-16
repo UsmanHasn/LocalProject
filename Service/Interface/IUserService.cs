@@ -11,7 +11,9 @@ namespace Service.Interface
     public interface IUserService
     {
         List<UserListModel> GetAllUsers();
-        List<UserRole> GetAllUserRole();
+        //List<UserRole> GetAllUserRole();
+        List<UserAssignRole> GetAllUserRole(int UID);
+
         bool Add(UserModel userModel, string userName);
         bool UpdateUser(UserModel userModel, string userName);
         UserModel GetUserById(int Id);

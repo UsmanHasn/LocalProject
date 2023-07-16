@@ -548,6 +548,10 @@ namespace Data.Concrete
                             {
                                 property.SetValue(item, Convert.ToDouble(value));
                             }
+                            else if (property.PropertyType.Name.ToLower() == "boolean")
+                            {
+                                property.SetValue(item, Convert.ToBoolean(value));
+                            }
                             else if (property.PropertyType.Name.ToLower() == "decimal")
                             {
                                 property.SetValue(item, Convert.ToDecimal(value));
