@@ -26,6 +26,7 @@ namespace Data.Context
             modelBuilder.Entity<Services>().Property(p => p.Id).HasColumnName("ServiceId");
             modelBuilder.Entity<Pages>().Property(p => p.Id).HasColumnName("PageId");
             modelBuilder.Entity<RolePermissions>().Property(p => p.Id).HasColumnName("RolePermissionId");
+            modelBuilder.Entity<UserDelegatedPermissions>().Property(p => p.Id).HasColumnName("UserPermissionId");
             modelBuilder.Entity<SystemSettings>().Property(p => p.Id).HasColumnName("SystemSettingId");
 
             //Lookup
@@ -46,6 +47,7 @@ namespace Data.Context
         public DbSet<Services> Services { get; set; }
         public DbSet<Pages> Pages { get; set; }
         public DbSet<RolePermissions> RolePermissions { get; set; }
+        public DbSet<UserDelegatedPermissions> UserDelegatedPermissions { get; set; }
         public DbSet<SystemSettings> SystemSettings { get; set; }
         //Lookup
         public DbSet<NationalityLookup> NationalityLookup { get; set; }

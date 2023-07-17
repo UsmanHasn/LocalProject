@@ -54,5 +54,16 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("deleterole")]
+        public IActionResult Delete(int roleId, string userName)
+        {
+            RoleModel _roleModel = roleService.GetRoleById(roleId);
+            _roleModel.CreatedDate = _roleModel.CreatedDate;
+            _roleModel.CreatedBy = _roleModel.CreatedBy;
+            roleService.DeleteRole(_roleModel, userName);
+            
+            return new JsonResult(new { data = _roleModel, status = HttpStatusCode.OK });
+        }
     }
 }

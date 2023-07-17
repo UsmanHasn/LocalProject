@@ -60,6 +60,7 @@ namespace WebAPI.Controllers
             {
                 _userService.Add(model, userName);
             }
+            _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }

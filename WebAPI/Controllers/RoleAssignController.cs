@@ -48,19 +48,24 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("manageRolepermission")]
-        public IActionResult Add(AssignRole model, string userName)
+        public IActionResult Add(List<AssignRole> model, string userName)
         {
-            if (model.RolePermissionId > 0)
+            //_permissionService.AddUpdRolePermission(model, userName);
+            foreach (AssignRole item in model)
             {
-                AssignRole _roleModel = _permissionService.GetPermissionById(model.RolePermissionId);
-                model.CreatedDate = _roleModel.CreatedDate;
-                model.CreatedBy = _roleModel.CreatedBy;
-                _permissionService.UpdatePermission(model, userName);
+                if (item.RolePermissionId > 0)
+                {
+                    AssignRole _roleModel = _permissionService.GetPermissionById(item.RolePermissionId);
+                    item.CreatedDate = _roleModel.CreatedDate;
+                    item.CreatedBy = _roleModel.CreatedBy;
+                    _permissionService.UpdatePermission(item, userName);
+                }
+                else
+                {
+                    _permissionService.Add(item, userName);
+                }
             }
-            else
-            {
-                _permissionService.Add(model, userName);
-            }
+
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }

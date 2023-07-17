@@ -9,7 +9,7 @@ namespace Service.Interface
 {
     public interface IMenuService
     {
-        List<MenuModel> GetAllMenu(int RoleId);
+        List<MenuModel> GetAllMenu(int profileId, string profileType);
         List<MenuModel> GetAllMenuCompany();
         Task<bool> Add(MenuModel menuViewModel);
         Task<MenuModel> GetMenuById(int Id);

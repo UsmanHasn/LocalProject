@@ -13,6 +13,6 @@ namespace Service.Interface
         bool Add(RoleModel roleViewModel,string userName);
         RoleModel GetRoleById(int Id);
         bool UpdateRole(RoleModel roleModel, string userName);
-        Task<bool> DeleteUser(int Id);
+        bool DeleteRole(RoleModel roleModel, string userName);
     }
 }

@@ -1,13 +1,16 @@
 ﻿using Data.Interface;
 using Domain.Entities;
+using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Service.Concrete
 {
@@ -28,9 +31,18 @@ namespace Service.Concrete
             throw new NotImplementedException();
         }
 
-        public List<MenuModel> GetAllMenu(int RoleId)
+        public List<MenuModel> GetAllMenu(int profileId, string profileType)
         {
-            var dataMenu = _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetMenu", new Microsoft.Data.SqlClient.SqlParameter("Role", RoleId));
+            SqlParameter[] spParams = new SqlParameter[1];
+            if (profileType != "R")
+            {
+                spParams[0] = new Microsoft.Data.SqlClient.SqlParameter("UserId", profileId);
+            }
+            else
+            {
+                spParams[0] = new Microsoft.Data.SqlClient.SqlParameter("RoleId", profileId);
+            }
+            var dataMenu = _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetMenu", spParams);
             var model = dataMenu.Where(x => x.Type == "M" && x.ParentId == 0).Select(x => new MenuModel()
             {
                 Id = x.Id,
@@ -71,9 +83,32 @@ namespace Service.Concrete
                 })
                 .ToList()
             }).ToList();
+            model = FilterMenus(model);
             return model;
         }
+        // Define a recursive method to filter the menus
+        List<MenuModel> FilterMenus(List<MenuModel> menus)
+        {
+            List<MenuModel> filteredMenus = new List<MenuModel>();
 
+            foreach (var menu in menus)
+            {
+                // Recursive call to filter children menus
+                if (menu.Childrens != null)
+                {
+                    menu.Childrens = FilterMenus(menu.Childrens);
+                }
+                
+
+                // Check if menu type is "M" and it has no children
+                if (!(menu.Type == "M" && string.IsNullOrEmpty(menu.UrlPath) && menu.Childrens.Count == 0))
+                {
+                    filteredMenus.Add(menu);
+                }
+            }
+
+            return filteredMenus;
+        }
         public List<MenuModel> GetAllMenuCompany()
         {
             List<MenuModel> model = new List<MenuModel>();

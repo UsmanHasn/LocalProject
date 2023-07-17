@@ -42,6 +42,19 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
         }
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("authenticatemobile")]
+        public ActionResult Login(string mobileNo)
+        {
+            var user = Authenticate(mobileNo);
+            if (user != null)
+            {
+                var token = GenerateToken(user);
+                return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+            }
+            return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
+        }
 
         // To generate token
         private string GenerateToken(UsersModel user)
@@ -68,6 +81,29 @@ namespace WebAPI.Controllers
             //var currentUser = SjdcConstants.Users.FirstOrDefault(x => x.Username.ToLower() ==
             //    userLogin.Username.ToLower() && x.Password == userLogin.Password);
             var currentUser = _usersRepository.GetSingle(x => x.CivilNumber.ToString() == userLogin.Username && x.Password == userLogin.Password);
+            if (currentUser != null)
+            {
+                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                return new UsersModel()
+                {
+                    UserId = currentUser.Id,
+                    Username = currentUser.UserName,
+                    UsernameAr = currentUser.UserNameAr,
+                    CivilID = currentUser.CivilNumber.ToString(),
+                    Email = currentUser.Email,
+                    MobileNo = currentUser.PhoneNumber,
+                    RoleId = role == null ? 0 : role.Id,
+                    Role = role == null ? "" : role.Name
+                };
+                //return currentUser;
+            }
+            return null;
+        }
+        private UsersModel Authenticate(string mobileNo)
+        {
+            //var currentUser = SjdcConstants.Users.FirstOrDefault(x => x.Username.ToLower() ==
+            //    userLogin.Username.ToLower() && x.Password == userLogin.Password);
+            var currentUser = _usersRepository.GetSingle(x => x.PhoneNumber == mobileNo);
             if (currentUser != null)
             {
                 Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;

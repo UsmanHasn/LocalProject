@@ -14,10 +14,12 @@ namespace Service.Concrete
     public class UserService : IUserService
     {
         public readonly IRepository<Users> _userRepository;
+        public readonly IRepository<UserInRole> _userRoleRepository;
 
-        public UserService(IRepository<Users> userRepository)
+        public UserService(IRepository<Users> userRepository, IRepository<UserInRole> userRoleRepository)
         {
             _userRepository = userRepository;
+            _userRoleRepository = userRoleRepository;
         }
 
         public List<UserListModel> GetAllUsers()
@@ -154,8 +156,16 @@ namespace Service.Concrete
 
         public UserModel GetUserById(int Id)
         {
+            UserModel user = new UserModel();
             var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById", new Microsoft.Data.SqlClient.SqlParameter("UserId", Id));
-            return dataMenu.FirstOrDefault();
+            if (dataMenu.Any())
+            {
+                user = dataMenu.FirstOrDefault();
+                user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+                return user;
+            }
+            
+            return null;
         }
 
         public bool UpdateUser(UserModel userModel, string userName)
@@ -189,6 +199,45 @@ namespace Service.Concrete
             _userRepository.Save();
             return true;
         }
-        
+        public bool AddUserInRole(List<int> roleIds, int userId, string userName)
+        {
+            List<UserInRole> assignedRoles = _userRoleRepository.GetAll(x => x.UserId == userId).ToList();
+            if (assignedRoles.Any() && assignedRoles.Count() > 0)
+            {
+                List<UserInRole> deletedRoles = assignedRoles.Where(x => !roleIds.Contains(x.RoleId)).ToList();
+                foreach (UserInRole userRole in deletedRoles)
+                {
+                    userRole.Deleted = true;
+                    _userRoleRepository.Delete(userRole, userName);
+                }
+                foreach (int roleId in roleIds)
+                {
+                    var aroles = _userRoleRepository.GetAll(x => x.UserId == userId && x.RoleId == roleId).FirstOrDefault();
+                    if (aroles != null)
+                    {
+                        aroles.Deleted = false;
+                        _userRoleRepository.Update(aroles, userName);
+                    }
+                    else
+                    {
+                        UserInRole userRole = new UserInRole() { UserId = userId, RoleId = roleId };
+                        _userRoleRepository.Create(userRole, userName);
+                    }
+                }
+                _userRepository.Save();
+            }
+            else
+            {
+                foreach (int roleId in roleIds)
+                {
+                    UserInRole userRole = new UserInRole() { UserId = userId, RoleId = roleId };
+                    _userRoleRepository.Create(userRole, userName);
+                }
+                _userRepository.Save();
+            }
+            
+            return true;
+        }
+
     }
 }

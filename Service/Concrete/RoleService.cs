@@ -39,9 +39,22 @@ namespace Service.Concrete
             return true;
         }
 
-        public Task<bool> DeleteUser(int Id)
+        public bool DeleteRole(RoleModel roleModel, string userName)
         {
-            throw new NotImplementedException();
+            Roles role = new Roles()
+            {
+                Id = roleModel.Id,
+                Name = roleModel.Name,
+                NameAr = roleModel.NameAr,
+                Description = roleModel.Description,
+                DescriptionAr = roleModel.DescriptionAr,
+                CreatedBy = roleModel.CreatedBy,
+                CreatedDate = roleModel.CreatedDate,
+                Deleted = true
+            };
+            _rolesRepository.Update(role, userName);
+            _rolesRepository.Save();
+            return true;
         }
 
         public RoleModel GetRoleById(int Id)

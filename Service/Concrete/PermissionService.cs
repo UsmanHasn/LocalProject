@@ -1,5 +1,6 @@
 ﻿using Data.Interface;
 using Domain.Entities;
+using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
 using System;
@@ -13,6 +14,7 @@ namespace Service.Concrete
     public class PermissionService : IPermissionService
     {
         private readonly IRepository<RolePermissions> _rolesPermissionRepository;
+        
         public PermissionService(IRepository<RolePermissions> rolesPermissionRepository)
         {
             _rolesPermissionRepository = rolesPermissionRepository;
@@ -105,12 +107,29 @@ namespace Service.Concrete
                 RoleId = assignRole.roleId,
                 ReadPermission = assignRole.ReadPermission,
                 WritePermission = assignRole.WritePermission,
-                DeletePermission = assignRole.DeletePermission
-
+                DeletePermission = assignRole.DeletePermission,
+                CreatedBy = assignRole.CreatedBy,
+                CreatedDate = assignRole.CreatedDate
             };
             _rolesPermissionRepository.Update(role, userName);
             _rolesPermissionRepository.Save();
             return true;
         }
+        public bool AddUpdRolePermission(List<AssignRole> rolePermissions, string userName)
+        {
+            try
+            {
+                SqlParameter[] spParams = new SqlParameter[2];
+                spParams[0] = new SqlParameter("@RolePermissions", rolePermissions);
+                spParams[1] = new SqlParameter("@UserName", userName);
+                _rolesPermissionRepository.ExecuteStoredProcedure("sp_dml_rolePermissions", spParams);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+       
     }
 }

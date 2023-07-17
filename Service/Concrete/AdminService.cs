@@ -148,25 +148,25 @@ namespace Service.Concrete
 
             model.Add(new CourtList()
             {
-                CaseID = "0001",
-                CourtName = "Administrative Court",
-                Description = "Description file here",
+                CaseID = "1",
+                CourtName = "مجمع المحاكم الخوير، شارع الوزارات، مسقط",
+                Description = "مجمع المحاكم الخوير، شارع الوزارات",
                 TotalNoCases = "10"
 
             });
             model.Add(new CourtList()
             {
-                CaseID = "0002",
-                CourtName = "Supreme Court",
-                Description = "Description file here",
+                CaseID = "2",
+                CourtName = "صلالة",
+                Description = "صلالة ، شمال العوقدين",
                 TotalNoCases = "10"
 
             });
             model.Add(new CourtList()
             {
-                CaseID = "0003",
-                CourtName = "Commercial Court",
-                Description = "Description file here",
+                CaseID = "3",
+                CourtName = "صحار",
+                Description = "صحار ، غيل الشبول",
                 TotalNoCases = "10"
 
             });

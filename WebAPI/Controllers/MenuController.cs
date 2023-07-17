@@ -16,10 +16,10 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("GetAllMenu")]
-        public IActionResult GetAllMenu(int roleId)
+        public IActionResult GetAllMenu(int profileId, string profileType)
         {
             List<MenuModel> model = new List<MenuModel>();
-            model = menuService.GetAllMenu(roleId);
+            model = menuService.GetAllMenu(profileId, profileType);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
