@@ -31,6 +31,7 @@ namespace WebAPI.Controllers
                                     items = model.Where(y => y.pageModuleEn == x)
                                     .Select(y => new DelegationModel()
                                     {
+                                        userPermissionId = y.userPermissionId,
                                         userId = y.userId,
                                         pageId = y.pageId,
                                         ReadPermission = y.ReadPermission,

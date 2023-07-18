@@ -43,6 +43,7 @@ namespace Service.Concrete
             var dataMenu = _rolesPermissionRepository.ExecuteStoredProcedure<DelegationModel>("sjc_GetPagesforAssignUser", new Microsoft.Data.SqlClient.SqlParameter("CivilId", civilId));
             var model = dataMenu.Select(x => new DelegationModel()
             {
+                userPermissionId = x.userPermissionId,
                 pageId = x.pageId,
                 PageNameEn = x.PageNameEn,
                 pageNameAr = x.pageNameAr,
