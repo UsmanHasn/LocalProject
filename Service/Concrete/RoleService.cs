@@ -52,7 +52,7 @@ namespace Service.Concrete
                 CreatedDate = roleModel.CreatedDate,
                 Deleted = true
             };
-            _rolesRepository.Update(role, userName);
+            _rolesRepository.Delete(role, userName);
             _rolesRepository.Save();
             return true;
         }

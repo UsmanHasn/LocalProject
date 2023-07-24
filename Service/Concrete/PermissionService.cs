@@ -82,6 +82,7 @@ namespace Service.Concrete
                 PageNameEn = x.PageNameEn,
                 pageNameAr = x.pageNameAr,
                 pageModuleEn=x.pageModuleEn,
+                pageModuleAr = x.pageModuleAr,
                 ReadPermission = x.ReadPermission,
                 WritePermission=x.WritePermission,
                 DeletePermission=x.DeletePermission,

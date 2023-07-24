@@ -30,6 +30,7 @@ namespace Data.Context
             modelBuilder.Entity<SystemSettings>().Property(p => p.Id).HasColumnName("SystemSettingId");
 
             //Lookup
+            modelBuilder.Entity<UserStatusLookup>().Property(p => p.Id).HasColumnName("UserStatusId");
             modelBuilder.Entity<NationalityLookup>().Property(p => p.Id).HasColumnName("NationalityId");
             modelBuilder.Entity<CountryLookup>().Property(p => p.Id).HasColumnName("CountryId");
             modelBuilder.Entity<LanguageLookup>().Property(p => p.Id).HasColumnName("LanguageId");
@@ -41,6 +42,7 @@ namespace Data.Context
         // DbSet properties for your entities
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Users> Users { get; set; }
+        public DbSet<UserStatusLookup> UserStatusLookup { get; set; }
         public DbSet<UserInRole> UserInRole { get; set; }
         public DbSet<UserActivityInfoLog> UserActivityInfoLog { get; set; }
         public DbSet<Menu> Menu { get; set; }

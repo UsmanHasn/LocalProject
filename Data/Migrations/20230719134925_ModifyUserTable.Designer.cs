@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230719134925_ModifyUserTable")]
+    partial class ModifyUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -871,9 +874,6 @@ namespace Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("SupervisorUserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -912,8 +912,6 @@ namespace Data.Migrations
                     b.HasIndex("NationalityId");
 
                     b.HasIndex("PassportCountryId");
-
-                    b.HasIndex("SupervisorUserId");
 
                     b.HasIndex("UserStatusId");
 
@@ -1020,10 +1018,6 @@ namespace Data.Migrations
                         .WithMany()
                         .HasForeignKey("PassportCountryId");
 
-                    b.HasOne("Domain.Entities.Users", "SupervisorUser")
-                        .WithMany()
-                        .HasForeignKey("SupervisorUserId");
-
                     b.HasOne("Domain.Entities.Lookups.UserStatusLookup", "UserStatus")
                         .WithMany()
                         .HasForeignKey("UserStatusId");
@@ -1033,8 +1027,6 @@ namespace Data.Migrations
                     b.Navigation("Nationality");
 
                     b.Navigation("PassportCountry");
-
-                    b.Navigation("SupervisorUser");
 
                     b.Navigation("UserStatus");
                 });

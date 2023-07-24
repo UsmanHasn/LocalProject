@@ -14,6 +14,7 @@ namespace Service.Models
         public string? PageNameEn { get; set; }
         public string? pageNameAr { get; set; }
         public string? pageModuleEn { get; set; }
+        public string? pageModuleAr { get; set; }
         public bool ReadPermission { get; set; }
         public bool WritePermission { get; set; }
         public bool DeletePermission { get; set; }

@@ -37,6 +37,7 @@ namespace WebAPI.Controllers
                                         PageNameEn = y.PageNameEn,
                                         pageNameAr = y.pageNameAr,
                                         pageModuleEn = y.pageModuleEn,
+                                        pageModuleAr = y.pageModuleAr,
                                         RolePermissionId = y.RolePermissionId
                                     }).ToList(),
                                     group = x,
