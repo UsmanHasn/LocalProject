@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Lookups;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Concrete;
 using Service.Interface;
 using System.Net;
@@ -70,5 +71,7 @@ namespace WebAPI.Controllers
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+       
     }
 }

@@ -21,14 +21,42 @@ namespace Service.Concrete
         {
             _menuRepository = menuRepository;
         }
-        public Task<bool> Add(MenuModel menuViewModel)
+        public bool Add(MenuModel menuViewModel, string username)
         {
-            throw new NotImplementedException();
+            SqlParameter[] spParams = new SqlParameter[11];
+            spParams[0] = new SqlParameter("MenuId", menuViewModel.Id);
+            spParams[1] = new SqlParameter("Name", menuViewModel.Name);
+            spParams[2] = new SqlParameter("NameAr", menuViewModel.NameAr);
+            spParams[3] = new SqlParameter("MenuType", menuViewModel.Type);
+            spParams[4] = new SqlParameter("ParentMenuId", menuViewModel.ParentId);
+            spParams[5] = new SqlParameter("UrlPath", menuViewModel.UrlPath);
+            spParams[6] = new SqlParameter("Sequence", menuViewModel.Sequence);
+            spParams[7] = new SqlParameter("PageId", menuViewModel.PageId);
+            spParams[8] = new SqlParameter("CreatedBy", username);
+            spParams[9] = new SqlParameter("Deleted", false);
+            spParams[10] = new SqlParameter("DML", "I");
+
+            _menuRepository.ExecuteStoredProcedure("Sp_dml_menu", spParams);
+            return true;
         }
 
-        public Task<bool> DeleteMenu(int Id)
+        public bool DeleteMenu(int Id)
         {
-            throw new NotImplementedException();
+            SqlParameter[] spParams = new SqlParameter[11];
+            spParams[0] = new SqlParameter("MenuId",Id);
+            spParams[1] = new SqlParameter("Name", "");
+            spParams[2] = new SqlParameter("NameAr", "");
+            spParams[3] = new SqlParameter("MenuType", "");
+            spParams[4] = new SqlParameter("ParentMenuId", "");
+            spParams[5] = new SqlParameter("UrlPath", "");
+            spParams[6] = new SqlParameter("Sequence","");
+            spParams[7] = new SqlParameter("PageId", "");
+            spParams[8] = new SqlParameter("CreatedBy", "");
+            spParams[9] = new SqlParameter("Deleted", true);
+            spParams[10] = new SqlParameter("DML", "D");
+
+            _menuRepository.ExecuteStoredProcedure("Sp_dml_menu", spParams);
+            return true;
         }
 
         public List<MenuModel> GetAllMenu(int profileId, string profileType)
@@ -183,14 +211,71 @@ namespace Service.Concrete
             return model;
         }
 
-        public Task<MenuModel> GetMenuById(int Id)
+        public MenuModel GetMenuById(int Id)
         {
-            throw new NotImplementedException();
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("MenuId", Id);
+            return _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetAllMenu", parameters).FirstOrDefault();
         }
 
-        public Task<bool> UpdateMenu(int Id, MenuModel menuViewModel)
+        public bool UpdateMenu(int Id, MenuModel menuViewModel, string username)
         {
-            throw new NotImplementedException();
+            SqlParameter[] spParams = new SqlParameter[11];
+            spParams[0] = new SqlParameter("MenuId", menuViewModel.Id);
+            spParams[1] = new SqlParameter("Name", menuViewModel.Name);
+            spParams[2] = new SqlParameter("NameAr", menuViewModel.NameAr);
+            spParams[3] = new SqlParameter("MenuType", menuViewModel.Type);
+            spParams[4] = new SqlParameter("ParentMenuId", menuViewModel.ParentId);
+            spParams[5] = new SqlParameter("UrlPath", menuViewModel.UrlPath);
+            spParams[6] = new SqlParameter("Sequence", menuViewModel.Sequence);
+            spParams[7] = new SqlParameter("PageId", menuViewModel.PageId);
+            spParams[8] = new SqlParameter("CreatedBy", username);
+            spParams[9] = new SqlParameter("Deleted", false);
+            spParams[10] = new SqlParameter("DML", "U");
+
+            _menuRepository.ExecuteStoredProcedure("Sp_dml_menu", spParams);
+            return true;
+        }
+
+        public List<PagesModel> Getpages()
+        {
+           // List<PagesModel> model = new List<PagesModel>();
+            SqlParameter[] spParams = new SqlParameter[0];
+            var dataMenu = _menuRepository.ExecuteStoredProcedure<PagesModel>("sjc_GetPages", spParams);
+            var model = dataMenu.Select(x => new PagesModel()
+            {
+                Id = x.Id,
+                PageName = x.PageName
+            }).ToList();
+            return model;
+        }
+
+        public List<MenuModel> getParentMenu()
+        {
+            SqlParameter[] spParams = new SqlParameter[0];
+            var dataMenu = _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetParentMenu", spParams);
+            var model = dataMenu.Select(x => new MenuModel()
+            {
+                Id = x.Id,
+                Name = x.Name
+            }).ToList();
+            return model;
+        }
+
+        public List<MenuModel> GetMenu()
+        {
+            // List<PagesModel> model = new List<PagesModel>();
+            SqlParameter[] spParams = new SqlParameter[0];
+            //spParams[0] = new SqlParameter("MenuId", menuId);
+            var dataMenu = _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetAllMenu", spParams);
+            var model = dataMenu.Select(x => new MenuModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr=x.NameAr,
+                Sequence=x.Sequence
+            }).ToList();
+            return model;
         }
     }
 }

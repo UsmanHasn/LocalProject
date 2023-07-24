@@ -22,15 +22,24 @@ namespace Service.Concrete
 
         public bool Add(SystemParameterModel systemParameterModel, string userName)
         {
-            SystemSettings settings = new SystemSettings()
+            SystemParameterModel sysModel = this.GetsystemParameterByName(systemParameterModel.keyName);
+            if (sysModel==null)
             {
-                KeyName = systemParameterModel.KeyName,
-                KeyValue = systemParameterModel.KeyValue,
-                Description = systemParameterModel.Description,
-            };
-            _systemSettingRepository.Create(settings,userName);
-            _systemSettingRepository.Save();
-            return true;
+                SystemSettings settings = new SystemSettings()
+                {
+                    KeyName = systemParameterModel.keyName,
+                    KeyValue = systemParameterModel.keyValue,
+                    Description = systemParameterModel.description,
+
+                };
+                _systemSettingRepository.Create(settings, userName);
+                _systemSettingRepository.Save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool DeletesystemParameter(int Id, string userName)
@@ -40,15 +49,15 @@ namespace Service.Concrete
                 SystemParameterModel sysModel = this.GetsystemParameterById(Id);
                 SystemSettings model = new SystemSettings()
                 {
-                    KeyName = sysModel.KeyName,
-                    KeyValue = sysModel.KeyValue,
-                    Description = sysModel.Description,
-                    CreatedBy = sysModel.CreatedBy,
-                    CreatedDate = sysModel.CreatedDate,
+                    KeyName = sysModel.keyName,
+                    KeyValue = sysModel.keyValue,
+                    Description = sysModel.description,
+                    CreatedBy = sysModel.createdBy,
+                    CreatedDate = sysModel.createdDate,
                     Id = Id,
                     Deleted = true
                 };
-                _systemSettingRepository.Update(model, userName);
+                _systemSettingRepository.Delete(model, userName);
                 _systemSettingRepository.Save();
                 return true;
             }
@@ -57,7 +66,7 @@ namespace Service.Concrete
 
                 return false;
             }
-            
+
 
         }
 
@@ -74,18 +83,26 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<SystemParameterModel>("sjc_GetSystemSettings", spParams).FirstOrDefault();
         }
 
+
+        public SystemParameterModel GetsystemParameterByName(string name)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("KeyName", name);
+            return _systemSettingRepository.ExecuteStoredProcedure<SystemParameterModel>("sjc_GetSystemSettingsName", spParams).FirstOrDefault();
+        }
+
         public bool UpdatesystemParameter(SystemParameterModel systemParameterModel, string userName)
         {
             try
             {
                 SystemSettings model = new SystemSettings()
                 {
-                    KeyName = systemParameterModel.KeyName,
-                    KeyValue = systemParameterModel.KeyValue,
-                    Description = systemParameterModel.Description,
-                    CreatedBy = systemParameterModel.CreatedBy,
-                    CreatedDate = systemParameterModel.CreatedDate,
-                    Id = systemParameterModel.Id
+                    KeyName = systemParameterModel.keyName,
+                    KeyValue = systemParameterModel.keyValue,
+                    Description = systemParameterModel.description,
+                    CreatedBy = systemParameterModel.createdBy,
+                    CreatedDate = systemParameterModel.createdDate,
+                    Id = systemParameterModel.systemSettingId
                 };
                 _systemSettingRepository.Update(model, userName);
                 _systemSettingRepository.Save();

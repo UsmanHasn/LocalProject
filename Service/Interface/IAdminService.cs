@@ -1,4 +1,6 @@
-﻿using Service.Models;
+﻿using Domain.Entities;
+using Domain.Entities.Lookups;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +19,10 @@ namespace Service.Interface
         List<LawyersModels> GetAllLawyers();
         List<Notification> GetAllNotifications();
         List<ServicesModel> GetAllServices(int categoryId, int subCategoryId);
+
+        List<UserModel> GetUsers();
+        List<AlertModel> GetAllAlerts();
+        bool Add(AlertModel alertModel, string userName);
+        AlertModel GetAlertById(int Id);
     }
 }

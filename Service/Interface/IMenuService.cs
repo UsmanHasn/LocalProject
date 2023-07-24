@@ -1,4 +1,6 @@
-﻿using Service.Models;
+﻿using Domain.Entities;
+using Domain.Entities.Lookups;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,14 @@ namespace Service.Interface
     {
         List<MenuModel> GetAllMenu(int profileId, string profileType);
         List<MenuModel> GetAllMenuCompany();
-        Task<bool> Add(MenuModel menuViewModel);
-        Task<MenuModel> GetMenuById(int Id);
-        Task<bool> UpdateMenu(int Id, MenuModel menuViewModel);
-        Task<bool> DeleteMenu(int Id);
+
+        List<MenuModel> GetMenu();
+        bool Add(MenuModel menuViewModel,string username);
+        MenuModel GetMenuById(int Id);
+        bool UpdateMenu(int Id, MenuModel menuViewModel, string username);
+        bool DeleteMenu(int Id);
+        List<PagesModel> Getpages();
+
+        List<MenuModel> getParentMenu();
     }
 }

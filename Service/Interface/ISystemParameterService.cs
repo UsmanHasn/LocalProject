@@ -15,5 +15,6 @@ namespace Service.Interface
         SystemParameterModel GetsystemParameterById(int Id);
         bool UpdatesystemParameter(SystemParameterModel systemParameterModel, string userName);
         bool DeletesystemParameter(int Id, string userName);
+        public SystemParameterModel GetsystemParameterByName(string name);
     }
 }

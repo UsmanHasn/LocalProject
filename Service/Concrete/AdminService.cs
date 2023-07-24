@@ -232,5 +232,51 @@ namespace Service.Concrete
             List<ServicesModel> data = _systemSettingRepository.ExecuteStoredProcedure<ServicesModel>("sp_GetServices", spParams).ToList();
             return data;
         }
+
+        public List<AlertModel> GetAllAlerts()
+        {
+            SqlParameter[] spParams = new SqlParameter[0];
+            var model= _systemSettingRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAllAlerts", spParams).ToList();
+            return model;
+        }
+
+        public bool Add(AlertModel alertModel, string userName)
+        {
+
+            SqlParameter[] spParams = new SqlParameter[10];
+            spParams[0] = new SqlParameter("Alertid", alertModel.alertId);
+            spParams[1] = new SqlParameter("UserId", alertModel.userId);
+            spParams[2] = new SqlParameter("AlertType", alertModel.alertType);
+            spParams[3] = new SqlParameter("Subject", alertModel.subject);
+            spParams[4] = new SqlParameter("Email", alertModel.email);
+            spParams[5] = new SqlParameter("MobileNo", alertModel.mobileNo);
+            spParams[6] = new SqlParameter("Message", alertModel.message);
+            spParams[7] = new SqlParameter("CreatedBy", userName);
+            spParams[8] = new SqlParameter("LastModifiedBy", userName);
+            spParams[9] = new SqlParameter("Deleted", false);
+            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_alerts", spParams);
+            return true;
+        }
+
+        public AlertModel GetAlertById(int Id)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("Alertid", Id);
+            var model = _systemSettingRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAllAlerts", spParams).FirstOrDefault();
+            return model;
+        }
+
+        public List<UserModel> GetUsers()
+        {
+            SqlParameter[] spParams = new SqlParameter[0];
+           // List<UserModel> model = new List<UserModel>();
+            var model = _systemSettingRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUser", spParams).ToList();
+            var data = model.Select(x => new UserModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+            }).ToList();
+            return data;
+        }
     }
 }

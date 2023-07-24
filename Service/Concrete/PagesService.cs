@@ -26,6 +26,8 @@ namespace Service.Concrete
             { 
             PageName = pagesModel.PageName,
             PageNameAr = pagesModel.PageNameAr,
+            PageModuleEn=pagesModel.PageModuleEn,
+            PageModuleAr=pagesModel.PageModuleAr
             };
             _pagesRepository.Create(pages, userName);
             _pagesRepository.Save();
@@ -33,7 +35,7 @@ namespace Service.Concrete
         }
 
         public bool Deletepages(int Id, string userName)
-        {
+       {
             try
             {
                 PagesModel pageModel = this.GetpagesById(Id);
@@ -41,12 +43,14 @@ namespace Service.Concrete
                 {
                     PageName = pageModel.PageName,
                     PageNameAr = pageModel.PageNameAr,
+                    PageModuleEn=pageModel.PageModuleEn,
+                    PageModuleAr=pageModel.PageModuleAr,
                     CreatedBy = pageModel.CreatedBy,
                     CreatedDate = pageModel.CreatedDate,
                     Id = pageModel.Id,
                     Deleted = true
                 };
-                _pagesRepository.Update(pages,userName);
+                _pagesRepository.Delete(pages,userName);
                 _pagesRepository.Save();
                 return true;
             }
@@ -80,6 +84,8 @@ namespace Service.Concrete
                     Id = pagesModel.Id,
                     PageName = pagesModel.PageName,
                     PageNameAr = pagesModel.PageNameAr,
+                    PageModuleEn=pagesModel.PageModuleEn,
+                    PageModuleAr=pagesModel.PageModuleAr,
                     CreatedBy = pagesModel.CreatedBy,
                     CreatedDate = pagesModel.CreatedDate,
                    

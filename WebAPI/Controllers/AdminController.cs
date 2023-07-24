@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
@@ -87,6 +88,41 @@ namespace WebAPI.Controllers
         {
             List<ServicesModel> model = new List<ServicesModel>();
             model = _AdminService.GetAllServices(categoryId, subCategoryId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+
+
+
+        [HttpPost]
+        [Route("insertalert")]
+        public IActionResult Add(AlertModel alertModel,string userName)
+        {
+            _AdminService.Add(alertModel, userName);
+            return new JsonResult(new {data = alertModel, status = HttpStatusCode.OK});
+        }
+        [HttpGet]
+        [Route("getusers")]
+        public IActionResult Getusers()
+        {
+            //List<UserModel> model = new List<UserModel>();
+            var model = _AdminService.GetUsers();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getall")]
+        public IActionResult GetAll()
+        {
+          //  List<UserModel> model = new List<UserModel>();
+           var model = _AdminService.GetAllAlerts();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getAlertbyId")]
+        public IActionResult GetAlertById(int Id)
+        {
+            AlertModel model = new AlertModel();
+            model = _AdminService.GetAlertById(Id);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }

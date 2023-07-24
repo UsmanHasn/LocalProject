@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
             _isystemParameterService = systemParameterService;
         }
         [HttpGet]
-        [Route("InsertsystemParameter")]
+        [Route("getallsystemparameter")]
         public IActionResult GetAllSystemParmeter()
         {
             var systemParameterModel = _isystemParameterService.GetAllsystemParameter();
@@ -26,14 +26,25 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("InsertsystemParameter")]
+        [Route("insertsystemparameter")]
         public IActionResult Add(SystemParameterModel systemParameterModel, string userName)
         {
-            _isystemParameterService.Add(systemParameterModel, userName);
+            if (systemParameterModel.systemSettingId > 0)
+            {
+                SystemParameterModel model = _isystemParameterService.GetsystemParameterById(systemParameterModel.systemSettingId);
+                systemParameterModel.createdDate = model.createdDate;
+                systemParameterModel.createdBy = model.createdBy;
+                _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
+            }
+            else
+            {
+                _isystemParameterService.Add(systemParameterModel, userName);
+            }
+
             return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
         }
         [HttpDelete]
-        [Route("Deletesystemparameter")]
+        [Route("deletesystemparameter")]
         public IActionResult Deletesystemparameter(int id, string userName)
         {
             var systemParameterModel = _isystemParameterService.DeletesystemParameter(id, userName);
@@ -46,6 +57,14 @@ namespace WebAPI.Controllers
             var systemparameter = _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
             return new JsonResult(new { data = systemparameter, status = HttpStatusCode.OK });
 
+        }
+        [HttpGet]
+        [Route("getsysParambyId")]
+        public IActionResult GetUserById(int Id)
+        {
+            SystemParameterModel model = new SystemParameterModel();
+            model = _isystemParameterService.GetsystemParameterById(Id);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }
 }

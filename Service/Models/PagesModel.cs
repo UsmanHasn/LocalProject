@@ -12,6 +12,8 @@ namespace Service.Models
         public int Id { get; set; }
         public string PageName { get; set; }
         public string PageNameAr { get; set; }
+        public string PageModuleEn { get; set; }
+        public string PageModuleAr { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
     }

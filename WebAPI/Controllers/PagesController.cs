@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
@@ -23,11 +24,31 @@ namespace WebAPI.Controllers
             var pagesModel = _IpagesService.GetAllPages();
             return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("getPagebyId")]
+        public IActionResult GetPageById(int Id)
+        {
+            PagesModel model = new PagesModel();
+            model = _IpagesService.GetpagesById(Id);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
         [HttpPost]
         [Route("Insertpages")]
         public IActionResult Addpages(PagesModel pagesModel, string username)
         {
-            _IpagesService.Addpages(pagesModel, username);
+            if (pagesModel.Id > 0)
+            {
+                PagesModel model = _IpagesService.GetpagesById(pagesModel.Id);
+                pagesModel.CreatedDate = model.CreatedDate;
+                pagesModel.CreatedBy = model.CreatedBy;
+                _IpagesService.Updatepages(pagesModel, username);
+            }
+            else
+            {
+                _IpagesService.Addpages(pagesModel, username);
+            }
             return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
         }
         [HttpDelete]
