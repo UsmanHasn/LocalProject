@@ -41,6 +41,7 @@ namespace Domain.Entities
         [MaxLength(50)]
         public string TelephoneNumber { get; set; }
         public string Gender { get; set; }
+        public DateTime? LastLoginDate { get; set; }
         public bool IsLocked { get; set; }
         public DateTime? LockedDate { get; set; }
         public int? WrongPassword { get; set; }
