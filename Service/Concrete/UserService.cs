@@ -147,7 +147,8 @@ namespace Service.Concrete
                 CountryId = userModel.CountryID,
                 DateOfBirth=userModel.DateOfBirth,
                 City=userModel.City,
-                Password=userModel.Password
+                Password=userModel.Password,
+                SupervisorUserId = userModel.SupervisorUserId
             };
             _userRepository.Create(users, userName);
             _userRepository.Save();
@@ -193,7 +194,8 @@ namespace Service.Concrete
                 City = userModel.City,
                 Password = userModel.Password,
                 CreatedBy=userModel.CreatedBy,
-                CreatedDate=userModel.CreatedDate
+                SupervisorUserId = userModel.SupervisorUserId,
+                CreatedDate =userModel.CreatedDate
             };
             _userRepository.Update(users, userName);
             _userRepository.Save();
