@@ -16,6 +16,7 @@ namespace Service.Interface
 
         bool Add(UserModel userModel, string userName);
         bool UpdateUser(UserModel userModel, string userName);
+        bool UpdateUserFirstLogin(UserModel userModel, string userName);
         UserModel GetUserById(int Id);
         bool AddUserInRole(List<int> roleIds, int userId, string userName);
 

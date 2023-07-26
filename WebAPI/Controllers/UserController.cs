@@ -63,5 +63,23 @@ namespace WebAPI.Controllers
             _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpPost]
+        [Route("UpdateUserFirstLogin")]
+        public IActionResult UpdateFirstLogin(UserModel model,string userName)
+        {
+            if (model.Id > 0)
+            {
+                UserModel _userModel = _userService.GetUserById(model.Id);
+                
+                _userService.UpdateUserFirstLogin(_userModel, userName);
+            }
+            else
+            {
+                _userService.Add(model, userName);
+            }
+            _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }
