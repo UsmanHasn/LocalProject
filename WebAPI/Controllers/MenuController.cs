@@ -46,6 +46,8 @@ namespace WebAPI.Controllers
         [Route("addMenu")]
         public IActionResult AddMenu(MenuModel menuModel, string username)
         {
+      
+
             if (menuModel.Id > 0)
             {
                 //MenuModel mode = menuService.GetMenuById(menuModel.Id);
