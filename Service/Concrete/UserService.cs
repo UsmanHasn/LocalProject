@@ -201,6 +201,41 @@ namespace Service.Concrete
             _userRepository.Save();
             return true;
         }
+
+
+        public bool UpdateUserFirstLogin(UserModel userModel, string userName)
+        {
+            Users users = new Users()
+            {
+                Id = userModel.Id,
+                UserName = userModel.Name,
+                UserNameAr = userModel.NameAr,
+                CivilNumber = userModel.CivilID,
+                NationalityId = userModel.Nationality,
+                Email = userModel.Email,
+                PhoneNumber = userModel.Mobile,
+                Gender = userModel.Gender,
+                PassportNumber = userModel.PassportNo,
+                PassportExpiryDate = userModel.PassportExpDate,
+                PassportCountryId = userModel.PassportCountryCode,
+                VisaNumber = userModel.VisaNo,
+                VisaExpiryDate = userModel.VisaNoExpDate,
+                BuildingNumber = "22",
+                WayNumber = "83884",
+                TelephoneNumber = "2881038832",
+                CountryId = userModel.CountryID,
+                DateOfBirth = userModel.DateOfBirth,
+                City = userModel.City,
+                Password = userModel.Password,
+                CreatedBy = userModel.CreatedBy,
+                SupervisorUserId = userModel.SupervisorUserId,
+                LastLoginDate=DateTime.Now,
+                CreatedDate = userModel.CreatedDate
+            };
+            _userRepository.Update(users, userName);
+            _userRepository.Save();
+            return true;
+        }
         public bool AddUserInRole(List<int> roleIds, int userId, string userName)
         {
             List<UserInRole> assignedRoles = _userRoleRepository.GetAll(x => x.UserId == userId).ToList();
