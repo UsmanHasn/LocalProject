@@ -30,6 +30,18 @@ namespace Service.Concrete
         {
             throw new NotImplementedException();
         }
+        public Task<bool> unblockUser(int UserId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<bool> blockUser(int UserId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<bool> restoreUser(int UserId)
+        {
+            throw new NotImplementedException();
+        }
 
         public List<UserProfileModel> GetAllUserFile()
         {

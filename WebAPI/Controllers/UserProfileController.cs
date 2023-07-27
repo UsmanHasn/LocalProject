@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Service.Concrete;
 using Service.Interface;
@@ -41,10 +42,34 @@ namespace WebAPI.Controllers
         [Route("GetSwitchProfiles")]
         public IActionResult GetSwitchProfiles(int UserId)
         {
-            List<SwitchProfileModel> model = new List<SwitchProfileModel>();
-            model = userProfileService.GetSwitchProfiles(UserId);
+            var model = userProfileService.GetSwitchProfiles(UserId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("unblockUser")]
+        public IActionResult unblockUser(int UserId)
+        {
+            var model = userProfileService.unblockUser(UserId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("blockUser")]
+        public IActionResult blockUser(int UserId)
+        {
+            var model = userProfileService.blockUser(UserId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("restoreUser")]
+        public IActionResult restoreUser(int UserId)
+        {
+            var model = userProfileService.restoreUser(UserId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
 
     }
 }
