@@ -85,7 +85,7 @@ namespace WebAPI.Controllers
         {
             //var currentUser = SjdcConstants.Users.FirstOrDefault(x => x.Username.ToLower() ==
             //    userLogin.Username.ToLower() && x.Password == userLogin.Password);
-            var currentUser = _usersRepository.GetSingle(x => x.CivilNumber.ToString() == userLogin.Username && x.Password == userLogin.Password);
+            var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == userLogin.Username && x.Password == userLogin.Password);
             if (currentUser != null)
             {
                 Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
