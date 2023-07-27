@@ -47,7 +47,7 @@ namespace Service.Helper
                 
             }
         }
-        public void sendMailAttachment(string toEmail, string subject, string messageBody, string sFileName)
+        public static void sendMailAttachment(string toEmail, string subject, string messageBody, string sFileName)
         {
             //For e-Brochure
 
