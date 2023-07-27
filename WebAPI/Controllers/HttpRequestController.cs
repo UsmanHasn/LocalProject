@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
+using Microsoft.Data.SqlClient;
 using Service.Concrete;
+using Service.Models;
 using System.Net;
 using WebAPI.Helper;
 using WebAPI.Models;
@@ -125,5 +128,43 @@ namespace WebAPI.Controllers
             //response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
+
+
+        [HttpGet]
+        [Route("getCasesType")]
+        public async Task<IActionResult> GetCaseType()
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseType>, HttpResponseModel<CaseType>>(base.acoApiUrl + "case/GetCasesType", HttpMethod.Get, null, null);
+            var response = new List<CaseType>();
+            response.AddRange(responseACO.data);
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getCasesStatus")]
+        public async Task<IActionResult> GetCasesStatus()
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseStatus>, HttpResponseModel<CaseStatus>>(base.acoApiUrl + "case/GetCasesStatus", HttpMethod.Get, null, null);
+            var response = new List<CaseStatus>();
+            response.AddRange(responseACO.data);
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getCaseFilter")]
+        public async Task<IActionResult> GetCaseFilter(string caseType, string caseStatus)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var parameters = new Dictionary<string, string>
+            {
+                { "caseType", caseType},
+                { "caseStatus", caseStatus}
+            };
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCaseFilter?caseType=" + caseType + "&caseStatus=" + caseStatus, HttpMethod.Get, null, null);
+            var response = new List<CasesModel>();
+            response.AddRange(responseACO.data);
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+
     }
 }
