@@ -15,7 +15,7 @@ namespace Domain.Entities
         public string UserName { get; set; }
         public string UserNameAr { get; set; }
         public string Password { get; set; }
-        public int? CivilNumber { get; set; }
+        public string CivilNumber { get; set; }
         public NationalityLookup Nationality { get; set; }
         public int? NationalityId { get; set; }
         public DateTime? DateOfBirth { get; set; }
@@ -49,5 +49,17 @@ namespace Domain.Entities
         public UserStatusLookup UserStatus { get; set; }
         public int? SupervisorUserId { get; set; }
         public Users SupervisorUser { get; set; }
+        public string title_ar { get; set; }
+        public string name_1_ar { get; set; }
+        public string name_2_ar { get; set; }
+        public string name_3_ar { get; set; }
+        public string name_4_ar { get; set; }
+        public string name_5_ar { get; set; }
+        public string name_6_ar { get; set; }
+        public string Wilayatcode { get; set; }
+        public string Wilayatdesc_ar { get; set; }
+        public string Towncode { get; set; }
+        public string Towndesc_ar { get; set; }
+        public DateTime CivilExpiryDate { get; set; }
     }
 }

@@ -19,5 +19,7 @@ namespace Domain.Entities
         public bool WritePermission { get; set; }
         public bool DeletePermission { get; set; }
         public int DelegatedByUserId { get; set; }
+        public DateTime? EffFrom { get; set; }
+        public DateTime? EffTo { get; set; }
     }
 }

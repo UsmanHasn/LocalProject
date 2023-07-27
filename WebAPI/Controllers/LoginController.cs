@@ -12,6 +12,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using Data.Interface;
 using Domain.Entities;
+using WebAPI.Models.APIModels;
 
 namespace WebAPI.Controllers
 {
@@ -45,10 +46,14 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("authenticatemobile")]
-        public ActionResult Login(string mobileNo)
+        public async Task<ActionResult> Login(string mobileNo)
         {
-            var user = Authenticate(mobileNo);
-            if (user != null)
+            var user = await Authenticate(mobileNo);
+            if (user != null && user.UserId == 0)
+            {
+                return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
+            }
+            else if (user != null && user.UserId > 0)
             {
                 var token = GenerateToken(user);
                 return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
@@ -99,28 +104,52 @@ namespace WebAPI.Controllers
             }
             return null;
         }
-        private UsersModel Authenticate(string mobileNo)
+        private async Task<UsersModel> Authenticate(string mobileNo)
         {
-            //var currentUser = SjdcConstants.Users.FirstOrDefault(x => x.Username.ToLower() ==
-            //    userLogin.Username.ToLower() && x.Password == userLogin.Password);
-            var currentUser = _usersRepository.GetSingle(x => x.PhoneNumber == mobileNo);
-            if (currentUser != null)
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new HttpResponseModel<MobilePKIResponseModel>();
+            try
             {
-                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                response = await httpClientHelper.MakeHttpRequest<HttpResponseModel<MobilePKIRequestModel>, HttpResponseModel<MobilePKIResponseModel>>("https://integrationsvc.com/api/GovServ/MobilePKI/" + mobileNo, HttpMethod.Get, null, null);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            if (response == null)
+            {
+                //will remove below code when api availables.
+                response = SjcConstants.getPKIResponse(mobileNo);
+                if (response == null)
+                {
+                    return null;
+                }
+            }
+            
+            MobilePKIResponseModel resp = (response != null ? response.data[0] : null);
+            var userByCivilNo = _usersRepository.GetSingle(x => x.CivilNumber == resp.CivilNo);
+            if (userByCivilNo == null)
+            {
                 return new UsersModel()
                 {
-                    UserId = currentUser.Id,
-                    Username = currentUser.UserName,
-                    UsernameAr = currentUser.UserNameAr,
-                    CivilID = currentUser.CivilNumber.ToString(),
-                    Email = currentUser.Email,
-                    MobileNo = currentUser.PhoneNumber,
-                    RoleId = role == null ? 0 : role.Id,
-                    Role = role == null ? "" : role.Name
+                    CivilID = resp.CivilNo.ToString()
                 };
-                //return currentUser;
+                
             }
-            return null;
+
+            Roles role = _userInRoleRepository.GetSingle(x => x.UserId == userByCivilNo.Id && x.Role.Name == SjcConstants.roleIndividual, x => x.Role).Role;
+            var user = new UsersModel()
+            {
+                UserId = userByCivilNo.Id,
+                Username = userByCivilNo.UserName,
+                UsernameAr = userByCivilNo.UserNameAr,
+                CivilID = userByCivilNo.CivilNumber.ToString(),
+                Email = userByCivilNo.Email,
+                MobileNo = userByCivilNo.PhoneNumber,
+                RoleId = role == null ? 0 : role.Id,
+                Role = role == null ? "" : role.Name
+            };
+            return user;
         }
     }
 }

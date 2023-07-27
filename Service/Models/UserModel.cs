@@ -11,7 +11,7 @@ namespace Service.Models
         public int Id { get; set; }
         public int SupervisorUserId { get; set; }
 
-        public int CivilID { get; set; }
+        public string CivilID { get; set; }
         public string Name { get; set; }
 
         public string NameAr { get; set; }

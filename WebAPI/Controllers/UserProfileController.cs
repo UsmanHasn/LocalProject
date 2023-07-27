@@ -31,13 +31,6 @@ namespace WebAPI.Controllers
 
 
         [HttpGet]
-        [Route("GetUserProfile")]
-        public IActionResult GetDataByID(string CivilID)
-        {
-            Models.UsersModel? model = SjdcConstants.Users.FirstOrDefault(x => x.CivilID == CivilID);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        }
-        [HttpGet]
         [Route("GetSwitchProfiles")]
         public IActionResult GetSwitchProfiles(int UserId)
         {
