@@ -46,9 +46,9 @@ namespace WebAPI.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("authenticatemobile")]
-        public async Task<ActionResult> Login(string mobileNo)
+        public async Task<ActionResult> Login(string civilNo)
         {
-            var user = await Authenticate(mobileNo);
+            var user = await Authenticate(civilNo);
             if (user != null && user.UserId == 0)
             {
                 return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
@@ -104,35 +104,21 @@ namespace WebAPI.Controllers
             }
             return null;
         }
-        private async Task<UsersModel> Authenticate(string mobileNo)
+        private async Task<UsersModel> Authenticate(string civilNo)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var response = new HttpResponseModel<MobilePKIResponseModel>();
-            try
-            {
-                response = await httpClientHelper.MakeHttpRequest<HttpResponseModel<MobilePKIRequestModel>, HttpResponseModel<MobilePKIResponseModel>>("https://integrationsvc.com/api/GovServ/MobilePKI/" + mobileNo, HttpMethod.Get, null, null);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-            if (response == null)
-            {
-                //will remove below code when api availables.
-                response = SjcConstants.getPKIResponse(mobileNo);
-                if (response == null)
-                {
-                    return null;
-                }
-            }
-            
-            MobilePKIResponseModel resp = (response != null ? response.data[0] : null);
-            var userByCivilNo = _usersRepository.GetSingle(x => x.CivilNumber == resp.CivilNo);
+            #if debug
+               if (civilNo == "85923849")
+               {
+                    civilNo = "2189511";
+               }             
+            #endif
+            var userByCivilNo = _usersRepository.GetSingle(x => x.CivilNumber == civilNo);
             if (userByCivilNo == null)
             {
                 return new UsersModel()
                 {
-                    CivilID = resp.CivilNo.ToString()
+                    CivilID = civilNo,
+                    UserId = 0
                 };
                 
             }
@@ -143,7 +129,7 @@ namespace WebAPI.Controllers
                 UserId = userByCivilNo.Id,
                 Username = userByCivilNo.UserName,
                 UsernameAr = userByCivilNo.UserNameAr,
-                CivilID = userByCivilNo.CivilNumber.ToString(),
+                CivilID = userByCivilNo.CivilNumber,
                 Email = userByCivilNo.Email,
                 MobileNo = userByCivilNo.PhoneNumber,
                 RoleId = role == null ? 0 : role.Id,

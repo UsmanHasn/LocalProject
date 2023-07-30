@@ -5,4 +5,9 @@
         public List<T> data { get; set; }
         public bool status { get; set; }
     }
+    public class HttpStringResponseModel
+    {
+        public string data { get; set; }
+        public bool status { get; set; }
+    }
 }

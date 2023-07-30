@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Newtonsoft.Json;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -57,7 +58,7 @@ namespace WebAPI.Helper
 
                 // Deserialize the response body
                 var responseBody = await response.Content.ReadFromJsonAsync<TResponse>();
-
+                
                 return responseBody;
             }
             catch (HttpRequestException ex)
@@ -65,6 +66,56 @@ namespace WebAPI.Helper
                 // Handle any exceptions thrown during the request
                 Console.WriteLine($"Error: {ex.Message}");
                 return default(TResponse);
+            }
+        }
+        public async Task<string> MakeHttpRequestJsonString<TRequest, TResponse>(string requestURL, HttpMethod httpMethod, TRequest requestBody = default, Dictionary<string, string> parameters = null)
+        {
+            try
+            {
+                // Add the parameters to the URL if provided
+                if (parameters != null)
+                {
+                    var uriBuilder = new UriBuilder(requestURL);
+                    var query = new StringBuilder();
+                    foreach (var parameter in parameters)
+                    {
+                        query.Append($"{Uri.EscapeDataString(parameter.Key)}={Uri.EscapeDataString(parameter.Value)}&");
+                    }
+                    uriBuilder.Query = query.ToString().TrimEnd('&');
+                    requestURL = uriBuilder.ToString();
+                }
+
+                // Send the HTTP request
+                HttpResponseMessage response;
+                if (httpMethod == HttpMethod.Get)
+                {
+                    response = await _httpClient.GetAsync(requestURL);
+                    
+                }
+                else if (httpMethod == HttpMethod.Post)
+                {
+                    var content = JsonContent.Create(requestBody);
+                    response = await _httpClient.PostAsync(requestURL, content);
+                }
+                else
+                {
+                    throw new NotSupportedException($"HTTP method {httpMethod} is not supported.");
+                }
+
+                // Ensure a successful response
+                response.EnsureSuccessStatusCode();
+
+                // Deserialize the response body
+                var responseBodyStr = await response.Content.ReadAsStringAsync();
+                //var responseBody = await response.Content.ReadFromJsonAsync<TResponse>();
+
+                return responseBodyStr;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Handle any exceptions thrown during the request
+                Console.WriteLine($"Error: {ex.Message}");
+                return default(string);
             }
         }
         private static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)

@@ -6,6 +6,7 @@ namespace WebAPI.Models.APIModels
     {
         public string CardCivilNo { get; set; }
         public string cardExpiryDate { get; set; }
+        public string email { get; set; }
     }
     public class PersonalApiResponseModel
     {
@@ -13,7 +14,7 @@ namespace WebAPI.Models.APIModels
         public string Nationalitycode { get; set; }
         public string Nationalitydesc_en { get; set; }
         public string Nationalitydesc_ar { get; set; }
-        public DateTime dateOfBirth { get; set; }
+        public DateTime? dateOfBirth { get; set; }
         public string Countrycode { get; set; }
         public string Countrydesc_ar { get; set; }
         public string fullname { get; set; }
@@ -33,7 +34,7 @@ namespace WebAPI.Models.APIModels
         public string passportExpireDate { get; set; }
         public string passportCountryCode { get; set; }
         public string visaNumber { get; set; }
-        public DateTime visaNumberExpirydate { get; set; }
+        public DateTime? visaNumberExpirydate { get; set; }
         public string mobileNumber { get; set; }
         public string telephoneNumber { get; set; }
         public string emailAddress { get; set; }
@@ -44,7 +45,7 @@ namespace WebAPI.Models.APIModels
         public string Gender { get; set; }
         public string Genderdesc_en { get; set; }
         public string Genderdesc_ar { get; set; }
-        public DateTime dateOfDeath { get; set; }
+        public DateTime? dateOfDeath { get; set; }
         public CurrentAddress CurrentAddress { get; set; }
         public string PermanentAddress { get; set; }
         public string WorkAddress { get; set; }
