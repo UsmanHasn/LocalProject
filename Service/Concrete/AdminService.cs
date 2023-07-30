@@ -1,29 +1,39 @@
-﻿using Data.Interface;
+﻿using AutoMapper;
+using Data.Concrete;
+using Data.Interface;
 using Domain.Entities;
+using Microsoft.AspNet.Identity;
 using Microsoft.Data.SqlClient;
+using Org.BouncyCastle.Crypto;
 using Service.Interface;
 using Service.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Service.Concrete
 {
     public class AdminService : IAdminService
     {
+        public readonly IRepository<SMS_Trans> _smsRepository;
+    
         private readonly IRepository<SystemSettings> _systemSettingRepository;
-        public AdminService(IRepository<SystemSettings> systemSettingRepository)
+        public AdminService(IRepository<SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
         {
             _systemSettingRepository = systemSettingRepository;
+            _smsRepository = smsRepository;
+         
         }
         public List<UserActivityLog> GetActivityLogs()
         {
             List<UserActivityLog> model = new List<UserActivityLog>();
             model.Add(new UserActivityLog()
             {
-                ID = "0001",
+                ID = 0001,
                 Name = "Waqas Yaqoob",
                 Email = "abc@xyz.com",
                 Role = "Administrator",
@@ -231,6 +241,55 @@ namespace Service.Concrete
             spParams[1] = new SqlParameter("SubCategoryId", subCategoryId);
             List<ServicesModel> data = _systemSettingRepository.ExecuteStoredProcedure<ServicesModel>("sp_GetServices", spParams).ToList();
             return data;
+        }
+        //public List<ServicesModel> GetAllSubServices(int categoryId, int subCategoryId)
+        //{
+        //    SqlParameter[] spParams = new SqlParameter[2];
+        //    spParams[0] = new SqlParameter("CategoryId", categoryId);
+        //    spParams[1] = new SqlParameter("SubCategoryId", subCategoryId);
+        //    List<ServicesModel> data = _systemSettingRepository.ExecuteStoredProcedure<ServicesModel>("sp_GetServices", spParams).ToList();
+        //    return data;
+        //}
+
+
+        public bool Add(SMS_TransModel smsModel, string smsId)
+        {
+            SMS_Trans sms = new SMS_Trans()
+            {
+                SMS_Trans_ID = smsModel.SMS_Trans_ID,
+                Text_Numbers = smsModel.Text_Numbers,
+                Text_Message = smsModel.Text_Message,
+                Notes = smsModel.Notes,
+                CreatedDate = DateTime.Now,
+                Created_On = smsModel.Created_On,
+                Modified_By = smsModel.Modified_By,
+                Modified_On = DateTime.Now
+
+            };
+            _smsRepository.Create(sms, smsId);
+            _smsRepository.Save();
+            return true;
+
+        }
+
+        public SMS_TransModel GetSmsById(int smsId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateSms(SMS_TransModel sms_TransModel, string smsId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Add(SMS_TransModel sms_TransModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<ServiceSubCategoryLookupModel> IAdminService.GetAllSubServices(int categoryId, int subCategoryId)
+        {
+            throw new NotImplementedException();
         }
 
         public List<AlertModel> GetAllAlerts(int userId)

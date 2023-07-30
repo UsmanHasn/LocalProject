@@ -196,7 +196,7 @@ namespace Data.Concrete
             entity.CreatedBy = createdBy;
             entity.LastModifiedDate = DateTime.Now;
             entity.LastModifiedBy = createdBy;
-            entity.Deleted = false;
+          //  entity.Deleted = false;
             _entity.Add(entity);
             DbContext.Entry(entity).State = EntityState.Added;
         }
@@ -208,7 +208,7 @@ namespace Data.Concrete
             entity.CreatedBy = createdBy;
             entity.LastModifiedDate = DateTime.Now;
             entity.LastModifiedBy = createdBy;
-            entity.Deleted = false;
+           // entity.Deleted = false;
             _entity.Add(entity);
             DbContext.Entry(entity).State = EntityState.Added;
 
@@ -222,7 +222,7 @@ namespace Data.Concrete
             entity.CreatedDate = createdDate;
             entity.LastModifiedBy = createdBy;
             entity.LastModifiedDate = createdDate;
-            entity.Deleted = false;
+          //  entity.Deleted = false;
             _entity.Add(entity);
             DbContext.Entry(entity).State = EntityState.Added;
 
@@ -239,7 +239,7 @@ namespace Data.Concrete
             Logger();
             entity.LastModifiedDate = DateTime.Now;
             entity.LastModifiedBy = modifiedBy;
-            entity.Deleted = false;
+           // entity.Deleted = false;
             _entity.Attach(entity);//check if this need to be Add instead if adding a new child to parent.
             DbContext.Entry(entity).State = EntityState.Modified;
         }
@@ -252,7 +252,7 @@ namespace Data.Concrete
         public virtual void Delete(T entity, string modifiedBy)
         {
             Logger();
-            entity.Deleted = true;
+           // entity.Deleted = true;
             entity.LastModifiedDate = DateTime.Now;
             entity.LastModifiedBy = modifiedBy;
             _entity.Attach(entity);

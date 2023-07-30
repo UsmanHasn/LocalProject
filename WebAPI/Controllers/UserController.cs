@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Entities;
+using Domain.Modeles;
+using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
 using Service.Interface;
 using Service.Models;
@@ -81,5 +83,24 @@ namespace WebAPI.Controllers
             _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+
+        [HttpPost]
+        [Route("InsertUserActivity")]
+        public IActionResult AddUserActivity(UserActivityInfoLogModel model, string userName)
+        {
+            _userService.AddActivity(model, userName);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("getUserActivityLogbyId")]
+        public IActionResult GetUserUserActivityLogById(int ID)
+        {
+            UserActivityInfoLogModel model = new UserActivityInfoLogModel();
+            model = _userService.GetActivityById(ID);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }

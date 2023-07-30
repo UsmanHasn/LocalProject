@@ -6,16 +6,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.Lookups
+namespace Domain.Entities
 {
     public class ServiceCategoryLookup : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        [Key]
+        public int ServiceCategoryId { get; set; }
         [MaxLength(50)]
         [Required]
         public string Name { get; set; }
+        [MaxLength(50)]
         [Required]
         public string NameAr { get; set; }
+        //[MaxLength(100)]
+        //[Required]
+        //public string CreatedBy { get; set; }
+      
+        //public DateTime CreatedDate { get; set; }
+
+        
+        //[MaxLength(100)]
+        //[Required]
+        //public string LastModifiedBy { get; set; }
+
+        //public DateTime LastModifiedDate { get; set; }
+        public int Deleted { get; set; }
     }
 }

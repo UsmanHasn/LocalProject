@@ -10,6 +10,8 @@ namespace Domain.Entities
 {
     public class Users : BaseEntity
     {
+       
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string UserName { get; set; }
@@ -19,11 +21,11 @@ namespace Domain.Entities
         public NationalityLookup Nationality { get; set; }
         public int? NationalityId { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public CountryLookup Country { get; set; }
+       // public CountryLookup Country { get; set; }
         public int? CountryId { get; set;}
         public string? PassportNumber { get; set; }
         public DateTime? PassportExpiryDate { get; set; }
-        public CountryLookup PassportCountry { get; set; }
+       // public CountryLookup PassportCountry { get; set; }
         public int? PassportCountryId { get; set; }
         public string? VisaNumber { get;set; }
         public DateTime? VisaExpiryDate { get; set; }
@@ -64,4 +66,6 @@ namespace Domain.Entities
         public bool? isEmailVerified { get; set; }
         public bool? isPhoneVerified { get; set; }
     }
+
+
 }

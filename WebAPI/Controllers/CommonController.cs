@@ -13,10 +13,14 @@ namespace WebAPI.Controllers
     [Route("api/common/")]
     public class CommonController : Controller
     {
+
+        private readonly IMailService mailService;
+       
         private readonly ILookupService _lookupService;
-        public CommonController(ILookupService lookupService)
+        public CommonController(ILookupService lookupService, IMailService mailService)
         {
             _lookupService = lookupService;
+            this.mailService = mailService;
         }
         [HttpGet]
         [Route("getlanguagevalues")]
@@ -88,6 +92,27 @@ namespace WebAPI.Controllers
             var model = _lookupService.GetAlertsById(alertId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        
+        
+            [HttpPost("SendNotification")]
+            public async Task<IActionResult> SendMail([FromForm] MailRequest request)
+            {
+                try
+                {
+                    await mailService.SendEmailAsync(request);
+                    return Ok();
+
+
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+
+            }
+        }
+    }
 
         [HttpPost]
         [Route("updatealert")]

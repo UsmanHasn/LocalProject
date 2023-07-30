@@ -12,15 +12,19 @@ namespace Domain.Entities
     public class Services : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public ServiceSubCategoryLookup ServiceSubCategory { get; set; }
-        public int? ServiceSubCategoryId { get; set; }
-        [MaxLength(50)]
-        [Required]
+        [Key]
+       // public int ServiceId { get; set; }
+      //  public ServiceSubCategoryLookup ServiceSubCategory { get; set; }
+        public int ServiceSubCategoryId { get; set; }
+      
         public string Name { get; set; }
-        [Required]
+
+        public int Deleted { get; set; }
         public string NameAr { get; set; }
-        public int? Sequence { get; set; }
-        public bool IsActive { get; set; }
+     //   public int Sequence { get; set; }
+        public int IsActive { get; set; }
+      //  public string NameEn { get; set; }
+
+     //  public string CategoryId { get; set; }
     }
 }
