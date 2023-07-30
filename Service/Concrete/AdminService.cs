@@ -233,9 +233,10 @@ namespace Service.Concrete
             return data;
         }
 
-        public List<AlertModel> GetAllAlerts()
+        public List<AlertModel> GetAllAlerts(int userId)
         {
-            SqlParameter[] spParams = new SqlParameter[0];
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("userid", userId);
             var model= _systemSettingRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAllAlerts", spParams).ToList();
             return model;
         }
@@ -243,7 +244,7 @@ namespace Service.Concrete
         public bool Add(AlertModel alertModel, string userName)
         {
 
-            SqlParameter[] spParams = new SqlParameter[10];
+            SqlParameter[] spParams = new SqlParameter[12];
             spParams[0] = new SqlParameter("Alertid", alertModel.alertId);
             spParams[1] = new SqlParameter("UserId", alertModel.userId);
             spParams[2] = new SqlParameter("AlertType", alertModel.alertType);
@@ -254,6 +255,8 @@ namespace Service.Concrete
             spParams[7] = new SqlParameter("CreatedBy", userName);
             spParams[8] = new SqlParameter("LastModifiedBy", userName);
             spParams[9] = new SqlParameter("Deleted", false);
+            spParams[10] = new SqlParameter("IsViewed", false);
+            spParams[11] = new SqlParameter("ViewedOn", DBNull.Value);
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_alerts", spParams);
             return true;
         }

@@ -35,13 +35,22 @@ namespace WebAPI.Controllers
                 systemParameterModel.createdDate = model.createdDate;
                 systemParameterModel.createdBy = model.createdBy;
                 _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
+                return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
             }
             else
             {
-                _isystemParameterService.Add(systemParameterModel, userName);
+                SystemParameterModel sysModel = _isystemParameterService.GetsystemParameterByName(systemParameterModel.keyName);
+                if (sysModel == null)
+                {
+                    _isystemParameterService.Add(systemParameterModel, userName);
+                    return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+                }
+                else
+                {
+                    return null;
+                }
             }
-
-            return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+            return null;
         }
         [HttpDelete]
         [Route("deletesystemparameter")]

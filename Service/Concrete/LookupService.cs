@@ -1,4 +1,5 @@
 ﻿using Data.Interface;
+using Domain.Entities;
 using Domain.Entities.Lookups;
 using Microsoft.Data.SqlClient;
 using Service.Interface;
@@ -44,6 +45,30 @@ namespace Service.Concrete
 
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<ServicesSubCategoryModel>("sjc_GetServicesSubCategory", param);
             return dataMenu.ToList();
+        }
+
+        public List<AlertModel> GetAlerts(string userId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", userId);
+            return _languagesRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAlerts", spParams).ToList();
+        }
+
+        public AlertModel GetAlertsById(string alertId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("AlertId", alertId);
+            return _languagesRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAlertsById", spParams).FirstOrDefault();
+        }
+
+        public bool UpdateAlertById(AlertModel alert)
+        {
+            SqlParameter[] spParams = new SqlParameter[3];
+            spParams[0] = new SqlParameter("Alertid", alert.alertId);
+            spParams[1] = new SqlParameter("IsViewed", true);
+            spParams[2] = new SqlParameter("ViewedOn", DateTime.Now);
+            _languagesRepository.ExecuteStoredProcedure("Sp_dml_updatealerts", spParams);
+            return true;
         }
     }
 }

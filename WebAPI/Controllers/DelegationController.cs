@@ -83,7 +83,9 @@ namespace WebAPI.Controllers
                                         DeletePermission = y.DeletePermission,
                                         PageNameEn = y.PageNameEn,
                                         pageNameAr = y.pageNameAr,
-                                        pageModuleEn = y.pageModuleEn
+                                        pageModuleEn = y.pageModuleEn,
+                                       EffectiveFrom=y.EffectiveFrom,
+                                       EffectiveTo=y.EffectiveTo
 
                                     }).ToList(),
                                     group = x,

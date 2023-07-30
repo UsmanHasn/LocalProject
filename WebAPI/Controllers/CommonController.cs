@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Concrete;
 using Service.Interface;
+using Service.Models;
 using System.Net;
 using WebAPI.Models;
 
@@ -71,7 +72,29 @@ namespace WebAPI.Controllers
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("getAlerts")]
+        public IActionResult GetAlerts(string userId)
+        {
+            List<AlertModel> model = new List<AlertModel>();
+            model = _lookupService.GetAlerts(userId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getAlertsById")]
+        public IActionResult GetAlertsById(string alertId)
+        {
+            //AlertModel model = new AlertModel>();
+            var model = _lookupService.GetAlertsById(alertId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
 
-       
+        [HttpPost]
+        [Route("updatealert")]
+        public IActionResult Add(AlertModel alertModel, string userName)
+        {
+            _lookupService.UpdateAlertById(alertModel);
+            return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
+        }
     }
 }

@@ -110,11 +110,11 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
-        [Route("getall")]
-        public IActionResult GetAll()
+        [Route("getalerts")]
+        public IActionResult GetAll(int userId)
         {
           //  List<UserModel> model = new List<UserModel>();
-           var model = _AdminService.GetAllAlerts();
+           var model = _AdminService.GetAllAlerts(userId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]

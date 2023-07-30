@@ -21,7 +21,7 @@ namespace Service.Interface
         List<ServicesModel> GetAllServices(int categoryId, int subCategoryId);
 
         List<UserModel> GetUsers();
-        List<AlertModel> GetAllAlerts();
+        List<AlertModel> GetAllAlerts(int userId);
         bool Add(AlertModel alertModel, string userName);
         AlertModel GetAlertById(int Id);
     }

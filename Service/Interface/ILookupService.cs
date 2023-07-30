@@ -15,5 +15,9 @@ namespace Service.Interface
         List<NationalityLookup> GetNationalityLookups();
         List<CountryLookup> GetCountryLookups();
         List<ServicesSubCategoryModel> GetServicesSubCategory();
+        List<AlertModel> GetAlerts(string userId);
+        AlertModel GetAlertsById(string alertId);
+
+        bool UpdateAlertById(AlertModel alert);
     }
 }

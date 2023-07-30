@@ -22,9 +22,9 @@ namespace Service.Concrete
 
         public bool Add(SystemParameterModel systemParameterModel, string userName)
         {
-            SystemParameterModel sysModel = this.GetsystemParameterByName(systemParameterModel.keyName);
-            if (sysModel==null)
-            {
+            //SystemParameterModel sysModel = this.GetsystemParameterByName(systemParameterModel.keyName);
+            //if (sysModel==null)
+            //{
                 SystemSettings settings = new SystemSettings()
                 {
                     KeyName = systemParameterModel.keyName,
@@ -35,11 +35,11 @@ namespace Service.Concrete
                 _systemSettingRepository.Create(settings, userName);
                 _systemSettingRepository.Save();
                 return true;
-            }
-            else
-            {
-                return false;
-            }
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
         public bool DeletesystemParameter(int Id, string userName)
