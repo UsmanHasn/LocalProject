@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 using Data.Interface;
 using Domain.Entities;
 using WebAPI.Models.APIModels;
+using Service.Interface;
+using Service.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -23,11 +25,14 @@ namespace WebAPI.Controllers
         private readonly IConfiguration _config;
         private readonly IRepository<Users> _usersRepository;
         private readonly IRepository<UserInRole> _userInRoleRepository;
-        public LoginController(IConfiguration config, IRepository<Users> usersRepository, IRepository<UserInRole> userInRoleRepository)
+        private readonly IUserService _userService;
+        public LoginController(IConfiguration config, IRepository<Users> usersRepository, IRepository<UserInRole> userInRoleRepository,
+               IUserService userService)
         {
             _config = config;
             _usersRepository = usersRepository;
             _userInRoleRepository = userInRoleRepository;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -39,6 +44,7 @@ namespace WebAPI.Controllers
             if (user != null)
             {
                 var token = GenerateToken(user);
+                _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
                 return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
@@ -51,11 +57,13 @@ namespace WebAPI.Controllers
             var user = await Authenticate(civilNo);
             if (user != null && user.UserId == 0)
             {
+                _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI but not exists in system", DateTime.Now, user.Username);
                 return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
             }
             else if (user != null && user.UserId > 0)
             {
                 var token = GenerateToken(user);
+                _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
                 return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });

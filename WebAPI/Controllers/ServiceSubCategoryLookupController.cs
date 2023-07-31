@@ -47,17 +47,17 @@ namespace WebAPI.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        [Route("UpdateServiceImage")]
-        //[Route("UpdateService")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateImage(int ServiceId,[FromForm] Services issue)
-        {
-            _context.Entry(issue).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
+        //[HttpPut]
+        //[Route("UpdateServiceImage")]
+        ////[Route("UpdateService")]
+        ////[ProducesResponseType(StatusCodes.Status204NoContent)]
+        ////[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> UpdateImage(int ServiceId,[FromForm] Services issue)
+        //{
+        //    _context.Entry(issue).State = EntityState.Modified;
+        //    await _context.SaveChangesAsync();
+        //    return NoContent();
+        //}
 
 
         [HttpDelete]

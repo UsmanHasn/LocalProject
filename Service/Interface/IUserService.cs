@@ -22,6 +22,7 @@ namespace Service.Interface
         UserModel GetUserById(int Id);
 
         bool AddActivity(UserActivityInfoLogModel userModel, string userName);
+        bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName);
         UserActivityInfoLogModel GetActivityById(int UserId);
 
         bool UpdateUserActivity(UserActivityInfoLogModel userModel, string userName);

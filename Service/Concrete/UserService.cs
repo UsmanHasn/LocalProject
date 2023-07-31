@@ -8,6 +8,7 @@ using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -289,13 +290,29 @@ namespace Service.Concrete
                 PageName = userModel.PageName,
                 Message = userModel.Message,
                 TimeLoggedIn = userModel.TimeLoggedIn,
-                TimeLoggedOut = userModel.TimeLoggedIn
+                TimeLoggedOut = userModel.TimeLoggedOut
             };
             _userRepository1.Create(userActivityInfoLog, userName);
             _userRepository1.Save();
             return true;
         }
-
+        public bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName)
+        {
+            UserActivityInfoLog userActivityInfoLog = new UserActivityInfoLog()
+            {
+                UserId = userId,
+                PageName = pageName,
+                Message = activity,
+                TimeLoggedIn = loggedIn,
+                CreatedBy = userName,
+                LastModifiedBy = userName,
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now
+            };
+            _userRepository1.Create(userActivityInfoLog, userName);
+            _userRepository1.Save();
+            return true;
+        }
         public UserActivityInfoLogModel GetActivityById(int ID)
         {
             var dataMenu = _userRepository.ExecuteStoredProcedure<UserActivityInfoLogModel>("sjc_GetUserActivityInfoLogById", new Microsoft.Data.SqlClient.SqlParameter("UserId", ID));
