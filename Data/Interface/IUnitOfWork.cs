@@ -1,7 +1,7 @@
 ﻿using Data.Concrete;
 using System;
 using System.Data;
-
+ 
 namespace Data.Interface
 {
     public interface IUnitOfWork: IDisposable
@@ -12,5 +12,8 @@ namespace Data.Interface
         UnitOfWork BeginTransaction(IsolationLevel isolationLevel);
         void RollBackTransaction();
         void CommitTransaction(bool disposeTransaction = false);
+
+        IServiceRepository Services { get; }
+        int Complete();
     }
 }

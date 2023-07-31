@@ -1,4 +1,6 @@
-﻿using Domain.Entities.Lookups;
+﻿using Domain.Entities;
+using Domain.Entities.Lookups;
+using Domain.Modeles;
 using Service.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,12 @@ namespace Service.Interface
         bool UpdateUser(UserModel userModel, string userName);
         bool UpdateUserFirstLogin(UserModel userModel, string userName);
         UserModel GetUserById(int Id);
+
+        bool AddActivity(UserActivityInfoLogModel userModel, string userName);
+        bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName);
+        UserActivityInfoLogModel GetActivityById(int UserId);
+
+        bool UpdateUserActivity(UserActivityInfoLogModel userModel, string userName);
         bool AddUserInRole(List<int> roleIds, int userId, string userName);
 
     }

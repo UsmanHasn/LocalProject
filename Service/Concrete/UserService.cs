@@ -1,10 +1,14 @@
 ﻿using Data.Interface;
 using Domain.Entities;
 using Domain.Entities.Lookups;
+using Domain.Modeles;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +18,14 @@ namespace Service.Concrete
     public class UserService : IUserService
     {
         public readonly IRepository<Users> _userRepository;
+        public readonly IRepository<UserActivityInfoLog> _userRepository1;
         public readonly IRepository<UserInRole> _userRoleRepository;
 
-        public UserService(IRepository<Users> userRepository, IRepository<UserInRole> userRoleRepository)
+        public UserService(IRepository<Users> userRepository, IRepository<UserActivityInfoLog> userRepository1, IRepository<UserInRole> userRoleRepository)
         {
             _userRepository = userRepository;
             _userRoleRepository = userRoleRepository;
+            _userRepository1 = userRepository1;
         }
 
         public List<UserListModel> GetAllUsers()
@@ -173,7 +179,7 @@ namespace Service.Concrete
         {
             Users users = new Users()
             {
-                Id=userModel.Id,
+                Id = userModel.Id,
                 UserName = userModel.Name,
                 UserNameAr = userModel.NameAr,
                 CivilNumber = userModel.CivilID,
@@ -276,5 +282,69 @@ namespace Service.Concrete
             return true;
         }
 
+        public bool AddActivity(UserActivityInfoLogModel userModel, string userName)
+        {
+            UserActivityInfoLog userActivityInfoLog = new UserActivityInfoLog()
+            {
+                UserId = userModel.UserId,
+                PageName = userModel.PageName,
+                Message = userModel.Message,
+                TimeLoggedIn = userModel.TimeLoggedIn,
+                TimeLoggedOut = userModel.TimeLoggedOut
+            };
+            _userRepository1.Create(userActivityInfoLog, userName);
+            _userRepository1.Save();
+            return true;
+        }
+        public bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName)
+        {
+            UserActivityInfoLog userActivityInfoLog = new UserActivityInfoLog()
+            {
+                UserId = userId,
+                PageName = pageName,
+                Message = activity,
+                TimeLoggedIn = loggedIn,
+                CreatedBy = userName,
+                LastModifiedBy = userName,
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now
+            };
+            _userRepository1.Create(userActivityInfoLog, userName);
+            _userRepository1.Save();
+            return true;
+        }
+        public UserActivityInfoLogModel GetActivityById(int ID)
+        {
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserActivityInfoLogModel>("sjc_GetUserActivityInfoLogById", new Microsoft.Data.SqlClient.SqlParameter("UserId", ID));
+            return dataMenu.FirstOrDefault();
+        }
+
+        public bool UpdateUserActivity(UserActivityInfoLogModel userModel, string userName)
+        {
+            UserActivityInfoLog users = new UserActivityInfoLog()
+            {
+                UserId = userModel.UserId,
+                PageName = userModel.PageName,
+                Message = userModel.Message,
+                TimeLoggedIn = userModel.TimeLoggedIn,
+                TimeLoggedOut = userModel.TimeLoggedIn,           
+                LastModifiedDate = userModel.TimeLoggedIn
+            };
+            _userRepository1.Update(users, userName);
+            _userRepository1.Save();
+            return true;
+        }
+        //--------------------------------------------------------------------------------------------------------------------------
+        //public bool AddActivity(UserActivityLog userModel, string userName)
+        //{
+        //    UserActivityInfoLog users = new UserActivityInfoLog()
+        //    {
+        //        UserId = userModel.ID 
+
+        //    };
+        //    _userRepository.Create(users, userName);
+        //    _userRepository.Save();
+        //    return true;
+        //}
     }
 }

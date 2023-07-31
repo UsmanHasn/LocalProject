@@ -8,18 +8,27 @@ namespace Domain.Entities
     {
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public Users User { get; set; }
-        [Required]
+        [Key]
         public int UserId { get; set; }
-        [Required]
+        //public int Id { get; set; }
+        //public Users User { get; set; }
+       
+        
         [MaxLength(100)]
         public string PageName { get; set; }
         [MaxLength(200)]
         public string Message { get; set; }
-        [Required]
+       
         public DateTime TimeLoggedIn { get; set; }
 
         public DateTime? TimeLoggedOut { get; set; }
+
+        public Boolean Deleted { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+
+        public string? LastModifiedBy { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+
     }
 }

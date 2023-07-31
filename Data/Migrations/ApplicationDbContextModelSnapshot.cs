@@ -707,6 +707,12 @@ namespace Data.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("EffFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffTo")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -792,17 +798,19 @@ namespace Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BuildingNumber")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("CivilNumber")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CivilExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CivilNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CountryId")
                         .HasColumnType("int");
@@ -831,7 +839,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsLocked")
@@ -862,7 +869,6 @@ namespace Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PassportNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -870,7 +876,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -878,9 +883,14 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TelephoneNumber")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Towncode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Towndesc_ar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -897,16 +907,47 @@ namespace Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("VisaNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WayNumber")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("Wilayatcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Wilayatdesc_ar")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("WrongPassword")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("isEmailVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("isPhoneVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("name_1_ar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name_2_ar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name_3_ar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name_4_ar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name_5_ar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name_6_ar")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("title_ar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

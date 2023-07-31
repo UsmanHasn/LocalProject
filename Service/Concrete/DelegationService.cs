@@ -77,7 +77,9 @@ namespace Service.Concrete
                 WritePermission = x.WritePermission,
                 DeletePermission = x.DeletePermission,
                 userId = x.userId,
-                UsernameEn = x.UsernameEn
+                UsernameEn = x.UsernameEn,
+                EffectiveFrom=x.EffectiveFrom,
+                EffectiveTo=x.EffectiveTo
             }).ToList();
             return model;
         }
@@ -90,7 +92,9 @@ namespace Service.Concrete
                 ReadPermission = assignRole.ReadPermission,
                 WritePermission = assignRole.WritePermission,
                 DeletePermission = assignRole.DeletePermission,
-                DelegatedByUserId = assignRole.DelegatedUserId
+                DelegatedByUserId = assignRole.DelegatedUserId,
+                EffFrom = assignRole.EffectiveFrom,
+                EffTo=assignRole.EffectiveTo
 
             };
             _userPermissionRepository.Create(userDelegatedPermissions, userName);
@@ -109,7 +113,9 @@ namespace Service.Concrete
                 WritePermission = assignRole.WritePermission,
                 DeletePermission = assignRole.DeletePermission,
                 CreatedBy = assignRole.CreatedBy,
-                CreatedDate = assignRole.CreatedDate
+                CreatedDate = assignRole.CreatedDate,
+                EffFrom = assignRole.EffectiveFrom,
+                EffTo = assignRole.EffectiveTo
             };
             _userPermissionRepository.Update(userDelegatedPermissions, userName);
             _userPermissionRepository.Save();

@@ -10,6 +10,9 @@ using Data.Concrete;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Domain.Entities;
+using Service.Models;
+using System.Configuration;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +56,7 @@ builder.Services.AddCors(options =>
 });
 //Service Activator
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IServiceSubCategoryLookupService, ServiceSubCategoryLookupService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<ILookupService, LookupService>();
 builder.Services.AddScoped<IDelegationService, DelegationService>();
@@ -62,6 +66,9 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<ITestService>(new TestService());
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IMailService, Service.Concrete.MailService>();
+builder.Services.AddTransient<IUsersProfilePicture, Service.Concrete.UsersProfilePicture>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
 builder.Services.AddScoped<IPagesService, PagesService>();

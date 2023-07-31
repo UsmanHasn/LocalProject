@@ -50,5 +50,6 @@ namespace Data.Interface
         (IEnumerable<T>, int resultCount, decimal? totalAmount) SearchWithCount(SearchQuery<T> searchQuery);
         void ExecuteStoredProcedure(string storedProcedureName, params SqlParameter[] parameters);
         IEnumerable<TResult> ExecuteStoredProcedure<TResult>(string storedProcedureName, params SqlParameter[] parameters);
+        
     }
 }

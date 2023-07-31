@@ -11,15 +11,18 @@ namespace Domain.Entities.Lookups
     public class ServiceSubCategoryLookup : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public ServiceCategoryLookup ServiceCategory { get; set; }
+        [Key]
+        public int ServiceSubCategoryId { get; set; }
+        //public ServiceCategoryLookup ServiceCategory { get; set; }
         public int? ServiceCategoryId { get; set; }
+                    
         [MaxLength(50)]
         [Required]
         public string Name { get; set; }
         [Required]
         public string NameAr { get; set; }
-        
+        public int Deleted { get; set; }
+
     }
 
 }

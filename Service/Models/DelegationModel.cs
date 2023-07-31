@@ -23,5 +23,7 @@ namespace Service.Models
         public string? CreatedBy { get; set;}
         public bool Deleted { get; set; }
         public int DelegatedByUserId { get; set; }
+        public DateTime? EffectiveFrom { get; set; }
+        public DateTime? EffectiveTo{ get; set; }
     }
 }

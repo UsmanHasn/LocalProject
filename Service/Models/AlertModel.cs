@@ -15,5 +15,10 @@ namespace Service.Models
         public string? mobileNo { get; set; }
         public string? message { get; set; }
         public int userId { get; set; }
+        public string? userName { get; set; }
+        public int alertcount { get; set; }
+
+        public bool IsViewed { get; set; }
+        public DateTime? ViewedOn { get; set;}
     }
 }

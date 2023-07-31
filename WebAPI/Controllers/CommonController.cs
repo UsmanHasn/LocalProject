@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Concrete;
 using Service.Interface;
+using Service.Models;
 using System.Net;
 using WebAPI.Models;
 
@@ -12,10 +13,14 @@ namespace WebAPI.Controllers
     [Route("api/common/")]
     public class CommonController : Controller
     {
+
+        private readonly IMailService mailService;
+
         private readonly ILookupService _lookupService;
-        public CommonController(ILookupService lookupService)
+        public CommonController(ILookupService lookupService, IMailService mailService)
         {
             _lookupService = lookupService;
+            this.mailService = mailService;
         }
         [HttpGet]
         [Route("getlanguagevalues")]
@@ -71,7 +76,49 @@ namespace WebAPI.Controllers
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("getAlerts")]
+        public IActionResult GetAlerts(string userId)
+        {
+            List<AlertModel> model = new List<AlertModel>();
+            model = _lookupService.GetAlerts(userId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getAlertsById")]
+        public IActionResult GetAlertsById(string alertId)
+        {
+            //AlertModel model = new AlertModel>();
+            var model = _lookupService.GetAlertsById(alertId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
 
-       
+
+
+        [HttpPost("SendNotification")]
+        public async Task<IActionResult> SendMail([FromForm] MailRequest request)
+        {
+            try
+            {
+                await mailService.SendEmailAsync(request);
+                return Ok();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+
+        [HttpPost]
+        [Route("updatealert")]
+        public IActionResult Add(AlertModel alertModel, string userName)
+        {
+            _lookupService.UpdateAlertById(alertModel);
+            return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
+        }
     }
 }

@@ -24,6 +24,9 @@ namespace Data.Concrete
         {
             get { return _transaction != null; }
         }
+
+        public IServiceRepository Services => throw new NotImplementedException();
+
         public UnitOfWork BeginTransaction()
         {
             return BeginTransaction(IsolationLevel.ReadUncommitted);
@@ -129,6 +132,12 @@ namespace Data.Concrete
 
             _disposed = true;
         }
+
+        public int Complete()
+        {
+            throw new NotImplementedException();
+        }
+
         private bool _disposed;
         #endregion
     }

@@ -19,9 +19,15 @@ namespace Service.Interface
         List<LawyersModels> GetAllLawyers();
         List<Notification> GetAllNotifications();
         List<ServicesModel> GetAllServices(int categoryId, int subCategoryId);
+        List<ServiceSubCategoryLookupModel> GetAllSubServices(int categoryId, int subCategoryId);
+        // Task<bool> SendSmsMessage(SMS_TransModel sms_TransModel);
+        bool Add(SMS_TransModel sms_TransModel, string smsId);
+        SMS_TransModel GetSmsById(int smsId);
+        bool UpdateSms(SMS_TransModel sms_TransModel, string smsId);
+
 
         List<UserModel> GetUsers();
-        List<AlertModel> GetAllAlerts();
+        List<AlertModel> GetAllAlerts(int userId);
         bool Add(AlertModel alertModel, string userName);
         AlertModel GetAlertById(int Id);
     }
