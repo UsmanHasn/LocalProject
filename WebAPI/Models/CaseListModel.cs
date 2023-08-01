@@ -23,5 +23,6 @@
         public double FeeValue { get; set; }
         public string Comments { get; set; }
         public DateTime CaseFiledDate { get; set; }
+        public string CaseSource { get; set; }
     }
 }
