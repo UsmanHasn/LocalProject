@@ -16,7 +16,8 @@ namespace Service.Models
 
         public string NameAr { get; set; }
 
-        public int Nationality { get; set; }
+        public int NationalityId { get; set; }
+        public string Nationality { get; set; }
 
         public string Email { get; set; }
 
