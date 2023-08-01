@@ -103,7 +103,11 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json","MyAPI");
     }); 
 }
-
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyAPI");
+});
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();

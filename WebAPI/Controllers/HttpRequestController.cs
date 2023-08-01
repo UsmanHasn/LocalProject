@@ -50,11 +50,11 @@ namespace WebAPI.Controllers
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
             var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new CasesModel();
-            if (responseACO.data != null && responseACO.data.Count() > 0)
+            if (responseACO != null && responseACO.data != null && responseACO.data.Count() > 0)
             {
                 response = responseACO.data.FirstOrDefault();
             }
-            else
+            else if (responseJCMS != null)
             {
                 response = responseJCMS.data.FirstOrDefault();
             }
