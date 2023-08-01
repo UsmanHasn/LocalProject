@@ -78,7 +78,7 @@ namespace Service.Concrete
                 DeletePermission = x.DeletePermission,
                 userId = x.userId,
                 UsernameEn = x.UsernameEn,
-                EffectiveFrom=x.EffectiveFrom,
+                EffectiveFrom= x.EffectiveFrom,
                 EffectiveTo=x.EffectiveTo
             }).ToList();
             return model;
