@@ -80,10 +80,10 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("getalllawyers")]
-        public IActionResult GetAllLawyers()
+        public IActionResult GetAllLawyers(int civilNo)
         {
             List<LawyersModels> model = new List<LawyersModels>();
-            model = _AdminService.GetAllLawyers();
+            model = _AdminService.GetAllLawyers(civilNo);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]

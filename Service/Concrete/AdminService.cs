@@ -203,22 +203,11 @@ namespace Service.Concrete
             });
             return model;
         }
-        public List<LawyersModels> GetAllLawyers()
+        public List<LawyersModels> GetAllLawyers(int civilNo)
         {
-            List<LawyersModels> model = new List<LawyersModels>();
-            model.Add(new LawyersModels()
-            {
-                LawyerName = "Fahad",
-                CaseId = 1101,
-                Description = "file description here",
-                CaseType = "Civil"
-            }); model.Add(new LawyersModels()
-            {
-                LawyerName = "Kamran",
-                CaseId = 1102,
-                Description = "file description here",
-                CaseType = "Material"
-            });
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CivilNO", civilNo);
+            var model = _systemSettingRepository.ExecuteStoredProcedure<LawyersModels>("sjc_GetLawyer", spParams).ToList();
             return model;
         }
         public List<Notification> GetAllNotifications()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MimeKit.Cryptography;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,21 @@ namespace Service.Models
 {
     public class LawyersModels
     {
-        public string LawyerName { get; set; }
-        public int CaseId { get; set; }
-        public string Description { get; set; }
-        public string CaseType { get; set; }
+        public int LawyerId { get; set; }
+        public string? CivilNO { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameAr { get; set; }
+        public string? Email { get; set; }
+        public string? Mobile { get; set; }
+        public string? ClassName { get; set; }
+        public string? AddressRegion { get; set; }
+        public string? AddressState { get; set; }
+        public string? RegistrtionNO { get; set; }
+        public string? Status { get; set; }
+        public string? WorkPlaceCode { get; set; }
+        public string? WorkPlace { get; set; }
+        public string? WorkPlaceEmail { get; set; }
+        public string? WorkPlaceRegion { get; set; }
+        public string? WorkPlaceState { get; set; }
     }
 }
