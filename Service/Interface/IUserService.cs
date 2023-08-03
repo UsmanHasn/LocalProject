@@ -18,7 +18,8 @@ namespace Service.Interface
 
         bool Add(UserModel userModel, string userName);
         bool UpdateUser(UserModel userModel, string userName);
-        bool UpdateUserFirstLogin(UserModel userModel, string userName);
+        bool UpdateUserFirstLogin(int UserId, string userName);
+        bool UpdateUserLock(int UserId, string userName);
         UserModel GetUserById(int Id);
 
         bool AddActivity(UserActivityInfoLogModel userModel, string userName);

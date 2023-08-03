@@ -15,7 +15,7 @@ namespace Service.Interface
         Task<bool> UpdateUserProfile(int Id, UserProfileModel UserProfileViewModel);
         Task<bool> DeleteUserProfile(int Id);
         Task<bool> unblockUser(int UserIdUserId);
-        Task<bool> blockUser(int IdUserId;
+        Task<bool> blockUser(int IdUserId);
         Task<bool> restoreUser(int UserId);
         List<SwitchProfileModel> GetSwitchProfiles(int UserId);
     }
