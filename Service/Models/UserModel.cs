@@ -50,6 +50,7 @@ namespace Service.Models
         public DateTime CreatedDate { get; set; }
 
         public string? CreatedBy { get; set; }
+        public int WrongPassword { get; set; } = 0;
         public DateTime CivilExpiryDate { get; set; }
         public bool IsEmailVerified { get; set; }
         public bool IsPhoneVerified { get; set; }
