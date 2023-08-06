@@ -15,6 +15,7 @@ using Domain.Entities;
 using WebAPI.Models.APIModels;
 using Service.Interface;
 using Service.Concrete;
+using Service.Helper;
 
 namespace WebAPI.Controllers
 {
@@ -161,5 +162,40 @@ namespace WebAPI.Controllers
             };
             return user;
         }
+
+        
+
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("forgotPassword")]
+        public ActionResult ForgotPassword([FromBody] ForgotPasswordModel forgotPassword)
+        {
+            var user = _usersRepository.GetSingle(x => x.CivilNumber == forgotPassword.CivilNo && x.Email == forgotPassword.Email);
+            if (user != null)
+            {
+
+                var pass = Guid.NewGuid(); 
+                user.Password = "12345";
+                _usersRepository.Update(user, "System");
+                _usersRepository.Save();
+
+                var fullPath = Path.Combine(Directory.GetCurrentDirectory() + "/Assets/EmailTemplates/", "ForgotPassword.txt");
+
+                string messageBody = System.IO.File.ReadAllText(fullPath);
+                if (!string.IsNullOrEmpty(messageBody))
+                {
+                    messageBody.Replace("{username}", user.UserName);
+                }
+
+                EmailHelper.sendMail(user.Email, "ForgotPassword ", messageBody);
+                return new JsonResult(new { success = true, status = HttpStatusCode.OK });
+            }
+            return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
+        }
+
+
+
     }
 }
