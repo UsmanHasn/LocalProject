@@ -46,8 +46,9 @@ namespace Data.Context
             modelBuilder.Entity<LanguageLookup>().Property(p => p.Id).HasColumnName("LanguageId");
             modelBuilder.Entity<ServiceCategoryLookup>().Property(p => p.ServiceCategoryId).HasColumnName("ServiceCategoryId");
             modelBuilder.Entity<ServiceSubCategoryLookup>().Property(p => p.ServiceSubCategoryId).HasColumnName("ServiceSubCategoryId");
-           // modelBuilder.Entity<SJCESP_LawyerInformation>().Property(p => p.lawyerid).HasConversion("LawyerName");
-          //  modelBuilder.Entity<UpdateUsers>().Property(p => p.UserId).HasColumnName("UserId");
+            modelBuilder.Entity<UsersProfilePicture>().Property(p => p.UserId).HasColumnName("UserId");
+            // modelBuilder.Entity<SJCESP_LawyerInformation>().Property(p => p.lawyerid).HasConversion("LawyerName");
+            //  modelBuilder.Entity<UpdateUsers>().Property(p => p.UserId).HasColumnName("UserId");
             // In OnModelCreating method
             //modelBuilder.Entity<Users>(u =>
             //{
@@ -96,6 +97,7 @@ namespace Data.Context
         public virtual DbSet<UsersProfilePicture> UsersProfilePicture { get; set; }
 
         public virtual DbSet<UsersProfilePictureView> UsersProfilePictureView { get; set; }
+        public virtual DbSet<DwonloadUsersProfilePicture> DwonloadUsersProfilePicture { get; set; }
 
         // public virtual DbSet<UpdateUsers> UpdateUsers { get; set; }
 

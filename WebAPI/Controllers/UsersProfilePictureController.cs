@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.Concrete;
 using Service.Interface;
+using System.Data.Entity;
 
 namespace WebAPI.Controllers
 {
@@ -114,15 +115,32 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpPut]
-        [Route("UpdateUsers")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(int UserId, Users issue)
+        //[HttpPut]
+        //[Route("UpdateUsers")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> Update(int UserId, Users issue)
+        //{
+        //    _DbContext.Entry(issue).State = System.Data.Entity.EntityState.Modified;
+        //    await _DbContext.SaveChangesAsync();
+        //    return NoContent();
+        //}
+
+
+
+        [HttpPost]
+        [Route("DownloadPathImage")]
+        // Implement the file download logic
+        public IActionResult Download(int id)
         {
-            _DbContext.Entry(issue).State = EntityState.Modified;
-            await _DbContext.SaveChangesAsync();
-            return NoContent();
+            var fileModel = _DbContext.DwonloadUsersProfilePicture.FirstOrDefault(f => f.UserId == id);
+            if (fileModel != null)
+            {
+                var fileStream = new FileStream(fileModel.FilePath, FileMode.Open);
+                return File(fileStream, "application/octet-stream", fileModel.FileName);
+            }
+
+            return NotFound();
         }
 
     }
