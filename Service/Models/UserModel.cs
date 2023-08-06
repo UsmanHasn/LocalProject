@@ -46,6 +46,7 @@ namespace Service.Models
         public string City { get; set; }
         public string Password { get; set; }
         public List<int> AssignRoleIds { get; set; }
+        public int UserStatusId { get; set; } = 1;
 
         public DateTime CreatedDate { get; set; }
 

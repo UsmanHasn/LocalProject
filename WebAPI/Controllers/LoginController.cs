@@ -42,15 +42,19 @@ namespace WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
-                var checkLock = _userService.GetUserById(Convert.ToInt32(userLogin.Username));
+                var check = _userService.GetUserById(Convert.ToInt32(userLogin.Username));
 
-                if(checkLock.WrongPassword == 5) return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
+                if(check.WrongPassword == 5) return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
                 var user = Authenticate(userLogin);
                 if (user != null)
                 {
-                    var token = GenerateToken(user);
-                    _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
-                    return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                    if (check.UserStatusId == 1)
+                    {
+                        var token = GenerateToken(user);
+                        _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
+                        return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                    }
+                    else return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
                 }
                 else
                 {
