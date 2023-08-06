@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
@@ -243,6 +244,60 @@ namespace WebAPI.Controllers
                     Console.WriteLine(ex);
                 }
                 var ListofLawyerInfo = institutionInfo.ListinstitutionLawyersInfo;
+
+                foreach (LawyerInfo responseLawyer in ListofLawyerInfo)
+                {
+                    SqlParameter[] parametersLawyer = new SqlParameter[]
+                {
+                        new SqlParameter("@CivilNO", responseLawyer.lawyerCivilNO),
+                        new SqlParameter("@NameAr", responseLawyer.lawyerArabicName),
+                        new SqlParameter("@NameEn", responseLawyer.lawyerEnglishName),
+                        new SqlParameter("@Email", responseLawyer.lawyerEmail),
+                        new SqlParameter("@Gender", responseLawyer.lawyerGender),
+                        new SqlParameter("@Mobile", responseLawyer.lawyerMobile),
+                        new SqlParameter("@Nationality", responseLawyer.lawyerNationality),
+                        new SqlParameter("@AddressRegion", DBNull.Value),
+                        new SqlParameter("@AddressState", DBNull.Value),
+                        new SqlParameter("@LandLine", DBNull.Value),
+                        new SqlParameter("@ClassCode", responseLawyer.lawyerClassCode),
+                        new SqlParameter("@ClassName", responseLawyer.lawyerClassName),
+                        new SqlParameter("@FileNo", responseLawyer.lawyerFileNo),
+                        new SqlParameter("@LicenseEndDate", DBNull.Value),
+                        new SqlParameter("@LicenseStartDate", DBNull.Value),
+                        new SqlParameter("@RegistrtionNO", DBNull.Value),
+                        new SqlParameter("@Status", responseLawyer.lawyerStatus),
+                        new SqlParameter("@StatusCode", responseLawyer.lawyerStatusCode),
+                        new SqlParameter("@WorkPlace",instituteList[0].institutionName),
+                        new SqlParameter("@WorkPlaceCode", instituteList[0].institutionCode),
+                        new SqlParameter("@WorkPlaceEmail", instituteList[0].institutionEmail),
+                        new SqlParameter("@WorkPlaceMobile", instituteList[0].institutionMobileNo),
+                        new SqlParameter("@WorkPlaceRegion", instituteList[0].institutionRegin),
+                        new SqlParameter("@WorkPlaceState", instituteList[0].institutionState),
+                        new SqlParameter("@ArabicName", responseLawyer.lawyerArabicName),
+                        new SqlParameter("@EnglishName", responseLawyer.lawyerEnglishName),
+                        new SqlParameter("@OwnerArabicName", instituteList[0].institutionOwnersInfo.ownerArabicName),
+                        new SqlParameter("@OwnerCivilNo", instituteList[0].institutionOwnersInfo.ownerCivilNo),
+                        new SqlParameter("@OwnerEnglishName", instituteList[0].institutionOwnersInfo.ownerEnglishName),
+                        new SqlParameter("@OwnerFileNo", instituteList[0].institutionOwnersInfo.ownerFileNo),
+                        new SqlParameter("@OwnerGender", instituteList[0].institutionOwnersInfo.ownerGender),
+                        new SqlParameter("@OwnerNationality", instituteList[0].institutionOwnersInfo.ownerNationality),
+                        new SqlParameter("@PartnerType", DBNull.Value),
+                        new SqlParameter("@SignRight", DBNull.Value),
+                        new SqlParameter("@InstitutionLicenseEndDate", DBNull.Value),
+                        new SqlParameter("@InstitutionLicenseStartDate", DBNull.Value),
+                        new SqlParameter("@InstitutionRegDate", DBNull.Value),
+                        new SqlParameter("@InstitutionRegNo", DBNull.Value),
+                        new SqlParameter("@InstitutionStatus", DBNull.Value),
+                };
+                    try
+                    {
+                        _userRepository.ExecuteStoredProcedure("UpsertLawyer", parametersLawyer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
 
             }
         }

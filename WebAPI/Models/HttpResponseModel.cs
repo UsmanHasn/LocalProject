@@ -10,4 +10,9 @@
         public string data { get; set; }
         public bool status { get; set; }
     }
+    public class HttpPKIResponseModel
+    {
+        public string data { get; set; }
+        public int status { get; set; }
+    }
 }

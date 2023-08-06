@@ -1,7 +1,16 @@
-﻿using static WebAPI.Models.APIModels.PersonalApiRequestModel;
+﻿using Microsoft.Identity.Client;
+using static WebAPI.Models.APIModels.PersonalApiRequestModel;
 
 namespace WebAPI.Models.APIModels
 {
+    public class InovokeMobilePKIRequestModel 
+    {
+        public string Mobile { get; set; }
+    }
+    public class InovokeMobilePKIResponseModel
+    {
+        public string CivilNo { get; set; }
+    }
     public class PersonalApiRequestModel
     {
         public string CardCivilNo { get; set; }

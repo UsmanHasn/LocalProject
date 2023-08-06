@@ -71,10 +71,10 @@ namespace WebAPI.Controllers
                 { "caseId", caseId}
             };
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.acoApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            //var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.jcmsApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.jcmsApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new List<CaseSubjectsModel>();
             response.AddRange(responseACO.data);
-            //response.AddRange(responseJCMS.data);
+            response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -88,10 +88,10 @@ namespace WebAPI.Controllers
                 { "caseId", caseId}
             };
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.acoApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            //var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.jcmsApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.jcmsApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new List<CasePartiesModel>();
             response.AddRange(responseACO.data);
-            //response.AddRange(responseJCMS.data);
+            response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -105,10 +105,10 @@ namespace WebAPI.Controllers
                 { "caseId", caseId}
             };
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.acoApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            //var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.jcmsApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.jcmsApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new List<CaseAnnouncementModel>();
             response.AddRange(responseACO.data);
-            //response.AddRange(responseJCMS.data);
+            response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -122,10 +122,10 @@ namespace WebAPI.Controllers
                 { "caseId", caseId}
             };
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.acoApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            //var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.jcmsApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.jcmsApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new List<CaseHearingModel>();
             response.AddRange(responseACO.data);
-            //response.AddRange(responseJCMS.data);
+            response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -139,10 +139,10 @@ namespace WebAPI.Controllers
                 { "caseId", caseId}
             };
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.acoApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            //var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.jcmsApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.jcmsApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new List<CaseDocumentModel>();
             response.AddRange(responseACO.data);
-            //response.AddRange(responseJCMS.data);
+            response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
 
@@ -153,7 +153,10 @@ namespace WebAPI.Controllers
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseType>, HttpResponseModel<CaseType>>(base.acoApiUrl + "case/GetCasesType", HttpMethod.Get, null, null);
             var response = new List<CaseType>();
-            response.AddRange(responseACO.data);
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -163,7 +166,10 @@ namespace WebAPI.Controllers
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseStatus>, HttpResponseModel<CaseStatus>>(base.acoApiUrl + "case/GetCasesStatus", HttpMethod.Get, null, null);
             var response = new List<CaseStatus>();
-            response.AddRange(responseACO.data);
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
         [HttpGet]

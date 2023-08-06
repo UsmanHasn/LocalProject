@@ -43,12 +43,14 @@ namespace WebAPI.Controllers
         {
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
-                var check = _userService.GetUserById(Convert.ToInt32(userLogin.Username));
-
-                if(check.WrongPassword == 5) return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
                 var user = Authenticate(userLogin);
                 if (user != null)
                 {
+                    var check = _userService.GetUserById(user.UserId);
+
+                    if (check.WrongPassword == 5) 
+                        return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
+
                     if (check.UserStatusId == 1)
                     {
                         var token = GenerateToken(user);
@@ -73,7 +75,6 @@ namespace WebAPI.Controllers
             var user = await Authenticate(civilNo);
             if (user != null && user.UserId == 0)
             {
-                _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI but not exists in system", DateTime.Now, user.Username);
                 return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
             }
             else if (user != null && user.UserId > 0)
@@ -84,7 +85,44 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
         }
-
+        [HttpGet]
+        [Route("InvokeMobilePKI")]
+        public async Task<ActionResult> InvokePKI(string mobileNo)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new InovokeMobilePKIResponseModel();
+            try
+            {
+                var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
+                    ("http://sjcintgerationsvc/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
+                HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
+                //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
+                return new JsonResult(new { data = httpStringResponse });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [HttpGet]
+        [Route("InvokeMobilePKIStatus")]
+        public async Task<ActionResult> InvokeMobilePKIStatus(string transId)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new InovokeMobilePKIResponseModel();
+            try
+            {
+                var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
+                    ("http://sjcintgerationsvc/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
+                HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
+                //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
+                return new JsonResult(new { data = httpStringResponse });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         // To generate token
         private string GenerateToken(UsersModel user)
         {
