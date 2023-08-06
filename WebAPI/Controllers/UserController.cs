@@ -5,6 +5,7 @@ using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
@@ -97,5 +98,13 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+
+        [HttpPost]
+        [Route("updateUserStatus")]
+        public IActionResult UpdateUserStatus(Service.Models.UserStatusModel model)
+        {
+            _userService.UpdateUserStatus(model);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }

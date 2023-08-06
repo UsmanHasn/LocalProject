@@ -39,29 +39,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
-        [HttpGet]
-        [Route("unblockUser")]
-        public IActionResult unblockUser(int UserId)
-        {
-            var model = userProfileService.unblockUser(UserId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        }
-
-        [HttpGet]
-        [Route("blockUser")]
-        public IActionResult blockUser(int UserId)
-        {
-            var model = userProfileService.blockUser(UserId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        }
-
-        [HttpGet]
-        [Route("restoreUser")]
-        public IActionResult restoreUser(int UserId)
-        {
-            var model = userProfileService.restoreUser(UserId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        }
+        
 
 
     }

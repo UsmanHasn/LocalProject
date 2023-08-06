@@ -222,6 +222,7 @@ namespace Service.Concrete
                 Email = userModel.Email,
                 PhoneNumber = userModel.Mobile,
                 Gender = userModel.Gender,
+                Password= userModel.Password,   
                 PassportNumber = userModel.PassportNo,
                 PassportExpiryDate = userModel.PassportExpDate,
                 PassportCountryId = userModel.PassportCountryCode,
@@ -233,17 +234,15 @@ namespace Service.Concrete
                 CountryId = userModel.CountryID,
                 DateOfBirth = userModel.DateOfBirth,
                 City = userModel.City,
-                Password = userModel.Password,
                 CreatedBy = userModel.CreatedBy,
-                SupervisorUserId = userModel.SupervisorUserId,
                 CreatedDate = userModel.CreatedDate,
-                LastLoginDate=DateTime.Now
+                LastModifiedBy = userModel.Name,
+                LastModifiedDate = DateTime.Now,
+                LastLoginDate = DateTime.Now
             };
             _userRepository.Update(users, userName);
             _userRepository.Save();
 
-            _userRepository.Update(users, userName);
-            _userRepository.Save();
             return true;
         }
         public bool UpdateLoginAttempts(int UserId)
@@ -277,15 +276,25 @@ namespace Service.Concrete
                 LastLoginDate = DateTime.Now,
                 WrongPassword =  userModel.WrongPassword+1
             };
-            _userRepository.Update(users, userName);
-            _userRepository.Save();
-
-            _userRepository.Update(users, userName);
+            _userRepository.Update(users, userModel.Name);
             _userRepository.Save();
             return true;
         }
 
-       
+       public UserModel UpdateUserStatus(UserStatusModel userStatus)
+        {
+            UserModel user = new UserModel();
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sp_UpdateUserStatus", new Microsoft.Data.SqlClient.SqlParameter("UserId", userStatus.UserId), new Microsoft.Data.SqlClient.SqlParameter("UserStatusId", userStatus.UserStatusId));
+            if (dataMenu.Any())
+            {
+                user = dataMenu.FirstOrDefault();
+                user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+                return user;
+            }
+
+            return null;
+
+        }
         public bool AddUserInRole(List<int> roleIds, int userId, string userName)
         {
             List<UserInRole> assignedRoles = _userRoleRepository.GetAll(x => x.UserId == userId).ToList();
