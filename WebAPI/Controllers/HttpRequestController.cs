@@ -50,11 +50,11 @@ namespace WebAPI.Controllers
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
             var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
             var response = new CasesModel();
-            if (responseACO.data != null && responseACO.data.Count() > 0)
+            if (responseACO != null && responseACO.data != null && responseACO.data.Count() > 0)
             {
                 response = responseACO.data.FirstOrDefault();
             }
-            else
+            else if (responseJCMS != null)
             {
                 response = responseJCMS.data.FirstOrDefault();
             }
@@ -128,7 +128,23 @@ namespace WebAPI.Controllers
             //response.AddRange(responseJCMS.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
-
+        [HttpGet]
+        [Route("getdocumentsbycaseid")]
+        public async Task<IActionResult> GetDocumentsByCaseId(string caseId)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+            var parameters = new Dictionary<string, string>
+            {
+                { "caseId", caseId}
+            };
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.acoApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            //var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.jcmsApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+            var response = new List<CaseDocumentModel>();
+            response.AddRange(responseACO.data);
+            //response.AddRange(responseJCMS.data);
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
 
         [HttpGet]
         [Route("getCasesType")]

@@ -125,11 +125,14 @@ namespace WebAPI.Controllers
                 ("http://sjcintgerationsvc/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
             HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
             LawyerApiResponseModel responseLawyer = JsonConvert.DeserializeObject<LawyerApiResponseModel>(httpStringResponse.data);
-            if (httpStringResponse.data != null && responseLawyer != null)
+            if (httpStringResponse.data != null && responseLawyer != null && !string.IsNullOrEmpty(responseLawyer.lawyerCivilNO))
             {
                 //Add/Update Institute first
-                await InstituteInfo_UpsertInstitute(responseLawyer.lawyerWorkPlaceCode);
-
+                if (!string.IsNullOrEmpty(responseLawyer.lawyerWorkPlaceCode))
+                {
+                    await InstituteInfo_UpsertInstitute(responseLawyer.lawyerWorkPlaceCode);
+                }
+                
                 // Create an array of SqlParameter objects
                 SqlParameter[] parametersLawyer = new SqlParameter[]
                 {

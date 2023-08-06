@@ -84,8 +84,8 @@ namespace WebAPI.Controllers
                                         PageNameEn = y.PageNameEn,
                                         pageNameAr = y.pageNameAr,
                                         pageModuleEn = y.pageModuleEn,
-                                       EffectiveFrom=y.EffectiveFrom,
-                                       EffectiveTo=y.EffectiveTo
+                                        EffectiveFrom=y.EffectiveFrom,
+                                        EffectiveTo=y.EffectiveTo
 
                                     }).ToList(),
                                     group = x,

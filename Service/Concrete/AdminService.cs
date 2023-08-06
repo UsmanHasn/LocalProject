@@ -30,20 +30,22 @@ namespace Service.Concrete
         }
         public List<UserActivityLog> GetActivityLogs()
         {
-            List<UserActivityLog> model = new List<UserActivityLog>();
-            model.Add(new UserActivityLog()
-            {
-                ID = 0001,
-                Name = "Waqas Yaqoob",
-                Email = "abc@xyz.com",
-                Role = "Administrator",
-                Date = "06-13-2023",
-                IPAddress = "192.168.2.6",
-                Location = "10.15456856, 36542145235",
-                Device = "Iphone8"
-            });
+           
 
-            return model;
+            //List<UserActivityLog> model = new List<UserActivityLog>();
+            //model.Add(new UserActivityLog()
+            //{
+            //    ID = "0001",
+            //    Name = "Waqas Yaqoob",
+            //    Email = "abc@xyz.com",
+            //    Role = "Administrator",
+            //    Date = "06-13-2023",
+            //    IPAddress = "192.168.2.6",
+            //    Location = "10.15456856, 36542145235",
+            //    Device = "Iphone8"
+            //});
+
+            return null;
         }
         public List<Announcement> GetAllAnnouncements()
         {
@@ -190,7 +192,7 @@ namespace Service.Concrete
                 Case_No = "Case I",
                 Case_Type = "Civil",
                 Description = "file description here",
-                Lawyers ="Fahad"
+                Lawyers = "Fahad"
             });
             model.Add(new CaseListModel()
             {
@@ -201,28 +203,17 @@ namespace Service.Concrete
             });
             return model;
         }
-        public List<LawyersModels> GetAllLawyers()
+        public List<LawyersModels> GetAllLawyers(int civilNo)
         {
-            List<LawyersModels> model = new List<LawyersModels>();
-            model.Add(new LawyersModels()
-            {
-                LawyerName = "Fahad",
-                CaseId = 1101,
-                Description = "file description here",
-                CaseType = "Civil"
-            }); model.Add(new LawyersModels()
-            {
-                LawyerName = "Kamran",
-                CaseId = 1102,
-                Description = "file description here",
-                CaseType = "Material"
-            });
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CivilNO", civilNo);
+            var model = _systemSettingRepository.ExecuteStoredProcedure<LawyersModels>("sjc_GetLawyer", spParams).ToList();
             return model;
         }
         public List<Notification> GetAllNotifications()
         {
             List<Notification> model = new List<Notification>();
-            model.Add(new Notification() { CaseID = "172488", Type = "Marriage", Date = "20-10-2019", Description= "Your application has been registered No.: 2054/9101/2018, the Department of Execution of Legal Claims Registration at the First Instance Court in Seeb", LastViewedOn="21-11-2019"});
+            model.Add(new Notification() { CaseID = "172488", Type = "Marriage", Date = "20-10-2019", Description = "Your application has been registered No.: 2054/9101/2018, the Department of Execution of Legal Claims Registration at the First Instance Court in Seeb", LastViewedOn = "21-11-2019" });
             model.Add(new Notification() { CaseID = "291915", Type = "Power of attorney", Date = "21-10-2019", Description = "The decision was taken to postpone the response to a session in file No. 308/1309/2019 for a session on 05/11/2019, the Sessions Affairs Department of the Court, the Court of First Instance in Sohar", LastViewedOn = "12-11-2019" });
             model.Add(new Notification() { CaseID = "352528", Type = "Commandment", Date = "13-11-2019", Description = "The decision was taken to postpone the publication of a session in file No. 406/1301/2019 for a session on 11/12/2019, the Sessions Affairs Department of the Court of First Instance Court in Sohar", LastViewedOn = "14-12-2019" });
             model.Add(new Notification() { CaseID = "172495", Type = "Other civil claims", Date = "21-10-2019", Description = "Your application has been registered No.: 1253/9103/2019, the Department of Commercial Execution, Registration of Claims in the Court of First Instance in Muscat", LastViewedOn = "22-12-2019" });
@@ -234,7 +225,7 @@ namespace Service.Concrete
             model.Add(new Notification() { CaseID = "172242", Type = "Divorce", Date = "21-08-2022", Description = "The executor has been announced against him, File No.: 1030/9101/2019, the Department of Sharia Implementation, Registration of Claims in the Court of First Instance in Al-Buraimi, The procedure is in progress", LastViewedOn = "20-09-2022" });
             return model;
         }
-        public List<ServicesModel> GetAllServices(int categoryId, int subCategoryId) 
+        public List<ServicesModel> GetAllServices(int categoryId, int subCategoryId)
         {
             SqlParameter[] spParams = new SqlParameter[2];
             spParams[0] = new SqlParameter("CategoryId", categoryId);
@@ -296,7 +287,7 @@ namespace Service.Concrete
         {
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("userid", userId);
-            var model= _systemSettingRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAllAlerts", spParams).ToList();
+            var model = _systemSettingRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAllAlerts", spParams).ToList();
             return model;
         }
 
@@ -331,12 +322,30 @@ namespace Service.Concrete
         public List<UserModel> GetUsers()
         {
             SqlParameter[] spParams = new SqlParameter[0];
-           // List<UserModel> model = new List<UserModel>();
+            // List<UserModel> model = new List<UserModel>();
             var model = _systemSettingRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUser", spParams).ToList();
             var data = model.Select(x => new UserModel()
             {
                 Id = x.Id,
                 Name = x.Name,
+            }).ToList();
+            return data;
+        }
+
+
+        public List<UserActivityLog> GetActivityInfoLogs(int userId, bool isSystemAdmin)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", isSystemAdmin != true ? userId : DBNull.Value);
+            var model = _systemSettingRepository.ExecuteStoredProcedure<UserActivityLog>("sjc_GetUserActivityInfoLogById", spParams).ToList();
+            var data = model.Select(x => new UserActivityLog()
+            {
+                UserId = x.UserId,
+                UserName = x.UserName,
+                UserNameAr=x.UserNameAr,
+                PageName = x.PageName,
+                Message = x.Message,
+                TimeLoggedIn = x.TimeLoggedIn
             }).ToList();
             return data;
         }

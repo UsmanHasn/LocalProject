@@ -40,13 +40,17 @@ namespace WebAPI.Controllers
         [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
-            var user = Authenticate(userLogin);
-            if (user != null)
+            if (!string.IsNullOrEmpty(userLogin.Password))
             {
-                var token = GenerateToken(user);
-                _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
-                return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                var user = Authenticate(userLogin);
+                if (user != null)
+                {
+                    var token = GenerateToken(user);
+                    _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
+                    return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                }
             }
+            
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
         }
         [AllowAnonymous]
@@ -141,7 +145,8 @@ namespace WebAPI.Controllers
                 Email = userByCivilNo.Email,
                 MobileNo = userByCivilNo.PhoneNumber,
                 RoleId = role == null ? 0 : role.Id,
-                Role = role == null ? "" : role.Name
+                Role = role == null ? "" : role.Name,
+                RoleAr = role == null ? "" : role.Name
             };
             return user;
         }

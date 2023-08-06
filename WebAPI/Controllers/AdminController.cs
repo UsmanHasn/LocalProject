@@ -5,6 +5,8 @@ using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using WebAPI.Models;
+
 namespace WebAPI.Controllers
 {
     [ApiController]
@@ -21,7 +23,7 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("getallcourt")]
-        public IActionResult  GetAllCourt()
+        public IActionResult GetAllCourt()
         {
             List<CourtList> model = new List<CourtList>();
             model = _AdminService.GetAllCourts();
@@ -31,7 +33,7 @@ namespace WebAPI.Controllers
         [Route("getallcases")]
         public IActionResult GetAllCases()
         {
-            List<CaseListModel> model = new List<CaseListModel>();
+            List<Service.Models.CaseListModel> model = new List<Service.Models.CaseListModel>();
             model = _AdminService.GetAllCases();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
@@ -78,10 +80,10 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("getalllawyers")]
-        public IActionResult GetAllLawyers()
+        public IActionResult GetAllLawyers(int civilNo)
         {
             List<LawyersModels> model = new List<LawyersModels>();
-            model = _AdminService.GetAllLawyers();
+            model = _AdminService.GetAllLawyers(civilNo);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -246,10 +248,10 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("insertalert")]
-        public IActionResult Add(AlertModel alertModel,string userName)
+        public IActionResult Add(AlertModel alertModel, string userName)
         {
             _AdminService.Add(alertModel, userName);
-            return new JsonResult(new {data = alertModel, status = HttpStatusCode.OK});
+            return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
         }
         [HttpGet]
         [Route("getusers")]
@@ -263,8 +265,8 @@ namespace WebAPI.Controllers
         [Route("getalerts")]
         public IActionResult GetAll(int userId)
         {
-          //  List<UserModel> model = new List<UserModel>();
-           var model = _AdminService.GetAllAlerts(userId);
+            //  List<UserModel> model = new List<UserModel>();
+            var model = _AdminService.GetAllAlerts(userId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -274,6 +276,33 @@ namespace WebAPI.Controllers
             AlertModel model = new AlertModel();
             model = _AdminService.GetAlertById(Id);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("getUserActivityInfoLog")]
+        public IActionResult GetUserActivityInfoLog(int Id,bool isSystemAdmin)
+        {
+            List<UserActivityLog> model = new List<UserActivityLog>();
+            model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin);
+            var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();
+            List<UserActivityLogModel> modelPermissions = groupData.Select(x =>
+                                new UserActivityLogModel()
+                                {
+                                    items = model.Where(y => y.UserName == x.group)
+                                    .Select(y => new UserActivityLog()
+                                    {
+                                        UserId = y.UserId,
+                                        UserNameAr=y.UserNameAr,
+                                        PageName = y.PageName,
+                                        Message = y.Message,
+                                        TimeLoggedIn = y.TimeLoggedIn,
+                                        TimeLoggedOut = y.TimeLoggedOut
+
+                                    }).ToList(),
+                                    group = x.group,
+                                    groupAr=x.groupAr
+                                }).ToList();
+            return new JsonResult(new { data = modelPermissions, status = HttpStatusCode.OK });
         }
     }
 }

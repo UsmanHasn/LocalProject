@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +9,14 @@ namespace Service.Models
 {
     public class UserActivityLog
     {
-        public int ID { get; set; }
-        public string Name{ get; set; }
         public int UserId { get; set; }
-        public string? Email { get; set; }
-        public string? Role { get; set; }
-        public string Message { get; set; }
-        public string? Date { get; set; }
-        public string? IPAddress { get; set; }
+        public string? UserName { get; set; }
+        public string? UserNameAr { get; set; }
+        public string? PageName { get; set; }
 
-        public string? Location { get; set; }
-        public string? Device { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string? CreatedBy { get; set; }
-        public Boolean Deleted { get; set; }
+        public string? Message { get; set; }
+        public string? TimeLoggedIn { get; set; }
+
+        public DateTime? TimeLoggedOut { get; set; }
     }
 }

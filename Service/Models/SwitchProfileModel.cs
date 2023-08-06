@@ -9,6 +9,7 @@ namespace Service.Models
     public class SwitchProfileModel
     {
         public int Id { get; set; }
+        public string CivilNumber { get; set; }
         public int UserId { get; set; }
         public string UserNameEn { get; set; }
         public string UserNameAr { get; set; }
