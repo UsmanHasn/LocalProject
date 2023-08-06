@@ -30,7 +30,6 @@ namespace Service.Concrete
         {
             throw new NotImplementedException();
         }
-
         public List<UserProfileModel> GetAllUserFile()
         {
             List<UserProfileModel> model = new List<UserProfileModel>();

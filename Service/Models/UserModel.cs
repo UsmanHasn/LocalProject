@@ -16,8 +16,10 @@ namespace Service.Models
 
         public string NameAr { get; set; }
 
-        public int NationalityId { get; set; }
         public string Nationality { get; set; }
+        public int nationalityID { get; set; }
+
+        public string countryName { get; set; }
 
         public string Email { get; set; }
 
@@ -44,10 +46,12 @@ namespace Service.Models
         public string City { get; set; }
         public string Password { get; set; }
         public List<int> AssignRoleIds { get; set; }
+        public int UserStatusId { get; set; } = 1;
 
         public DateTime CreatedDate { get; set; }
 
         public string? CreatedBy { get; set; }
+        public int WrongPassword { get; set; } = 0;
         public DateTime CivilExpiryDate { get; set; }
         public bool IsEmailVerified { get; set; }
         public bool IsPhoneVerified { get; set; }

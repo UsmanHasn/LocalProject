@@ -108,10 +108,10 @@ namespace Service.Concrete
             {
                 ID = x.ID,
                 Name = x.Name,
-               Email = x.Email,
-               Role=x.Role,
-               MobileNumber=x.MobileNumber,
-               CivilId=x.CivilId
+                Email = x.Email,
+                Role = x.Role,
+                MobileNumber = x.MobileNumber,
+                CivilId = x.CivilId
             }).ToList();
             return model;
         }
@@ -138,7 +138,7 @@ namespace Service.Concrete
                 UserName = userModel.Name,
                 UserNameAr = userModel.NameAr,
                 CivilNumber = userModel.CivilID,
-                NationalityId = userModel.NationalityId,
+                NationalityId = userModel.nationalityID,
                 Email = userModel.Email,
                 PhoneNumber = userModel.Mobile,
                 Gender = userModel.Gender,
@@ -148,12 +148,12 @@ namespace Service.Concrete
                 VisaNumber = userModel.VisaNo,
                 VisaExpiryDate = userModel.VisaNoExpDate,
                 BuildingNumber = "22",
-                WayNumber="83884",
-                TelephoneNumber="2881038832",
+                WayNumber = "83884",
+                TelephoneNumber = "2881038832",
                 CountryId = userModel.CountryID,
-                DateOfBirth=userModel.DateOfBirth,
-                City=userModel.City,
-                Password=userModel.Password,
+                DateOfBirth = userModel.DateOfBirth,
+                City = userModel.City,
+                Password = userModel.Password,
                 SupervisorUserId = userModel.SupervisorUserId
             };
             _userRepository.Create(users, userName);
@@ -171,7 +171,7 @@ namespace Service.Concrete
                 user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
                 return user;
             }
-            
+
             return null;
         }
 
@@ -183,41 +183,7 @@ namespace Service.Concrete
                 UserName = userModel.Name,
                 UserNameAr = userModel.NameAr,
                 CivilNumber = userModel.CivilID,
-                NationalityId = userModel.NationalityId,
-                Email = userModel.Email,
-                PhoneNumber = userModel.Mobile,
-                Gender = userModel.Gender,
-                PassportNumber = userModel.PassportNo,
-                PassportExpiryDate = userModel.PassportExpDate,
-                PassportCountryId = userModel.PassportCountryCode,
-                VisaNumber = userModel.VisaNo,
-                VisaExpiryDate = userModel.VisaNoExpDate,
-                BuildingNumber = "22",
-                WayNumber = "83884",
-                TelephoneNumber = "2881038832",
-                CountryId = userModel.CountryID,
-                DateOfBirth = userModel.DateOfBirth,
-                City = userModel.City,
-                Password = userModel.Password,
-                CreatedBy=userModel.CreatedBy,
-                SupervisorUserId = userModel.SupervisorUserId,
-                CreatedDate =userModel.CreatedDate
-            };
-            _userRepository.Update(users, userName);
-            _userRepository.Save();
-            return true;
-        }
-
-
-        public bool UpdateUserFirstLogin(UserModel userModel, string userName)
-        {
-            Users users = new Users()
-            {
-                Id = userModel.Id,
-                UserName = userModel.Name,
-                UserNameAr = userModel.NameAr,
-                CivilNumber = userModel.CivilID,
-                NationalityId = userModel.NationalityId,
+                NationalityId = userModel.nationalityID,
                 Email = userModel.Email,
                 PhoneNumber = userModel.Mobile,
                 Gender = userModel.Gender,
@@ -235,12 +201,99 @@ namespace Service.Concrete
                 Password = userModel.Password,
                 CreatedBy = userModel.CreatedBy,
                 SupervisorUserId = userModel.SupervisorUserId,
-                LastLoginDate=DateTime.Now,
                 CreatedDate = userModel.CreatedDate
             };
             _userRepository.Update(users, userName);
             _userRepository.Save();
             return true;
+        }
+
+
+        public bool UpdateUserFirstLogin(int UserId, string userName)
+        {
+            UserModel userModel = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId)).FirstOrDefault();
+            Users users = new Users()
+            {
+                Id = userModel.Id,
+                UserName = userModel.Name,
+                UserNameAr = userModel.NameAr,
+                CivilNumber = userModel.CivilID,
+                NationalityId = userModel.nationalityID,
+                Email = userModel.Email,
+                PhoneNumber = userModel.Mobile,
+                Gender = userModel.Gender,
+                Password= userModel.Password,   
+                PassportNumber = userModel.PassportNo,
+                PassportExpiryDate = userModel.PassportExpDate,
+                PassportCountryId = userModel.PassportCountryCode,
+                VisaNumber = userModel.VisaNo,
+                VisaExpiryDate = userModel.VisaNoExpDate,
+                BuildingNumber = "22",
+                WayNumber = "83884",
+                TelephoneNumber = "2881038832",
+                CountryId = userModel.CountryID,
+                DateOfBirth = userModel.DateOfBirth,
+                City = userModel.City,
+                CreatedBy = userModel.CreatedBy,
+                CreatedDate = userModel.CreatedDate,
+                LastModifiedBy = userModel.Name,
+                LastModifiedDate = DateTime.Now,
+                LastLoginDate = DateTime.Now
+            };
+            _userRepository.Update(users, userName);
+            _userRepository.Save();
+
+            return true;
+        }
+        public bool UpdateLoginAttempts(int UserId)
+        {
+            UserModel userModel = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId)).FirstOrDefault();
+            Users users = new Users()
+            {
+                Id = userModel.Id,
+                UserName = userModel.Name,
+                UserNameAr = userModel.NameAr,
+                CivilNumber = userModel.CivilID,
+                NationalityId = userModel.nationalityID,
+                Email = userModel.Email,
+                PhoneNumber = userModel.Mobile,
+                Gender = userModel.Gender,
+                PassportNumber = userModel.PassportNo,
+                PassportExpiryDate = userModel.PassportExpDate,
+                PassportCountryId = userModel.PassportCountryCode,
+                VisaNumber = userModel.VisaNo,
+                VisaExpiryDate = userModel.VisaNoExpDate,
+                BuildingNumber = "22",
+                WayNumber = "83884",
+                TelephoneNumber = "2881038832",
+                CountryId = userModel.CountryID,
+                DateOfBirth = userModel.DateOfBirth,
+                City = userModel.City,
+                Password = userModel.Password,
+                CreatedBy = userModel.CreatedBy,
+                SupervisorUserId = userModel.SupervisorUserId,
+                CreatedDate = userModel.CreatedDate,
+                LastLoginDate = DateTime.Now,
+                WrongPassword =  userModel.WrongPassword+1
+            };
+            _userRepository.Update(users, userModel.Name);
+            _userRepository.Save();
+            return true;
+        }
+
+       public UserModel UpdateUserStatus(UserStatusModel userStatus)
+        {
+            UserModel user = new UserModel();
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sp_UpdateUserStatus", new Microsoft.Data.SqlClient.SqlParameter("UserId", userStatus.UserId), new Microsoft.Data.SqlClient.SqlParameter("UserStatusId", userStatus.UserStatusId));
+            if (dataMenu.Any())
+            {
+                user = dataMenu.FirstOrDefault();
+                user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+                return user;
+            }
+
+            return null;
+
         }
         public bool AddUserInRole(List<int> roleIds, int userId, string userName)
         {
@@ -278,7 +331,7 @@ namespace Service.Concrete
                 }
                 _userRepository.Save();
             }
-            
+
             return true;
         }
 
@@ -327,7 +380,7 @@ namespace Service.Concrete
                 PageName = userModel.PageName,
                 Message = userModel.Message,
                 TimeLoggedIn = userModel.TimeLoggedIn,
-                TimeLoggedOut = userModel.TimeLoggedIn,           
+                TimeLoggedOut = userModel.TimeLoggedIn,
                 LastModifiedDate = userModel.TimeLoggedIn
             };
             _userRepository1.Update(users, userName);

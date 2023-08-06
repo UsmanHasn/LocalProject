@@ -46,7 +46,7 @@ namespace Domain.Entities
         public DateTime? LastLoginDate { get; set; }
         public bool IsLocked { get; set; }
         public DateTime? LockedDate { get; set; }
-        public int? WrongPassword { get; set; }
+        public int WrongPassword { get; set; } = 0;
         public int? UserStatusId { get; set; }
         public UserStatusLookup UserStatus { get; set; }
         public int? SupervisorUserId { get; set; }
