@@ -32,6 +32,29 @@ namespace WebAPI.Controllers
             _userRepository = userRepository;
         }
         [HttpPost]
+        [Route("getcompanyinfo")]
+        public async Task<IActionResult> GetCompanyInfo(CompanyApiRequestModel companyApiRequest)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new CompanyApiResponseModel();
+            try
+            {
+                //Get Personal Information
+                var responseString = await httpClientHelper.MakeHttpRequestJsonString<CompanyApiRequestModel, CompanyApiResponseModel>
+                    ("http://sjcintgerationsvc/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
+                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
+                response = JsonConvert.DeserializeObject<CompanyApiResponseModel>(httpStringResponse.data);
+                var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
+                return new JsonResult(new { companydata = response, signatory = responseSignatory, status = HttpStatusCode.OK});
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+           
+            return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
+        }
+        [HttpPost]
         [Route("getpersonalinfo")]
         public async Task<IActionResult> GetPersonalInfo(PersonalApiRequestModel personalApiRequest)
         {
