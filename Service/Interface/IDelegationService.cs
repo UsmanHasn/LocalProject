@@ -12,6 +12,8 @@ namespace Service.Interface
     {
         List<DelegationModel> GetAllDelegations(string civilId);
 
+        List<DelegationModel> GetUserDelegatedPermission(int delegatedByUserId);
+
         bool Add(DelegationModel delegationModel, string userName);
         List<DelegationModel> GetDelegatedUserPermission(int civilNo, int roleId, int delegatedUserId);
         bool AddUserDelegate(UserDelegatePermissionModel assignRole, string userName);

@@ -9,19 +9,20 @@ namespace Service.Models
     public class ServicesModel
     {
         public int CategoryId { get; set; }
-        public string CategoryNameEn { get; set; }
-        public string CategoryNameAr { get; set; }
+        public string? CategoryNameEn { get; set; }
+        public string? CategoryNameAr { get; set; }
         public int SubCategoryId { get; set; }
-        public string SubCategoryNameEn { get; set; }
-        public string SubCategoryNameAr { get;set; }
+        public string? SubCategoryNameEn { get; set; }
+        public string? SubCategoryNameAr { get;set; }
         public int ServiceId { get; set; }
-        public string ServiceNameEn { get; set; }
-        public string ServiceNameAr { get; set;}
+        public string? ServiceNameEn { get; set; }
+        public string? ServiceNameAr { get; set;}
         public int Sequence { get; set; }
 
-        public string ServiceDescEn { get; set; }
-        public string ServiceDescAr { get; set; }
+        public string? ServiceDescEn { get; set; }
+        public string? ServiceDescAr { get; set; }
          
-
+        public bool? IsActive { get; set; }
+        public string? ImagePath { get; set; }
     }
 }

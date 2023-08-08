@@ -18,7 +18,12 @@ namespace Service.Interface
         List<Domain.Entities.ServiceCategoryLookup> GetAllServiceLookup();
         List<Domain.Modeles.ServicesModel> GetAllServices();
 
+        List<Service.Models.ServiceCategoryLookup> BindServiceCategory();
 
+
+        Service.Models.ServiceSubCategoryLookupModel GetDataById(int id);
+        bool AddServiceSubCat(ServiceSubCategoryLookupModel model, string userName);
+        public bool UpdateServiceSubCat(int id,ServiceSubCategoryLookupModel model, string userName);
         //bool Add(Domain.Modeles.ServicesModel userModel, string userName);
         //bool UpdateUser(Domain.Modeles.ServicesModel userModel, string userName);
         //Domain.Modeles.ServicesModel GetUserById(int ServiceId);

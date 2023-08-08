@@ -114,6 +114,15 @@ namespace WebAPI.Controllers
 
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GetUserDelegatedPermission")]
+        public IActionResult GetUserDelegatedPermission(int delegatedByUserId)
+        {
+            List<DelegationModel> model = new List<DelegationModel>();
+            model = _delegationService.GetUserDelegatedPermission(delegatedByUserId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }
 

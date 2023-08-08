@@ -5,6 +5,7 @@ using Domain.Entities.Lookups;
 using Domain.Modeles;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Service.Helper;
 using Service.Interface;
@@ -97,6 +98,61 @@ namespace Service.Concrete
             return true;
         }
 
+        public bool AddServiceSubCat(ServiceSubCategoryLookupModel model, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[9];
+            spParams[0] = new SqlParameter("ServiceSubCategoryId", model.Id);
+            spParams[1] = new SqlParameter("ServiceCategoryId", model.CategoryId);
+            spParams[2] = new SqlParameter("Name", model.NameEn);
+            spParams[3] = new SqlParameter("NameAr", model.NameAr);
+            spParams[4] = new SqlParameter("ImagePath", model.ImagePath);
+            spParams[5] = new SqlParameter("CreatedBy", userName);
+            spParams[6] = new SqlParameter("LastModifiedBy", userName);
+            spParams[7] = new SqlParameter("Deleted", false);
+            spParams[8] = new SqlParameter("DML", "I");
+            _rolesRepository.ExecuteStoredProcedure("Sp_dml_servicesubcategory", spParams);
+            return true;
+        }
+
+        public bool UpdateServiceSubCat(int id,ServiceSubCategoryLookupModel model, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[9];
+            spParams[0] = new SqlParameter("ServiceSubCategoryId", model.Id);
+            spParams[1] = new SqlParameter("ServiceCategoryId", model.CategoryId);
+            spParams[2] = new SqlParameter("Name", model.NameEn);
+            spParams[3] = new SqlParameter("NameAr", model.NameAr);
+            spParams[4] = new SqlParameter("ImagePath", model.ImagePath);
+            spParams[5] = new SqlParameter("CreatedBy", userName);
+            spParams[6] = new SqlParameter("LastModifiedBy", userName);
+            spParams[7] = new SqlParameter("Deleted", false);
+            spParams[8] = new SqlParameter("DML", "U");
+            _rolesRepository.ExecuteStoredProcedure("Sp_dml_servicesubcategory", spParams);
+            return true;
+        }
+
+        public List<Models.ServiceCategoryLookup> BindServiceCategory()
+        {
+            SqlParameter[] spParams = new SqlParameter[0];
+            // List<UserModel> model = new List<UserModel>();
+            var model = _rolesRepository.ExecuteStoredProcedure<Models.ServiceCategoryLookup>("sjc_GetServiceCategoryLookup", spParams).ToList();
+            var data = model.Select(x => new Models.ServiceCategoryLookup()
+            {
+                ServiceCategoryId = x.ServiceCategoryId,
+                Name = x.Name,
+            }).ToList();
+            return data;
+        }
+
+        public Models.ServiceSubCategoryLookupModel GetDataById(int id)
+        {
+           
+                SqlParameter[] spParams = new SqlParameter[1];
+                spParams[0] = new SqlParameter("Id", id);
+                var model = _rolesRepository.ExecuteStoredProcedure<Models.ServiceSubCategoryLookupModel>("sjc_GetServiceSubCategoryLookupById", spParams).FirstOrDefault();
+                return model;
+            
+        }
+
         //public Domain.Modeles.ServicesModel GetUserById(int ServiceId)
         //{
         //    var dataMenu = _userRepository.ExecuteStoredProcedure<Domain.Modeles.ServicesModel>("sjc_GetServiceId", new Microsoft.Data.SqlClient.SqlParameter("ServiceId", ServiceId));
@@ -115,7 +171,7 @@ namespace Service.Concrete
         //    return true;
         //}
 
-        
+
 
     }
 }

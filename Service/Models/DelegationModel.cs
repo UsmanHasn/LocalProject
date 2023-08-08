@@ -9,6 +9,7 @@ namespace Service.Models
     public class DelegationModel
     {
         public int userPermissionId { get; set; }
+        public string civilNo { get; set; }
         public int pageId { get; set; }
         public int userId { get; set; }
         public string? UsernameEn { get; set; }

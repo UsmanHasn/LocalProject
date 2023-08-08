@@ -241,5 +241,40 @@ namespace WebAPI.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = issue.ServiceCategoryId }, issue);
         }
+
+
+        [HttpGet]
+        [Route("BindServiceCat")]
+        public IActionResult BindServiceCat()
+
+        {
+            List<Service.Models.ServiceCategoryLookup> model = new List<Service.Models.ServiceCategoryLookup>();
+            model = serviceSubCategory.BindServiceCategory();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddServiceSubCat")]
+        public IActionResult AddServiceSubCat(ServiceSubCategoryLookupModel model,string userName)
+        {
+            if (model.Id > 0)
+            {
+                serviceSubCategory.UpdateServiceSubCat(model.Id, model, userName);
+            }
+            else
+            {
+                serviceSubCategory.AddServiceSubCat(model, userName);
+            }
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetAllServiceSubCategoryLookupById")]
+        public IActionResult GetAllServiceSubCategoryLookupById(int id)
+        {
+            var model = serviceSubCategory.GetDataById(id);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }

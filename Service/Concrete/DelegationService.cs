@@ -137,6 +137,11 @@ namespace Service.Concrete
             };
             return userDelegatePermissionModel;
         }
-       
+
+        public List<DelegationModel> GetUserDelegatedPermission(int delegatedByUserId)
+        {
+            var data = _rolesPermissionRepository.ExecuteStoredProcedure<DelegationModel>("sjc_GetUserDelegatedPermissions", new Microsoft.Data.SqlClient.SqlParameter("DelegatedByUserId", delegatedByUserId));
+            return data.ToList();
+        }
     }
 }

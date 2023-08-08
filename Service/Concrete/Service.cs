@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Data.Interface;
 using Domain.Entities;
+using Microsoft.Data.SqlClient;
 using Service.Interface;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace Service.Concrete
 
         public IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IRepository<SystemSettings> _systemSettingRepository;
 
         public Service(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -28,6 +31,33 @@ namespace Service.Concrete
             var stafflist = await _unitOfWork.Services.GetAll();
             var staflist = _mapper.Map<List<Services>>(stafflist);
             return staflist;
+        }
+
+        public List<ServicesSubCategoryModel> BindSubCategory()
+        {
+            throw new NotImplementedException();
+        }
+
+       
+
+        public bool AddService(ServicesModel services, string userName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ServicesModel> GetAllService()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ServicesModel GetDataById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateService(int id, ServicesModel services, string userName)
+        {
+            throw new NotImplementedException();
         }
     }
 }
