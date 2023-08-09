@@ -20,17 +20,17 @@ namespace Service.Concrete
     public class AdminService : IAdminService
     {
         public readonly IRepository<SMS_Trans> _smsRepository;
-    
+
         private readonly IRepository<SystemSettings> _systemSettingRepository;
         public AdminService(IRepository<SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
         {
             _systemSettingRepository = systemSettingRepository;
             _smsRepository = smsRepository;
-         
+
         }
         public List<UserActivityLog> GetActivityLogs()
         {
-           
+
 
             //List<UserActivityLog> model = new List<UserActivityLog>();
             //model.Add(new UserActivityLog()
@@ -333,21 +333,26 @@ namespace Service.Concrete
         }
 
 
-        public List<UserActivityLog> GetActivityInfoLogs(int userId, bool isSystemAdmin)
+        public List<UserActivityLog> GetActivityInfoLogs(int userId, bool isSystemAdmin, string? userName, string? fromdate, string? todate)
         {
-            SqlParameter[] spParams = new SqlParameter[1];
+            SqlParameter[] spParams = new SqlParameter[4];
             spParams[0] = new SqlParameter("UserId", isSystemAdmin != true ? userId : DBNull.Value);
+            spParams[1] = new SqlParameter("UserName", string.IsNullOrEmpty(userName)  ? "" : userName);
+            spParams[2] = new SqlParameter("FromDate", string.IsNullOrEmpty(fromdate) ? "" : fromdate);
+            spParams[3] = new SqlParameter("ToDate", string.IsNullOrEmpty(todate) ? "" : todate);
             var model = _systemSettingRepository.ExecuteStoredProcedure<UserActivityLog>("sjc_GetUserActivityInfoLogById", spParams).ToList();
             var data = model.Select(x => new UserActivityLog()
             {
                 UserId = x.UserId,
                 UserName = x.UserName,
-                UserNameAr=x.UserNameAr,
+                UserNameAr = x.UserNameAr,
                 PageName = x.PageName,
                 Message = x.Message,
                 TimeLoggedIn = x.TimeLoggedIn
             }).ToList();
             return data;
         }
+
+
     }
 }

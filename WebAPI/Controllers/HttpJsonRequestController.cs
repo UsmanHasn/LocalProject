@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -323,6 +324,14 @@ namespace WebAPI.Controllers
                 }
 
             }
+        }
+
+        [HttpGet]
+        [Route("getEntity")]
+        public IActionResult GetEntity()
+        {
+            var data = _userRepository.ExecuteStoredProcedure<EntityModel>("sjc_GetEntity").ToList();
+            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
         }
 
     }

@@ -280,29 +280,29 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("getUserActivityInfoLog")]
-        public IActionResult GetUserActivityInfoLog(int Id,bool isSystemAdmin)
+        public IActionResult GetUserActivityInfoLog(int Id, bool isSystemAdmin, string? userName, string? fromdate, string? todate)
         {
             List<UserActivityLog> model = new List<UserActivityLog>();
-            model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin);
-            var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();
-            List<UserActivityLogModel> modelPermissions = groupData.Select(x =>
-                                new UserActivityLogModel()
-                                {
-                                    items = model.Where(y => y.UserName == x.group)
-                                    .Select(y => new UserActivityLog()
-                                    {
-                                        UserId = y.UserId,
-                                        UserNameAr=y.UserNameAr,
-                                        PageName = y.PageName,
-                                        Message = y.Message,
-                                        TimeLoggedIn = y.TimeLoggedIn,
-                                        TimeLoggedOut = y.TimeLoggedOut
+            model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin, userName, fromdate, todate);
+            //var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();
+            //List<UserActivityLogModel> modelPermissions = groupData.Select(x =>
+            //                    new UserActivityLogModel()
+            //                    {
+            //                        items = model.Where(y => y.UserName == x.group)
+            //                        .Select(y => new UserActivityLog()
+            //                        {
+            //                            UserId = y.UserId,
+            //                            UserNameAr=y.UserNameAr,
+            //                            PageName = y.PageName,
+            //                            Message = y.Message,
+            //                            TimeLoggedIn = y.TimeLoggedIn,
+            //                            TimeLoggedOut = y.TimeLoggedOut
 
-                                    }).ToList(),
-                                    group = x.group,
-                                    groupAr=x.groupAr
-                                }).ToList();
-            return new JsonResult(new { data = modelPermissions, status = HttpStatusCode.OK });
+            //                        }).ToList(),
+            //                        group = x.group,
+            //                        groupAr=x.groupAr
+            //                    }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }
 }

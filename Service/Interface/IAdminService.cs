@@ -30,6 +30,6 @@ namespace Service.Interface
         List<AlertModel> GetAllAlerts(int userId);
         bool Add(AlertModel alertModel, string userName);
         AlertModel GetAlertById(int Id);
-        List<UserActivityLog> GetActivityInfoLogs(int userId, bool isSystemAdmin);
+        List<UserActivityLog> GetActivityInfoLogs(int userId, bool isSystemAdmin,string? userName,string?fromdate,string? todate);
     }
 }
