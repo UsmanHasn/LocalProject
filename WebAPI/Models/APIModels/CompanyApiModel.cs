@@ -27,8 +27,9 @@ namespace WebAPI.Models.APIModels
         public string NameEn { get; set; }
         public string Code { get; set; }
     }
-    public class Signatories { 
-    public Signatory Signatory { get; set; }
+    public class Signatories
+    {
+        public List<Signatory> Signatory { get; set; }
     }
     public class Signatory
     {
