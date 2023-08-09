@@ -1,10 +1,14 @@
 ﻿using Domain.Entities;
 using Domain.Modeles;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
+using Service.Helper;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -67,7 +71,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("UpdateUserFirstLogin")]
         public IActionResult UpdateFirstLogin(int UserId,string userName)
         {
@@ -106,5 +110,65 @@ namespace WebAPI.Controllers
             _userService.UpdateUserStatus(model);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GenerateNumericOTP")]
+        public IActionResult GenerateNumericOTP(int UserId,int OTPType)
+        {
+            
+            const string validChars = "0123456789";
+            byte[] randomBytes = new byte[6];
+
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
+            StringBuilder otpBuilder = new StringBuilder(6);
+            foreach (byte dataByte in randomBytes)
+            {
+                int index = dataByte % validChars.Length;
+                otpBuilder.Append(validChars[index]);
+            }
+
+            EmailHelper.sendMail("Saifnadeem16@gmail.com", "ForgotPassword ", otpBuilder.ToString());
+
+            return new JsonResult(new { data = otpBuilder.ToString(), status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("OTPverify")]
+        public IActionResult OTPverify(int UserId, int OTPType)
+        {
+
+            const string validChars = "0123456789";
+            byte[] randomBytes = new byte[6];
+
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
+            StringBuilder otpBuilder = new StringBuilder(6);
+            foreach (byte dataByte in randomBytes)
+            {
+                int index = dataByte % validChars.Length;
+                otpBuilder.Append(validChars[index]);
+            }
+
+            EmailHelper.sendMail("Saifnadeem16@gmail.com", "ForgotPassword ", otpBuilder.ToString());
+            Service.Models.OtpModel model = new Service.Models.OtpModel()
+            {
+
+
+                OtpId = (int)Convert.ToInt64(otpBuilder),
+                OtpType = OTPType,
+                UserId = UserId,
+                EmailSent = true,
+            };
+            _userService.InsertOtp(model);
+            return new JsonResult(new { data = otpBuilder.ToString(), status = HttpStatusCode.OK });
+        }
+
     }
 }

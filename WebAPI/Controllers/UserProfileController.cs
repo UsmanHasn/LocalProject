@@ -5,6 +5,8 @@ using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using WebAPI.Helper;
 
 namespace WebAPI.Controllers
@@ -38,8 +40,8 @@ namespace WebAPI.Controllers
             var model = userProfileService.GetSwitchProfiles(UserId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+       
 
-        
 
 
     }

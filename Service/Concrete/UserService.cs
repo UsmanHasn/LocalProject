@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace Service.Concrete
 {
@@ -174,7 +175,24 @@ namespace Service.Concrete
 
             return null;
         }
+        public bool InsertOtp(OtpModel DATA)
+        {
+          
+            UserModel user = new UserModel();
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sp_createOTP", 
+                new Microsoft.Data.SqlClient.SqlParameter("otp", DATA.OtpId),
+                 new Microsoft.Data.SqlClient.SqlParameter("typeid", DATA.OtpType)
+                 , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
+                 , new Microsoft.Data.SqlClient.SqlParameter("EmailSent", DATA.EmailSent)
+                 );
+            if (dataMenu.Any())
+            {
+               
+                return true;
+            }
 
+            return false;
+        }
         public bool UpdateUser(UserModel userModel, string userName)
         {
             Users users = new Users()
