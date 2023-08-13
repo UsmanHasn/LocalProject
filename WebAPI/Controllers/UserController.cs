@@ -132,42 +132,27 @@ namespace WebAPI.Controllers
             }
 
             EmailHelper.sendMail("Saifnadeem16@gmail.com", "ForgotPassword ", otpBuilder.ToString());
-
-            return new JsonResult(new { data = otpBuilder.ToString(), status = HttpStatusCode.OK });
-        }
-
-        [HttpGet]
-        [Route("OTPverify")]
-        public IActionResult OTPverify(int UserId, int OTPType)
-        {
-
-            const string validChars = "0123456789";
-            byte[] randomBytes = new byte[6];
-
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(randomBytes);
-            }
-
-            StringBuilder otpBuilder = new StringBuilder(6);
-            foreach (byte dataByte in randomBytes)
-            {
-                int index = dataByte % validChars.Length;
-                otpBuilder.Append(validChars[index]);
-            }
-
-            EmailHelper.sendMail("Saifnadeem16@gmail.com", "ForgotPassword ", otpBuilder.ToString());
             Service.Models.OtpModel model = new Service.Models.OtpModel()
             {
 
 
-                OtpId = (int)Convert.ToInt64(otpBuilder),
+                OtpId = otpBuilder.ToString(),
                 OtpType = OTPType,
                 UserId = UserId,
                 EmailSent = true,
             };
             _userService.InsertOtp(model);
+
+
             return new JsonResult(new { data = otpBuilder.ToString(), status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("OTPverify")]
+        public IActionResult OTPverify(Service.Models.OtpModel model)
+        {
+            
+            return new JsonResult(new { data = _userService.VerifyOtp(model), status = HttpStatusCode.OK });
         }
 
     }
