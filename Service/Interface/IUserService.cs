@@ -21,7 +21,8 @@ namespace Service.Interface
         bool UpdateUserFirstLogin(int UserId, string userName);
         bool UpdateLoginAttempts(int UserId);
         UserModel GetUserById(int Id);
-        bool InsertOtp(OtpModel DATA);
+        bool InsertOtp(OtpModel Data);
+        bool VerifyOtp(OtpModel Data);
 
         bool AddActivity(UserActivityInfoLogModel userModel, string userName);
         bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName);

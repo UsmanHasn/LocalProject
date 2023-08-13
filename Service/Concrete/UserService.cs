@@ -179,8 +179,8 @@ namespace Service.Concrete
         {
           
             UserModel user = new UserModel();
-            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sp_createOTP", 
-                new Microsoft.Data.SqlClient.SqlParameter("otp", DATA.OtpId),
+            var dataMenu = _userRepository.ExecuteStoredProcedure<object>("sp_createOTP", 
+                new Microsoft.Data.SqlClient.SqlParameter("otp", (int)Convert.ToInt64(DATA.OtpId.ToString())),
                  new Microsoft.Data.SqlClient.SqlParameter("typeid", DATA.OtpType)
                  , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
                  , new Microsoft.Data.SqlClient.SqlParameter("EmailSent", DATA.EmailSent)
@@ -192,6 +192,20 @@ namespace Service.Concrete
             }
 
             return false;
+        }
+        public bool VerifyOtp(OtpModel DATA)
+        {
+
+
+            bool dataMenu = _userRepository.ExecuteStoredProcedure<bool>("sp_VerifyOTP",
+                new Microsoft.Data.SqlClient.SqlParameter("otp", (int)Convert.ToInt64(DATA.OtpId.ToString()))
+                 , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
+                 , new Microsoft.Data.SqlClient.SqlParameter("OtpType", DATA.OtpType)
+                 , new Microsoft.Data.SqlClient.SqlParameter("Email", DATA.Email)
+                 , new Microsoft.Data.SqlClient.SqlParameter("MobileNumber", DATA.MobileNumber)
+                 ).FirstOrDefault();
+
+            return dataMenu;
         }
         public bool UpdateUser(UserModel userModel, string userName)
         {
