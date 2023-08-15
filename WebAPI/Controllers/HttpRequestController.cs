@@ -13,6 +13,7 @@ namespace WebAPI.Controllers
     [Route("api/httprequest/")]
     public class HttpRequestController : BaseController
     {
+        #region Case Requests
         [HttpGet]
         [Route("getcases")]
         public async Task<IActionResult> GetCases(string civilNo)
@@ -187,6 +188,27 @@ namespace WebAPI.Controllers
             response.AddRange(responseACO.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
+        #endregion
+        #region Lookup Requests
+        [HttpGet]
+        [Route("getcourttype")]
+        public async Task<IActionResult> GetCourtType()
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetCourtTypes", HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetCourtTypes", HttpMethod.Get, null, null);
+            var response = new List<LookupModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        #endregion
 
     }
 }
