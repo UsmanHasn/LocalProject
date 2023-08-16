@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Data.Concrete;
 using Data.Interface;
 using Domain.Entities;
@@ -28,6 +29,7 @@ namespace Service.Concrete
             _smsRepository = smsRepository;
 
         }
+       
         public List<UserActivityLog> GetActivityLogs()
         {
 
