@@ -208,6 +208,90 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetCaseCategorybyIdCaseType")]
+        public async Task<IActionResult> GetCaseCategorybyIdCaseType(string Id)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "Id", Id}
+            };
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetCaseCategorybyIdCaseType", HttpMethod.Get, null, parameters);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetCaseCategorybyIdCaseType", HttpMethod.Get, null, parameters);
+            var response = new List<LookupModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCaseSubCategorybyCategoryId")]
+        public async Task<IActionResult> GetCaseSubCategorybyCategoryId(string Id)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "Id", Id}
+            };
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetCaseSubCategorybyCategoryId", HttpMethod.Get, null, parameters);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetCaseSubCategorybyCategoryId", HttpMethod.Get, null, parameters);
+            var response = new List<LookupModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCaseTypes")]
+        public async Task<IActionResult> GetCaseTypes()
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetCaseTypes", HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetCaseTypes", HttpMethod.Get, null, null);
+            var response = new List<LookupModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCourtNamebyCourtTypeId")]
+        public async Task<IActionResult> GetCourtNamebyCourtTypeId(string Id)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "Id", Id}
+            };
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetCourtNamebyCourtTypeId", HttpMethod.Get, null, parameters);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetCourtNamebyCourtTypeId", HttpMethod.Get, null, parameters);
+            var response = new List<LookupModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
         #endregion
 
     }
