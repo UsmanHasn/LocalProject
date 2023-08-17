@@ -57,6 +57,7 @@ builder.Services.AddCors(options =>
 //Service Activator
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IServiceSubCategoryLookupService, ServiceSubCategoryLookupService>();
+builder.Services.AddScoped<ICaseService, CaseService>();
 builder.Services.AddScoped<IService, ServicesService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<ILookupService, LookupService>();
