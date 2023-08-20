@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
@@ -31,5 +32,22 @@ namespace WebAPI.Controllers
             _caseService.AddCaseParties(caseParties, userName);
             return new JsonResult(new { data = caseParties, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetCaseByCivilNo")]
+        public IActionResult GetCaseByCivilNo(string CivilNo)
+        {
+            List<CaseModel> model = new List<CaseModel>();
+            model = _caseService.GetAllCases(CivilNo);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCaseById")]
+        public IActionResult GetCaseById(long CaseId)
+        {
+            CaseModel model = new CaseModel();
+            model = _caseService.GetCaseById(CaseId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }

@@ -11,5 +11,8 @@ namespace Service.Interface
     {
         long AddCase(CaseModel caseModel, string userName);
         bool AddCaseParties(CaseParties caseParties, string userName);
+
+        CaseModel GetCaseById(long caseId);
+        List<CaseModel> GetAllCases(string CivilNo);
     }
 }

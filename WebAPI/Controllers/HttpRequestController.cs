@@ -292,6 +292,78 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetPartyTypebyCaseTypeId")]
+        public async Task<IActionResult> GetPartyTypebyCaseTypeId(string Id)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "Id", Id}
+            };
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetPartyTypebyCaseTypeId", HttpMethod.Get, null, parameters);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetPartyTypebyCaseTypeId", HttpMethod.Get, null, parameters);
+            var response = new List<LookupModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetOriginalCaseInfoByCaseNo")]
+        public async Task<IActionResult> GetOriginalCaseInfoByCaseNo(string CourtNameId, string CaseSerial, string CaseCode, string CaseYear, string CategoryId)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                 { "CourtNameId", CourtNameId},
+                 { "CaseSerial", CaseSerial},
+                 { "CaseCode", CaseCode},
+                 { "CaseYear", CaseYear},
+                 { "CategoryId", CategoryId}
+            };
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<OriginalCaseInfoModel>, HttpResponseModel<OriginalCaseInfoModel>>(base.acoApiUrl + "lookup/GetOriginalCaseInfoByCaseNo", HttpMethod.Get, null, parameters);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<OriginalCaseInfoModel>, HttpResponseModel<OriginalCaseInfoModel>>(base.jcmsApiUrl + "lookup/GetOriginalCaseInfoByCaseNo", HttpMethod.Get, null, parameters);
+            var response = new List<OriginalCaseInfoModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetPartyInformationbyOriginalcaseId")]
+        public async Task<IActionResult> GetPartyInformationbyOriginalcaseId(string Id)
+        {
+            var parameters = new Dictionary<string, string>
+            {
+                { "Id", Id}
+            };
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<PartyInformationModel>, HttpResponseModel<PartyInformationModel>>(base.acoApiUrl + "lookup/GetPartyInformationbyOriginalcaseId", HttpMethod.Get, null, parameters);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<PartyInformationModel>, HttpResponseModel<PartyInformationModel>>(base.jcmsApiUrl + "lookup/GetPartyInformationbyOriginalcaseId", HttpMethod.Get, null, parameters);
+            var response = new List<PartyInformationModel>();
+            if (responseACO != null && responseACO.data != null)
+            {
+                response.AddRange(responseACO.data);
+            }
+            if (responseJCMS != null && responseJCMS.data != null)
+            {
+                response.AddRange(responseJCMS.data);
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
         #endregion
 
     }

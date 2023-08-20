@@ -14,8 +14,11 @@ namespace Service.Concrete
 {
     public class CaseService : ICaseService
     {
+
         private readonly IRepository<SystemSettings> _systemSettingRepository;
+        
         public CaseService(IRepository<SystemSettings> systemSettingRepository)
+
         {
             _systemSettingRepository = systemSettingRepository;
         }
@@ -55,5 +58,18 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
             return true;
         }
+        public List<CaseModel> GetAllCases(string CivilNo)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CivilNo", CivilNo);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseByCivilNo", parameters).ToList();
+        }
+        public CaseModel GetCaseById(long caseId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CaseId", caseId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseByCaseId", parameters).FirstOrDefault();
+        }
+
     }
 }
