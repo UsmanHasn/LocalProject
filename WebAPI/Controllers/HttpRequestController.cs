@@ -6,6 +6,7 @@ using Service.Models;
 using System.Net;
 using WebAPI.Helper;
 using WebAPI.Models;
+using CaseDocumentModel = WebAPI.Models.CaseDocumentModel;
 
 namespace WebAPI.Controllers
 {

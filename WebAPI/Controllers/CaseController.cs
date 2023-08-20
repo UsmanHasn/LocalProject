@@ -4,6 +4,7 @@ using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace WebAPI.Controllers
 {
@@ -49,5 +50,45 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+        #region
+        [HttpPost]
+        [Route("uploaddocument")]
+        public IActionResult UploadDocument(string caseId, string documentId, string documentType, string description, string userName)
+        {
+            
+            var file = Request.Form.Files[0];
+            string folderName = Path.Combine("wwwroot", "Case Document");
+            var pathTotSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (file.Length > 0)
+            {
+                var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                var fullPath = Path.Combine(pathTotSave, caseId, fileName);
+                var dbPath = Path.Combine(folderName, fileName);
+                DirectoryInfo di = new DirectoryInfo(fullPath);
+                if (!di.Exists)
+                {
+                    di.Create();
+                }
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                    CaseDocumentModel caseDocumentModel = new CaseDocumentModel()
+                    {
+                        CaseId = Convert.ToInt64(caseId),
+                        DocumentId = Convert.ToInt64(documentId),
+                        DocumentPath = fullPath,
+                        Description = description,
+                        DocumentType = Convert.ToInt32(documentType)
+                    };
+                    _caseService.AddCaseDocuments(caseDocumentModel, userName);
+                }
+                return new JsonResult(new { data = dbPath, status = HttpStatusCode.OK });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
     }
 }

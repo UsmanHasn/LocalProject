@@ -14,5 +14,6 @@ namespace Service.Interface
 
         CaseModel GetCaseById(long caseId);
         List<CaseModel> GetAllCases(string CivilNo);
+        bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName);
     }
 }
