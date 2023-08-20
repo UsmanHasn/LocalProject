@@ -9,7 +9,7 @@ namespace Service.Interface
 {
     public interface ICaseService
     {
-        bool AddCase(CaseModel caseModel, string userName);
+        long AddCase(CaseModel caseModel, string userName);
         bool AddCaseParties(CaseParties caseParties, string userName);
     }
 }

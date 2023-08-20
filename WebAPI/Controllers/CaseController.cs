@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         [Route("insertcase")]
         public IActionResult Insertcase(CaseModel caseModel, string userName)
         {
-            _caseService.AddCase(caseModel, userName);
+            caseModel.CaseId =  _caseService.AddCase(caseModel, userName);
             return new JsonResult(new { data = caseModel, status = HttpStatusCode.OK });
         }
         [HttpPost]

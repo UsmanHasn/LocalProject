@@ -19,7 +19,7 @@ namespace Service.Concrete
         {
             _systemSettingRepository = systemSettingRepository;
         }
-        public bool AddCase(CaseModel caseModel,string userName)
+        public long AddCase(CaseModel caseModel,string userName)
         {
             SqlParameter[] spParams = new SqlParameter[13];
             spParams[0] = new SqlParameter("CaseId", caseModel.CaseId);
@@ -35,8 +35,7 @@ namespace Service.Concrete
             spParams[10] = new SqlParameter("LastModifiedBy", userName);
             spParams[11] = new SqlParameter("Deleted", false);
             spParams[12] = new SqlParameter("DML", "I");
-            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_cases", spParams);
-            return true;
+            return _systemSettingRepository.ExecuteStoredProcedure<long>("Sp_dml_cases", spParams).First();
         }
 
         public bool AddCaseParties(CaseParties caseParties, string userName)
@@ -53,7 +52,7 @@ namespace Service.Concrete
             spParams[8] = new SqlParameter("PhoneNo", caseParties.PhoneNo);
             spParams[9] = new SqlParameter("Address", caseParties.Address);
             spParams[10] = new SqlParameter("DML", "I");
-            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_cases", spParams);
+            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
             return true;
         }
     }

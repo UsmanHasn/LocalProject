@@ -8,7 +8,7 @@ namespace Service.Models
 {
     public class CaseModel
     {
-        public int CaseId { get; set; }
+        public long CaseId { get; set; }
         public string? CaseNo { get; set; }
         public int CourtTypeId { get; set; }
         public int CourtBuildingId { get; set; }
