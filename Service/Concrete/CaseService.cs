@@ -70,16 +70,22 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("CaseId", caseId);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseByCaseId", parameters).FirstOrDefault();
         }
-
+        public List<CaseParties> GetCaseParties(long caseId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CaseId", caseId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseParties>("sjc_GetPartiesByCaseId", parameters).ToList();
+        }
         public bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[11];
+            SqlParameter[] spParams = new SqlParameter[7];
             spParams[0] = new SqlParameter("CaseDocumentId", caseDocumentModel.DocumentId);
             spParams[1] = new SqlParameter("CaseId", caseDocumentModel.CaseId);
             spParams[2] = new SqlParameter("DocumentType", caseDocumentModel.DocumentType);
             spParams[3] = new SqlParameter("DocumentPath", caseDocumentModel.DocumentPath);
             spParams[4] = new SqlParameter("Description", caseDocumentModel.Description);
             spParams[5] = new SqlParameter("DML", "I");
+            spParams[6] = new SqlParameter("UploadedBy", userName);
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_casedocument", spParams);
             return true;
         }
