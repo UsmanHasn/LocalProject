@@ -26,4 +26,16 @@ namespace Service.Models
         public DateTime? LastModifiedDate { get; set; }
         public string? LastModifiedBy { get;set; }
     }
+    public class CaseDocumentsModel
+    {
+       // public string CaseDocumentId { get;set; }
+    public long CaseId { get;set; }
+    public long DocumentTypeId { get;set; }
+    public string DocumentPath { get;set; }
+    public string Description { get;set; }
+    public DateTime? UploadDate { get;set; }
+
+    
+
+    }
 }

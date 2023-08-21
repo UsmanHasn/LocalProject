@@ -58,6 +58,14 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+        [HttpGet]
+        [Route("GeCaseDocumentsByCaseId")]
+        public IActionResult GeCaseDocumentsByCaseId(long CaseId)
+        {
+            List<CaseDocumentsModel> model = new List<CaseDocumentsModel>();
+            model = _caseService.GeCaseDocumentsByCaseId(CaseId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
         #region
         [HttpPost]
         [Route("uploaddocument")]
