@@ -556,13 +556,17 @@ namespace Data.Concrete
                             {
                                 property.SetValue(item, Convert.ToDecimal(value));
                             }
-                            else if (property.PropertyType.Name.ToLower() == "int")
+                            else if (property.PropertyType.Name.ToLower() == "int" || property.PropertyType.Name.ToLower() == "int32")
                             {
                                 property.SetValue(item, Convert.ToInt32(value));
                             }
                             else if (property.PropertyType.Name.ToLower() == "long")
                             {
                                 property.SetValue(item, Convert.ToInt64(value));
+                            }
+                            else if (property.PropertyType.Name.ToLower() == "char")
+                            {
+                                property.SetValue(item, Convert.ToChar(value));
                             }
                             else
                             {

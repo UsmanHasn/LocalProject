@@ -49,6 +49,14 @@ namespace WebAPI.Controllers
             model = _caseService.GetCaseById(CaseId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetPartiesByCaseId")]
+        public IActionResult GetPartiesByCaseId(long CaseId)
+        {
+            List<CaseParties> model = new List<CaseParties>();
+            model = _caseService.GetCaseParties(CaseId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
 
         #region
         [HttpPost]
@@ -64,7 +72,7 @@ namespace WebAPI.Controllers
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                 var fullPath = Path.Combine(pathTotSave, caseId, fileName);
                 var dbPath = Path.Combine(folderName, fileName);
-                DirectoryInfo di = new DirectoryInfo(fullPath);
+                DirectoryInfo di = new DirectoryInfo(pathTotSave);
                 if (!di.Exists)
                 {
                     di.Create();
