@@ -89,5 +89,12 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_casedocument", spParams);
             return true;
         }
+
+        public List<CaseDocumentsModel> GeCaseDocumentsByCaseId(long CaseId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CaseId", CaseId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseDocumentsModel>("sjc_GetByCaseDocumenByCaseId", parameters).ToList();
+        }
     }
 }
