@@ -55,6 +55,7 @@ namespace WebAPI.Controllers
         {
             List<CaseParties> model = new List<CaseParties>();
             model = _caseService.GetCaseParties(CaseId);
+            
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
@@ -65,6 +66,13 @@ namespace WebAPI.Controllers
             List<CaseDocumentsModel> model = new List<CaseDocumentsModel>();
             model = _caseService.GeCaseDocumentsByCaseId(CaseId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("UpdateCaseStatus")]
+        public IActionResult UpdateCaseStatus(long CaseId, string CaseStatus, string UserName)
+        {
+           _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName);
+            return new JsonResult(new { data = new { CaseId= CaseId, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
         }
         #region
         [HttpPost]

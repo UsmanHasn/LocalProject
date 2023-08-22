@@ -25,17 +25,21 @@ namespace Service.Models
         public DateTime? CreatedDate { get;set; }
         public DateTime? LastModifiedDate { get; set; }
         public string? LastModifiedBy { get;set; }
+        public int? CaseStatusId { get; set; }
+        public string CaseStatusName { get; set; }
     }
     public class CaseDocumentsModel
     {
-       // public string CaseDocumentId { get;set; }
-    public long CaseId { get;set; }
-    public long DocumentTypeId { get;set; }
-    public string DocumentPath { get;set; }
-    public string Description { get;set; }
-    public DateTime? UploadDate { get;set; }
+        // public string CaseDocumentId { get;set; }
+        public long CaseId { get; set; }
+        public long DocumentTypeId { get; set; }
+        public string DocNameEn { get; set; }
+        public string DocNameAr { get; set; }
+        public string DocumentPath { get; set; }
+        public string Description { get; set; }
+        public DateTime? UploadDate { get; set; }
 
-    
+
 
     }
 }

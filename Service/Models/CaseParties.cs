@@ -10,12 +10,15 @@ namespace Service.Models
     {
         public int CasePartyId { get; set; }
         public int CaseId { get; set;}
-        public char PartyType { get; set;}
+        public int PartyNo { get; set; }
+        public char PartyType { get; set; }
+        public string PartyTypeAdjective { get; set;}
         public int PartyCategoryId { get; set;}
         public string? PartyCatName { get; set;}
         public int PartyTypeId { get; set;}
         public string? PartyTypeName { get; set; }
         public string? CivilNo { get; set;}
+        public DateTime? CivilExpiry { get; set; }
         public string? CRNo { get; set; }
         public string? Name { get; set; }
         public string? PhoneNo { get; set;}
