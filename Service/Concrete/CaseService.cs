@@ -24,10 +24,10 @@ namespace Service.Concrete
         }
         public long AddCase(CaseModel caseModel,string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[13];
+            SqlParameter[] spParams = new SqlParameter[14];
             spParams[0] = new SqlParameter("CaseId", caseModel.CaseId);
             spParams[1] = new SqlParameter("CaseNo", caseModel.CaseNo);
-            spParams[2] = new SqlParameter("CourtTypeId", caseModel.CourtTypeId);
+            spParams[2] = new SqlParameter("CourtTypeId", caseModel.CourtTypeId); 
             spParams[3] = new SqlParameter("CourtBuildingId", caseModel.CourtBuildingId);
             spParams[4] = new SqlParameter("CaseTypeId", caseModel.CaseTypeId);
             spParams[5] = new SqlParameter("CaseCategoryId", caseModel.CaseCategoryId);
@@ -38,12 +38,14 @@ namespace Service.Concrete
             spParams[10] = new SqlParameter("LastModifiedBy", userName);
             spParams[11] = new SqlParameter("Deleted", false);
             spParams[12] = new SqlParameter("DML", "I");
-            return _systemSettingRepository.ExecuteStoredProcedure<long>("Sp_dml_cases", spParams).First();
+            spParams[13] = new SqlParameter("CaseStatusId", caseModel.CaseStatusId);
+            var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("Sp_dml_cases", spParams).FirstOrDefault();
+            return data.CaseId;
         }
 
         public bool AddCaseParties(CaseParties caseParties, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[11];
+            SqlParameter[] spParams = new SqlParameter[13];
             spParams[0] = new SqlParameter("CasePartyId", caseParties.CasePartyId);
             spParams[1] = new SqlParameter("CaseId", caseParties.CaseId);
             spParams[2] = new SqlParameter("PartyType", caseParties.PartyType);
@@ -55,6 +57,11 @@ namespace Service.Concrete
             spParams[8] = new SqlParameter("PhoneNo", caseParties.PhoneNo);
             spParams[9] = new SqlParameter("Address", caseParties.Address);
             spParams[10] = new SqlParameter("DML", "I");
+            spParams[11] = new SqlParameter("PartyNo", caseParties.PartyNo);
+            spParams[12] = new SqlParameter("CivilExpiry", caseParties.CivilExpiry);
+            
+
+
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
             return true;
         }
