@@ -273,7 +273,7 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("GetCourtNamebyCourtTypeId")]
-        public async Task<IActionResult> GetCourtNamebyCourtTypeId(string Id)
+        public async Task<IActionResult> GetCourtNamebyCourtTypeId(string Id, string ApiType)
         {
             var parameters = new Dictionary<string, string>
             {
@@ -283,13 +283,19 @@ namespace WebAPI.Controllers
             var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetCourtNamebyCourtTypeId", HttpMethod.Get, null, parameters);
             var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetCourtNamebyCourtTypeId", HttpMethod.Get, null, parameters);
             var response = new List<LookupModel>();
-            if (responseACO != null && responseACO.data != null)
+            if (ApiType == "A")
             {
-                response.AddRange(responseACO.data);
+                if (responseACO != null && responseACO.data != null)
+                {
+                    response.AddRange(responseACO.data);
+                }
             }
-            if (responseJCMS != null && responseJCMS.data != null)
+            else
             {
-                response.AddRange(responseJCMS.data);
+                if (responseJCMS != null && responseJCMS.data != null)
+                {
+                    response.AddRange(responseJCMS.data);
+                }
             }
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
         }

@@ -86,6 +86,7 @@ namespace WebAPI.Controllers
             if (file.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                var folderPath = Path.Combine(pathTotSave, caseId);
                 var fullPath = Path.Combine(pathTotSave, caseId, fileName);
                 var dbPath = Path.Combine(folderName, fileName);
                 DirectoryInfo di = new DirectoryInfo(pathTotSave);
