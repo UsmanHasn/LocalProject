@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
                 var folderPath = Path.Combine(pathTotSave, caseId);
                 var fullPath = Path.Combine(pathTotSave, caseId, fileName);
                 var dbPath = Path.Combine(folderName, fileName);
-                DirectoryInfo di = new DirectoryInfo(pathTotSave);
+                DirectoryInfo di = new DirectoryInfo(folderPath);
                 if (!di.Exists)
                 {
                     di.Create();
