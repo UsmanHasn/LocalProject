@@ -19,5 +19,7 @@ namespace Service.Interface
         bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName);
         bool UpdateCaseStatus(long caseId, string caseStatus, string userName);
         List<CaseModel> GetAllCases();
+
+        List<CaseModel> GetCasesByUserName(string CreatedBy);
     }
 }

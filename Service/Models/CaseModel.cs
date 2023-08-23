@@ -40,7 +40,9 @@ namespace Service.Models
         public string Description { get; set; }
         public DateTime? UploadDate { get; set; }
 
-
+        public string? nameEn { get; set; }
+        public string? nameAr { get; set;}
+    
 
     }
 }

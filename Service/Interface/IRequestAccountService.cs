@@ -11,6 +11,9 @@ namespace Service.Interface
     public interface IRequestAccountService
     {
         List<DocumentTypeLookupModel> BindDocumentType();
+        bool AddLinkCompany(LinkCompanyModel linkCompanyModel, string userName);
         bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName,string folderName);
+        public LinkCompanyModel GetCivilNo(string CivilNo);
+        List<RequestAccountsModel> GetAll();
     }
 }

@@ -26,9 +26,23 @@ namespace Service.Concrete
             environment = repository;
             _systemSettingRepository = systemSettingRepository;
         }
+
+        public bool AddLinkCompany(LinkCompanyModel linkCompanyModel, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[6];
+            spParams[0] = new SqlParameter("Id", linkCompanyModel.Id);
+            spParams[1] = new SqlParameter("CivilNo", linkCompanyModel.CivilNo);
+            spParams[2] = new SqlParameter("CRNo", linkCompanyModel.CRNo);
+            spParams[3] = new SqlParameter("IsActive", linkCompanyModel.IsActive);
+            spParams[4] = new SqlParameter("CreatedBy", userName);
+            spParams[5] = new SqlParameter("LastModifiedBy", userName);
+            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_linktocompany", spParams);
+            return true;
+        }
+
         public bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName, string folderName)
         {
-            SqlParameter[] spParams = new SqlParameter[11];
+            SqlParameter[] spParams = new SqlParameter[12];
             spParams[0] = new SqlParameter("RequestId", requestAccountsModel.RequestId);
             spParams[1] = new SqlParameter("ActionTypeId", requestAccountsModel.ActionTypeId);
             spParams[2] = new SqlParameter("Role", requestAccountsModel.Role);
@@ -40,6 +54,7 @@ namespace Service.Concrete
             spParams[8] = new SqlParameter("DocumentTypeId", requestAccountsModel.DocumentTypeId);
             spParams[9] = new SqlParameter("DocPath", folderName);
             spParams[10] = new SqlParameter("FileName", requestAccountsModel.FileName);
+            spParams[11] = new SqlParameter("Type", requestAccountsModel.Type);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_requestAccounts", spParams);
             return true;
@@ -52,6 +67,17 @@ namespace Service.Concrete
             return model;
         }
 
+        public List<RequestAccountsModel> GetAll()
+        {
+            SqlParameter[] spParams = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
+        }
 
+        public LinkCompanyModel GetCivilNo(string CivilNo)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CivilNo", CivilNo);
+            return _systemSettingRepository.ExecuteStoredProcedure<LinkCompanyModel>("sjc_GetCivilNo", spParams).FirstOrDefault();
+        }
     }
 }

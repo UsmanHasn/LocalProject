@@ -123,6 +123,12 @@ namespace Service.Concrete
             var dataMenu = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetAllCases", param);
             return dataMenu.ToList();
         }
-       
+
+        public List<CaseModel> GetCasesByUserName(string CreatedBy)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("UserName", CreatedBy);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).ToList();
+        }
     }
 }
