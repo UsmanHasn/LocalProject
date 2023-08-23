@@ -73,8 +73,8 @@ namespace WebAPI.Controllers
         [Route("UpdateCaseStatus")]
         public IActionResult UpdateCaseStatus(long CaseId, string CaseStatus, string UserName)
         {
-           _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName);
-            return new JsonResult(new { data = new { CaseId= CaseId, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
+           string caseNo = _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName).CaseNo;
+            return new JsonResult(new { data = new { CaseId= CaseId, CaseNo = caseNo, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
         }
         #region
         [HttpPost]
@@ -90,7 +90,7 @@ namespace WebAPI.Controllers
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                 string folderPath = Path.Combine(pathTotSave, caseId);
                 fullPath = Path.Combine(pathTotSave, caseId, fileName);
-                var dbPath = Path.Combine(folderName, fileName);
+                var dbPath = Path.Combine("\\", folderName, caseId, fileName);
                 DirectoryInfo di = new DirectoryInfo(folderPath);
                 if (!di.Exists)
                 {
@@ -103,7 +103,7 @@ namespace WebAPI.Controllers
                     {
                         CaseId = Convert.ToInt64(caseId),
                         DocumentId = Convert.ToInt64(documentId),
-                        DocumentPath = fullPath,
+                        DocumentPath = dbPath,
                         Description = description,
                         DocumentType = Convert.ToInt32(documentType)
                     };
