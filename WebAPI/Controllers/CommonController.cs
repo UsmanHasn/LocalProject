@@ -120,5 +120,15 @@ namespace WebAPI.Controllers
             _lookupService.UpdateAlertById(alertModel);
             return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GetCaseStatusLookup")]
+        public IActionResult GetCaseStatusLookup()
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            model = _lookupService.GetCaseStatusLookup().Select(x => new LookupsModel() { Id = x.Id, NameAr = x.NameAr, NameEn = x.NameEn }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
     }
 }

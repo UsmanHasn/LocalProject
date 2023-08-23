@@ -114,5 +114,15 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("sjc_UpdateCasestatus", parameters);
             return true;
         }
+
+        public List<CaseModel> GetAllCases()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+
+
+            var dataMenu = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetAllCases", param);
+            return dataMenu.ToList();
+        }
+       
     }
 }

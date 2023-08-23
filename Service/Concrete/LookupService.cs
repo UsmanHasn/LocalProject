@@ -70,5 +70,14 @@ namespace Service.Concrete
             _languagesRepository.ExecuteStoredProcedure("Sp_dml_updatealerts", spParams);
             return true;
         }
+
+        public List<LookupsModel> GetCaseStatusLookup()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+
+
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sjc_GetCaseStatusLookup", param);
+            return dataMenu.ToList();
+        }
     }
 }
