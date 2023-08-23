@@ -24,5 +24,8 @@ namespace Service.Models
         public int DocumentTypeId { get; set; }
         public string? DocPath { get; set; }
         public string? FileName { get; set; }
+        public char? Type { get; set; }
+        public string? NameEn { get; set;}
+        public string? NameAr { get; set; }
     }
 }

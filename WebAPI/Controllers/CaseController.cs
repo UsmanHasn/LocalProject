@@ -13,6 +13,7 @@ namespace WebAPI.Controllers
     public class CaseController : Controller
     {
         private readonly ICaseService _caseService;
+        private string fullPath;
 
         public CaseController(ICaseService caseService)
         {
@@ -59,6 +60,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+
         [HttpGet]
         [Route("GeCaseDocumentsByCaseId")]
         public IActionResult GeCaseDocumentsByCaseId(long CaseId)
@@ -86,8 +88,7 @@ namespace WebAPI.Controllers
             if (file.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                var folderPath = Path.Combine(pathTotSave, caseId);
-                var fullPath = Path.Combine(pathTotSave, caseId, fileName);
+                fullPath = Path.Combine(pathTotSave, caseId, fileName);
                 var dbPath = Path.Combine(folderName, fileName);
                 DirectoryInfo di = new DirectoryInfo(pathTotSave);
                 if (!di.Exists)
