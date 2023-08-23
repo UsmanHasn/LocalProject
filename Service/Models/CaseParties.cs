@@ -12,7 +12,7 @@ namespace Service.Models
         public int CaseId { get; set;}
         public int PartyNo { get; set; }
         public char PartyType { get; set; }
-        public string PartyTypeAdjective { get; set;}
+        public string? PartyTypeAdjective { get; set;}
         public int PartyCategoryId { get; set;}
         public string? PartyCatName { get; set;}
         public int PartyTypeId { get; set;}
