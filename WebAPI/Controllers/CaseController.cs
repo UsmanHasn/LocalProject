@@ -123,6 +123,15 @@ namespace WebAPI.Controllers
             model = _caseService.GetAllCases().Select(x => new CaseModel() { CaseId = x.CaseId, CaseNo = x.CaseNo, CourtTypeId = x.CourtTypeId, CourtBuildingId = x.CourtBuildingId , CourtName =x.CourtName , CaseTypeId =x.CaseTypeId , CaseType =x.CaseType , CaseCategoryId =x.CaseCategoryId , CaseCatName =x.CaseCatName , CaseSubCategoryId  =x.CaseSubCategoryId, CaseSubCatName= x.CaseSubCatName, FiledOn= x.FiledOn , Subject =x.Subject, CreatedBy =x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedDate =x.LastModifiedDate , LastModifiedBy =x.LastModifiedBy , OriginalCaseNo =x.OriginalCaseNo, CaseStatusName=x.CaseStatusName }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetCasesByUserName")]
+        public IActionResult GetCasesByUserName(string UserName)
+        {
+            List<CaseModel> model = new List<CaseModel>();
+            model = _caseService.GetCasesByUserName(UserName);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
         #endregion
     }
 }
