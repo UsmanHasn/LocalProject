@@ -17,7 +17,7 @@ namespace Service.Interface
         List<CaseParties> GetCaseParties(long caseId);
         List<CaseDocumentsModel> GeCaseDocumentsByCaseId(long CaseId);
         bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName);
-        bool UpdateCaseStatus(long caseId, string caseStatus, string userName);
+        UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName);
         List<CaseModel> GetAllCases();
 
         List<CaseModel> GetCasesByUserName(string CreatedBy);

@@ -105,14 +105,13 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("CaseId", CaseId);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseDocumentsModel>("sjc_GetByCaseDocumenByCaseId", parameters).ToList();
         }
-        public bool UpdateCaseStatus(long caseId, string caseStatus, string userName)
+        public UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName)
         {
             SqlParameter[] parameters = new SqlParameter[3];
             parameters[0] = new SqlParameter("CaseId", caseId);
             parameters[1] = new SqlParameter("CaseStatus", caseStatus);
             parameters[2] = new SqlParameter("UserName", userName);
-            _systemSettingRepository.ExecuteStoredProcedure("sjc_UpdateCasestatus", parameters);
-            return true;
+            return _systemSettingRepository.ExecuteStoredProcedure<UpdateStatusResponse>("sjc_UpdateCasestatus", parameters).FirstOrDefault();
         }
 
         public List<CaseModel> GetAllCases()
