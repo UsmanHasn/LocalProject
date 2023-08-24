@@ -46,7 +46,7 @@ namespace Service.Concrete
 
         public bool AddCaseParties(CaseParties caseParties, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[15];
+            SqlParameter[] spParams = new SqlParameter[19];
             spParams[0] = new SqlParameter("CasePartyId", caseParties.CasePartyId);
             spParams[1] = new SqlParameter("CaseId", caseParties.CaseId);
             spParams[2] = new SqlParameter("PartyType", caseParties.PartyType);
@@ -62,7 +62,10 @@ namespace Service.Concrete
             spParams[12] = new SqlParameter("CivilExpiry", caseParties.CivilExpiry);
             spParams[13] = new SqlParameter("LegalType", caseParties.LegalType);
             spParams[14] = new SqlParameter("EntityId", caseParties.EntityId);
-
+            spParams[15] = new SqlParameter("FamilyName", caseParties.FamilyName);
+            spParams[16] = new SqlParameter("Email", caseParties.Email);
+            spParams[17] = new SqlParameter("Country", caseParties.Country);
+            spParams[18] = new SqlParameter("City", caseParties.City);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
             return true;
