@@ -79,10 +79,11 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("CaseId", caseId);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseByCaseId", parameters).FirstOrDefault();
         }
-        public List<CaseParties> GetCaseParties(long caseId)
+        public List<CaseParties> GetCaseParties(long caseId, long PartyNo)
         {
-            SqlParameter[] parameters = new SqlParameter[1];
+            SqlParameter[] parameters = new SqlParameter[2];
             parameters[0] = new SqlParameter("CaseId", caseId);
+            parameters[1] = new SqlParameter("PartyNo", PartyNo);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseParties>("sjc_GetPartiesByCaseId", parameters).ToList();
         }
         public bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName)
@@ -123,11 +124,11 @@ namespace Service.Concrete
             return dataMenu.ToList();
         }
 
-        public List<CaseModel> GetCasesByUserName(string CreatedBy)
+        public CaseModel GetCasesByUserName(string CreatedBy)
         {
-            SqlParameter[] parameters = new SqlParameter[1];
+                   SqlParameter[] parameters = new SqlParameter[1];
             parameters[0] = new SqlParameter("UserName", CreatedBy);
-            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).ToList();
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).FirstOrDefault();
         }
     }
 }
