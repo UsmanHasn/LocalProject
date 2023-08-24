@@ -192,6 +192,30 @@ namespace WebAPI.Controllers
         #endregion
         #region Lookup Requests
         [HttpGet]
+        [Route("GetEntity")]
+        public async Task<IActionResult> GetEntity(string ApiType)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.acoApiUrl + "lookup/GetEntity", HttpMethod.Get, null, null);
+            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LookupModel>, HttpResponseModel<LookupModel>>(base.jcmsApiUrl + "lookup/GetEntity", HttpMethod.Get, null, null);
+            var response = new List<LookupModel>();
+            if (ApiType == "A")
+            {
+                if (responseACO != null && responseACO.data != null)
+                {
+                    response.AddRange(responseACO.data);
+                }
+            }
+            else
+            {
+                if (responseJCMS != null && responseJCMS.data != null)
+                {
+                    response.AddRange(responseJCMS.data);
+                }
+            }
+            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
         [Route("getcourttype")]
         public async Task<IActionResult> GetCourtType()
         {

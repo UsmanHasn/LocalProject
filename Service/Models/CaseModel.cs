@@ -27,7 +27,8 @@ namespace Service.Models
         public DateTime? LastModifiedDate { get; set; }
         public string? LastModifiedBy { get;set; }
         public int? CaseStatusId { get; set; }
-        public string CaseStatusName { get; set; }
+        public string? CaseStatusName { get; set; }
+        public string CaseSource { get; set; }
     }
     public class CaseDocumentsModel
     {
