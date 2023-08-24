@@ -52,10 +52,10 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("GetPartiesByCaseId")]
-        public IActionResult GetPartiesByCaseId(long CaseId)
+        public IActionResult GetPartiesByCaseId(long CaseId, long PartyNo)
         {
             List<CaseParties> model = new List<CaseParties>();
-            model = _caseService.GetCaseParties(CaseId);
+            model = _caseService.GetCaseParties(CaseId, PartyNo);
             
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
@@ -128,7 +128,7 @@ namespace WebAPI.Controllers
         [Route("GetCasesByUserName")]
         public IActionResult GetCasesByUserName(string UserName)
         {
-            List<CaseModel> model = new List<CaseModel>();
+            CaseModel model = new CaseModel();
             model = _caseService.GetCasesByUserName(UserName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }

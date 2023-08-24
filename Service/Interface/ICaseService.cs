@@ -14,12 +14,12 @@ namespace Service.Interface
 
         CaseModel GetCaseById(long caseId);
         List<CaseModel> GetAllCases(string CivilNo);
-        List<CaseParties> GetCaseParties(long caseId);
+        List<CaseParties> GetCaseParties(long caseId, long partyNo);
         List<CaseDocumentsModel> GeCaseDocumentsByCaseId(long CaseId);
         bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName);
         UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName);
         List<CaseModel> GetAllCases();
 
-        List<CaseModel> GetCasesByUserName(string CreatedBy);
+         CaseModel GetCasesByUserName(string CreatedBy);
     }
 }
