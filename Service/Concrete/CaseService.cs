@@ -37,7 +37,7 @@ namespace Service.Concrete
             spParams[9] = new SqlParameter("CreatedBy", userName);
             spParams[10] = new SqlParameter("LastModifiedBy", userName);
             spParams[11] = new SqlParameter("Deleted", false);
-            spParams[12] = new SqlParameter("DML", "I");
+            spParams[12] = new SqlParameter("DML", caseModel.CaseId > 0 ? "U" : "I");
             spParams[13] = new SqlParameter("CaseStatusId", caseModel.CaseStatusId);
             spParams[14] = new SqlParameter("OriginalCaseNo", caseModel.OriginalCaseNo);
             var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("Sp_dml_cases", spParams).FirstOrDefault();
@@ -46,7 +46,7 @@ namespace Service.Concrete
 
         public bool AddCaseParties(CaseParties caseParties, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[13];
+            SqlParameter[] spParams = new SqlParameter[15];
             spParams[0] = new SqlParameter("CasePartyId", caseParties.CasePartyId);
             spParams[1] = new SqlParameter("CaseId", caseParties.CaseId);
             spParams[2] = new SqlParameter("PartyType", caseParties.PartyType);
@@ -57,10 +57,11 @@ namespace Service.Concrete
             spParams[7] = new SqlParameter("Name", caseParties.Name);
             spParams[8] = new SqlParameter("PhoneNo", caseParties.PhoneNo);
             spParams[9] = new SqlParameter("Address", caseParties.Address);
-            spParams[10] = new SqlParameter("DML", "I");
+            spParams[10] = new SqlParameter("DML", caseParties.CasePartyId > 0 ? "U" : "I");
             spParams[11] = new SqlParameter("PartyNo", caseParties.PartyNo);
             spParams[12] = new SqlParameter("CivilExpiry", caseParties.CivilExpiry);
-            
+            spParams[13] = new SqlParameter("LegalType", caseParties.LegalType);
+            spParams[14] = new SqlParameter("EntityId", caseParties.EntityId);
 
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
@@ -104,14 +105,29 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("CaseId", CaseId);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseDocumentsModel>("sjc_GetByCaseDocumenByCaseId", parameters).ToList();
         }
-        public bool UpdateCaseStatus(long caseId, string caseStatus, string userName)
+        public UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName)
         {
             SqlParameter[] parameters = new SqlParameter[3];
             parameters[0] = new SqlParameter("CaseId", caseId);
             parameters[1] = new SqlParameter("CaseStatus", caseStatus);
             parameters[2] = new SqlParameter("UserName", userName);
-            _systemSettingRepository.ExecuteStoredProcedure("sjc_UpdateCasestatus", parameters);
-            return true;
+            return _systemSettingRepository.ExecuteStoredProcedure<UpdateStatusResponse>("sjc_UpdateCasestatus", parameters).FirstOrDefault();
+        }
+
+        public List<CaseModel> GetAllCases()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+
+
+            var dataMenu = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetAllCases", param);
+            return dataMenu.ToList();
+        }
+
+        public List<CaseModel> GetCasesByUserName(string CreatedBy)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("UserName", CreatedBy);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).ToList();
         }
     }
 }

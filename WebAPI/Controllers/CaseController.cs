@@ -13,6 +13,7 @@ namespace WebAPI.Controllers
     public class CaseController : Controller
     {
         private readonly ICaseService _caseService;
+        private string fullPath;
 
         public CaseController(ICaseService caseService)
         {
@@ -59,6 +60,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+
         [HttpGet]
         [Route("GeCaseDocumentsByCaseId")]
         public IActionResult GeCaseDocumentsByCaseId(long CaseId)
@@ -71,8 +73,8 @@ namespace WebAPI.Controllers
         [Route("UpdateCaseStatus")]
         public IActionResult UpdateCaseStatus(long CaseId, string CaseStatus, string UserName)
         {
-           _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName);
-            return new JsonResult(new { data = new { CaseId= CaseId, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
+           string caseNo = _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName).CaseNo;
+            return new JsonResult(new { data = new { CaseId= CaseId, CaseNo = caseNo, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
         }
         #region
         [HttpPost]
@@ -86,10 +88,10 @@ namespace WebAPI.Controllers
             if (file.Length > 0)
             {
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                var folderPath = Path.Combine(pathTotSave, caseId);
-                var fullPath = Path.Combine(pathTotSave, caseId, fileName);
-                var dbPath = Path.Combine(folderName, fileName);
-                DirectoryInfo di = new DirectoryInfo(pathTotSave);
+                string folderPath = Path.Combine(pathTotSave, caseId);
+                fullPath = Path.Combine(pathTotSave, caseId, fileName);
+                var dbPath = Path.Combine("\\", folderName, caseId, fileName);
+                DirectoryInfo di = new DirectoryInfo(folderPath);
                 if (!di.Exists)
                 {
                     di.Create();
@@ -101,7 +103,7 @@ namespace WebAPI.Controllers
                     {
                         CaseId = Convert.ToInt64(caseId),
                         DocumentId = Convert.ToInt64(documentId),
-                        DocumentPath = fullPath,
+                        DocumentPath = dbPath,
                         Description = description,
                         DocumentType = Convert.ToInt32(documentType)
                     };
@@ -114,6 +116,23 @@ namespace WebAPI.Controllers
                 return BadRequest();
             }
         }
+        [HttpGet]
+        [Route("GetAllCases")]
+        public IActionResult GetAllCases()
+        {
+            List<CaseModel> model = new List<CaseModel>();
+            model = _caseService.GetAllCases().Select(x => new CaseModel() { CaseId = x.CaseId, CaseNo = x.CaseNo, CourtTypeId = x.CourtTypeId, CourtBuildingId = x.CourtBuildingId , CourtName =x.CourtName , CaseTypeId =x.CaseTypeId , CaseType =x.CaseType , CaseCategoryId =x.CaseCategoryId , CaseCatName =x.CaseCatName , CaseSubCategoryId  =x.CaseSubCategoryId, CaseSubCatName= x.CaseSubCatName, FiledOn= x.FiledOn , Subject =x.Subject, CreatedBy =x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedDate =x.LastModifiedDate , LastModifiedBy =x.LastModifiedBy , OriginalCaseNo =x.OriginalCaseNo, CaseStatusName=x.CaseStatusName }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCasesByUserName")]
+        public IActionResult GetCasesByUserName(string UserName)
+        {
+            List<CaseModel> model = new List<CaseModel>();
+            model = _caseService.GetCasesByUserName(UserName);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
         #endregion
     }
 }

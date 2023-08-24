@@ -19,5 +19,7 @@ namespace Service.Interface
         AlertModel GetAlertsById(string alertId);
 
         bool UpdateAlertById(AlertModel alert);
+
+        List<LookupsModel> GetCaseStatusLookup();
     }
 }

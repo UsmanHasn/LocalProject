@@ -8,6 +8,8 @@ using Service.Models;
 using System;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -41,13 +43,13 @@ namespace WebAPI.Controllers
             //var folderName = Path.Combine("wwwroot", "requestaccount");
             //var pathTotSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, folderName);
+            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "");
             return new JsonResult(new { data = requestAccountsModel, status = HttpStatusCode.OK });
         }
 
         [HttpPost]
         [Route("uploadimage")]
-        public IActionResult UploadImage()
+        public IActionResult UploadImage(int actionTypeId,string role,int entityId,string comments,int requestStatusId,string createdBy,DateTime createdDate,string lastModifiedBy,DateTime lastModifiedDate,int documentTypeId,char _type, string userName)
         {
             var file = Request.Form.Files[0];
             folderName = Path.Combine("wwwroot", "requestaccount");
@@ -57,10 +59,27 @@ namespace WebAPI.Controllers
                 var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                 var fullPath = Path.Combine(pathTotSave, fileName);
                 var dbPath = Path.Combine(folderName, fileName);
-
+                //folderName = fullPath;
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     file.CopyTo(stream);
+                    RequestAccountsModel requestAccountsModel = new RequestAccountsModel()
+                    {
+                        ActionTypeId = actionTypeId,
+                        Role = role,
+                        EntityId = entityId,
+                        Comments = comments,
+                        RequestStatusId = requestStatusId,
+                        CreatedBy = createdBy,
+                        CreatedDate = createdDate,
+                        LastModifiedBy = lastModifiedBy,
+                        LastModifiedDate = lastModifiedDate,
+                        DocumentTypeId = documentTypeId,
+                        DocPath = fullPath,
+                        FileName = fileName,
+                        Type = _type
+                    };
+                    _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath);
                 }
                 return new JsonResult(new { data = dbPath, status = HttpStatusCode.OK });
             }
@@ -68,6 +87,31 @@ namespace WebAPI.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpPost]
+        [Route("insertlinkcompany")]
+        public IActionResult AddLicktoCompany(LinkCompanyModel linkCompanyModel, string userName)
+        {
+            LinkCompanyModel sysModel = _requestAccountService.GetCivilNo(linkCompanyModel.CivilNo);
+            if (sysModel == null)
+            {
+                _requestAccountService.AddLinkCompany(linkCompanyModel, userName);
+                return new JsonResult(new { data = linkCompanyModel, status = HttpStatusCode.OK });
+            }
+            else
+            {
+                return null;
+            }
+        }
+        
+        [HttpGet]
+        [Route("getallrequestaccount")]
+        public IActionResult GetRequestAccount()
+        {
+            List<RequestAccountsModel> model = new List<RequestAccountsModel>();
+            model = _requestAccountService.GetAll();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }
 }
