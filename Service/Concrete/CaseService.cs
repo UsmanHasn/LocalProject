@@ -24,7 +24,7 @@ namespace Service.Concrete
         }
         public long AddCase(CaseModel caseModel,string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[15];
+            SqlParameter[] spParams = new SqlParameter[16];
             spParams[0] = new SqlParameter("CaseId", caseModel.CaseId);
             spParams[1] = new SqlParameter("CaseNo", caseModel.CaseNo);
             spParams[2] = new SqlParameter("CourtTypeId", caseModel.CourtTypeId); 
@@ -40,6 +40,7 @@ namespace Service.Concrete
             spParams[12] = new SqlParameter("DML", caseModel.CaseId > 0 ? "U" : "I");
             spParams[13] = new SqlParameter("CaseStatusId", caseModel.CaseStatusId);
             spParams[14] = new SqlParameter("OriginalCaseNo", caseModel.OriginalCaseNo);
+            spParams[15] = new SqlParameter("CaseSource", caseModel.CaseSource);
             var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("Sp_dml_cases", spParams).FirstOrDefault();
             return data.CaseId;
         }
