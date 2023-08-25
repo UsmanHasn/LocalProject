@@ -33,6 +33,7 @@ namespace Service.Models
         public string? CaseSubCategoryName { get; set; }
         public string? CourtTypeName { get; set; }
         public string? CourtBuildingName { get; set; }
+        public string? CaseTypeName { get; set; }
     }
     public class CaseDocumentsModel
     {
