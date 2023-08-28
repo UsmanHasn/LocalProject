@@ -22,5 +22,6 @@ namespace Service.Interface
         List<CaseModel> GetAllPendingCase(string CivilNo, int CaseStatusId);
         public List<LookupsModel> BindPaymentDraw();
         public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
+        CaseModel GetCasesByUserName(string CreatedBy);
     }
 }

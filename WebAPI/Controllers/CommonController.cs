@@ -6,6 +6,7 @@ using Service.Interface;
 using Service.Models;
 using System.Net;
 using WebAPI.Models;
+using static Azure.Core.HttpHeader;
 
 namespace WebAPI.Controllers
 {
@@ -49,7 +50,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = json, status = HttpStatusCode.OK });
         }
 
-        [HttpGet]
+       [HttpGet]
         [Route("getnationalityvalues")]
         public IActionResult GetNationalityValues()
         {
@@ -61,7 +62,7 @@ namespace WebAPI.Controllers
             //    json[item.Id + ""] = item.Name;
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        }
+        } 
 
         [HttpGet]
         [Route("getCountry")]
@@ -234,6 +235,44 @@ namespace WebAPI.Controllers
         {
             _lookupService.AddLocationLookup(locationLookup);
             return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseTypeLookup")]
+        public IActionResult AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup)
+        {
+            _lookupService.AddCaseTypeLookup(caseTypeLookup);
+            return new JsonResult(new { data = caseTypeLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseCategoryLookup")]
+        public IActionResult AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup)
+        {
+            _lookupService.AddCaseCategoryLookup(caseCategoryLookup);
+            return new JsonResult(new { data = caseCategoryLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseSubCategoryLookup")]
+        public IActionResult AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup)
+        {
+            _lookupService.AddCaseSubCategoryLookup(caseSubCategoryLookup);
+            return new JsonResult(new { data = caseSubCategoryLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetcaseTypesLookup")]
+        public IActionResult GetcaseTypesLookup()
+        {
+            List<CaseTypesLookupModel> model = new List<CaseTypesLookupModel>();
+            model = _lookupService.caseTypesLookup().Select(x => new CaseTypesLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code , NameEn = x.NameEn, NameAr=x.NameAr , CourtTypeId =x.CourtTypeId ,IsActive =x.IsActive, CreatedBy =x.CreatedBy , CreatedDate=x.CreatedDate , LastModifiedBy=x.LastModifiedBy , LastModifiedDate  =x.LastModifiedDate , Deleted =x.Deleted , CaseGroupId =x.CaseGroupId }).ToList();
+            //var json = new Dictionary<string, string>();
+            //foreach (var item in model)
+            //{
+            //    json[item.Id + ""] = item.Name;
+            //}
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }
 }

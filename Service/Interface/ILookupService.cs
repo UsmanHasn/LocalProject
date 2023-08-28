@@ -38,5 +38,13 @@ namespace Service.Interface
         bool AddGovernatesLookup(GovernatesLookupModel governatesLookup);
         bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool AddLocationLookup(LocationLookupModel locationLookup);
+
+
+        bool AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup);
+        bool AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup);
+        bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup);
+
+
+        List<CaseTypesLookupModel> caseTypesLookup();
     }
 }

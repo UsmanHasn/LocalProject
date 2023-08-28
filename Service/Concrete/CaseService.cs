@@ -155,5 +155,16 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("sjc_UpdateCase", parameters);
             return true;
         }
+        public CaseModel GetCasesByUserName(string CreatedBy)
+
+        {
+
+            SqlParameter[] parameters = new SqlParameter[1];
+
+            parameters[0] = new SqlParameter("UserName", CreatedBy);
+
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).FirstOrDefault();
+
+        }
     }
 }
