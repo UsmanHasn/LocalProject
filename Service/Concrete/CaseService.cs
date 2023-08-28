@@ -128,11 +128,32 @@ namespace Service.Concrete
             return dataMenu.ToList();
         }
 
-        public CaseModel GetCasesByUserName(string CreatedBy)
+        public List<CaseModel> GetAllPendingCase(string CivilNo,int CaseStatusId)
         {
-                   SqlParameter[] parameters = new SqlParameter[1];
-            parameters[0] = new SqlParameter("UserName", CreatedBy);
-            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).FirstOrDefault();
+            SqlParameter[] parameters = new SqlParameter[2];
+            parameters[0] = new SqlParameter("CivilNo", CivilNo);
+            parameters[1] = new SqlParameter("CasaStatusId", CaseStatusId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetPendingCase", parameters).ToList();
+        }
+
+        public List<LookupsModel> BindPaymentDraw()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var dataMenu = _systemSettingRepository.ExecuteStoredProcedure<LookupsModel>("sjc_GetPaymentDraw", param);
+            return dataMenu.ToList();
+        }
+
+        public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName)
+        {
+            SqlParameter[] parameters = new SqlParameter[6];
+            parameters[0] = new SqlParameter("CaseId", caseId);
+            parameters[1] = new SqlParameter("CaseStatusId", caseStatusId);
+            parameters[2] = new SqlParameter("Fee", fee);
+            parameters[3] = new SqlParameter("PaymentDrawId", paymentDrawId);
+            parameters[4] = new SqlParameter("Exempted", exempted);
+            parameters[5] = new SqlParameter("UserName", userName);
+            _systemSettingRepository.ExecuteStoredProcedure("sjc_UpdateCase", parameters);
+            return true;
         }
     }
 }

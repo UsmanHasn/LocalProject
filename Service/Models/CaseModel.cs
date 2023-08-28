@@ -29,6 +29,7 @@ namespace Service.Models
         public int? CaseStatusId { get; set; }
         public string? CaseStatusName { get; set; }
         public string CaseSource { get; set; }
+        public string? Fee { get; set; }
     }
     public class CaseDocumentsModel
     {
