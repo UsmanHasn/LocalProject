@@ -21,5 +21,17 @@ namespace Service.Interface
         bool UpdateAlertById(AlertModel alert);
 
         List<LookupsModel> GetCaseStatusLookup();
+
+        List<GovernatesLookupModel> GetGovernatesLookupByCaseGroupId(long CaseGroupId);
+        List<CaseGroupLookupModel> GetCaseGroupLookupByCaseGroupId(long CaseGroupId);
+        List<LocationLookupModel> GetLocationLookupByGovernatesId(long GovernatesId);
+
+        bool UpdateGovernatesLookupByCaseGroupId(GovernatesLookupModel governatesLookup);
+        bool UpdateCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
+        bool UpdateLocationLookup(LocationLookupModel locationLookup);
+
+        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup);
+        bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
+        bool AddLocationLookup(LocationLookupModel locationLookup);
     }
 }

@@ -130,5 +130,79 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+
+        [HttpGet]
+        [Route("GetGovernatesLookupByCaseGroupId")]
+        public IActionResult GetGovernatesLookupByCaseGroupId(long CaseGroupId)
+        {
+            List<GovernatesLookupModel> model = new List<GovernatesLookupModel>();
+            model = _lookupService.GetGovernatesLookupByCaseGroupId(CaseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCaseGroupLookupByCaseGroupId")]
+        public IActionResult GetCaseGroupLookupByCaseGroupId(long CaseGroupId)
+        {
+            List<CaseGroupLookupModel> model = new List<CaseGroupLookupModel>();
+            model = _lookupService.GetCaseGroupLookupByCaseGroupId(CaseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetLocationLookupByGovernatesId")]
+        public IActionResult GetLocationLookupByGovernatesId(long GovernatesId)
+        {
+            List<LocationLookupModel> model = new List<LocationLookupModel>();
+            model = _lookupService.GetLocationLookupByGovernatesId(GovernatesId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateGovernatesLookupByCaseGroupId")]
+        public IActionResult UpdateGovernatesLookupByCaseGroupId(GovernatesLookupModel governatesLookupModel, long CaseGroupId)
+        {
+            _lookupService.UpdateGovernatesLookupByCaseGroupId(governatesLookupModel);
+            return new JsonResult(new { data = governatesLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateCaseGroupLookup")]
+        public IActionResult UpdateCaseGroupLookup(CaseGroupLookupModel caseGroupLookupModel, long CaseGroupId)
+        {
+            _lookupService.UpdateCaseGroupLookup(caseGroupLookupModel);
+            return new JsonResult(new { data = caseGroupLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateLocationLookup")]
+        public IActionResult UpdateLocationLookup(LocationLookupModel locationLookupModel, long LocationId)
+        {
+            _lookupService.UpdateLocationLookup(locationLookupModel);
+            return new JsonResult(new { data = locationLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddGovernatesLookup")]
+        public IActionResult AddGovernatesLookup(GovernatesLookupModel governatesLookupl)
+        {
+            _lookupService.AddGovernatesLookup(governatesLookupl);
+            return new JsonResult(new { data = governatesLookupl, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseGroupLookup")]
+        public IActionResult AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup)
+        {
+            _lookupService.AddCaseGroupLookup(caseGroupLookup);
+            return new JsonResult(new { data = caseGroupLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddLocationLookup")]
+        public IActionResult AddLocationLookup(LocationLookupModel locationLookup)
+        {
+            _lookupService.AddLocationLookup(locationLookup);
+            return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK });
+        }
     }
 }
