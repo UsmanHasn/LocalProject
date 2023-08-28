@@ -54,6 +54,7 @@ namespace WebAPI.Controllers
                     if (check.UserStatusId == 1)
                     {
                         var token = GenerateToken(user);
+                        //inser token into db 
                         _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
                         return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
                     }
@@ -80,6 +81,7 @@ namespace WebAPI.Controllers
             else if (user != null && user.UserId > 0)
             {
                 var token = GenerateToken(user);
+                //inser token into db 
                 _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
                 return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
             }
@@ -136,8 +138,8 @@ namespace WebAPI.Controllers
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
                 _config["Jwt:Audience"],
                 claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials);
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials); 
             
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

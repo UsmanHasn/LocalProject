@@ -113,7 +113,7 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GenerateNumericOTP")]
-        public IActionResult GenerateNumericOTP(int UserId,int OTPType)
+        public IActionResult GenerateNumericOTP(string Email, int UserId,int OTPType)
         {
             
             const string validChars = "0123456789";
@@ -131,27 +131,25 @@ namespace WebAPI.Controllers
                 otpBuilder.Append(validChars[index]);
             }
 
-            EmailHelper.sendMail("Saifnadeem16@gmail.com", "ForgotPassword ", otpBuilder.ToString());
+            EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
             Service.Models.OtpModel model = new Service.Models.OtpModel()
             {
-
-
                 OtpId = otpBuilder.ToString(),
                 OtpType = OTPType,
                 UserId = UserId,
                 EmailSent = true,
+                OTPExpiry = DateTime.Now.AddMinutes(2)
             };
             _userService.InsertOtp(model);
 
 
-            return new JsonResult(new { data = otpBuilder.ToString(), status = HttpStatusCode.OK });
+            return new JsonResult(new { data = otpBuilder.ToString(), email=Email, otpexpiry = model.OTPExpiry, status = HttpStatusCode.OK });
         }
 
         [HttpPost]
         [Route("OTPverify")]
         public IActionResult OTPverify(Service.Models.OtpModel model)
         {
-            
             return new JsonResult(new { data = _userService.VerifyOtp(model), status = HttpStatusCode.OK });
         }
 
