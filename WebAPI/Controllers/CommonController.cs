@@ -76,6 +76,37 @@ namespace WebAPI.Controllers
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        //added by Muhammad Usman
+        [HttpGet]
+        [Route("GetActionById")]
+        public IActionResult GetActionById(int id)
+        {
+            ActionType action = new ActionType();
+            action = _lookupService.GetActionById(id);
+            return new JsonResult(new { data = action, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetAllActionlist")]
+        public IActionResult GetAllActionlist()
+        {
+            List<ActionType> model = new List<ActionType>();
+            model = _lookupService.GetAllActionlist();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("InsUpdActType")]
+        public void InsUpdActionLookup(ActionType model, string userName)
+        {
+            _lookupService.InsUpdActionLookup(model, userName);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteAction")]
+        public void DeleteAction(ActionType model, string userName)
+        {
+            _lookupService.DeleteAction(model, userName);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
         [HttpGet]
         [Route("getAlerts")]
         public IActionResult GetAlerts(string userId)

@@ -17,7 +17,12 @@ namespace Service.Interface
         List<ServicesSubCategoryModel> GetServicesSubCategory();
         List<AlertModel> GetAlerts(string userId);
         AlertModel GetAlertsById(string alertId);
+        //added by muhammad usman
+        ActionType GetActionById(int Id);
+        List<ActionType> GetAllActionlist();
+        void InsUpdActionLookup(ActionType actionType, string userName);
 
+        void  DeleteAction(ActionType actionType, string userName);
         bool UpdateAlertById(AlertModel alert);
 
         List<LookupsModel> GetCaseStatusLookup();

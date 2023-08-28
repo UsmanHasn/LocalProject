@@ -61,6 +61,52 @@ namespace Service.Concrete
             return _languagesRepository.ExecuteStoredProcedure<AlertModel>("sjc_GetAlertsById", spParams).FirstOrDefault();
         }
 
+        //added by Muhammad Usman
+        public ActionType GetActionById(int Id)
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<ActionType>("sjc_GetActionById", new Microsoft.Data.SqlClient.SqlParameter("ActionTypeId", Id));
+            return dataMenu.FirstOrDefault();
+        }
+        public void DeleteAction(ActionType actionType, string userName)
+        {
+            {
+                SqlParameter[] spParams = new SqlParameter[8];
+                spParams[0] = new SqlParameter("@ActionTypeId", actionType.ActionTypeId);
+                spParams[1] = new SqlParameter("@NameEn", actionType.NameEn);
+                spParams[2] = new SqlParameter("@NameAr", actionType.NameAr);
+                spParams[3] = new SqlParameter("@Createdby", userName);
+                spParams[4] = new SqlParameter("@CreatedDate", actionType.CreatedDate);
+                spParams[5] = new SqlParameter("@LastModifiedBy", userName);
+                spParams[6] = new SqlParameter("@LastModifiedDate", actionType.LastModifiedDate);
+                spParams[7] = new SqlParameter("@Action", "d");
+                _languagesRepository.ExecuteStoredProcedure("sjc_ActionTypeLookup", spParams);
+            }
+        }
+        List<ActionType> ILookupService.GetAllActionlist()
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<ActionType>("sjc_GetActiontypelist");
+            var model = dataMenu.Select(x => new ActionType()
+            {
+                ActionTypeId = x.ActionTypeId,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
+
+            }).ToList();
+            return model;
+        }
+        public void InsUpdActionLookup(ActionType actionType, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[8];
+            spParams[0] = new SqlParameter("@ActionTypeId", actionType.ActionTypeId);
+            spParams[1] = new SqlParameter("@NameEn", actionType.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", actionType.NameAr);
+            spParams[3] = new SqlParameter("@Createdby", userName);
+            spParams[4] = new SqlParameter("@CreatedDate", actionType.CreatedDate);
+            spParams[5] = new SqlParameter("@LastModifiedBy", userName);
+            spParams[6] = new SqlParameter("@LastModifiedDate", actionType.LastModifiedDate);
+            spParams[7] = new SqlParameter("@Action", actionType.ActionTypeId > 0 ? "u" : "i");
+            _languagesRepository.ExecuteStoredProcedure("sjc_ActionTypeLookup", spParams);
+        }
         public bool UpdateAlertById(AlertModel alert)
         {
             SqlParameter[] spParams = new SqlParameter[3];
