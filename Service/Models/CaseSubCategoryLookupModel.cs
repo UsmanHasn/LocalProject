@@ -23,4 +23,11 @@ namespace Service.Models
         public DateTime LastModifiedDate { get; set; }
         public int Deleted { get; set; }
     }
-}
+    public class CaseSubCategoryLookupModelDelete
+    {
+        public long CaseSubCategoryId { get; set; }
+        public int Deleted { get; set; }
+
+    }
+
+    }

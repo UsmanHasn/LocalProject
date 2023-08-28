@@ -155,7 +155,7 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("Code", governatesLookup.Code);
             spParams[3] = new SqlParameter("NameEn", governatesLookup.NameEn);
             spParams[4] = new SqlParameter("NameAr", governatesLookup.NameAr);
-            spParams[5] = new SqlParameter("LastModifiedBy ", true);
+            spParams[5] = new SqlParameter("LastModifiedBy ", governatesLookup.LastModifiedBy);
             spParams[6] = new SqlParameter("LastModifiedDate", DateTime.Now);
             _languagesRepository.ExecuteStoredProcedure("Sjc_Update_GovernatesLookup", spParams);
             return true;
@@ -168,7 +168,7 @@ namespace Service.Concrete
             spParams[1] = new SqlParameter("Code", caseGroupLookup.Code);
             spParams[2] = new SqlParameter("NameEn", caseGroupLookup.NameEn);
             spParams[3] = new SqlParameter("NameAr", caseGroupLookup.NameAr);
-            spParams[4] = new SqlParameter("LastModifiedBy ", true);
+            spParams[4] = new SqlParameter("LastModifiedBy ", caseGroupLookup.LastModifiedBy);
             spParams[5] = new SqlParameter("LastModifiedDate", DateTime.Now);
             _languagesRepository.ExecuteStoredProcedure("Sjc_Update_CaseGroupLookup", spParams);
             return true;
@@ -183,7 +183,7 @@ namespace Service.Concrete
             spParams[3] = new SqlParameter("NameEn", locationLookup.NameAr);
             spParams[4] = new SqlParameter("NameAr", locationLookup.NameAr);
             spParams[5] = new SqlParameter("LinkLocationId", locationLookup.NameAr);
-            spParams[6] = new SqlParameter("LastModifiedBy ", true);
+            spParams[6] = new SqlParameter("LastModifiedBy ", locationLookup.LastModifiedBy);
             spParams[7] = new SqlParameter("LastModifiedDate", DateTime.Now);
             _languagesRepository.ExecuteStoredProcedure("Sjc_Update_LocationLookup", spParams);
             return true;
@@ -196,7 +196,7 @@ namespace Service.Concrete
             spParams[1] = new SqlParameter("Code", governatesLookup.Code);
             spParams[2] = new SqlParameter("NameEn", governatesLookup.NameEn);
             spParams[3] = new SqlParameter("NameAr", governatesLookup.NameAr);
-            spParams[4] = new SqlParameter("CreatedBy", true);
+            spParams[4] = new SqlParameter("CreatedBy", governatesLookup.CreatedBy);
             spParams[5] = new SqlParameter("Createdate", DateTime.Now);
      
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_GovernatesLookup", spParams);
@@ -209,7 +209,7 @@ namespace Service.Concrete
             spParams[0] = new SqlParameter("Code", caseGroupLookup.Code);
             spParams[1] = new SqlParameter("NameEn", caseGroupLookup.NameEn);
             spParams[2] = new SqlParameter("NameAr", caseGroupLookup.NameAr);
-            spParams[3] = new SqlParameter("CreatedBy", true);
+            spParams[3] = new SqlParameter("CreatedBy", caseGroupLookup.CreatedBy);
             spParams[4] = new SqlParameter("Createdate", DateTime.Now);
 
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_CaseGroupLookup", spParams);
@@ -224,7 +224,7 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("NameEn", locationLookup.NameEn);
             spParams[3] = new SqlParameter("NameAr", locationLookup.NameAr);
             spParams[4] = new SqlParameter("LinkLocationId", locationLookup.LinkLocationId);
-            spParams[5] = new SqlParameter("CreatedBy", true);
+            spParams[5] = new SqlParameter("CreatedBy", locationLookup.CreatedBy);
             spParams[6] = new SqlParameter("Createdate", DateTime.Now);
 
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_LocationLookup", spParams);
@@ -239,7 +239,7 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("NameAr", caseTypeLookup.NameAr);
             spParams[3] = new SqlParameter("CourtTypeId", caseTypeLookup.CourtTypeId);
             spParams[4] = new SqlParameter("IsActive", caseTypeLookup.IsActive); 
-            spParams[5] = new SqlParameter("CreatedBy", true);
+            spParams[5] = new SqlParameter("CreatedBy", caseTypeLookup.CreatedBy);
             spParams[6] = new SqlParameter("Createdate", DateTime.Now);
             spParams[7] = new SqlParameter("CaseGroupId", caseTypeLookup.CaseGroupId);
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_caseTypesLookup", spParams);
@@ -254,7 +254,7 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("NameAr", caseCategoryLookup.NameAr);
             spParams[3] = new SqlParameter("CaseTypeId", caseCategoryLookup.CaseTypeId);
             spParams[4] = new SqlParameter("IsActive", caseCategoryLookup.IsActive);
-            spParams[5] = new SqlParameter("CreatedBy", true);
+            spParams[5] = new SqlParameter("CreatedBy", caseCategoryLookup.CreatedBy);
             spParams[6] = new SqlParameter("Createdate", DateTime.Now);
  
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_CaseCategoryLookup", spParams);
@@ -263,16 +263,16 @@ namespace Service.Concrete
 
         public bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup)
         {
-            SqlParameter[] spParams = new SqlParameter[10];
+            SqlParameter[] spParams = new SqlParameter[9];
             spParams[0] = new SqlParameter("NameEn", caseSubCategoryLookup.NameEn);
             spParams[1] = new SqlParameter("NameAr", caseSubCategoryLookup.NameAr);
-            spParams[3] = new SqlParameter("CaseCategoryId", caseSubCategoryLookup.CaseCategoryId);
-            spParams[4] = new SqlParameter("CodeCAAJ", caseSubCategoryLookup.CodeCAAJ);
-            spParams[5] = new SqlParameter("CodeACO", caseSubCategoryLookup.CodeACO);
-            spParams[6] = new SqlParameter("AllowPreviousSearch", caseSubCategoryLookup.AllowPreviousSearch);
-            spParams[7] = new SqlParameter("IsActive", caseSubCategoryLookup.IsActive);
-            spParams[8] = new SqlParameter("CreatedBy", true);
-            spParams[9] = new SqlParameter("Createdate", DateTime.Now);
+            spParams[2] = new SqlParameter("CaseCategoryId", caseSubCategoryLookup.CaseCategoryId);
+            spParams[3] = new SqlParameter("CodeCAAJ", caseSubCategoryLookup.CodeCAAJ);
+            spParams[4] = new SqlParameter("CodeACO", caseSubCategoryLookup.CodeACO);
+            spParams[5] = new SqlParameter("AllowPreviousSearch", caseSubCategoryLookup.AllowPreviousSearch);
+            spParams[6] = new SqlParameter("IsActive", caseSubCategoryLookup.IsActive);
+            spParams[7] = new SqlParameter("CreatedBy", caseSubCategoryLookup.CreatedBy);
+            spParams[8] = new SqlParameter("Createdate", DateTime.Now);
 
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_CaseSubCategoryLookup", spParams);
             return true;
@@ -285,6 +285,95 @@ namespace Service.Concrete
 
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseTypesLookupModel>("sjc_Get_CaseTypesLookup", param);
             return dataMenu.ToList();
+        }
+
+        public List<CaseCategoryLookupModel> GetcaseCategoryLookup()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseCategoryLookupModel>("sjc_Get_CaseCategoryLookup", param);
+            return dataMenu.ToList();
+        }
+
+        public List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseSubCategoryLookup", param);
+            return dataMenu.ToList();
+        }
+
+        public bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup)
+        {
+            SqlParameter[] spParams = new SqlParameter[9];
+            spParams[0] = new SqlParameter("CaseTypeId", caseTypesLookup.CaseTypeId);
+            spParams[1] = new SqlParameter("Code", caseTypesLookup.Code);
+            spParams[2] = new SqlParameter("NameEn", caseTypesLookup.NameEn);
+            spParams[3] = new SqlParameter("NameAr", caseTypesLookup.NameAr);
+            spParams[4] = new SqlParameter("CourtTypeId", caseTypesLookup.CourtTypeId);
+            spParams[5] = new SqlParameter("IsActive", caseTypesLookup.IsActive);
+            spParams[6] = new SqlParameter("LastModifiedBy ", caseTypesLookup.LastModifiedBy);
+            spParams[7] = new SqlParameter("LastModifiedDate", DateTime.Now);
+            spParams[8] = new SqlParameter("CaseGroupId" , caseTypesLookup.CaseGroupId);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_Update_CaseTypesLookup", spParams);
+            return true;
+        }
+
+        public bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup)
+        {
+            SqlParameter[] spParams = new SqlParameter[8];
+            spParams[0] = new SqlParameter("CaseCategoryId", caseCategoryLookup.CaseCategoryId);
+            spParams[1] = new SqlParameter("Code", caseCategoryLookup.Code);
+            spParams[2] = new SqlParameter("NameEn", caseCategoryLookup.NameEn);
+            spParams[3] = new SqlParameter("NameAr", caseCategoryLookup.NameAr);
+            spParams[4] = new SqlParameter("CaseTypeId", caseCategoryLookup.CaseTypeId);
+            spParams[5] = new SqlParameter("IsActive", caseCategoryLookup.IsActive);
+            spParams[6] = new SqlParameter("LastModifiedBy ", caseCategoryLookup.LastModifiedBy);
+            spParams[7] = new SqlParameter("LastModifiedDate", DateTime.Now);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_Update_CaseCategoryLookup", spParams);
+            return true;
+        }
+
+        public bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup)
+        {
+            SqlParameter[] spParams = new SqlParameter[10];
+            spParams[0] = new SqlParameter("CaseSubCategoryId", caseSubCategoryLookup.CaseSubCategoryId);
+            spParams[1] = new SqlParameter("NameEn", caseSubCategoryLookup.NameEn);
+            spParams[2] = new SqlParameter("NameAr", caseSubCategoryLookup.NameAr);
+            spParams[3] = new SqlParameter("CaseCategoryId", caseSubCategoryLookup.CaseCategoryId);
+            spParams[4] = new SqlParameter("CodeCAAJ", caseSubCategoryLookup.CodeCAAJ);
+            spParams[5] = new SqlParameter("CodeACO", caseSubCategoryLookup.CodeACO);
+            spParams[6] = new SqlParameter("AllowPreviousSearch", caseSubCategoryLookup.AllowPreviousSearch);
+            spParams[7] = new SqlParameter("IsActive", caseSubCategoryLookup.IsActive);
+            spParams[8] = new SqlParameter("LastModifiedBy ", caseSubCategoryLookup.LastModifiedBy);
+            spParams[9] = new SqlParameter("LastModifiedDate", DateTime.Now);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_Update_CaseSubCategoryLookup", spParams);
+            return true;
+        }
+
+        public bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("CaseTypeId", deletecaseTypesLookup.CaseTypeId);
+            spParams[1] = new SqlParameter("Deleted", deletecaseTypesLookup.Deleted);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseTypesLookup", spParams);
+            return true;
+        }
+
+        public bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("CaseCategoryId", deletecaseCategoryLookupModel.CaseCategoryId);
+            spParams[1] = new SqlParameter("Deleted", deletecaseCategoryLookupModel.Deleted);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseCategoryLookup", spParams);
+            return true;
+        }
+
+        public bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("CaseSubCategoryId ", deleteCaseSubCategoryLookupModel.CaseSubCategoryId);
+            spParams[1] = new SqlParameter("Deleted", deleteCaseSubCategoryLookupModel.Deleted);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseSubCategoryLookup", spParams);
+            return true;
         }
     }
 }

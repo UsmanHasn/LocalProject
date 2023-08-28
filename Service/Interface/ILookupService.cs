@@ -46,5 +46,15 @@ namespace Service.Interface
 
 
         List<CaseTypesLookupModel> caseTypesLookup();
+        List<CaseCategoryLookupModel> GetcaseCategoryLookup();
+        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
+
+        bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup);
+        bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup);
+        bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup);
+
+        bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
+        bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);
+        bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel);
     }
 }

@@ -21,4 +21,9 @@ namespace Service.Models
        public int Deleted {get; set;}
        public long CaseGroupId {get; set;}
     }
+    public class CaseTypesLookupModelDelete
+    {
+        public long CaseTypeId { get; set; }
+        public int Deleted { get; set; }
+    }
 }

@@ -274,5 +274,70 @@ namespace WebAPI.Controllers
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GetcaseCategoryLookup")]
+        public IActionResult GetcaseCategoryLookup()
+        {
+            List<CaseCategoryLookupModel> model = new List<CaseCategoryLookupModel>();
+            model = _lookupService.GetcaseCategoryLookup().Select(x => new CaseCategoryLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code, NameEn = x.NameEn, NameAr = x.NameAr,  IsActive = x.IsActive, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedBy = x.LastModifiedBy, LastModifiedDate = x.LastModifiedDate, Deleted = x.Deleted }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetcaseSubCategoryLookup")]
+        public IActionResult GetcaseSubCategoryLookup()
+        {
+            List<CaseSubCategoryLookupModel> model = new List<CaseSubCategoryLookupModel>();
+            model = _lookupService.GetcaseSubCategoryLookup().Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId, CodeCAAJ = x.CodeCAAJ, CodeACO = x.CodeACO, AllowPreviousSearch = x.AllowPreviousSearch, IsActive = x.IsActive, CreatedBy = x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedBy =x.LastModifiedBy , LastModifiedDate =x.LastModifiedDate , Deleted =x.Deleted }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+
+        [HttpPost]
+        [Route("UpdateCaseTypeLookup")]
+        public IActionResult UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, long CaseTypeId)
+        {
+            _lookupService.UpdateCaseTypeLookup(caseTypesLookupModel);
+            return new JsonResult(new { data = caseTypesLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateCaseCategoryLookup")]
+        public IActionResult UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookupModel, long CaseCategoryId)
+        {
+            _lookupService.UpdateCaseCategoryLookup(caseCategoryLookupModel);
+            return new JsonResult(new { data = caseCategoryLookupModel, status = HttpStatusCode.OK });
+        }
+
+
+        [HttpPost]
+        [Route("UpdateCaseSubCategoryLookup")]
+        public IActionResult UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookupModel, long CaseSubCategoryId)
+        {
+            _lookupService.UpdateCaseSubCategoryLookup(caseSubCategoryLookupModel);
+            return new JsonResult(new { data = caseSubCategoryLookupModel, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteCaseTypeLookup")]
+        public IActionResult DeleteCaseTypeLookup(CaseTypesLookupModelDelete caseTypesLookupModelDelete, long CaseTypeId)
+        {
+            _lookupService.DeleteCaseTypeLookup(caseTypesLookupModelDelete);
+            return new JsonResult(new { data = caseTypesLookupModelDelete, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteCaseCategoryLookup")]
+        public IActionResult DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete caseCategoryLookupModelDelete, long CaseCategoryId)
+        {
+            _lookupService.DeleteCaseCategoryLookup(caseCategoryLookupModelDelete);
+            return new JsonResult(new { data = caseCategoryLookupModelDelete, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteCaseSubCategoryLookupModel")]
+        public IActionResult DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete caseSubCategoryLookupModelDelete, long CaseSubCategoryId)
+        {
+            _lookupService.DeleteCaseSubCategoryLookupModel(caseSubCategoryLookupModelDelete);
+            return new JsonResult(new { data = caseSubCategoryLookupModelDelete, status = HttpStatusCode.OK });
+        }
     }
 }
