@@ -149,6 +149,10 @@ namespace WebAPI.Controllers
             _caseService.UpdateCase(caseId, caseStatusId,fee,paymentDrawId,exempted, userName);
             return new JsonResult(new { data = new { CaseId = caseId, CaseStatus = caseStatusId, fee = fee, paymentDrawId= paymentDrawId, exempted= exempted }, status = HttpStatusCode.OK });
         }
+       
+
+       
+       
         [HttpGet]
         [Route("GetCasesByUserName")]
         public IActionResult GetCasesByUserName(string UserName)

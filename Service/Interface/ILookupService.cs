@@ -32,10 +32,11 @@ namespace Service.Interface
         List<LocationLookupModel> GetLocationLookupByGovernatesId(long GovernatesId);
 
         bool UpdateGovernatesLookupByCaseGroupId(GovernatesLookupModel governatesLookup);
+        bool UpdateGovernatesLookupByGovernateId(GovernatesLookupModel governatesLookup);
         bool UpdateCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool UpdateLocationLookup(LocationLookupModel locationLookup);
 
-        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup);
+        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup, string userName);
         bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool AddLocationLookup(LocationLookupModel locationLookup);
 
@@ -46,6 +47,13 @@ namespace Service.Interface
 
 
         List<CaseTypesLookupModel> caseTypesLookup();
+        List<CaseGroupLookupModel> BindCaseGroup();
+        List<GovernatesLookupModel> BindGovernateLookup();
+        List<LocationLookupModel> GelAllLocationLookup();
+        LocationLookupModel GelLocationLookupById(int LocationId);
+
+        List<GovernatesLookupModel> GetAllGovernateLookup();
+        GovernatesLookupModel GetGovernateLookupById(int governateId);
         List<CaseCategoryLookupModel> GetcaseCategoryLookup();
         List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
 
