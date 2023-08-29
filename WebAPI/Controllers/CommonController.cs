@@ -278,10 +278,10 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetcaseTypesLookup")]
-        public IActionResult GetcaseTypesLookup()
+        public IActionResult GetcaseTypesLookup(int CaseGroupId)
         {
             List<CaseTypesLookupModel> model = new List<CaseTypesLookupModel>();
-            model = _lookupService.caseTypesLookup().Select(x => new CaseTypesLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code , NameEn = x.NameEn, NameAr=x.NameAr , CourtTypeId =x.CourtTypeId ,IsActive =x.IsActive, CreatedBy =x.CreatedBy , CreatedDate=x.CreatedDate , LastModifiedBy=x.LastModifiedBy , LastModifiedDate  =x.LastModifiedDate , Deleted =x.Deleted , CaseGroupId =x.CaseGroupId }).ToList();
+            model = _lookupService.caseTypesLookup(CaseGroupId).Select(x => new CaseTypesLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code , NameEn = x.NameEn, NameAr=x.NameAr , CourtTypeId =x.CourtTypeId ,IsActive =x.IsActive, CreatedBy =x.CreatedBy , CreatedDate=x.CreatedDate , LastModifiedBy=x.LastModifiedBy , LastModifiedDate  =x.LastModifiedDate , Deleted =x.Deleted , CaseGroupId =x.CaseGroupId }).ToList();
             //var json = new Dictionary<string, string>();
             //foreach (var item in model)
             //{
@@ -342,19 +342,19 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetcaseCategoryLookup")]
-        public IActionResult GetcaseCategoryLookup()
+        public IActionResult GetcaseCategoryLookup(int CaseTypeId)
         {
             List<CaseCategoryLookupModel> model = new List<CaseCategoryLookupModel>();
-            model = _lookupService.GetcaseCategoryLookup().Select(x => new CaseCategoryLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code, NameEn = x.NameEn, NameAr = x.NameAr,  IsActive = x.IsActive, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedBy = x.LastModifiedBy, LastModifiedDate = x.LastModifiedDate, Deleted = x.Deleted }).ToList();
+            model = _lookupService.GetcaseCategoryLookup(CaseTypeId).Select(x => new CaseCategoryLookupModel() { CaseCategoryId = x.CaseCategoryId, CaseTypeId = x.CaseTypeId, Code = x.Code, NameEn = x.NameEn, NameAr = x.NameAr,  IsActive = x.IsActive, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedBy = x.LastModifiedBy, LastModifiedDate = x.LastModifiedDate, Deleted = x.Deleted }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
         [HttpGet]
         [Route("GetcaseSubCategoryLookup")]
-        public IActionResult GetcaseSubCategoryLookup()
+        public IActionResult GetcaseSubCategoryLookup(int CaseCategoryId)
         {
             List<CaseSubCategoryLookupModel> model = new List<CaseSubCategoryLookupModel>();
-            model = _lookupService.GetcaseSubCategoryLookup().Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId, CodeCAAJ = x.CodeCAAJ, CodeACO = x.CodeACO, AllowPreviousSearch = x.AllowPreviousSearch, IsActive = x.IsActive, CreatedBy = x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedBy =x.LastModifiedBy , LastModifiedDate =x.LastModifiedDate , Deleted =x.Deleted }).ToList();
+            model = _lookupService.GetcaseSubCategoryLookup(CaseCategoryId).Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId, CodeCAAJ = x.CodeCAAJ, CodeACO = x.CodeACO, AllowPreviousSearch = x.AllowPreviousSearch, IsActive = x.IsActive, CreatedBy = x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedBy =x.LastModifiedBy , LastModifiedDate =x.LastModifiedDate , Deleted =x.Deleted }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
@@ -403,6 +403,14 @@ namespace WebAPI.Controllers
         {
             _lookupService.DeleteCaseSubCategoryLookupModel(caseSubCategoryLookupModelDelete);
             return new JsonResult(new { data = caseSubCategoryLookupModelDelete, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetPartyTypes")]
+        public IActionResult GetPartyTypes(int CaseTypeId)
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            model = _lookupService.GetPartyTypes(CaseTypeId).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
     }
 }

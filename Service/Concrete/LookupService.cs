@@ -277,10 +277,10 @@ namespace Service.Concrete
             return true;
         }
 
-        public List<CaseTypesLookupModel> caseTypesLookup()
+        public List<CaseTypesLookupModel> caseTypesLookup(int CaseGroupId)
         {
-            SqlParameter[] param = new SqlParameter[0];
-
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseGroupId", CaseGroupId);
 
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseTypesLookupModel>("sjc_Get_CaseTypesLookup", param);
             return dataMenu.ToList();
@@ -344,16 +344,18 @@ namespace Service.Concrete
             return true;
         }
 
-        public List<CaseCategoryLookupModel> GetcaseCategoryLookup()
+        public List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId)
         {
-            SqlParameter[] param = new SqlParameter[0];
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseTypeId", CaseTypeId);
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseCategoryLookupModel>("sjc_Get_CaseCategoryLookup", param);
             return dataMenu.ToList();
         }
 
-        public List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup()
+        public List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId)
         {
-            SqlParameter[] param = new SqlParameter[0];
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseCategoryId", CaseCategoryId);
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseSubCategoryLookup", param);
             return dataMenu.ToList();
         }
@@ -431,6 +433,13 @@ namespace Service.Concrete
             spParams[1] = new SqlParameter("Deleted", deleteCaseSubCategoryLookupModel.Deleted);
             _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseSubCategoryLookup", spParams);
             return true;
+        }
+        public List<LookupsModel> GetPartyTypes(int CaseTypeId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseTypeId", CaseTypeId);
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sjc_GetPartyTypeByCaseTypeId", param);
+            return dataMenu.ToList();
         }
     }
 }

@@ -15,8 +15,8 @@ namespace Service.Models
         public long CaseCategoryId { get; set; }
         public string CodeCAAJ { get; set; }
         public string  CodeACO { get; set; }
-        public string AllowPreviousSearch { get; set; }
-        public string IsActive { get; set; }
+        public bool AllowPreviousSearch { get; set; }
+        public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }

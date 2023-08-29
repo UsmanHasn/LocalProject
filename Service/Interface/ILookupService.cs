@@ -46,7 +46,7 @@ namespace Service.Interface
         bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup);
 
 
-        List<CaseTypesLookupModel> caseTypesLookup();
+        List<CaseTypesLookupModel> caseTypesLookup(int CaseGroupId);
         List<CaseGroupLookupModel> BindCaseGroup();
         List<GovernatesLookupModel> BindGovernateLookup();
         List<LocationLookupModel> GelAllLocationLookup();
@@ -54,8 +54,8 @@ namespace Service.Interface
 
         List<GovernatesLookupModel> GetAllGovernateLookup();
         GovernatesLookupModel GetGovernateLookupById(int governateId);
-        List<CaseCategoryLookupModel> GetcaseCategoryLookup();
-        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
+        List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId);
+        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId);
 
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup);
         bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup);
@@ -64,5 +64,6 @@ namespace Service.Interface
         bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
         bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);
         bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel);
+        List<LookupsModel> GetPartyTypes(int CaseTypeId);
     }
 }

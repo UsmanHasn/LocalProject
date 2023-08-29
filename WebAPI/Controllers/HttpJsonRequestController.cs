@@ -149,6 +149,10 @@ namespace WebAPI.Controllers
             var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
                 ("http://sjcintgerationsvc/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
             HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
+            if (httpStringResponse.data.Contains("Error"))
+            {
+                return "";
+            }
             LawyerApiResponseModel responseLawyer = JsonConvert.DeserializeObject<LawyerApiResponseModel>(httpStringResponse.data);
             if (httpStringResponse.data != null && responseLawyer != null && !string.IsNullOrEmpty(responseLawyer.lawyerCivilNO))
             {
