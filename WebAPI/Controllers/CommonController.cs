@@ -6,6 +6,7 @@ using Service.Interface;
 using Service.Models;
 using System.Net;
 using WebAPI.Models;
+using static Azure.Core.HttpHeader;
 
 namespace WebAPI.Controllers
 {
@@ -49,7 +50,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = json, status = HttpStatusCode.OK });
         }
 
-        [HttpGet]
+       [HttpGet]
         [Route("getnationalityvalues")]
         public IActionResult GetNationalityValues()
         {
@@ -61,7 +62,7 @@ namespace WebAPI.Controllers
             //    json[item.Id + ""] = item.Name;
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        }
+        } 
 
         [HttpGet]
         [Route("getCountry")]
@@ -75,6 +76,37 @@ namespace WebAPI.Controllers
             //    json[item.Id + ""] = item.Name;
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        //added by Muhammad Usman
+        [HttpGet]
+        [Route("GetActionById")]
+        public IActionResult GetActionById(int id)
+        {
+            ActionType action = new ActionType();
+            action = _lookupService.GetActionById(id);
+            return new JsonResult(new { data = action, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetAllActionlist")]
+        public IActionResult GetAllActionlist()
+        {
+            List<ActionType> model = new List<ActionType>();
+            model = _lookupService.GetAllActionlist();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("InsUpdActType")]
+        public void InsUpdActionLookup(ActionType model, string userName)
+        {
+            _lookupService.InsUpdActionLookup(model, userName);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteAction")]
+        public void DeleteAction(ActionType model, string userName)
+        {
+            _lookupService.DeleteAction(model, userName);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
         }
         [HttpGet]
         [Route("getAlerts")]
@@ -130,5 +162,182 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+
+        [HttpGet]
+        [Route("GetGovernatesLookupByCaseGroupId")]
+        public IActionResult GetGovernatesLookupByCaseGroupId(long CaseGroupId)
+        {
+            List<GovernatesLookupModel> model = new List<GovernatesLookupModel>();
+            model = _lookupService.GetGovernatesLookupByCaseGroupId(CaseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCaseGroupLookupByCaseGroupId")]
+        public IActionResult GetCaseGroupLookupByCaseGroupId(long CaseGroupId)
+        {
+            List<CaseGroupLookupModel> model = new List<CaseGroupLookupModel>();
+            model = _lookupService.GetCaseGroupLookupByCaseGroupId(CaseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetLocationLookupByGovernatesId")]
+        public IActionResult GetLocationLookupByGovernatesId(long GovernatesId)
+        {
+            List<LocationLookupModel> model = new List<LocationLookupModel>();
+            model = _lookupService.GetLocationLookupByGovernatesId(GovernatesId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateGovernatesLookupByCaseGroupId")]
+        public IActionResult UpdateGovernatesLookupByCaseGroupId(GovernatesLookupModel governatesLookupModel, long CaseGroupId)
+        {
+            _lookupService.UpdateGovernatesLookupByCaseGroupId(governatesLookupModel);
+            return new JsonResult(new { data = governatesLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateCaseGroupLookup")]
+        public IActionResult UpdateCaseGroupLookup(CaseGroupLookupModel caseGroupLookupModel, long CaseGroupId)
+        {
+            _lookupService.UpdateCaseGroupLookup(caseGroupLookupModel);
+            return new JsonResult(new { data = caseGroupLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateLocationLookup")]
+        public IActionResult UpdateLocationLookup(LocationLookupModel locationLookupModel, long LocationId)
+        {
+            _lookupService.UpdateLocationLookup(locationLookupModel);
+            return new JsonResult(new { data = locationLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddGovernatesLookup")]
+        public IActionResult AddGovernatesLookup(GovernatesLookupModel governatesLookupl)
+        {
+            _lookupService.AddGovernatesLookup(governatesLookupl);
+            return new JsonResult(new { data = governatesLookupl, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseGroupLookup")]
+        public IActionResult AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup)
+        {
+            _lookupService.AddCaseGroupLookup(caseGroupLookup);
+            return new JsonResult(new { data = caseGroupLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddLocationLookup")]
+        public IActionResult AddLocationLookup(LocationLookupModel locationLookup)
+        {
+            _lookupService.AddLocationLookup(locationLookup);
+            return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseTypeLookup")]
+        public IActionResult AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup)
+        {
+            _lookupService.AddCaseTypeLookup(caseTypeLookup);
+            return new JsonResult(new { data = caseTypeLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseCategoryLookup")]
+        public IActionResult AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup)
+        {
+            _lookupService.AddCaseCategoryLookup(caseCategoryLookup);
+            return new JsonResult(new { data = caseCategoryLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("AddCaseSubCategoryLookup")]
+        public IActionResult AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup)
+        {
+            _lookupService.AddCaseSubCategoryLookup(caseSubCategoryLookup);
+            return new JsonResult(new { data = caseSubCategoryLookup, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetcaseTypesLookup")]
+        public IActionResult GetcaseTypesLookup()
+        {
+            List<CaseTypesLookupModel> model = new List<CaseTypesLookupModel>();
+            model = _lookupService.caseTypesLookup().Select(x => new CaseTypesLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code , NameEn = x.NameEn, NameAr=x.NameAr , CourtTypeId =x.CourtTypeId ,IsActive =x.IsActive, CreatedBy =x.CreatedBy , CreatedDate=x.CreatedDate , LastModifiedBy=x.LastModifiedBy , LastModifiedDate  =x.LastModifiedDate , Deleted =x.Deleted , CaseGroupId =x.CaseGroupId }).ToList();
+            //var json = new Dictionary<string, string>();
+            //foreach (var item in model)
+            //{
+            //    json[item.Id + ""] = item.Name;
+            //}
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetcaseCategoryLookup")]
+        public IActionResult GetcaseCategoryLookup()
+        {
+            List<CaseCategoryLookupModel> model = new List<CaseCategoryLookupModel>();
+            model = _lookupService.GetcaseCategoryLookup().Select(x => new CaseCategoryLookupModel() { CaseTypeId = x.CaseTypeId, Code = x.Code, NameEn = x.NameEn, NameAr = x.NameAr,  IsActive = x.IsActive, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedBy = x.LastModifiedBy, LastModifiedDate = x.LastModifiedDate, Deleted = x.Deleted }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetcaseSubCategoryLookup")]
+        public IActionResult GetcaseSubCategoryLookup()
+        {
+            List<CaseSubCategoryLookupModel> model = new List<CaseSubCategoryLookupModel>();
+            model = _lookupService.GetcaseSubCategoryLookup().Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId, CodeCAAJ = x.CodeCAAJ, CodeACO = x.CodeACO, AllowPreviousSearch = x.AllowPreviousSearch, IsActive = x.IsActive, CreatedBy = x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedBy =x.LastModifiedBy , LastModifiedDate =x.LastModifiedDate , Deleted =x.Deleted }).ToList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+
+        [HttpPost]
+        [Route("UpdateCaseTypeLookup")]
+        public IActionResult UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, long CaseTypeId)
+        {
+            _lookupService.UpdateCaseTypeLookup(caseTypesLookupModel);
+            return new JsonResult(new { data = caseTypesLookupModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateCaseCategoryLookup")]
+        public IActionResult UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookupModel, long CaseCategoryId)
+        {
+            _lookupService.UpdateCaseCategoryLookup(caseCategoryLookupModel);
+            return new JsonResult(new { data = caseCategoryLookupModel, status = HttpStatusCode.OK });
+        }
+
+
+        [HttpPost]
+        [Route("UpdateCaseSubCategoryLookup")]
+        public IActionResult UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookupModel, long CaseSubCategoryId)
+        {
+            _lookupService.UpdateCaseSubCategoryLookup(caseSubCategoryLookupModel);
+            return new JsonResult(new { data = caseSubCategoryLookupModel, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteCaseTypeLookup")]
+        public IActionResult DeleteCaseTypeLookup(CaseTypesLookupModelDelete caseTypesLookupModelDelete, long CaseTypeId)
+        {
+            _lookupService.DeleteCaseTypeLookup(caseTypesLookupModelDelete);
+            return new JsonResult(new { data = caseTypesLookupModelDelete, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteCaseCategoryLookup")]
+        public IActionResult DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete caseCategoryLookupModelDelete, long CaseCategoryId)
+        {
+            _lookupService.DeleteCaseCategoryLookup(caseCategoryLookupModelDelete);
+            return new JsonResult(new { data = caseCategoryLookupModelDelete, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("DeleteCaseSubCategoryLookupModel")]
+        public IActionResult DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete caseSubCategoryLookupModelDelete, long CaseSubCategoryId)
+        {
+            _lookupService.DeleteCaseSubCategoryLookupModel(caseSubCategoryLookupModelDelete);
+            return new JsonResult(new { data = caseSubCategoryLookupModelDelete, status = HttpStatusCode.OK });
+        }
     }
 }

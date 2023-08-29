@@ -184,6 +184,7 @@ namespace Service.Concrete
                  new Microsoft.Data.SqlClient.SqlParameter("typeid", DATA.OtpType)
                  , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
                  , new Microsoft.Data.SqlClient.SqlParameter("EmailSent", DATA.EmailSent)
+                 , new Microsoft.Data.SqlClient.SqlParameter("OtpExpiry", DATA.OTPExpiry)
                  );
             if (dataMenu.Any())
             {
@@ -195,9 +196,7 @@ namespace Service.Concrete
         }
         public bool VerifyOtp(OtpModel DATA)
         {
-
-
-            bool dataMenu = _userRepository.ExecuteStoredProcedure<bool>("sp_VerifyOTP",
+            int dataMenu = _userRepository.ExecuteStoredProcedure<int>("sp_VerifyOTP",
                 new Microsoft.Data.SqlClient.SqlParameter("otp", (int)Convert.ToInt64(DATA.OtpId.ToString()))
                  , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
                  , new Microsoft.Data.SqlClient.SqlParameter("OtpType", DATA.OtpType)
@@ -205,7 +204,7 @@ namespace Service.Concrete
                  , new Microsoft.Data.SqlClient.SqlParameter("MobileNumber", DATA.MobileNumber)
                  ).FirstOrDefault();
 
-            return dataMenu;
+            return dataMenu == 1 ? true : false;
         }
         public bool UpdateUser(UserModel userModel, string userName)
         {
@@ -270,7 +269,10 @@ namespace Service.Concrete
                 CreatedDate = userModel.CreatedDate,
                 LastModifiedBy = userModel.Name,
                 LastModifiedDate = DateTime.Now,
-                LastLoginDate = DateTime.Now
+                LastLoginDate = DateTime.Now,
+                isEmailVerified = userModel.IsEmailVerified,
+                isPhoneVerified = userModel.IsPhoneVerified,
+                CivilExpiryDate = userModel.CivilExpiryDate
             };
             _userRepository.Update(users, userName);
             _userRepository.Save();

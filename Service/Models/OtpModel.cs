@@ -13,5 +13,6 @@ namespace Service.Models
         public bool EmailSent { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
+        public DateTime OTPExpiry { get; set; }
     }
 }

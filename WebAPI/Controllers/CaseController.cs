@@ -124,6 +124,31 @@ namespace WebAPI.Controllers
             model = _caseService.GetAllCases().Select(x => new CaseModel() { CaseId = x.CaseId, CaseNo = x.CaseNo, CourtTypeId = x.CourtTypeId, CourtBuildingId = x.CourtBuildingId , CourtName =x.CourtName , CaseTypeId =x.CaseTypeId , CaseType =x.CaseType , CaseCategoryId =x.CaseCategoryId , CaseCatName =x.CaseCatName , CaseSubCategoryId  =x.CaseSubCategoryId, CaseSubCatName= x.CaseSubCatName, FiledOn= x.FiledOn , Subject =x.Subject, CreatedBy =x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedDate =x.LastModifiedDate , LastModifiedBy =x.LastModifiedBy , OriginalCaseNo =x.OriginalCaseNo, CaseStatusName=x.CaseStatusName }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GetPendingCase")]
+        public IActionResult GetPendingCase(string CivilNo, int CaseStatusId)
+        {
+            List<CaseModel> model = new List<CaseModel>();
+            model = _caseService.GetAllPendingCase(CivilNo, CaseStatusId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("BindPaymentDraw")]
+        public IActionResult BindPaymentDraw()
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            model = _caseService.BindPaymentDraw();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("UpdateCase")]
+        public IActionResult UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName)
+        {
+            _caseService.UpdateCase(caseId, caseStatusId,fee,paymentDrawId,exempted, userName);
+            return new JsonResult(new { data = new { CaseId = caseId, CaseStatus = caseStatusId, fee = fee, paymentDrawId= paymentDrawId, exempted= exempted }, status = HttpStatusCode.OK });
+        }
         [HttpGet]
         [Route("GetCasesByUserName")]
         public IActionResult GetCasesByUserName(string UserName)

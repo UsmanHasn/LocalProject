@@ -34,6 +34,7 @@ namespace Service.Models
         public string? CourtTypeName { get; set; }
         public string? CourtBuildingName { get; set; }
         public string? CaseTypeName { get; set; }
+        public string? Fee { get; set; }
     }
     public class CaseDocumentsModel
     {
