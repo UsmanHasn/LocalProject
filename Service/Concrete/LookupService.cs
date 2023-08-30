@@ -189,16 +189,15 @@ namespace Service.Concrete
             return true;
         }
 
-        public bool AddGovernatesLookup(GovernatesLookupModel governatesLookup)
+        public bool AddGovernatesLookup(GovernatesLookupModel governatesLookup, string userName)
         {
             SqlParameter[] spParams = new SqlParameter[6];
             spParams[0] = new SqlParameter("CaseGroupId", governatesLookup.CaseGroupId);
             spParams[1] = new SqlParameter("Code", governatesLookup.Code);
             spParams[2] = new SqlParameter("NameEn", governatesLookup.NameEn);
             spParams[3] = new SqlParameter("NameAr", governatesLookup.NameAr);
-            spParams[4] = new SqlParameter("CreatedBy", governatesLookup.CreatedBy);
+            spParams[4] = new SqlParameter("CreatedBy", userName);
             spParams[5] = new SqlParameter("Createdate", DateTime.Now);
-     
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_GovernatesLookup", spParams);
             return true;
         }
@@ -278,25 +277,85 @@ namespace Service.Concrete
             return true;
         }
 
-        public List<CaseTypesLookupModel> caseTypesLookup()
+        public List<CaseTypesLookupModel> caseTypesLookup(int CaseGroupId)
         {
-            SqlParameter[] param = new SqlParameter[0];
-
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseGroupId", CaseGroupId);
 
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseTypesLookupModel>("sjc_Get_CaseTypesLookup", param);
             return dataMenu.ToList();
         }
 
-        public List<CaseCategoryLookupModel> GetcaseCategoryLookup()
+        public List<CaseGroupLookupModel> BindCaseGroup()
         {
             SqlParameter[] param = new SqlParameter[0];
+            var data = _languagesRepository.ExecuteStoredProcedure<CaseGroupLookupModel>("sjc_GetCaseGroup", param);
+            return data.ToList();
+        }
+
+        public List<GovernatesLookupModel> BindGovernateLookup()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var data = _languagesRepository.ExecuteStoredProcedure<GovernatesLookupModel>("sjc_GetGovernateLookup", param);
+            return data.ToList();
+        }
+
+        public List<LocationLookupModel> GelAllLocationLookup()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var data = _languagesRepository.ExecuteStoredProcedure<LocationLookupModel>("sjc_GetAllLocationLookup", param);
+            return data.ToList();
+        }
+
+        public LocationLookupModel GelLocationLookupById(int LocationId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("LocationId", LocationId);
+            var data = _languagesRepository.ExecuteStoredProcedure<LocationLookupModel>("sjc_GetLocationLookupById", param).FirstOrDefault();
+            return data;
+        }
+
+        public List<GovernatesLookupModel> GetAllGovernateLookup()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var data = _languagesRepository.ExecuteStoredProcedure<GovernatesLookupModel>("sjc_GetAllGovernateLookup", param);
+            return data.ToList();
+        }
+
+        public GovernatesLookupModel GetGovernateLookupById(int governateId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("governateid", governateId);
+            var data = _languagesRepository.ExecuteStoredProcedure<GovernatesLookupModel>("sjc_GetGovernateLookupById", param).FirstOrDefault();
+            return data;
+        }
+
+        public bool UpdateGovernatesLookupByGovernateId(GovernatesLookupModel governatesLookup)
+        {
+            SqlParameter[] spParams = new SqlParameter[7];
+            spParams[0] = new SqlParameter("GovernateId", governatesLookup.GovernateId);
+            spParams[1] = new SqlParameter("CaseGroupId", governatesLookup.CaseGroupId);
+            spParams[2] = new SqlParameter("Code", governatesLookup.Code);
+            spParams[3] = new SqlParameter("NameEn", governatesLookup.NameEn);
+            spParams[4] = new SqlParameter("NameAr", governatesLookup.NameAr);
+            spParams[5] = new SqlParameter("LastModifiedBy ", true);
+            spParams[6] = new SqlParameter("LastModifiedDate", DateTime.Now);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_Update_GovernatesLookup", spParams);
+            return true;
+        }
+
+        public List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseTypeId", CaseTypeId);
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseCategoryLookupModel>("sjc_Get_CaseCategoryLookup", param);
             return dataMenu.ToList();
         }
 
-        public List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup()
+        public List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId)
         {
-            SqlParameter[] param = new SqlParameter[0];
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseCategoryId", CaseCategoryId);
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseSubCategoryLookup", param);
             return dataMenu.ToList();
         }
@@ -374,6 +433,13 @@ namespace Service.Concrete
             spParams[1] = new SqlParameter("Deleted", deleteCaseSubCategoryLookupModel.Deleted);
             _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseSubCategoryLookup", spParams);
             return true;
+        }
+        public List<LookupsModel> GetPartyTypes(int CaseTypeId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseTypeId", CaseTypeId);
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sjc_GetPartyTypeByCaseTypeId", param);
+            return dataMenu.ToList();
         }
     }
 }

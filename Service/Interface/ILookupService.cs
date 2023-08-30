@@ -32,10 +32,11 @@ namespace Service.Interface
         List<LocationLookupModel> GetLocationLookupByGovernatesId(long GovernatesId);
 
         bool UpdateGovernatesLookupByCaseGroupId(GovernatesLookupModel governatesLookup);
+        bool UpdateGovernatesLookupByGovernateId(GovernatesLookupModel governatesLookup);
         bool UpdateCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool UpdateLocationLookup(LocationLookupModel locationLookup);
 
-        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup);
+        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup, string userName);
         bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool AddLocationLookup(LocationLookupModel locationLookup);
 
@@ -45,9 +46,16 @@ namespace Service.Interface
         bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup);
 
 
-        List<CaseTypesLookupModel> caseTypesLookup();
-        List<CaseCategoryLookupModel> GetcaseCategoryLookup();
-        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
+        List<CaseTypesLookupModel> caseTypesLookup(int CaseGroupId);
+        List<CaseGroupLookupModel> BindCaseGroup();
+        List<GovernatesLookupModel> BindGovernateLookup();
+        List<LocationLookupModel> GelAllLocationLookup();
+        LocationLookupModel GelLocationLookupById(int LocationId);
+
+        List<GovernatesLookupModel> GetAllGovernateLookup();
+        GovernatesLookupModel GetGovernateLookupById(int governateId);
+        List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId);
+        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId);
 
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup);
         bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup);
@@ -56,5 +64,6 @@ namespace Service.Interface
         bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
         bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);
         bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel);
+        List<LookupsModel> GetPartyTypes(int CaseTypeId);
     }
 }

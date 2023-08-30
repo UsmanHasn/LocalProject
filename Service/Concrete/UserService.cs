@@ -136,6 +136,7 @@ namespace Service.Concrete
         {
             Users users = new Users()
             {
+                Id=userModel.Id,
                 UserName = userModel.Name,
                 UserNameAr = userModel.NameAr,
                 CivilNumber = userModel.CivilID,
@@ -157,8 +158,10 @@ namespace Service.Concrete
                 Password = userModel.Password,
                 SupervisorUserId = userModel.SupervisorUserId
             };
+            
             _userRepository.Create(users, userName);
             _userRepository.Save();
+            userModel.Id= users.Id;
             return true;
         }
 
