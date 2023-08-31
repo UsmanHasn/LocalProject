@@ -232,9 +232,14 @@ namespace WebAPI.Controllers
                                         CaseId = y.CaseId,
                                         PartyNo = y.PartyNo,
                                         LegalType = y.LegalType,
+                                        PartyType=y.PartyType,
                                         PartyCategoryId = y.PartyCategoryId,
                                         PartyTypeId = y.PartyTypeId,
+                                        PartyTypeName=y.PartyTypeName,
+                                        partyTypeNameAr=y.partyTypeNameAr,
                                         EntityId = y.EntityId,
+                                        EntityName=y.EntityName,
+                                        EntityNameAr=y.EntityNameAr,
                                         CivilNo = y.CivilNo,
                                         CivilExpiry = y.CivilExpiry,
                                         CRNo = y.CRNo,
@@ -244,8 +249,11 @@ namespace WebAPI.Controllers
                                         FamilyName = y.FamilyName,
                                         Email = y.Email,
                                         Country = y.Country,
-                                        City = y.City
-
+                                        City = y.City,
+                                        DocEn=y.DocEn,
+                                        DocAr=y.DocAr,
+                                        DocumentPath=y.DocumentPath,
+                                        Description=y.Description
                                     }).ToList(),
                                     group = x.group.ToString(),
                                 }).ToList();

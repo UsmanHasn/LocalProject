@@ -475,6 +475,8 @@ namespace Service.Concrete
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_LanguageLookup", spParams);
             return true;
         }
+
+       
         public List<LookupsModel> GetPartyTypes(int CaseTypeId)
         {
             SqlParameter[] param = new SqlParameter[1];
@@ -485,7 +487,15 @@ namespace Service.Concrete
 
         public bool UpdateLanguageLookup(LanguageLookupModel languageLookupModel, string userName)
         {
-            throw new NotImplementedException();
+            SqlParameter[] spParams = new SqlParameter[5];
+            spParams[0] = new SqlParameter("LanguageId", languageLookupModel.LanguageId);
+            spParams[1] = new SqlParameter("Key", languageLookupModel.Key);
+            spParams[2] = new SqlParameter("EnglishValue", languageLookupModel.EnglishValue);
+            spParams[3] = new SqlParameter("ArabicValue", languageLookupModel.ArabicValue);
+            spParams[4] = new SqlParameter("LastModifiedBy", userName);
+
+            _languagesRepository.ExecuteStoredProcedure("sjc_update_LanguageLookup", spParams);
+            return true;
         }
 
         public List<LanguageLookupModel> GetLanguageLookup()
