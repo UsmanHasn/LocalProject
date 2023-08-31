@@ -62,6 +62,11 @@ namespace Service.Concrete
         }
 
         //added by Muhammad Usman
+        public RequestStatus GetReqStatusById(int Id)
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<RequestStatus>("sjc_GetRequsetById", new Microsoft.Data.SqlClient.SqlParameter("StatusId", Id));
+            return dataMenu.FirstOrDefault();
+        }
         public ActionType GetActionById(int Id)
         {
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<ActionType>("sjc_GetActionById", new Microsoft.Data.SqlClient.SqlParameter("ActionTypeId", Id));
@@ -82,6 +87,19 @@ namespace Service.Concrete
                 _languagesRepository.ExecuteStoredProcedure("sjc_ActionTypeLookup", spParams);
             }
         }
+        public void DeleteRequest(RequestStatus requestStatus, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[8];
+            spParams[0] = new SqlParameter("@StatusId", requestStatus.StatusId);
+            spParams[1] = new SqlParameter("@NameEn", requestStatus.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", requestStatus.NameAr);
+            spParams[3] = new SqlParameter("@Createdby", userName);
+            spParams[4] = new SqlParameter("@CreatedDate", requestStatus.CreatedDate);
+            spParams[5] = new SqlParameter("@LastModifiedBy", userName);
+            spParams[6] = new SqlParameter("@LastModifiedDate", requestStatus.LastModifiedDate);
+            spParams[7] = new SqlParameter("@Action", "d");
+            _languagesRepository.ExecuteStoredProcedure("sjc_RequestStatusLookup", spParams);
+        }
         List<ActionType> ILookupService.GetAllActionlist()
         {
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<ActionType>("sjc_GetActiontypelist");
@@ -93,6 +111,19 @@ namespace Service.Concrete
 
             }).ToList();
             return model;
+        }
+        List<RequestStatus> ILookupService.GetAllStatusList()
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<RequestStatus>("sjc_GetrequestStatusList");
+            var model = dataMenu.Select(x => new RequestStatus()
+            {
+                StatusId = x.StatusId,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
+
+            }).ToList();
+            return model;
+
         }
         public void InsUpdActionLookup(ActionType actionType, string userName)
         {
@@ -116,7 +147,19 @@ namespace Service.Concrete
             _languagesRepository.ExecuteStoredProcedure("Sp_dml_updatealerts", spParams);
             return true;
         }
-
+        public void InsUpdStatusLookup(RequestStatus requestStatus, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[8];
+            spParams[0] = new SqlParameter("@StatusId", requestStatus.StatusId);
+            spParams[1] = new SqlParameter("@NameEn", requestStatus.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", requestStatus.NameAr);
+            spParams[3] = new SqlParameter("@Createdby", userName);
+            spParams[4] = new SqlParameter("@CreatedDate", requestStatus.CreatedDate);
+            spParams[5] = new SqlParameter("@LastModifiedBy", userName);
+            spParams[6] = new SqlParameter("@LastModifiedDate", requestStatus.LastModifiedDate);
+            spParams[7] = new SqlParameter("@Action", requestStatus.StatusId > 0 ? "u" : "i");
+            _languagesRepository.ExecuteStoredProcedure("sjc_RequestStatusLookup", spParams);
+        }
         public List<LookupsModel> GetCaseStatusLookup()
         {
             SqlParameter[] param = new SqlParameter[0];
@@ -198,7 +241,7 @@ namespace Service.Concrete
             spParams[3] = new SqlParameter("NameAr", governatesLookup.NameAr);
             spParams[4] = new SqlParameter("CreatedBy", true);
             spParams[5] = new SqlParameter("Createdate", DateTime.Now);
-     
+
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_GovernatesLookup", spParams);
             return true;
         }

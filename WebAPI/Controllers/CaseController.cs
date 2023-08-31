@@ -154,7 +154,7 @@ namespace WebAPI.Controllers
         public IActionResult GetCasesByUserName(string UserName)
         {
             CaseModel model = new CaseModel();
-            model = _caseService.GetCasesByUserName(UserName);
+            //model = _caseService.GetCasesByUserName(UserName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
