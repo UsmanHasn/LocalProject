@@ -32,11 +32,50 @@ namespace Service.Interface
         List<CaseGroupLookupModel> GetCaseGroupLookupByCaseGroupId(long CaseGroupId);
         List<LocationLookupModel> GetLocationLookupByGovernatesId(long GovernatesId);
         bool UpdateGovernatesLookupByCaseGroupId(GovernatesLookupModel governatesLookup);
+        bool UpdateGovernatesLookupByGovernateId(GovernatesLookupModel governatesLookup);
         bool UpdateCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool UpdateLocationLookup(LocationLookupModel locationLookup);
 
-        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup);
+        bool AddGovernatesLookup(GovernatesLookupModel governatesLookup, string userName);
         bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool AddLocationLookup(LocationLookupModel locationLookup);
+
+
+        bool AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup);
+        bool AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup, string userName);
+        List<CaseCategoryLookupModel> GetAllCaseCategory();
+        public CaseCategoryLookupModel GetCaseCategoryById(int caseCategoryId);
+        bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup, string userName);
+
+
+        //List<CaseTypesLookupModel> caseTypesLookup();
+        List<CaseTypesLookupModel> caseTypesLookup(int CaseGroupId);
+        List<CaseGroupLookupModel> BindCaseGroup();
+        List<GovernatesLookupModel> BindGovernateLookup();
+        List<LocationLookupModel> GelAllLocationLookup();
+        LocationLookupModel GelLocationLookupById(int LocationId);
+
+        List<GovernatesLookupModel> GetAllGovernateLookup();
+        GovernatesLookupModel GetGovernateLookupById(int governateId);
+        List<CaseCategoryLookupModel> GetcaseCategoryLookup();
+        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
+        CaseSubCategoryLookupModel GetcaseSubCategoryLookupById(int caseSubCategoryId);
+        List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId);
+        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId);
+
+        bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup);
+        bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup,string userName);
+        bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup,string userName);
+
+        bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
+        bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);
+        bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel);
+
+
+        bool AddLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
+        bool UpdateLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
+        List<LanguageLookupModel> GetLanguageLookup();
+        LanguageLookupModel GetLanguageLookupById(int languageLookupId);
+        List<LookupsModel> GetPartyTypes(int CaseTypeId);
     }
 }

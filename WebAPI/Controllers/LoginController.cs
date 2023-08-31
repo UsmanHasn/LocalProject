@@ -162,7 +162,8 @@ namespace WebAPI.Controllers
                     Email = currentUser.Email,
                     MobileNo = currentUser.PhoneNumber,
                     RoleId = role == null ? 0 : role.Id,
-                    Role = role == null ? "" : role.Name
+                    Role = role == null ? "" : role.Name,
+                    LastLoginDate = currentUser.LastLoginDate
                 };
                 //return currentUser;
             }
@@ -198,7 +199,8 @@ namespace WebAPI.Controllers
                 MobileNo = userByCivilNo.PhoneNumber,
                 RoleId = role == null ? 0 : role.Id,
                 Role = role == null ? "" : role.Name,
-                RoleAr = role == null ? "" : role.Name
+                RoleAr = role == null ? "" : role.Name,
+                LastLoginDate = userByCivilNo.LastLoginDate
             };
             return user;
         }

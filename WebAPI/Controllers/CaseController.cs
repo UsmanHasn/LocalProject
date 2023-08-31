@@ -5,6 +5,7 @@ using Service.Interface;
 using Service.Models;
 using System.Net;
 using System.Net.Http.Headers;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebAPI.Controllers
 
         public CaseController(ICaseService caseService)
         {
-            _caseService= caseService;
+            _caseService = caseService;
         }
 
         [HttpPost]
@@ -56,7 +57,7 @@ namespace WebAPI.Controllers
         {
             List<CaseParties> model = new List<CaseParties>();
             model = _caseService.GetCaseParties(CaseId, PartyNo);
-            
+
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
@@ -73,15 +74,15 @@ namespace WebAPI.Controllers
         [Route("UpdateCaseStatus")]
         public IActionResult UpdateCaseStatus(long CaseId, string CaseStatus, string UserName)
         {
-           string caseNo = _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName).CaseNo;
-            return new JsonResult(new { data = new { CaseId= CaseId, CaseNo = caseNo, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
+            string caseNo = _caseService.UpdateCaseStatus(CaseId, CaseStatus, UserName).CaseNo;
+            return new JsonResult(new { data = new { CaseId = CaseId, CaseNo = caseNo, CaseStatus = CaseStatus, Message = "Case updated" }, status = HttpStatusCode.OK });
         }
         #region
         [HttpPost]
         [Route("uploaddocument")]
         public IActionResult UploadDocument(string caseId, string documentId, string documentType, string description, string userName)
         {
-            
+
             var file = Request.Form.Files[0];
             string folderName = Path.Combine("wwwroot", "Case Document");
             var pathTotSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -121,7 +122,7 @@ namespace WebAPI.Controllers
         public IActionResult GetAllCases()
         {
             List<CaseModel> model = new List<CaseModel>();
-            model = _caseService.GetAllCases().Select(x => new CaseModel() { CaseId = x.CaseId, CaseNo = x.CaseNo, CourtTypeId = x.CourtTypeId, CourtBuildingId = x.CourtBuildingId , CourtName =x.CourtName , CaseTypeId =x.CaseTypeId , CaseType =x.CaseType , CaseCategoryId =x.CaseCategoryId , CaseCatName =x.CaseCatName , CaseSubCategoryId  =x.CaseSubCategoryId, CaseSubCatName= x.CaseSubCatName, FiledOn= x.FiledOn , Subject =x.Subject, CreatedBy =x.CreatedBy , CreatedDate =x.CreatedDate , LastModifiedDate =x.LastModifiedDate , LastModifiedBy =x.LastModifiedBy , OriginalCaseNo =x.OriginalCaseNo, CaseStatusName=x.CaseStatusName }).ToList();
+            model = _caseService.GetAllCases().Select(x => new CaseModel() { CaseId = x.CaseId, CaseNo = x.CaseNo, CourtName = x.CourtName, CaseTypeId = x.CaseTypeId, CaseType = x.CaseType, CaseCategoryId = x.CaseCategoryId, CaseCatName = x.CaseCatName, CaseSubCategoryId = x.CaseSubCategoryId, CaseSubCatName = x.CaseSubCatName, FiledOn = x.FiledOn, Subject = x.Subject, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedDate = x.LastModifiedDate, LastModifiedBy = x.LastModifiedBy, OriginalCaseNo = x.OriginalCaseNo, CaseStatusName = x.CaseStatusName }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
@@ -146,9 +147,13 @@ namespace WebAPI.Controllers
         [Route("UpdateCase")]
         public IActionResult UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName)
         {
-            _caseService.UpdateCase(caseId, caseStatusId,fee,paymentDrawId,exempted, userName);
-            return new JsonResult(new { data = new { CaseId = caseId, CaseStatus = caseStatusId, fee = fee, paymentDrawId= paymentDrawId, exempted= exempted }, status = HttpStatusCode.OK });
+            _caseService.UpdateCase(caseId, caseStatusId, fee, paymentDrawId, exempted, userName);
+            return new JsonResult(new { data = new { CaseId = caseId, CaseStatus = caseStatusId, fee = fee, paymentDrawId = paymentDrawId, exempted = exempted }, status = HttpStatusCode.OK });
         }
+       
+
+       
+       
         [HttpGet]
         [Route("GetCasesByUserName")]
         public IActionResult GetCasesByUserName(string UserName)
@@ -159,5 +164,92 @@ namespace WebAPI.Controllers
         }
 
         #endregion
+
+
+        [HttpPost]
+        [Route("AddCaseTypeLookup")]
+        public IActionResult AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string UserName)
+        {
+            if (caseTypesLookupModel.CaseTypeId>0)
+            {
+                _caseService.UpdateCaseTypeLookup(caseTypesLookupModel, UserName);
+            }
+            else
+            {
+                _caseService.AddCaseTypeLookup(caseTypesLookupModel, UserName);
+            }
+            return new JsonResult(new { data = true, status = HttpStatusCode.OK });
+
+        }
+        [HttpGet]
+        [Route("GetCaseTypeLookup")]
+        public IActionResult GetCaseTypeLookup()
+        {
+            List<CaseTypesLookupModel> model = new List<CaseTypesLookupModel>();
+            model = _caseService.GetAllCaseTypeLookup();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCourtTypeLookup")]
+        public IActionResult GetCourtTypeLookup()
+        {
+            List<CourtTypeLookupModel> model = new List<CourtTypeLookupModel>();
+            model = _caseService.GetAllCourtTypeLookup();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetCaseTypeById")]
+        public IActionResult GetCaseTypeById(int caseTypeId)
+        {
+            CaseTypesLookupModel model = new CaseTypesLookupModel();
+            model = _caseService.GetCaseTypeLookupById(caseTypeId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("GetCaseDetail")]
+        public IActionResult GetCaseDetail(int caseId)
+        {
+            CaseModel model = new CaseModel();
+            model = _caseService.GetCaseDetail(caseId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("GetCasePartiesDetail")]
+        public IActionResult GetCasePartiesDetail(int caseId)
+        {
+            List<CaseParties> model = new List<CaseParties>();
+            model = _caseService.GetCasePartiesDetail(caseId);
+            var groupData = model.Select(x => new { group = x.PartyNo}).Distinct();
+            List<CasePartyModel> modelPermissions = groupData.Select(x =>
+                                new CasePartyModel()
+                                {
+                                    items = model.Where(y => y.PartyNo == x.group)
+                                    .Select(y => new CaseParties()
+                                    {
+                                        CasePartyId = y.CasePartyId,
+                                        CaseId = y.CaseId,
+                                        PartyNo = y.PartyNo,
+                                        LegalType = y.LegalType,
+                                        PartyCategoryId = y.PartyCategoryId,
+                                        PartyTypeId = y.PartyTypeId,
+                                        EntityId = y.EntityId,
+                                        CivilNo = y.CivilNo,
+                                        CivilExpiry = y.CivilExpiry,
+                                        CRNo = y.CRNo,
+                                        Name = y.Name,
+                                        PhoneNo = y.PhoneNo,
+                                        Address = y.Address,
+                                        FamilyName = y.FamilyName,
+                                        Email = y.Email,
+                                        Country = y.Country,
+                                        City = y.City
+
+                                    }).ToList(),
+                                    group = x.group.ToString(),
+                                }).ToList();
+            return new JsonResult(new { data = modelPermissions, status = HttpStatusCode.OK });
+        }
     }
 }

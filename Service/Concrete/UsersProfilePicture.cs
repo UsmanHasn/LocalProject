@@ -35,28 +35,41 @@ namespace Service.Concrete
                 CreatedBy = postRequest.CreatedBy,
                 FilePath = postRequest.FilePath,
                 LastModifiedDate = DateTime.Now,
-                LastModifiedBy = "123",
-                Deleted = "true"
+                LastModifiedBy = postRequest.LastModifiedBy,
+                Deleted = "false"
             };
-
-            var postEntry = await socialDbContext.UsersProfilePicture.AddAsync(post);
-
-            var saveResponse = await socialDbContext.SaveChangesAsync();
-
-            if (saveResponse < 0)
+            if (socialDbContext.UsersProfilePicture.Find(postRequest.UserId) == null)
             {
-                return new PostResponse { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" };
+                var _ = await socialDbContext.UsersProfilePicture.AddAsync(post);
             }
+            else {
+                var userProfile = socialDbContext.UsersProfilePicture.Find(postRequest.UserId);
+                userProfile.FilePath = postRequest.FilePath;
+                userProfile.LastModifiedDate = DateTime.Now;
+                userProfile.LastModifiedBy = postRequest.LastModifiedBy;
+                var _ = socialDbContext.UsersProfilePicture.Update(userProfile);
+            }
+            try
+            {
+                var saveResponse = await socialDbContext.SaveChangesAsync();
 
-            var postEntity = postEntry.Entity;
+                if (saveResponse < 0)
+                {
+                    return new PostResponse { Success = false, Error = "Issue while saving the post", ErrorCode = "CP01" };
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
             var postModel = new UsersProfilePictureModel
             {
-                Id = postEntity.UserId,
-                CreatedBy = postEntity.CreatedBy,
+                Id = postRequest.UserId,
+                CreatedBy = postRequest.CreatedBy,
                 LastModifiedDate = DateTime.Now,
-                LastModifiedBy="123",
-                FilePath = Path.Combine(postEntity.FilePath),
-                UserId = postEntity.UserId
+                LastModifiedBy= postRequest.LastModifiedBy,
+                FilePath = postRequest.FilePath,
+                UserId = postRequest.UserId
 
             };
 

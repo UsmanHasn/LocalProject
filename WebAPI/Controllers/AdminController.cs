@@ -282,6 +282,7 @@ namespace WebAPI.Controllers
         [Route("getUserActivityInfoLog")]
         public IActionResult GetUserActivityInfoLog(int Id, bool isSystemAdmin, string? userName, string? fromdate, string? todate)
         {
+            
             List<UserActivityLog> model = new List<UserActivityLog>();
             model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin, userName, fromdate, todate);
             //var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();

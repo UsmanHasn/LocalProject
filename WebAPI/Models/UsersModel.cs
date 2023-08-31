@@ -12,5 +12,6 @@
         public string MobileNo { get; set; }
         public string? CivilID { get; set; }
         public string? Email { get; set; }
+        public DateTime? LastLoginDate { get; set; }
     }
 }
