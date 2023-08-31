@@ -167,5 +167,70 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).FirstOrDefault();
 
         }
+
+        public bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[7];
+            spParams[0] = new SqlParameter("Code", caseTypesLookupModel.Code);
+            spParams[1] = new SqlParameter("NameEn", caseTypesLookupModel.NameEn);
+            spParams[2] = new SqlParameter("NameAr", caseTypesLookupModel.NameAr);
+            spParams[3] = new SqlParameter("CourtTypeId", caseTypesLookupModel.CourtTypeId);
+            spParams[4] = new SqlParameter("IsActive", caseTypesLookupModel.IsActive);
+            spParams[5] = new SqlParameter("CreatedBy", userName);
+            spParams[6] = new SqlParameter("CaseGroupId", caseTypesLookupModel.CaseGroupId);
+            _systemSettingRepository.ExecuteStoredProcedure("sjc_insert_caseTypesLookup", spParams);
+            return true;
+        }
+
+        public List<CaseTypesLookupModel> GetAllCaseTypeLookup()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseTypesLookupModel>("sjc_Get_CaseTypesLookup", parameters).ToList();
+        }
+
+        public List<CourtTypeLookupModel> GetAllCourtTypeLookup()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<CourtTypeLookupModel>("sjc_GetAll_CourtTypesLookup", parameters).ToList();
+        }
+
+        public CaseTypesLookupModel GetCaseTypeLookupById(int CaseTypeId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseTypeId", CaseTypeId);
+            var data = _systemSettingRepository.ExecuteStoredProcedure<CaseTypesLookupModel>("sjc_GetAll_CaseTypesLookup", param).FirstOrDefault();
+            return data;
+        }
+
+        public bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[8];
+            spParams[0] = new SqlParameter("Code", caseTypesLookupModel.Code);
+            spParams[1] = new SqlParameter("NameEn", caseTypesLookupModel.NameEn);
+            spParams[2] = new SqlParameter("NameAr", caseTypesLookupModel.NameAr);
+            spParams[3] = new SqlParameter("CourtTypeId", caseTypesLookupModel.CourtTypeId);
+            spParams[4] = new SqlParameter("IsActive", caseTypesLookupModel.IsActive);
+            spParams[5] = new SqlParameter("LastModifiedBy", userName);
+            spParams[6] = new SqlParameter("CaseGroupId", caseTypesLookupModel.CaseGroupId);
+            spParams[7] = new SqlParameter("CaseTypeId", caseTypesLookupModel.CaseTypeId);
+            _systemSettingRepository.ExecuteStoredProcedure("Sjc_Update_CaseTypesLookup", spParams);
+            return true;
+        }
+
+        public CaseModel GetCaseDetail(int CaseId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseId", CaseId);
+            var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseDetail", param).FirstOrDefault();
+            return data;
+        }
+
+        public List<CaseParties> GetCasePartiesDetail(int CaseId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("CaseId", CaseId);
+            var data = _systemSettingRepository.ExecuteStoredProcedure<CaseParties>("sjc_GetCasePartiesDetail", param).ToList();
+            return data;
+        }
     }
 }

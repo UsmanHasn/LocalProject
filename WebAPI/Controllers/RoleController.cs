@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
-        [HttpGet]
+        [HttpDelete]
         [Route("deleterole")]
         public IActionResult Delete(int roleId, string userName)
         {

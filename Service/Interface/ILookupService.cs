@@ -42,10 +42,13 @@ namespace Service.Interface
 
 
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup);
-        bool AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup);
-        bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup);
+        bool AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup, string userName);
+        List<CaseCategoryLookupModel> GetAllCaseCategory();
+        public CaseCategoryLookupModel GetCaseCategoryById(int caseCategoryId);
+        bool AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup, string userName);
 
 
+        //List<CaseTypesLookupModel> caseTypesLookup();
         List<CaseTypesLookupModel> caseTypesLookup(int CaseGroupId);
         List<CaseGroupLookupModel> BindCaseGroup();
         List<GovernatesLookupModel> BindGovernateLookup();
@@ -54,16 +57,25 @@ namespace Service.Interface
 
         List<GovernatesLookupModel> GetAllGovernateLookup();
         GovernatesLookupModel GetGovernateLookupById(int governateId);
+        List<CaseCategoryLookupModel> GetcaseCategoryLookup();
+        List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
+        CaseSubCategoryLookupModel GetcaseSubCategoryLookupById(int caseSubCategoryId);
         List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId);
         List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId);
 
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup);
-        bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup);
-        bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup);
+        bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup,string userName);
+        bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup,string userName);
 
         bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
         bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);
         bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel);
+
+
+        bool AddLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
+        bool UpdateLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
+        List<LanguageLookupModel> GetLanguageLookup();
+        LanguageLookupModel GetLanguageLookupById(int languageLookupId);
         List<LookupsModel> GetPartyTypes(int CaseTypeId);
     }
 }
