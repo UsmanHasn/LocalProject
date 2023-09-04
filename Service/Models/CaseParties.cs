@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Service.Models
+﻿namespace Service.Models
 {
     public class CaseParties
     {
@@ -33,10 +27,16 @@ namespace Service.Models
         public string? Email { get; set; }
         public string? Country { get; set; }
         public string? City { get; set; }
+        public int IsDeleted { get; set; }
 
         public string? DocEn { get; set; }
         public string? DocAr { get; set; }
         public string? DocumentPath { get; set; }
         public string? Description { get; set; }
     }
-}
+
+    public class CasePartiesDelete
+    {
+        public int CasePartyId { get; set; }
+    }
+    }

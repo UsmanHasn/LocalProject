@@ -280,5 +280,12 @@ namespace WebAPI.Controllers
             model = _caseService.GetCasesByStatusName(UserName, CaseStatusName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpPost]
+        [Route("DeleteCaseParties")]
+        public IActionResult DeleteCaseParties(CasePartiesDelete deleteCaseParties, long CasePartyId)
+        {
+            _caseService.DeleteCaseParties(deleteCaseParties);
+            return new JsonResult(new { data = deleteCaseParties, status = HttpStatusCode.OK });
+        }
     }
 }

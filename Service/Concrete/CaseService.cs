@@ -239,5 +239,13 @@ namespace Service.Concrete
             parameters[1] = new SqlParameter("CaseStatusName", CaseStatusName);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseBasicModel>("sjc_GetCaseByStatusAndUser", parameters).ToList();
         }
+
+        public bool DeleteCaseParties(CasePartiesDelete deleteCaseParties)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CasePartyId ", deleteCaseParties.CasePartyId);
+            _systemSettingRepository.ExecuteStoredProcedure("Sjc_delete_CaseParties", spParams);
+            return true;
+        }
     }
 }
