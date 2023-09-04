@@ -7,14 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Attachments\Capture.PNG" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Assets\Attachments\Capture.PNG">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+    <Compile Remove="Assets\Attachments\**" />
+    <Content Remove="Assets\Attachments\**" />
+    <EmbeddedResource Remove="Assets\Attachments\**" />
+    <None Remove="Assets\Attachments\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,8 +34,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\Case Document\" />
     <Folder Include="Assets\EmailTemplates\" />
     <Folder Include="wwwroot\requestaccount\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\Case Document\11\Capture1.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

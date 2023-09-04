@@ -34,6 +34,7 @@ namespace Service.Interface
 
         public CaseModel GetCaseDetail(int CaseId);
         public List<CaseParties> GetCasePartiesDetail(int CaseId);
+        List<CaseBasicModel> GetCasesByStatusName(string UserName, string CaseStatusName);
 
     }
 }

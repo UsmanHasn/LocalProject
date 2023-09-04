@@ -13,34 +13,41 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("api/FileViewer/ViewFile")]
-        public IActionResult ViewFile(string fullPath)
+        public IActionResult ViewFile(string fileName)
         {
-            string webRootPath = _webHostEnvironment.WebRootPath;
             string contentRootPath = _webHostEnvironment.ContentRootPath;
 
-            string path = "";
-            path = Path.Combine(webRootPath, fullPath);
-            //var pdfFilePath =  "C:\\Projects\\SJC\\Backend\\WebAPI\\Assets\\Attachments\\" + filename;
-            var pdfFilePath = path; // "C:\\Projects\\SJC\\Backend\\WebAPI\\Assets\\Attachments\\" + filename;
+            var filePath = Path.Combine(contentRootPath, fileName);
 
-
-            if (!System.IO.File.Exists(pdfFilePath))
+            if (!System.IO.File.Exists(filePath))
             {
                 return NotFound();
             }
-            var pdfBytes = System.IO.File.ReadAllBytes(pdfFilePath);
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-            var fileExt = Path.GetExtension(pdfFilePath);
+            var fileExt = Path.GetExtension(filePath);
             var filecont = "";
-            if (fileExt == ".pdf")
+            // Define a dictionary to map file extensions to content types
+            var contentTypes = new Dictionary<string, string>
             {
-                filecont = "application/pdf";
-            }
-            else if (fileExt == ".png")
+                { ".pdf", "application/pdf" },
+                { ".png", "image/png" },
+                { ".doc", "application/msword" },
+                { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
+                { ".jpeg", "image/jpeg" },
+                // Add more mappings for other file types as needed
+            };
+
+            // Try to get the content type based on the file extension
+            if (contentTypes.TryGetValue(fileExt.ToLower(), out var contentType))
             {
-                filecont = "image/png";
+                return File(fileBytes, contentType);
             }
-            return File(pdfBytes, filecont);
+            else
+            {
+                // If the file extension is not recognized, return a default content type
+                return File(filePath, "application/octet-stream"); // You can change the default content type as needed
+            }
 
         }
     }

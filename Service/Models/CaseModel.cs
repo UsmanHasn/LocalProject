@@ -51,7 +51,7 @@ namespace Service.Models
 
         public string? nameEn { get; set; }
         public string? nameAr { get; set;}
-    
+    public byte[]? fileStream { get; set; }
 
     }
 }

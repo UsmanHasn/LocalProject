@@ -232,5 +232,12 @@ namespace Service.Concrete
             var data = _systemSettingRepository.ExecuteStoredProcedure<CaseParties>("sjc_GetCasePartiesDetail", param).ToList();
             return data;
         }
+        public List<CaseBasicModel> GetCasesByStatusName(string UserName, string CaseStatusName)
+        {
+            SqlParameter[] parameters = new SqlParameter[2];
+            parameters[0] = new SqlParameter("UserName", UserName);
+            parameters[1] = new SqlParameter("CaseStatusName", CaseStatusName);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseBasicModel>("sjc_GetCaseByStatusAndUser", parameters).ToList();
+        }
     }
 }
