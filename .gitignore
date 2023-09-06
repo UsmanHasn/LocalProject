@@ -379,3 +379,4 @@ FodyWeavers.xsd
 /WebAPI/.config/dotnet-tools.json
 /WebAPI/WebAPI.csproj.user
 /WebAPI/wwwroot/Case Document
+/WebAPI/Assets/Case Document

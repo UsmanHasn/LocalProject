@@ -16,6 +16,7 @@ using WebAPI.Models.APIModels;
 using Service.Interface;
 using Service.Concrete;
 using Service.Helper;
+using Microsoft.AspNet.Identity;
 
 namespace WebAPI.Controllers
 {
@@ -125,6 +126,30 @@ namespace WebAPI.Controllers
                 return null;
             }
         }
+        [HttpGet]
+        [Route("RefreshToken")]
+        public async Task<ActionResult> RefreshToken(string token, string identifier) 
+        {
+            var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == identifier);
+            if (currentUser != null)
+            {
+                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                var user = new UsersModel()
+                {
+                    UserId = currentUser.Id,
+                    Username = currentUser.UserName,
+                    UsernameAr = currentUser.UserNameAr,
+                    CivilID = currentUser.CivilNumber.ToString(),
+                    Email = currentUser.Email,
+                    MobileNo = currentUser.PhoneNumber,
+                    RoleId = role == null ? 0 : role.Id,
+                    Role = role == null ? "" : role.Name,
+                    LastLoginDate = currentUser.LastLoginDate
+                };
+                return new JsonResult(new { token = GetRefreshToken(user), status = true });
+            }
+            return new JsonResult(new { message = "Invalid Authentication", status = false  });
+        }
         // To generate token
         private string GenerateToken(UsersModel user)
         {
@@ -141,6 +166,24 @@ namespace WebAPI.Controllers
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials); 
             
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string GetRefreshToken(UsersModel user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.Username),
+                new Claim(ClaimTypes.Role,user.Role)
+            };
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+                _config["Jwt:Audience"],
+                claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: credentials);
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
