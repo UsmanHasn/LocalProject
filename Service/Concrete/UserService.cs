@@ -112,7 +112,8 @@ namespace Service.Concrete
                 Email = x.Email,
                 Role = x.Role,
                 MobileNumber = x.MobileNumber,
-                CivilId = x.CivilId
+                CivilId = x.CivilId,
+                Status  = x.Status
             }).ToList();
             return model;
         }
