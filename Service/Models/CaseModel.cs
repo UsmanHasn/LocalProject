@@ -13,10 +13,13 @@ namespace Service.Models
         public string? OriginalCaseNo { get; set; }
         public int CaseGroupId { get; set; }
         public string? caseGroup { get; set; }
+        public string? caseGroupAr { get; set; }
         public int GovernateId { get; set; }
         public string? governate { get; set; }
+        public string? governateAr { get; set; }
         public int LocationId { get; set; }
         public string? LocationName { get; set; }
+        public string? LocationNameAr { get; set; }
         public string? CourtName { get; set; }
         public int CaseTypeId { get; set; }
         public string? CaseType { get; set; }
@@ -48,7 +51,7 @@ namespace Service.Models
 
         public string? nameEn { get; set; }
         public string? nameAr { get; set;}
-    
+    public byte[]? fileStream { get; set; }
 
     }
 }

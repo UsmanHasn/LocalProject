@@ -515,7 +515,7 @@ namespace WebAPI.Controllers
         {
             if (languageLookupModel.LanguageId > 0)
             {
-                //_lookupService.UpdateCaseSubCategoryLookup(languageLookupModel, userName);
+                _lookupService.UpdateLanguageLookup(languageLookupModel, userName);
             }
             else
             {

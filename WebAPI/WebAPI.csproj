@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\Attachments\**" />
+    <Content Remove="Assets\Attachments\**" />
+    <EmbeddedResource Remove="Assets\Attachments\**" />
+    <None Remove="Assets\Attachments\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
@@ -27,8 +34,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\Case Document\" />
     <Folder Include="Assets\EmailTemplates\" />
     <Folder Include="wwwroot\requestaccount\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\Case Document\11\Capture1.PNG">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
