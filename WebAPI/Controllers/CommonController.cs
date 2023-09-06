@@ -87,6 +87,15 @@ namespace WebAPI.Controllers
             action = _lookupService.GetActionById(id);
             return new JsonResult(new { data = action, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GetReqStatusById")]
+        public IActionResult GetReqStatusById(int id)
+        {
+            RequestStatus request = new RequestStatus();
+            request = _lookupService.GetReqStatusById(id);
+            return new JsonResult(new { data = request, status = HttpStatusCode.OK });
+        }
         [HttpGet]
         [Route("GetAllActionlist")]
         public IActionResult GetAllActionlist()
@@ -95,6 +104,16 @@ namespace WebAPI.Controllers
             model = _lookupService.GetAllActionlist();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("GetAllStatusList")]
+        public IActionResult GetAllStatusList()
+        {
+            List<RequestStatus> model = new List<RequestStatus>();
+            model = _lookupService.GetAllStatusList();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
         [HttpPost]
         [Route("InsUpdActType")]
         public void InsUpdActionLookup(ActionType model, string userName)
@@ -109,6 +128,24 @@ namespace WebAPI.Controllers
             _lookupService.DeleteAction(model, userName);
             new JsonResult(new { data = true, status = HttpStatusCode.OK });
         }
+
+        [HttpPost]
+        [Route("DeleteRequest")]
+        public void DeleteRequest(RequestStatus model, string userName)
+        {
+            _lookupService.DeleteRequest(model, userName);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("InsUpdReqStatus")]
+        public void InsUpdStatusLookup(RequestStatus model, string userName)
+        {
+            _lookupService.InsUpdStatusLookup(model, userName);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+
+
         [HttpGet]
         [Route("getAlerts")]
         public IActionResult GetAlerts(string userId)
