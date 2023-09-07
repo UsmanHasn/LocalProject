@@ -167,6 +167,12 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByUserName", parameters).FirstOrDefault();
 
         }
+        public CaseModel GetCasesByCaseId(string CaseId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CaseId", CaseId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCasesByCaseId", parameters).FirstOrDefault();
+        }
 
         public bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName)
         {

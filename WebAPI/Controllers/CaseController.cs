@@ -175,6 +175,14 @@ namespace WebAPI.Controllers
             model = _caseService.GetCasesByUserName(UserName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("GetCasesByCaseId")]
+        public IActionResult GetCasesByCaseId(string CaseId)
+        {
+            CaseModel model = new CaseModel();
+            model = _caseService.GetCasesByCaseId(CaseId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
 
         #endregion
 

@@ -23,7 +23,7 @@ namespace Service.Interface
         public List<LookupsModel> BindPaymentDraw();
         public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
         CaseModel GetCasesByUserName(string CreatedBy);
-
+        CaseModel GetCasesByCaseId(string CaseId);
 
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
