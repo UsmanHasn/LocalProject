@@ -4,6 +4,7 @@ using Domain.Entities.Lookups;
 using Domain.Modeles;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
 using System;
@@ -21,12 +22,15 @@ namespace Service.Concrete
         public readonly IRepository<Users> _userRepository;
         public readonly IRepository<UserActivityInfoLog> _userRepository1;
         public readonly IRepository<UserInRole> _userRoleRepository;
+        public readonly IRepository<SystemSettings> _systemSettingRepository;
 
-        public UserService(IRepository<Users> userRepository, IRepository<UserActivityInfoLog> userRepository1, IRepository<UserInRole> userRoleRepository)
+
+        public UserService(IRepository<Users> userRepository, IRepository<UserActivityInfoLog> userRepository1, IRepository<UserInRole> userRoleRepository, IRepository<SystemSettings> systemSettingRepository)
         {
             _userRepository = userRepository;
             _userRoleRepository = userRoleRepository;
             _userRepository1 = userRepository1;
+            _systemSettingRepository = systemSettingRepository;
         }
 
         public List<UserListModel> GetAllUsers()
@@ -113,7 +117,8 @@ namespace Service.Concrete
                 Role = x.Role,
                 MobileNumber = x.MobileNumber,
                 CivilId = x.CivilId,
-                Status  = x.Status
+                Status = x.Status,
+                NameAr=x.NameAr
             }).ToList();
             return model;
         }
@@ -135,9 +140,12 @@ namespace Service.Concrete
 
         public bool Add(UserModel userModel, string userName)
         {
+            // UserModel usrModel = this.checkDuplicate(userModel.CivilID, userModel.Email, userModel.Mobile);
+            //if (usrModel == null)
+            //{
             Users users = new Users()
             {
-                Id=userModel.Id,
+                Id = userModel.Id,
                 UserName = userModel.Name,
                 UserNameAr = userModel.NameAr,
                 CivilNumber = userModel.CivilID,
@@ -157,13 +165,21 @@ namespace Service.Concrete
                 DateOfBirth = userModel.DateOfBirth,
                 City = userModel.City,
                 Password = userModel.Password,
-                SupervisorUserId = userModel.SupervisorUserId
+                SupervisorUserId = userModel.SupervisorUserId,
+                UserStatusId=1
             };
-            
+
             _userRepository.Create(users, userName);
             _userRepository.Save();
-            userModel.Id= users.Id;
+            userModel.Id = users.Id;
             return true;
+
+            // }
+            //else
+            //{
+            //    return false;
+            //}
+
         }
 
         public UserModel GetUserById(int Id)
@@ -181,9 +197,9 @@ namespace Service.Concrete
         }
         public bool InsertOtp(OtpModel DATA)
         {
-          
+
             UserModel user = new UserModel();
-            var dataMenu = _userRepository.ExecuteStoredProcedure<object>("sp_createOTP", 
+            var dataMenu = _userRepository.ExecuteStoredProcedure<object>("sp_createOTP",
                 new Microsoft.Data.SqlClient.SqlParameter("otp", (int)Convert.ToInt64(DATA.OtpId.ToString())),
                  new Microsoft.Data.SqlClient.SqlParameter("typeid", DATA.OtpType)
                  , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
@@ -192,7 +208,7 @@ namespace Service.Concrete
                  );
             if (dataMenu.Any())
             {
-               
+
                 return true;
             }
 
@@ -257,7 +273,7 @@ namespace Service.Concrete
                 Email = userModel.Email,
                 PhoneNumber = userModel.Mobile,
                 Gender = userModel.Gender,
-                Password= userModel.Password,   
+                Password = userModel.Password,
                 PassportNumber = userModel.PassportNo,
                 PassportExpiryDate = userModel.PassportExpDate,
                 PassportCountryId = userModel.PassportCountryCode,
@@ -312,14 +328,14 @@ namespace Service.Concrete
                 SupervisorUserId = userModel.SupervisorUserId,
                 CreatedDate = userModel.CreatedDate,
                 LastLoginDate = DateTime.Now,
-                WrongPassword =  userModel.WrongPassword+1
+                WrongPassword = userModel.WrongPassword + 1
             };
             _userRepository.Update(users, userModel.Name);
             _userRepository.Save();
             return true;
         }
 
-       public UserModel UpdateUserStatus(UserStatusModel userStatus)
+        public UserModel UpdateUserStatus(UserStatusModel userStatus)
         {
             UserModel user = new UserModel();
             var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sp_UpdateUserStatus", new Microsoft.Data.SqlClient.SqlParameter("UserId", userStatus.UserId), new Microsoft.Data.SqlClient.SqlParameter("UserStatusId", userStatus.UserStatusId));
@@ -424,6 +440,16 @@ namespace Service.Concrete
             _userRepository1.Update(users, userName);
             _userRepository1.Save();
             return true;
+        }
+
+        public UserModel checkDuplicate(string civilNo, string email, string phone)
+        {
+            SqlParameter[] spParams = new SqlParameter[3];
+            spParams[0] = new SqlParameter("Email", email);
+            spParams[1] = new SqlParameter("CivilNumber", civilNo);
+            spParams[2] = new SqlParameter("PhoneNumber", phone);
+            return _systemSettingRepository.ExecuteStoredProcedure<UserModel>("Sjc_CheckDuplicate", spParams).FirstOrDefault();
+
         }
         //--------------------------------------------------------------------------------------------------------------------------
         //public bool AddActivity(UserActivityLog userModel, string userName)

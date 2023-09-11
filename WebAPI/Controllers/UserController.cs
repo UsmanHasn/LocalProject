@@ -65,7 +65,16 @@ namespace WebAPI.Controllers
             }
             else
             {
-                _userService.Add(model, userName);
+                UserModel usrModel = _userService.checkDuplicate(model.CivilID, model.Email, model.Mobile);
+                if (usrModel == null)
+                {
+                    _userService.Add(model, userName);
+                }
+                else
+                {
+                    return null;
+                } 
+                
             }
             _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });

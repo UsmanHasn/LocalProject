@@ -16,5 +16,7 @@ namespace Service.Models
         public DateTime Createdate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public int Deleted { get; set; }
+        public string Status { get; set; }
     }
 }

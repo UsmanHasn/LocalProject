@@ -51,26 +51,26 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = json, status = HttpStatusCode.OK });
         }
 
-       [HttpGet]
+        [HttpGet]
         [Route("getnationalityvalues")]
         public IActionResult GetNationalityValues()
         {
             List<NationalityModel> model = new List<NationalityModel>();
-            model = _lookupService.GetNationalityLookups().Select(x => new NationalityModel() { Id = x.Id, Name = x.Name }).ToList();
+            model = _lookupService.GetNationalityLookups().Select(x => new NationalityModel() { Id = x.Id, Name = x.Name,NameAr=x.NameAr }).ToList();
             //var json = new Dictionary<string, string>();
             //foreach (var item in model)
             //{
             //    json[item.Id + ""] = item.Name;
             //}
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
-        } 
+        }
 
         [HttpGet]
         [Route("getCountry")]
         public IActionResult GetCountry()
         {
             List<CountryModel> model = new List<CountryModel>();
-            model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Name = x.Name }).ToList();
+            model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Name = x.Name,NameAr=x.NameAr }).ToList();
             //var json = new Dictionary<string, string>();
             //foreach (var item in model)
             //{
@@ -253,7 +253,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("AddGovernatesLookup")]
-        public IActionResult AddGovernatesLookup(GovernatesLookupModel governatesLookupl,string userName)
+        public IActionResult AddGovernatesLookup(GovernatesLookupModel governatesLookupl, string userName)
         {
             if (governatesLookupl.GovernateId > 0)
             {
@@ -301,7 +301,7 @@ namespace WebAPI.Controllers
         [Route("AddCaseCategoryLookup")]
         public IActionResult AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup, string userName)
         {
-            if (caseCategoryLookup.CaseCategoryId>0)
+            if (caseCategoryLookup.CaseCategoryId > 0)
             {
                 _lookupService.UpdateCaseCategoryLookup(caseCategoryLookup, userName);
             }
@@ -309,7 +309,7 @@ namespace WebAPI.Controllers
             {
                 _lookupService.AddCaseCategoryLookup(caseCategoryLookup, userName);
             }
-            
+
             return new JsonResult(new { data = caseCategoryLookup, status = HttpStatusCode.OK });
         }
 
@@ -317,15 +317,15 @@ namespace WebAPI.Controllers
         [Route("AddCaseSubCategoryLookup")]
         public IActionResult AddCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup, string userName)
         {
-            if (caseSubCategoryLookup.CaseSubCategoryId>0)
+            if (caseSubCategoryLookup.CaseSubCategoryId > 0)
             {
                 _lookupService.UpdateCaseSubCategoryLookup(caseSubCategoryLookup, userName);
             }
             else
             {
-                _lookupService.AddCaseSubCategoryLookup(caseSubCategoryLookup,userName);
+                _lookupService.AddCaseSubCategoryLookup(caseSubCategoryLookup, userName);
             }
-           
+
             return new JsonResult(new { data = caseSubCategoryLookup, status = HttpStatusCode.OK });
         }
 
@@ -413,7 +413,7 @@ namespace WebAPI.Controllers
         public IActionResult GetcaseCategoryLookup(int CaseTypeId)
         {
             List<CaseCategoryLookupModel> model = new List<CaseCategoryLookupModel>();
-            model = _lookupService.GetcaseCategoryLookup(CaseTypeId).Select(x => new CaseCategoryLookupModel() { CaseCategoryId = x.CaseCategoryId, CaseTypeId = x.CaseTypeId, Code = x.Code, NameEn = x.NameEn, NameAr = x.NameAr,  IsActive = x.IsActive, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedBy = x.LastModifiedBy, LastModifiedDate = x.LastModifiedDate, Deleted = x.Deleted }).ToList();
+            model = _lookupService.GetcaseCategoryLookup(CaseTypeId).Select(x => new CaseCategoryLookupModel() { CaseCategoryId = x.CaseCategoryId, CaseTypeId = x.CaseTypeId, Code = x.Code, NameEn = x.NameEn, NameAr = x.NameAr, IsActive = x.IsActive, CreatedBy = x.CreatedBy, CreatedDate = x.CreatedDate, LastModifiedBy = x.LastModifiedBy, LastModifiedDate = x.LastModifiedDate, Deleted = x.Deleted }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
@@ -431,7 +431,7 @@ namespace WebAPI.Controllers
         public IActionResult GetcaseSubCategoryLookup(int CaseCategoryId)
         {
             List<CaseSubCategoryLookupModel> model = new List<CaseSubCategoryLookupModel>();
-            model = _lookupService.GetcaseSubCategoryLookup(CaseCategoryId).Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId}).ToList();
+            model = _lookupService.GetcaseSubCategoryLookup(CaseCategoryId).Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId }).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
@@ -547,6 +547,22 @@ namespace WebAPI.Controllers
             List<LookupsModel> model = new List<LookupsModel>();
             model = _lookupService.GetPartyTypes(CaseTypeId).ToList();
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("DeleteCaseGroup")]
+        public void DeleteCaseGroup(int id)
+        {
+            _lookupService.DeleteCaseGroupLookup(id);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("UpdateCaseGroupStatus")]
+        public void UpdateCaseGroupStatus(int caseGroupId, string status)
+        {
+            _lookupService.UpdateStatus(caseGroupId, status);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
         }
     }
 }

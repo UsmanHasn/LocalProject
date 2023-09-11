@@ -569,5 +569,23 @@ namespace Service.Concrete
             var dataMenu = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseSubCategoryLookup", param);
             return dataMenu.ToList();
         }
+
+        public bool DeleteCaseGroupLookup(int id)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("CaseGroupId", id);
+            spParams[1] = new SqlParameter("Deleted", true);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseGroupLookup", spParams);
+            return true;
+        }
+
+        public bool UpdateStatus(int caseGroupId,string status)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("CaseGroupId", caseGroupId);
+            spParams[1] = new SqlParameter("Status", status);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_update_CaseGroupStatus", spParams);
+            return true;
+        }
     }
 }

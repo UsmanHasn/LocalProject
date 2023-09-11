@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Lookups;
 using Domain.Modeles;
+using Microsoft.Data.SqlClient;
 using Service.Models;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,8 @@ namespace Service.Interface
         UserModel GetUserById(int Id);
         bool InsertOtp(OtpModel Data);
         bool VerifyOtp(OtpModel Data);
-
+        public UserModel checkDuplicate(string civilNo,string email,string phone);
+        
         bool AddActivity(UserActivityInfoLogModel userModel, string userName);
         bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName);
         UserModel UpdateUserStatus(UserStatusModel model);

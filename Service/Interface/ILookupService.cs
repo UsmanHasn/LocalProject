@@ -38,6 +38,8 @@ namespace Service.Interface
 
         bool AddGovernatesLookup(GovernatesLookupModel governatesLookup, string userName);
         bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
+        bool DeleteCaseGroupLookup(int id);
+        bool UpdateStatus(int caseGroupId, string status);
         bool AddLocationLookup(LocationLookupModel locationLookup);
 
 
