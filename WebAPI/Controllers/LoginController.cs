@@ -42,6 +42,9 @@ namespace WebAPI.Controllers
         [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
+
+
+
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
                 var user = Authenticate(userLogin);
@@ -49,7 +52,7 @@ namespace WebAPI.Controllers
                 {
                     var check = _userService.GetUserById(user.UserId);
 
-                    if (check.WrongPassword == 5) 
+                    if (check.WrongPassword == 5)
                         return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
 
                     if (check.UserStatusId == 1)
@@ -63,10 +66,19 @@ namespace WebAPI.Controllers
                 }
                 else
                 {
-                    _userService.UpdateLoginAttempts(Convert.ToInt32(userLogin.Username));
+                    try
+                    {
+                        _userService.UpdateLoginAttempts(Convert.ToInt32(userLogin.Username));
+                    }
+                    catch (Exception)
+                    {
+
+                        //throw;
+                    }
                 }
             }
-            
+
+
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
         }
         [AllowAnonymous]
