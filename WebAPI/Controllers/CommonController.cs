@@ -17,38 +17,61 @@ namespace WebAPI.Controllers
     {
 
         private readonly IMailService mailService;
+        private ILogger<CommonController> logger;
 
         private readonly ILookupService _lookupService;
-        public CommonController(ILookupService lookupService, IMailService mailService)
+        public CommonController(ILookupService lookupService, IMailService mailService, ILogger<CommonController> _logger)
         {
             _lookupService = lookupService;
             this.mailService = mailService;
+            this.logger = _logger;
         }
         [HttpGet]
         [Route("getlanguagevalues")]
         public IActionResult GetLanguageValues()
         {
-            List<LanguageModel> model = new List<LanguageModel>();
-            model = _lookupService.GetLanguageValues().Select(x => new LanguageModel() { Header = "" + x.Key + "", Values = x.ArabicValue }).ToList();
-            var json = new Dictionary<string, string>();
-            foreach (var item in model)
+            try
             {
-                json[item.Header] = item.Values;
+                List<LanguageModel> model = new List<LanguageModel>();
+                model = _lookupService.GetLanguageValues().Select(x => new LanguageModel() { Header = "" + x.Key + "", Values = x.ArabicValue }).ToList();
+                var json = new Dictionary<string, string>();
+                foreach (var item in model)
+                {
+                    json[item.Header] = item.Values;
+                }
+                logger.LogInformation("Language data found");
+                return new JsonResult(new { data = json, status = HttpStatusCode.OK });
+                
             }
-            return new JsonResult(new { data = json, status = HttpStatusCode.OK });
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error Language values");
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
         [HttpGet]
         [Route("getlanguagevaluesar")]
         public IActionResult GetLanguageValuesAr()
         {
-            List<LanguageModel> model = new List<LanguageModel>();
-            model = _lookupService.GetLanguageValues().Select(x => new LanguageModel() { Header = "" + x.Key + "", Values = x.EnglishValue }).ToList();
-            var json = new Dictionary<string, string>();
-            foreach (var item in model)
+            try
             {
-                json[item.Header] = item.Values;
+                List<LanguageModel> model = new List<LanguageModel>();
+                model = _lookupService.GetLanguageValues().Select(x => new LanguageModel() { Header = "" + x.Key + "", Values = x.EnglishValue }).ToList();
+                var json = new Dictionary<string, string>();
+                foreach (var item in model)
+                {
+                    json[item.Header] = item.Values;
+                }
+                logger.LogInformation("Arabic Language data found");
+                return new JsonResult(new { data = json, status = HttpStatusCode.OK });
             }
-            return new JsonResult(new { data = json, status = HttpStatusCode.OK });
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error Arabic Language values");
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
 
         [HttpGet]

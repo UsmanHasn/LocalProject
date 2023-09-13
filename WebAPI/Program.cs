@@ -8,17 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using Data.Interface;
 using Data.Concrete;
 using System.Text.Encodings.Web;
-using System.Text.Json;
-using Domain.Entities;
 using Service.Models;
-using System.Configuration;
-using System.Net.Http.Headers;
+using NLog.Web;
+using NLog.Config;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -54,6 +54,16 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+
+builder.Logging.ClearProviders();
+builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+builder.Host.UseNLog();
+var logger = LogManager
+                    .Setup()
+                    .LoadConfigurationFromAppSettings()
+                    .GetCurrentClassLogger();
+
 //Service Activator
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IServiceSubCategoryLookupService, ServiceSubCategoryLookupService>();
