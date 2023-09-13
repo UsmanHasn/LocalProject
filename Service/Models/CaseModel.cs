@@ -25,6 +25,8 @@ namespace Service.Models
         public string? CaseType { get; set; }
         public int CaseCategoryId { get; set; }
         public string? CaseCatName { get; set; }
+        public string? caseCatNameAr { get; set; }
+        public string?  caseSubCatNameAr { get; set; }
         public int CaseSubCategoryId { get; set;}
         public string? CaseSubCatName { get; set; }
         public DateTime? FiledOn { get; set; }
