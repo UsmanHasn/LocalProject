@@ -11,4 +11,11 @@ namespace Service.Models
         public string? group { get; set; }
         public List<CaseParties> items { get; set; }
     }
+    public class LKTPartyCategory
+    {
+        public int PartyCategoryId { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameAr { get; set; }
+        public string? CreatedBy { get; set; }
+    }
 }

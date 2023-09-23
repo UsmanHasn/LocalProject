@@ -11,7 +11,6 @@ namespace Service.Interface
     {
         long AddCase(CaseModel caseModel, string userName);
         bool AddCaseParties(CaseParties caseParties, string userName);
-
         CaseModel GetCaseById(long caseId);
         List<CaseModel> GetAllCases(string CivilNo);
         List<CaseParties> GetCaseParties(long caseId, long partyNo);
@@ -37,7 +36,21 @@ namespace Service.Interface
         List<CaseBasicModel> GetCasesByStatusName(string UserName, string CaseStatusName);
 
         bool DeleteCaseParties(CasePartiesDelete deleteCaseParties);
-
+        List<CaseGroupModel> GetCaseGroup();
+        CaseGroupCountValues GetCaseGroupCountValues();
+        List<GovernoratesModel> GetGovernoratesByCaseGroupId(int caseGroupId);
+        List<LocationModel> GetLocationByGovernorateId(int governorateId);
+        List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations();
+        List<CaseCategoryGroupModel> GetCategoryByLocationId(int locationId);
+        List<CaseCategoryTypesModel> GetTypeByCategoryId(int categoryId);
+        string InsUpDel_CaseGroup(CaseGroupModel caseGroupModel, string dmlType);
+        string InsUpDel_LktGovernorate(LKTGovernorateModel lktGovernorateModel, string dmlType);
+        string InsUpDel_LktLocation(LKTLocationModel lktGovernorateModel, string dmlType);
+        void InsUpDel_LktGroupGovernorate(LKT_GroupGovernoratesModel lKT_GroupGovernoratesModel);
+        List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId);
+        List<LKTGovernorateModel> getAssignedGovernorates(int caseGroupId);
+        string InsUpDel_CaseCategory(CaseGroupCategoryModel caseGroupCategoryModel, string dmlType);
+        List<LKTPartyCategory> getPartyCategory();
         bool DeleteCase(int CaseId);
     }
 }

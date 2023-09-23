@@ -8,5 +8,27 @@
         public string SubjectNameAr { get; set; }
         public decimal FeeValue { get; set; }
         public bool FeePaid { get; set; }
+        public string FeePaidStatus
+        {
+            get
+            {
+                return FeePaid ? "Yes" : "No";
+            }
+            set
+            {
+                
+            }
+        }
+        public string FeePaidStatusAr
+        {
+            get
+            {
+                return FeePaid ? "نعم" : "لا";
+            }
+            set
+            {
+
+            }
+        }
     }
 }

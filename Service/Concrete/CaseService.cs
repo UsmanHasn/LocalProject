@@ -6,9 +6,11 @@ using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
 
 namespace Service.Concrete
 {
@@ -252,6 +254,189 @@ namespace Service.Concrete
             spParams[0] = new SqlParameter("CasePartyId ", deleteCaseParties.CasePartyId);
             _systemSettingRepository.ExecuteStoredProcedure("Sjc_delete_CaseParties", spParams);
             return true;
+        }
+        public List<CaseGroupModel> GetCaseGroup()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseGroupModel>("COR_GetCaseGroup", parameters).ToList();
+        }
+        public CaseGroupCountValues GetCaseGroupCountValues()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseGroupCountValues>("sp_COA_GroupCounts", parameters).FirstOrDefault();
+        }
+        public List<GovernoratesModel> GetGovernoratesByCaseGroupId(int caseGroupId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CaseGroupId", caseGroupId);
+            return _systemSettingRepository.ExecuteStoredProcedure<GovernoratesModel>("COR_GetGovernorates", parameters).ToList();
+        }
+        public List<LocationModel> GetLocationByGovernorateId(int governorateId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("@GovernorateId", governorateId);
+            return _systemSettingRepository.ExecuteStoredProcedure<LocationModel>("COR_GetLocations", parameters).ToList();
+        }
+        public List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            var data = _systemSettingRepository.ExecuteStoredProcedure<GroupGovrenorateLocationModel>("COR_ListGrpGovernLocation", parameters).ToList();
+            List<treeViewGrpGovernLocModel> model = new List<treeViewGrpGovernLocModel>();
+            model.AddRange(data.Select(x => new { CaseGroupId = x.CaseGroupId, CaseGroupAr = x.CaseGroupAr, CaseGroupEn = x.CaseGroupEn }).Distinct()
+                .Select(y => new treeViewGrpGovernLocModel()
+                {
+                    Title = y.CaseGroupAr,
+                    TitleEn = y.CaseGroupEn,
+                    Id = y.CaseGroupId,
+                    Level = 1
+                }));
+
+            model.AddRange(data.Select(g => new { CaseGroupId = g.CaseGroupId, GrpGovernateId = g.GrpGovernateId, GovernoratesAr = g.GovernoratesAr, GovernoratesEn = g.GovernoratesEn }).Distinct()
+                    .Select(g => new treeViewGrpGovernLocModel()
+                    {
+                        Title = g.GovernoratesAr,
+                        TitleEn = g.GovernoratesEn,
+                        Id = g.GrpGovernateId,
+                        Parent = g.CaseGroupId,
+                        Level = 2
+                    }));
+
+            model.AddRange(data.Select(g => new treeViewGrpGovernLocModel()
+            {
+                Title = g.LocationAr,
+                TitleEn = g.LocationEn,
+                Id = g.LocationId,
+                Parent = g.GrpGovernateId,
+                Level = 3
+            }));
+
+            //model = data.Select(x => new { CaseGroupId = x.CaseGroupId, CaseGroupAr = x.CaseGroupAr, CaseGroupEn = x.CaseGroupEn }).Distinct()
+            //    .Select(y => new treeViewGrpGovernLocModel()
+            //    {
+            //        Title = y.CaseGroupAr,
+            //        TitleEn = y.CaseGroupEn,
+            //        Id = y.CaseGroupId,
+            //        Children = data.Where(g => g.CaseGroupId == y.CaseGroupId)
+            //        .Select(g => new { CaseGroupId = g.CaseGroupId, GrpGovernateId = g.GrpGovernateId, GovernoratesAr = g.GovernoratesAr, GovernoratesEn = g.GovernoratesEn }).Distinct()
+            //        .Select(g => new treeViewGrpGovernLocModel()
+            //        {
+            //            Title = g.GovernoratesAr,
+            //            TitleEn = g.GovernoratesEn,
+            //            Id = g.GrpGovernateId,
+            //            Parent = g.CaseGroupId,
+            //            Children = data.Where(l => l.CaseGroupId == y.CaseGroupId && l.GrpGovernateId == g.GrpGovernateId)
+            //            .Select(g => new treeViewGrpGovernLocModel()
+            //            {
+            //                Title = g.LocationAr,
+            //                TitleEn = g.LocationEn,
+            //                Id = g.LocationId,
+            //                Parent = g.GrpGovernateId,
+            //            }).ToList()
+            //        }).ToList()
+            //    }).ToList();
+            return model;
+        }
+        public List<CaseCategoryGroupModel> GetCategoryByLocationId(int locationId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("LocationId", locationId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryGroupModel>("COR_GetCaseCategoryByLocationId", parameters).ToList();
+        }
+        public List<CaseCategoryTypesModel> GetTypeByCategoryId(int categoryId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("CategoryId", categoryId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryTypesModel>("COA_GetCaseTypesByCategory", parameters).ToList();
+        }
+        public string InsUpDel_CaseGroup(CaseGroupModel caseGroupModel, string dmlType)
+        {
+            SqlParameter[] parameters = new SqlParameter[9];
+            parameters[0] = new SqlParameter("@CAAJ_Code", caseGroupModel.CAAJ_Code);
+            parameters[1] = new SqlParameter("@ACO_Code", caseGroupModel.ACO_Code);
+            parameters[2] = new SqlParameter("@NameEn", caseGroupModel.NameEn);
+            parameters[3] = new SqlParameter("@NameAr", caseGroupModel.NameAr);
+            parameters[4] = new SqlParameter("@IsActive", caseGroupModel.IsActive);
+            parameters[5] = new SqlParameter("@CreatedBy", caseGroupModel.CreatedBy);
+            parameters[6] = new SqlParameter("@CaseGroupId", caseGroupModel.CaseGroupId);
+            parameters[7] = new SqlParameter("@DmlType", dmlType);
+            parameters[8] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COA_CaseGroup", parameters);
+            return parameters[8].Value.ToString() ?? "";
+        }
+        public string InsUpDel_LktGovernorate(LKTGovernorateModel lktGovernorateModel, string dmlType)
+        {
+            SqlParameter[] parameters = new SqlParameter[8];
+            parameters[0] = new SqlParameter("@Code", lktGovernorateModel.Code);
+            parameters[1] = new SqlParameter("@NameEn", lktGovernorateModel.NameEn);
+            parameters[2] = new SqlParameter("@NameAr", lktGovernorateModel.NameAr);
+            parameters[3] = new SqlParameter("@IsActive", lktGovernorateModel.IsActive);
+            parameters[4] = new SqlParameter("@CreatedBy", lktGovernorateModel.CreatedBy);
+            parameters[5] = new SqlParameter("@GovernorateId", lktGovernorateModel.GovernateId);
+            parameters[6] = new SqlParameter("@DmlType", dmlType);
+            parameters[7] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_LKT_Governates", parameters);
+            return parameters[7].Value.ToString() ?? "";
+        }
+        public string InsUpDel_LktLocation(LKTLocationModel lktGovernorateModel, string dmlType)
+        {
+            SqlParameter[] parameters = new SqlParameter[10];
+            parameters[0] = new SqlParameter("@LocationId", lktGovernorateModel.LocationId);
+            parameters[1] = new SqlParameter("@Code", lktGovernorateModel.Code);
+            parameters[2] = new SqlParameter("@NameEn", lktGovernorateModel.NameEn);
+            parameters[3] = new SqlParameter("@NameAr", lktGovernorateModel.NameAr);
+            parameters[4] = new SqlParameter("@IsActive", lktGovernorateModel.IsActive);
+            parameters[5] = new SqlParameter("@CreatedBy", lktGovernorateModel.CreatedBy);
+            parameters[6] = new SqlParameter("@GovernorateId", lktGovernorateModel.GovernateId);
+            parameters[7] = new SqlParameter("@LinkLocationId", lktGovernorateModel.LinkLocationId);
+            parameters[8] = new SqlParameter("@DmlType", dmlType);
+            parameters[9] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_LKT_Location", parameters);
+            return parameters[9].Value.ToString() ?? "";
+        }
+        public void InsUpDel_LktGroupGovernorate(LKT_GroupGovernoratesModel lKT_GroupGovernoratesModel)
+        {
+            foreach (var governorateId in lKT_GroupGovernoratesModel.GovernorateId)
+            {
+                SqlParameter[] parameters = new SqlParameter[3];
+                parameters[0] = new SqlParameter("@CaseGroupId", lKT_GroupGovernoratesModel.CaseGroupId);
+                parameters[1] = new SqlParameter("@GovernorateId", governorateId);
+                parameters[2] = new SqlParameter("@CreatedBy", lKT_GroupGovernoratesModel.CreatedBy);
+                _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_LKT_GroupGovernates", parameters);
+
+            }
+        }
+        public List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("caseGroupId", caseGroupId);
+            return _systemSettingRepository.ExecuteStoredProcedure<LKTGovernorateModel>("sp_GetUnassignedGovernorates", parameters).ToList();
+        }
+        public List<LKTGovernorateModel> getAssignedGovernorates(int caseGroupId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("caseGroupId", caseGroupId);
+            return _systemSettingRepository.ExecuteStoredProcedure<LKTGovernorateModel>("sp_GetAssignedGovernorates", parameters).ToList();
+        }
+        public List<LKTPartyCategory> getPartyCategory()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<LKTPartyCategory>("sp_Get_LKT_PartyCategory", parameters).ToList();
+        }
+        public string InsUpDel_CaseCategory(CaseGroupCategoryModel caseGroupCategoryModel, string dmlType)
+        {
+            SqlParameter[] parameters = new SqlParameter[10];
+            parameters[0] = new SqlParameter("@CAAJ_Code", caseGroupCategoryModel.CAAJ_Code);
+            parameters[1] = new SqlParameter("@ACO_Code", caseGroupCategoryModel.ACO_Code);
+            parameters[2] = new SqlParameter("@NameEn", caseGroupCategoryModel.NameEn);
+            parameters[3] = new SqlParameter("@NameAr", caseGroupCategoryModel.NameAr);
+            parameters[4] = new SqlParameter("@IsActive", caseGroupCategoryModel.IsActive);
+            parameters[5] = new SqlParameter("@CreatedBy", caseGroupCategoryModel.CreatedBy);
+            parameters[6] = new SqlParameter("@CaseGroupId", caseGroupCategoryModel.CaseGroupId);
+            parameters[7] = new SqlParameter("@DmlType", dmlType);
+            parameters[8] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
+            parameters[9] = new SqlParameter("@CaseCategoryId", caseGroupCategoryModel.CaseCategoryId);
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COA_CaseCategory", parameters);
+            return parameters[8].Value.ToString() ?? "";
         }
         public bool DeleteCase(int CaseId)
         {

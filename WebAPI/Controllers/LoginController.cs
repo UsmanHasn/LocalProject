@@ -218,6 +218,7 @@ namespace WebAPI.Controllers
                     MobileNo = currentUser.PhoneNumber,
                     RoleId = role == null ? 0 : role.Id,
                     Role = role == null ? "" : role.Name,
+                    RoleAr = role == null ? "" : role.NameAr,
                     LastLoginDate = currentUser.LastLoginDate
                 };
                 //return currentUser;

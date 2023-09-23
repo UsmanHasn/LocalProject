@@ -296,6 +296,121 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = deleteCaseParties, status = HttpStatusCode.OK });
         }
         [HttpGet]
+        [Route("getcasegroup")]
+        public IActionResult GetCaseGroup()
+        {
+            List<CaseGroupModel> model = new List<CaseGroupModel>();
+            model = _caseService.GetCaseGroup();
+            CaseGroupCountValues modelCountValues = _caseService.GetCaseGroupCountValues();
+            return new JsonResult(new { data = model, countValues = modelCountValues, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getgroupgovenorates")]
+        public IActionResult GetCaseGroupGovernorates(int caseGroupId)
+        {
+            List<GovernoratesModel> model = new List<GovernoratesModel>();
+            model = _caseService.GetGovernoratesByCaseGroupId(caseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getgovenorateslocation")]
+        public IActionResult GetGovernoratesLocation(int governorateId)
+        {
+            List<LocationModel> model = new List<LocationModel>();
+            model = _caseService.GetLocationByGovernorateId(governorateId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getGrpGovernLocation")]
+        public IActionResult GetGrpGovernLocation()
+        {
+            List<treeViewGrpGovernLocModel> model = new List<treeViewGrpGovernLocModel>();
+            model = _caseService.GetGroupGovernorateLcoations();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getcasecategorybylocation")]
+        public IActionResult GetCaseCategoryByLocation(int locationId)
+        {
+            List<CaseCategoryGroupModel> model = new List<CaseCategoryGroupModel>();
+            model = _caseService.GetCategoryByLocationId(locationId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getcasetypebycategory")]
+        public IActionResult GetTypeByCategoryId(int categoryId)
+        {
+            List<CaseCategoryTypesModel> model = new List<CaseCategoryTypesModel>();
+            model = _caseService.GetTypeByCategoryId(categoryId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("insUpdCaseGroup")]
+        public IActionResult InsUpdCaseGroup(CaseGroupModel caseGroupModel)
+        {
+            string message = _caseService.InsUpDel_CaseGroup(caseGroupModel, (caseGroupModel.CaseGroupId > 0 ? "U" : "I"));
+            return new JsonResult(new { data = caseGroupModel, message = message, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("deleteCaseGroup")]
+        public IActionResult DeleteCaseGroup(CaseGroupModel caseGroupModel)
+        {
+            string message = _caseService.InsUpDel_CaseGroup(caseGroupModel, "D");
+            return new JsonResult(new { data = caseGroupModel, message = message, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("insUpDel_LktGovernorate")]
+        public IActionResult InsUpDel_LktGovernorate(LKTGovernorateModel lKTGovernorateModel)
+        {
+            string message = _caseService.InsUpDel_LktGovernorate(lKTGovernorateModel, (lKTGovernorateModel.GovernateId > 0 ? "U" : "I"));
+            return new JsonResult(new { data = lKTGovernorateModel, message = message, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("insUpDel_LktGroupGovernorate")]
+        public IActionResult InsUpDel_LktGovernorate(LKT_GroupGovernoratesModel lKTGroupGovernorateModel)
+        {
+            _caseService.InsUpDel_LktGroupGovernorate(lKTGroupGovernorateModel);
+            return new JsonResult(new { data = lKTGroupGovernorateModel, message = "Message.RecordSavedSuccessfully", status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("insUpDel_LktLoction")]
+        public IActionResult InsUpDel_LktLocation(LKTLocationModel lKTLocationModel)
+        {
+            string message = _caseService.InsUpDel_LktLocation(lKTLocationModel,(lKTLocationModel.LocationId > 0 ? "U" : "I") );
+            return new JsonResult(new { data = lKTLocationModel, message = message, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getunassignedgovernorates")]
+        public IActionResult getUnassignedGovernorates(int caseGroupId)
+        {
+            List<LKTGovernorateModel> model = new List<LKTGovernorateModel>();
+            model = _caseService.getUnassignedGovernorates(caseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getassignedgovernorates")]
+        public IActionResult getAssignedGovernorates(int caseGroupId)
+        {
+            List<LKTGovernorateModel> model = new List<LKTGovernorateModel>();
+            model = _caseService.getAssignedGovernorates(caseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("insUpDel_CaseCategory")]
+        public IActionResult InsUpDel_CaseCategory(CaseGroupCategoryModel caseGroupCategoryModel)
+        {
+            string message = _caseService.InsUpDel_CaseCategory(caseGroupCategoryModel, (caseGroupCategoryModel.CaseCategoryId > 0 ? "U" : "I"));
+            return new JsonResult(new { data = caseGroupCategoryModel, message = message, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getpartycategory")]
+        public IActionResult getPartyCategory()
+        {
+            List<LKTPartyCategory> model = new List<LKTPartyCategory>();
+            model = _caseService.getPartyCategory();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
         [Route("DeleteCase")]
         public IActionResult DeleteCase(int CaseId)
         {
