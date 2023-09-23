@@ -253,5 +253,12 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("Sjc_delete_CaseParties", spParams);
             return true;
         }
+        public bool DeleteCase(int CaseId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CaseId ", CaseId);
+            _systemSettingRepository.ExecuteStoredProcedure("Sjc_delete_Case", spParams);
+            return true;
+        }
     }
 }

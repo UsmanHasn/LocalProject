@@ -295,5 +295,12 @@ namespace WebAPI.Controllers
             _caseService.DeleteCaseParties(deleteCaseParties);
             return new JsonResult(new { data = deleteCaseParties, status = HttpStatusCode.OK });
         }
+        [HttpGet]
+        [Route("DeleteCase")]
+        public IActionResult DeleteCase(int CaseId)
+        {
+            _caseService.DeleteCase(CaseId);
+            return new JsonResult(new { data = CaseId, status = HttpStatusCode.OK });
+        }
     }
 }

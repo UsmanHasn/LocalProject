@@ -37,5 +37,7 @@ namespace Service.Interface
         List<CaseBasicModel> GetCasesByStatusName(string UserName, string CaseStatusName);
 
         bool DeleteCaseParties(CasePartiesDelete deleteCaseParties);
+
+        bool DeleteCase(int CaseId);
     }
 }
