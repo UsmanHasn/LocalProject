@@ -6,6 +6,7 @@ using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -257,10 +258,12 @@ namespace Service.Concrete
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_CaseGroupLookup", spParams);
             return true;
         }
-
-        public bool AddLocationLookup(LocationLookupModel locationLookup)
+        public string AddLocationLookup(LocationLookupModel locationLookup)
         {
-            SqlParameter[] spParams = new SqlParameter[7];
+
+            SqlParameter[] spParams = new SqlParameter[8];
+
+
             spParams[0] = new SqlParameter("GovernatesId", locationLookup.GovernatesId);
             spParams[1] = new SqlParameter("Code", locationLookup.Code);
             spParams[2] = new SqlParameter("NameEn", locationLookup.NameEn);
@@ -268,11 +271,13 @@ namespace Service.Concrete
             spParams[4] = new SqlParameter("LinkLocationId", locationLookup.LinkLocationId);
             spParams[5] = new SqlParameter("CreatedBy", locationLookup.CreatedBy);
             spParams[6] = new SqlParameter("Createdate", DateTime.Now);
-
+            spParams[7] = new SqlParameter("Message", SqlDbType.NVarChar, 255);
+            spParams[7].Direction = ParameterDirection.Output;
             _languagesRepository.ExecuteStoredProcedure("sjc_insert_LocationLookup", spParams);
-            return true;
-        }
+            string msg = spParams[7].Value.ToString();
 
+            return msg;
+        }
         public bool AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup)
         {
             SqlParameter[] spParams = new SqlParameter[8];
@@ -519,7 +524,7 @@ namespace Service.Concrete
             return true;
         }
 
-       
+
         public List<LookupsModel> GetPartyTypes(int CaseTypeId)
         {
             SqlParameter[] param = new SqlParameter[1];
@@ -579,7 +584,24 @@ namespace Service.Concrete
             return true;
         }
 
-        public bool UpdateStatus(int caseGroupId,string status)
+        public bool DeleteGovernatesLookup(int id)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("@GovernateId", id);
+            spParams[1] = new SqlParameter("@Deleted", true);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_delete_GovernateLookup", spParams);
+            return true;
+        }
+
+        public bool DeleteLocationLookup(int id)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("@LocationId ", id);
+            spParams[1] = new SqlParameter("@Deleted", true);
+            _languagesRepository.ExecuteStoredProcedure("Sjc_delete_LocationLookup", spParams);
+            return true;
+        }
+        public bool UpdateStatus(int caseGroupId, string status)
         {
             SqlParameter[] spParams = new SqlParameter[2];
             spParams[0] = new SqlParameter("CaseGroupId", caseGroupId);

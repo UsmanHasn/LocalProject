@@ -39,10 +39,10 @@ namespace Service.Interface
         bool AddGovernatesLookup(GovernatesLookupModel governatesLookup, string userName);
         bool AddCaseGroupLookup(CaseGroupLookupModel caseGroupLookup);
         bool DeleteCaseGroupLookup(int id);
+        bool DeleteGovernatesLookup(int id);
+        bool DeleteLocationLookup(int id);
         bool UpdateStatus(int caseGroupId, string status);
-        bool AddLocationLookup(LocationLookupModel locationLookup);
-
-
+        string AddLocationLookup(LocationLookupModel locationLookup);
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup);
         bool AddCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup, string userName);
         List<CaseCategoryLookupModel> GetAllCaseCategory();
@@ -66,8 +66,8 @@ namespace Service.Interface
         List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId);
 
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookup);
-        bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup,string userName);
-        bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup,string userName);
+        bool UpdateCaseCategoryLookup(CaseCategoryLookupModel caseCategoryLookup, string userName);
+        bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup, string userName);
 
         bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
         bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);

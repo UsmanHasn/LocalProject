@@ -15,7 +15,6 @@ namespace WebAPI.Controllers
     [Route("api/common/")]
     public class CommonController : Controller
     {
-
         private readonly IMailService mailService;
         private ILogger<CommonController> logger;
 
@@ -79,7 +78,7 @@ namespace WebAPI.Controllers
         public IActionResult GetNationalityValues()
         {
             List<NationalityModel> model = new List<NationalityModel>();
-            model = _lookupService.GetNationalityLookups().Select(x => new NationalityModel() { Id = x.Id, Name = x.Name,NameAr=x.NameAr }).ToList();
+            model = _lookupService.GetNationalityLookups().Select(x => new NationalityModel() { Id = x.Id, Name = x.Name, NameAr = x.NameAr }).ToList();
             //var json = new Dictionary<string, string>();
             //foreach (var item in model)
             //{
@@ -93,7 +92,7 @@ namespace WebAPI.Controllers
         public IActionResult GetCountry()
         {
             List<CountryModel> model = new List<CountryModel>();
-            model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Name = x.Name,NameAr=x.NameAr }).ToList();
+            model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Name = x.Name, NameAr = x.NameAr }).ToList();
             //var json = new Dictionary<string, string>();
             //foreach (var item in model)
             //{
@@ -301,6 +300,9 @@ namespace WebAPI.Controllers
         [Route("AddLocationLookup")]
         public IActionResult AddLocationLookup(LocationLookupModel locationLookup)
         {
+            string Message;
+            Message = _lookupService.AddLocationLookup(locationLookup);
+
             if (locationLookup.LocationId > 0)
             {
                 _lookupService.UpdateLocationLookup(locationLookup);
@@ -309,9 +311,9 @@ namespace WebAPI.Controllers
             {
                 _lookupService.AddLocationLookup(locationLookup);
             }
-            return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK });
+            return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK, msg = Message });
         }
-
+        
         [HttpPost]
         [Route("AddCaseTypeLookup")]
         public IActionResult AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup)
@@ -578,6 +580,22 @@ namespace WebAPI.Controllers
         {
             _lookupService.DeleteCaseGroupLookup(id);
             new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("DeleteGovernatesLookup")]
+        public IActionResult DeleteGovernatesLookup(int id)
+        {
+            _lookupService.DeleteGovernatesLookup(id);
+            return new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("DeleteLocationLookup")]
+        public IActionResult DeleteLocationLookup(int id)
+        {
+            _lookupService.DeleteLocationLookup(id);
+            return new JsonResult(new { data = true, status = HttpStatusCode.OK });
         }
 
         [HttpPost]
