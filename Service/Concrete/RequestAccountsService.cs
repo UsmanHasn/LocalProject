@@ -5,6 +5,7 @@ using Domain.Modeles;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Service.Interface;
 using Service.Models;
@@ -42,7 +43,7 @@ namespace Service.Concrete
 
         public bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName, string folderName)
         {
-            SqlParameter[] spParams = new SqlParameter[12];
+            SqlParameter[] spParams = new SqlParameter[13];
             spParams[0] = new SqlParameter("RequestId", requestAccountsModel.RequestId);
             spParams[1] = new SqlParameter("ActionTypeId", requestAccountsModel.ActionTypeId);
             spParams[2] = new SqlParameter("Role", requestAccountsModel.Role);
@@ -55,6 +56,7 @@ namespace Service.Concrete
             spParams[9] = new SqlParameter("DocPath", folderName);
             spParams[10] = new SqlParameter("FileName", requestAccountsModel.FileName);
             spParams[11] = new SqlParameter("Type", requestAccountsModel.Type);
+            spParams[12] = new SqlParameter("UserId", requestAccountsModel.UserId);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_requestAccounts", spParams);
             return true;
@@ -67,10 +69,20 @@ namespace Service.Concrete
             return model;
         }
 
-        public List<RequestAccountsModel> GetAll()
+        public List<RequestAccountsModel> GetAll(int userId)
         {
-            SqlParameter[] spParams = new SqlParameter[0];
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", userId);
             return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
+        }
+
+        public List<RequestAccountsModel> GetAllForAdmin(string ActionTypeId, string CivilNo, string UserName)
+        {
+            SqlParameter[] spParams = new SqlParameter[3];
+            spParams[0] = new SqlParameter("ActionTypeId", string.IsNullOrEmpty(ActionTypeId) ? "" : ActionTypeId);
+            spParams[1] = new SqlParameter("CivilNo", string.IsNullOrEmpty(CivilNo) ? "" : CivilNo);
+            spParams[2] = new SqlParameter("UserName", string.IsNullOrEmpty(UserName) ? "" : UserName);
+            return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccountForAdmin", spParams).ToList();
         }
 
         public LinkCompanyModel GetCivilNo(string CivilNo)
@@ -78,6 +90,25 @@ namespace Service.Concrete
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("CivilNo", CivilNo);
             return _systemSettingRepository.ExecuteStoredProcedure<LinkCompanyModel>("sjc_GetCivilNo", spParams).FirstOrDefault();
+        }
+
+        public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("KeyName", keyName);
+            return _systemSettingRepository.ExecuteStoredProcedure<SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
+        }
+
+        public bool UpdateRequestAccountHistory(int requestId,int responseStatusId)
+        {
+            SqlParameter[] spParams = new SqlParameter[4];
+            spParams[0] = new SqlParameter("RequestId", requestId);
+            spParams[1] = new SqlParameter("RequestStatusId", responseStatusId);
+            spParams[2] = new SqlParameter("AssignedTo", 1);
+            spParams[3] = new SqlParameter("ResponseStatusId", responseStatusId);
+
+            _systemSettingRepository.ExecuteStoredProcedure("Sp_RequestAccountsHistory", spParams);
+            return true;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Modeles;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,9 @@ namespace Service.Interface
         public Task PostMultiFileAsync(List<FileUploadModel> fileData);
 
         public Task DownloadFileById(int userId);
+
+        public PostRequest GetFileName(int UserId);
+
+        //public   byte[]  GetImage(string UserId, string imageName);
     }
 }

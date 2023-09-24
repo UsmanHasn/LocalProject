@@ -185,11 +185,13 @@ namespace Service.Concrete
         public UserModel GetUserById(int Id)
         {
             UserModel user = new UserModel();
-            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById", new Microsoft.Data.SqlClient.SqlParameter("UserId", Id));
+            SqlParameter[] Param = new SqlParameter[1];
+            Param[0] = new SqlParameter("UserId", Id);
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById",Param);
             if (dataMenu.Any())
             {
                 user = dataMenu.FirstOrDefault();
-                user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+               // user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
                 return user;
             }
 
@@ -252,7 +254,8 @@ namespace Service.Concrete
                 Password = userModel.Password,
                 CreatedBy = userModel.CreatedBy,
                 SupervisorUserId = userModel.SupervisorUserId,
-                CreatedDate = userModel.CreatedDate
+                CreatedDate = userModel.CreatedDate,
+                UserStatusId = 1
             };
             _userRepository.Update(users, userName);
             _userRepository.Save();

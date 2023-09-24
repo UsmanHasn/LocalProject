@@ -40,6 +40,7 @@
   <ItemGroup>
     <Folder Include="Assets\Case Document\" />
     <Folder Include="Assets\EmailTemplates\" />
+    <Folder Include="Assets\requestaccount\" />
     <Folder Include="wwwroot\requestaccount\" />
   </ItemGroup>
 

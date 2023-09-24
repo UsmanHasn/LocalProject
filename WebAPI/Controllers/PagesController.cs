@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
             {
                 _IpagesService.Addpages(pagesModel, username);
             }
-            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK});
         }
         [HttpDelete]
         [Route("Deletepages")]

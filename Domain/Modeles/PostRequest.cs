@@ -16,9 +16,10 @@ namespace Domain.Modeles
         public string CreatedBy { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public string? FileName { get; set; }
         public IFormFile Image { get; set; }
      
-
+      
 
 
 

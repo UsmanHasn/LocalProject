@@ -3,10 +3,15 @@ using Domain.Entities;
 using Domain.Modeles;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Service.Concrete;
 using Service.Interface;
+using Service.Models;
+using System;
 using System.Data.Entity;
+using System.IO;
+using System.Net;
 
 namespace WebAPI.Controllers
 {
@@ -17,8 +22,11 @@ namespace WebAPI.Controllers
         private readonly ApplicationDbContext _DbContext;
         private readonly ILogger<UsersProfilePictureController> logger;
         private readonly IUsersProfilePicture postService;
-        public UsersProfilePictureController(ApplicationDbContext Db ,ILogger<UsersProfilePictureController> logger, IUsersProfilePicture postService)
+        private readonly IWebHostEnvironment environment;
+        public string userId = "";
+        public UsersProfilePictureController(IWebHostEnvironment repository, ApplicationDbContext Db ,ILogger<UsersProfilePictureController> logger, IUsersProfilePicture postService)
         {
+            environment = repository;
             this._DbContext = Db;
             this.logger = logger;
             this.postService = postService;
@@ -38,6 +46,7 @@ namespace WebAPI.Controllers
         [RequestSizeLimit(5 * 1024 * 1024)]
         public async Task<IActionResult> SubmitPost(int UserId, [FromForm] PostRequest postRequest)
         {
+            userId = postRequest.UserId.ToString();
             if (postRequest == null)
             {
                 return BadRequest(new PostResponse { Success = false, ErrorCode = "S01", Error = "Invalid post request" });
@@ -52,7 +61,7 @@ namespace WebAPI.Controllers
             {
                 await postService.SavePostImageAsync(postRequest);
             }
-
+           
             var postResponse = await postService.CreatePostAsync(postRequest);
 
             if (!postResponse.Success)
@@ -60,6 +69,7 @@ namespace WebAPI.Controllers
                 return NotFound(postResponse);
             }
 
+          //  this.GetImage(postRequest.UserId.ToString(), postRequest.Image.FileName);
             return Ok(postResponse.Post);
 
         }
@@ -139,9 +149,27 @@ namespace WebAPI.Controllers
                 var fileStream = new FileStream(fileModel.FilePath, FileMode.Open);
                 return File(fileStream, "application/octet-stream", fileModel.FileName);
             }
-
             return NotFound();
         }
 
+
+        [HttpGet("{imageName}")]
+        public  IActionResult GetImage(string UserId,string imageName)
+        {
+            // Retrieve the image file and return it as a file result.
+            var imagePath = Path.Combine(environment.WebRootPath, "users", "posts", UserId, imageName);
+            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+            return File(imageBytes, "image/PNG"); // Adjust the content type as needed.
+        }
+
+        [HttpGet("GetFileName")]
+        public IActionResult GetFileName(int UserId)
+        {
+            PostRequest model = new PostRequest();
+            model = postService.GetFileName(UserId);
+            var data = model.FileName;
+           // var data = model.FileName;
+            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
+        }
     }
 }

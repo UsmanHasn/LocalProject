@@ -237,7 +237,7 @@ namespace WebAPI.Controllers
         {
             List<CaseGroupLookupModel> model = new List<CaseGroupLookupModel>();
             model = _lookupService.GetCaseGroupLookupByCaseGroupId(CaseGroupId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK});
         }
 
         [HttpGet]

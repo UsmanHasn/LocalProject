@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Service.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,11 @@ namespace Service.Interface
         bool AddLinkCompany(LinkCompanyModel linkCompanyModel, string userName);
         bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName,string folderName);
         public LinkCompanyModel GetCivilNo(string CivilNo);
-        List<RequestAccountsModel> GetAll();
+        List<RequestAccountsModel> GetAll(int userId);
+        List<RequestAccountsModel> GetAllForAdmin(string ActionTypeId, string CivilNo, string UserName);
+
+        bool UpdateRequestAccountHistory(int requestId, int responseStatusId);
+
+        public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName); 
     }
 }

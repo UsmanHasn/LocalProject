@@ -14,6 +14,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System.IO;
 
 namespace Service.Concrete
 {
@@ -21,14 +24,17 @@ namespace Service.Concrete
     {
         private readonly IWebHostEnvironment environment;
         private readonly ApplicationDbContext socialDbContext;
-
-        public UsersProfilePicture(IWebHostEnvironment repository, ApplicationDbContext dbContextClass)
+        public readonly IRepository<SystemSettings> _systemSettingRepository;
+        public string _FileName = "";
+        public UsersProfilePicture(IWebHostEnvironment repository, ApplicationDbContext dbContextClass, IRepository<SystemSettings> systemSettingRepository)
         {
             environment = repository;
             this.socialDbContext = dbContextClass;
+            _systemSettingRepository = systemSettingRepository;
         }
         public async Task<PostResponse> CreatePostAsync(PostRequest postRequest)
         {
+           
             var post = new Domain.Entities.UsersProfilePicture
             {
                 UserId = postRequest.UserId,
@@ -38,17 +44,36 @@ namespace Service.Concrete
                 LastModifiedBy = postRequest.LastModifiedBy,
                 Deleted = "false"
             };
-            if (socialDbContext.UsersProfilePicture.Find(postRequest.UserId) == null)
+            try
             {
-                var _ = await socialDbContext.UsersProfilePicture.AddAsync(post);
+                SqlParameter[] spParams = new SqlParameter[1];
+                spParams[0] = new SqlParameter("UserId", postRequest.UserId);
+                var _find = _systemSettingRepository.ExecuteStoredProcedure<PostRequest>("Sjc_GetUsersProfilePicture", spParams).FirstOrDefault();// socialDbContext.UsersProfilePicture.Find(28);
+                if (_find == null)
+                {
+                    var _ = await socialDbContext.UsersProfilePicture.AddAsync(post);
+                }
+                else
+                {
+                    SqlParameter[] spParam = new SqlParameter[3];
+                    spParam[0] = new SqlParameter("FilePath", postRequest.FilePath);
+                    spParam[1] = new SqlParameter("UserId", postRequest.UserId);
+                    spParam[2] = new SqlParameter("FileName", _FileName);
+                    _systemSettingRepository.ExecuteStoredProcedure("Sjc_UpdateUsersProfilePicture", spParam);
+
+                    //var userProfile =  socialDbContext.UsersProfilePicture.Find(28);
+                    //userProfile.FilePath = postRequest.FilePath;
+                    //userProfile.LastModifiedDate = DateTime.Now;
+                    //userProfile.LastModifiedBy = postRequest.LastModifiedBy;
+                    //var _ = socialDbContext.UsersProfilePicture.Update(userProfile);
+                }
             }
-            else {
-                var userProfile = socialDbContext.UsersProfilePicture.Find(postRequest.UserId);
-                userProfile.FilePath = postRequest.FilePath;
-                userProfile.LastModifiedDate = DateTime.Now;
-                userProfile.LastModifiedBy = postRequest.LastModifiedBy;
-                var _ = socialDbContext.UsersProfilePicture.Update(userProfile);
+            catch (Exception ex)
+            {
+
+                throw;
             }
+           
             try
             {
                 var saveResponse = await socialDbContext.SaveChangesAsync();
@@ -80,19 +105,23 @@ namespace Service.Concrete
         public async Task SavePostImageAsync(PostRequest postRequest)
         {
             var uniqueFileName = FileHelper.GetUniqueFileName(postRequest.Image.FileName);
-
+            _FileName = uniqueFileName;
             var uploads = Path.Combine(environment.WebRootPath, "users", "posts", postRequest.UserId.ToString());
 
             var filePath = Path.Combine(uploads, uniqueFileName);
 
             Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
-            await postRequest.Image.CopyToAsync(new FileStream(filePath, FileMode.Create));
-
+            using (FileStream fs = new FileStream(filePath, FileMode.Create))
+            {
+                await postRequest.Image.CopyToAsync(fs);
+            }
+           
             postRequest.FilePath = filePath;
 
             return;
         }
+
+
 
 
 
@@ -168,5 +197,20 @@ namespace Service.Concrete
         {
             throw new NotImplementedException();
         }
+
+        public PostRequest GetFileName(int UserId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", UserId);
+            var _find = _systemSettingRepository.ExecuteStoredProcedure<PostRequest>("Sjc_GetUsersProfilePicture", spParams).FirstOrDefault();// socialDbContext.UsersProfilePicture.Find(28);
+            return _find;
+        }
+
+       //public byte[] GetImage(string UserId, string imageName)
+       // {
+       //     var imagePath = Path.Combine(environment.WebRootPath, "users", "posts", UserId, imageName);
+       //     //var imageBytes = File.ReadAllBytes(imagePath);
+       //     return File.ReadAllBytes(imagePath);
+       // }
     }
 }
