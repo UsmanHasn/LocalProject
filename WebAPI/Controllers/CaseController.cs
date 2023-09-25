@@ -337,6 +337,14 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
+        [Route("getcasecategorybycasegroup")]
+        public IActionResult GetCaseCategoryByGroup(int caseGroupId)
+        {
+            List<CaseCategoryGroupModel> model = new List<CaseCategoryGroupModel>();
+            model = _caseService.GetCategoryByLocationId(caseGroupId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
         [Route("getcasetypebycategory")]
         public IActionResult GetTypeByCategoryId(int categoryId)
         {
@@ -411,11 +419,50 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
+        [Route("getpartytype")]
+        public IActionResult getPartyType(int caseGroupId, int partyCategoryId)
+        {
+            List<LKTPartyType> model = new List<LKTPartyType>();
+            model = _caseService.GetPartyTypes(caseGroupId, partyCategoryId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
         [Route("DeleteCase")]
         public IActionResult DeleteCase(int CaseId)
         {
             _caseService.DeleteCase(CaseId);
             return new JsonResult(new { data = CaseId, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getcorcasetypes")]
+        public IActionResult getcoacasetypes()
+        {
+            List<CaseCategoryTypesModel> model = new List<CaseCategoryTypesModel>();
+            model = _caseService.GetCaseCategoryTypes();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getunassignedcasetypes")]
+        public IActionResult getunassignedcasetypes(int caseGroupId, int caseCategoryId)
+        {
+            List<CaseCategoryTypesModel> model = new List<CaseCategoryTypesModel>();
+            model = _caseService.GetUnassignedCaseTypes(caseGroupId, caseCategoryId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpGet]
+        [Route("getassignedcasetypes")]
+        public IActionResult getassignedcasetypes(int caseGroupId, int caseCategoryId)
+        {
+            List<CaseCategoryTypesModel> model = new List<CaseCategoryTypesModel>();
+            model = _caseService.GetAssignedCaseTypes(caseGroupId, caseCategoryId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("insUpDel_CaseType")]
+        public IActionResult InsUpDel_CaseType(CaseCategoryTypesModel caseCategoryTypesModel)
+        {
+            string message = _caseService.InsUpDel_CaseType(caseCategoryTypesModel, (caseCategoryTypesModel.CaseTypeId > 0 ? "U" : "I"));
+            return new JsonResult(new { data = caseCategoryTypesModel, message = message, status = HttpStatusCode.OK });
         }
     }
 }

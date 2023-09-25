@@ -61,6 +61,7 @@ namespace WebAPI.Controllers
                 UserModel _userModel = _userService.GetUserById(model.Id);
                 model.CreatedDate = _userModel.CreatedDate;
                 model.CreatedBy = _userModel.CreatedBy;
+                model.CivilExpiryDate = _userModel.CivilExpiryDate;
                 _userService.UpdateUser(model, userName);
             }
             else
@@ -161,6 +162,13 @@ namespace WebAPI.Controllers
         {
             return new JsonResult(new { data = _userService.VerifyOtp(model), status = HttpStatusCode.OK });
         }
-
+        [HttpGet]
+        [Route("getUserbyCivilId")]
+        public IActionResult GetUserByCivilId(string civilId)
+        {
+            UserModel model = new UserModel();
+            model = _userService.GetUserByCivilId(civilId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }

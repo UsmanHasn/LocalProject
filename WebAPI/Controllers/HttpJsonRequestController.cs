@@ -145,26 +145,28 @@ namespace WebAPI.Controllers
         }
         private async Task<string> LawyerInfo_UpsertLawyer(string civilNo, string email)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                ("http://sjcintgerationsvc/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
-            HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
-            if (httpStringResponse.data.Contains("Error"))
+            try
             {
-                return "";
-            }
-            LawyerApiResponseModel responseLawyer = JsonConvert.DeserializeObject<LawyerApiResponseModel>(httpStringResponse.data);
-            if (httpStringResponse.data != null && responseLawyer != null && !string.IsNullOrEmpty(responseLawyer.lawyerCivilNO))
-            {
-                //Add/Update Institute first
-                if (!string.IsNullOrEmpty(responseLawyer.lawyerWorkPlaceCode))
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
+                    ("http://sjcintgerationsvc/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
+                if (httpStringResponse.data.Contains("Error"))
                 {
-                    await InstituteInfo_UpsertInstitute(responseLawyer.lawyerWorkPlaceCode);
+                    return "";
                 }
-                
-                // Create an array of SqlParameter objects
-                SqlParameter[] parametersLawyer = new SqlParameter[]
+                LawyerApiResponseModel responseLawyer = JsonConvert.DeserializeObject<LawyerApiResponseModel>(httpStringResponse.data);
+                if (httpStringResponse.data != null && responseLawyer != null && !string.IsNullOrEmpty(responseLawyer.lawyerCivilNO))
                 {
+                    //Add/Update Institute first
+                    if (!string.IsNullOrEmpty(responseLawyer.lawyerWorkPlaceCode))
+                    {
+                        await InstituteInfo_UpsertInstitute(responseLawyer.lawyerWorkPlaceCode);
+                    }
+
+                    // Create an array of SqlParameter objects
+                    SqlParameter[] parametersLawyer = new SqlParameter[]
+                    {
                         new SqlParameter("@CivilNO", responseLawyer.lawyerCivilNO),
                         new SqlParameter("@NameAr", responseLawyer.lawyerNameArabic),
                         new SqlParameter("@NameEn", responseLawyer.lawyerNameEnglish),
@@ -204,17 +206,24 @@ namespace WebAPI.Controllers
                         new SqlParameter("@InstitutionRegDate", responseLawyer.institutionRegDate),
                         new SqlParameter("@InstitutionRegNo", responseLawyer.institutionRegNo),
                         new SqlParameter("@InstitutionStatus", responseLawyer.institutionStatus),
-                };
-                try
-                {
-                    _userRepository.ExecuteStoredProcedure("UpsertLawyer", parametersLawyer);
+                    };
+                    try
+                    {
+                        _userRepository.ExecuteStoredProcedure("UpsertLawyer", parametersLawyer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
+                return responseLawyer.lawyerWorkPlaceCode;
             }
-            return responseLawyer.lawyerWorkPlaceCode;
+            catch (Exception)
+            {
+
+                return "";
+            }
+            
         }
         private async Task InstituteInfo_UpsertInstitute(string workplaceCode)
         {

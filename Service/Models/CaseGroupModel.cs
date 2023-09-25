@@ -113,5 +113,9 @@
         public string ACO_Code { get; set; }
         public string NameEn { get; set; }
         public string NameAr { get; set; }
+        public int? FirstPartyTypeId { get; set; }
+        public int? SecondPartyTypeId { get; set; }
+        public bool? IsActive { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

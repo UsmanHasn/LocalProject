@@ -42,6 +42,7 @@ namespace Service.Interface
         List<LocationModel> GetLocationByGovernorateId(int governorateId);
         List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations();
         List<CaseCategoryGroupModel> GetCategoryByLocationId(int locationId);
+        List<CaseCategoryGroupModel> GetCategoryByGroupId(int caseGroupId);
         List<CaseCategoryTypesModel> GetTypeByCategoryId(int categoryId);
         string InsUpDel_CaseGroup(CaseGroupModel caseGroupModel, string dmlType);
         string InsUpDel_LktGovernorate(LKTGovernorateModel lktGovernorateModel, string dmlType);
@@ -52,5 +53,10 @@ namespace Service.Interface
         string InsUpDel_CaseCategory(CaseGroupCategoryModel caseGroupCategoryModel, string dmlType);
         List<LKTPartyCategory> getPartyCategory();
         bool DeleteCase(int CaseId);
+        List<CaseCategoryTypesModel> GetCaseCategoryTypes();
+        string InsUpDel_CaseType(CaseCategoryTypesModel caseGroupCategoryModel, string dmlType);
+        List<LKTPartyType> GetPartyTypes(int caseGroupId, int partyCategoryId);
+        List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId);
+        List<CaseCategoryTypesModel> GetAssignedCaseTypes(int caseGroupId, int caseCategoryId);
     }
 }

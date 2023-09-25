@@ -33,6 +33,6 @@ namespace Service.Interface
 
         bool UpdateUserActivity(UserActivityInfoLogModel userModel, string userName);
         bool AddUserInRole(List<int> roleIds, int userId, string userName);
-
+        UserModel GetUserByCivilId(string civilId);
     }
 }

@@ -236,6 +236,7 @@ namespace Service.Concrete
                 UserName = userModel.Name,
                 UserNameAr = userModel.NameAr,
                 CivilNumber = userModel.CivilID,
+                CivilExpiryDate = userModel.CivilExpiryDate,
                 NationalityId = userModel.nationalityID,
                 Email = userModel.Email,
                 PhoneNumber = userModel.Mobile,
@@ -453,6 +454,21 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("PhoneNumber", phone);
             return _systemSettingRepository.ExecuteStoredProcedure<UserModel>("Sjc_CheckDuplicate", spParams).FirstOrDefault();
 
+        }
+        public UserModel GetUserByCivilId(string civilId)
+        {
+            UserModel user = new UserModel();
+            SqlParameter[] Param = new SqlParameter[1];
+            Param[0] = new SqlParameter("@CivilId", civilId);
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserByCivilId", Param);
+            if (dataMenu.Any())
+            {
+                user = dataMenu.FirstOrDefault();
+                // user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+                return user;
+            }
+
+            return null;
         }
         //--------------------------------------------------------------------------------------------------------------------------
         //public bool AddActivity(UserActivityLog userModel, string userName)

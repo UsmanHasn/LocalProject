@@ -18,4 +18,16 @@ namespace Service.Models
         public string? NameAr { get; set; }
         public string? CreatedBy { get; set; }
     }
+    public class LKTPartyType
+    {
+        public int PartyTypeId { get; set; }
+        public int? PartyCategoryId { get; set; }
+        public int? CaseGroupId { get; set; }
+        public string CAAJ_Code { get; set; }
+        public string ACO_Code { get; set; }
+        public string NameEn { get; set; }
+        public string NameAr { get; set; }
+        public bool? IsActive { get; set; }
+        public string CreatedBy { get; set; }
+    }
 }
