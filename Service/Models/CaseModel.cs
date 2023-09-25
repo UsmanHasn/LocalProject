@@ -38,6 +38,11 @@ namespace Service.Models
         public int? CaseStatusId { get; set; }
         public string? CaseStatusName { get; set; }
         public string CaseSource { get; set; }
+        public string? caseCategoryName { get; set; }
+        public string? CaseSubCategoryName { get; set; }
+        public string? CourtTypeName { get; set; }
+        public string? CourtBuildingName { get; set; }
+        public string? CaseTypeName { get; set; }
         public string? Fee { get; set; }
     }
     public class CaseDocumentsModel
