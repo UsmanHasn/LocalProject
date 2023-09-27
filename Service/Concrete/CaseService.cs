@@ -401,15 +401,18 @@ namespace Service.Concrete
         }
         public void InsUpDel_LktGroupGovernorate(LKT_GroupGovernoratesModel lKT_GroupGovernoratesModel)
         {
+            string gIds = "";
             foreach (var governorateId in lKT_GroupGovernoratesModel.GovernorateId)
             {
-                SqlParameter[] parameters = new SqlParameter[3];
-                parameters[0] = new SqlParameter("@CaseGroupId", lKT_GroupGovernoratesModel.CaseGroupId);
-                parameters[1] = new SqlParameter("@GovernorateId", governorateId);
-                parameters[2] = new SqlParameter("@CreatedBy", lKT_GroupGovernoratesModel.CreatedBy);
-                _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_LKT_GroupGovernates", parameters);
-
+                gIds = gIds + governorateId.ToString() + ",";
             }
+            gIds = gIds.Substring(0, gIds.Length - 1);
+            SqlParameter[] parameters = new SqlParameter[3];
+            parameters[0] = new SqlParameter("@CaseGroupId", lKT_GroupGovernoratesModel.CaseGroupId);
+            parameters[1] = new SqlParameter("@GovernorateId", gIds);
+            parameters[2] = new SqlParameter("@CreatedBy", lKT_GroupGovernoratesModel.CreatedBy);
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_LKT_GroupGovernates", parameters);
+
         }
         public List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId)
         {

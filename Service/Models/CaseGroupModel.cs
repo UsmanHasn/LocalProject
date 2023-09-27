@@ -23,6 +23,7 @@
     }
     public class CaseGroupCountValues
     {
+        public int CaseGroupId { get; set; }
         public int Governorates { get; set; }
         public int Buildings { get; set; }
         public int CaseCategory { get; set;}
