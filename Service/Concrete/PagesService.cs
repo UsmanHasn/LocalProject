@@ -39,19 +39,22 @@ namespace Service.Concrete
             try
             {
                 PagesModel pageModel = this.GetpagesById(Id);
-                Pages pages = new Pages()
+                if (pageModel != null)
                 {
-                    PageName = pageModel.PageName,
-                    PageNameAr = pageModel.PageNameAr,
-                    PageModuleEn=pageModel.PageModuleEn,
-                    PageModuleAr=pageModel.PageModuleAr,
-                    CreatedBy = pageModel.CreatedBy,
-                    CreatedDate = pageModel.CreatedDate,
-                    Id = pageModel.Id,
-                    Deleted = true
-                };
-                _pagesRepository.Delete(pages,userName);
-                _pagesRepository.Save();
+                    Pages pages = new Pages()
+                    {
+                        PageName = pageModel.PageName,
+                        PageNameAr = pageModel.PageNameAr,
+                        PageModuleEn = pageModel.PageModuleEn,
+                        PageModuleAr = pageModel.PageModuleAr,
+                        CreatedBy = pageModel.CreatedBy,
+                        CreatedDate = pageModel.CreatedDate,
+                        Id = pageModel.Id,
+                        Deleted = true
+                    };
+                    _pagesRepository.Delete(pages, userName);
+                    _pagesRepository.Save();
+                }
                 return true;
             }
             catch (Exception)
