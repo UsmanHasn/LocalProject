@@ -11,7 +11,7 @@ namespace Service.Interface
 {
     public interface IMenuService
     {
-        List<MenuModel> GetAllMenu(int profileId, string profileType);
+        List<MenuModel> GetAllMenu(int profileId, string profileType, int profileDelegatedId);
         List<MenuModel> GetAllMenuCompany();
 
         List<MenuModel> GetMenu();

@@ -205,9 +205,13 @@ namespace WebAPI.Controllers
         {
             PostRequest model = new PostRequest();
             model = postService.GetFileName(UserId);
-            var data = model.FileName == "" ? "no_image.jpg" : model.FileName;
-            // var data = model.FileName;
-            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
+            if (model == null)
+            {
+                var data = model.FileName == "" ? "no_image.jpg" : model.FileName;
+                // var data = model.FileName;
+                return new JsonResult(new { data = data, status = HttpStatusCode.OK });
+            }
+            return new JsonResult(new { data = "", status = HttpStatusCode.OK });
         }
     }
 }

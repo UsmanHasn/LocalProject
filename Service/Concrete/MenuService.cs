@@ -59,10 +59,16 @@ namespace Service.Concrete
             return true;
         }
 
-        public List<MenuModel> GetAllMenu(int profileId, string profileType)
+        public List<MenuModel> GetAllMenu(int profileId, string profileType, int profileDelegatedId)
         {
             SqlParameter[] spParams = new SqlParameter[1];
-            if (profileType != "R")
+            if (profileType == "D")
+            {
+                spParams = new SqlParameter[2];
+                spParams[0] = new Microsoft.Data.SqlClient.SqlParameter("UserId", profileId);
+                spParams[1] = new Microsoft.Data.SqlClient.SqlParameter("DelegateUserId", profileDelegatedId);
+            }
+            else if (profileType != "R")
             {
                 spParams[0] = new Microsoft.Data.SqlClient.SqlParameter("UserId", profileId);
             }

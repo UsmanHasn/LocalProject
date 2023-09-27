@@ -13,8 +13,7 @@ namespace Service.Interface
 {
     public interface IUserService
     {
-        List<UserListModel> GetAllUsers();
-        //List<UserRole> GetAllUserRole();
+        List<UserListModel> GetAllUsers(int userId);
         List<UserAssignRole> GetAllUserRole(int UID);
 
         bool Add(UserModel userModel, string userName);

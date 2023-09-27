@@ -26,10 +26,10 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("getalluserslist")]
-        public IActionResult GetAllUser()
+        public IActionResult GetAllUser(int userId)
         {
             List<UserListModel> model = new List<UserListModel>();
-            model = _userService.GetAllUsers();
+            model = _userService.GetAllUsers(userId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
