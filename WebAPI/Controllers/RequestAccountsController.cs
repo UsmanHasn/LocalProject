@@ -49,16 +49,16 @@ namespace WebAPI.Controllers
 
             //Initiate
             requestAccountsModel.RequestStatusId = Convert.ToInt32(InitiateRequest.KeyValue);
-            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "");
+            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "", 1);
 
             //Assign
             requestAccountsModel.RequestStatusId = Convert.ToInt32(Assigned.KeyValue);
-            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "");
+            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "", 2);
 
             //Approved
             requestAccountsModel.RequestStatusId = Convert.ToInt32(Approved.KeyValue);
-            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "");
-
+            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "", 2);
+            
             return new JsonResult(new { data = requestAccountsModel, status = HttpStatusCode.OK });
         }
 
@@ -98,10 +98,10 @@ namespace WebAPI.Controllers
                         UserId = userId
                     };
                     requestAccountsModel.RequestStatusId = Convert.ToInt32(InitiateRequest.KeyValue);
-                    _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath);
+                    _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath, 1);
 
                     requestAccountsModel.RequestStatusId = Convert.ToInt32(Assigned.KeyValue);
-                    _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath);
+                    _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath, 2);
                 }
                 return new JsonResult(new { data = dbPath, status = HttpStatusCode.OK });
             }
@@ -157,9 +157,9 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("updateRequestAccountHistory")]
-        public IActionResult updateRequestAccountHistory(int requestId, int responseStatusId)
+        public IActionResult updateRequestAccountHistory(int requestId, int responseStatusId, string rejectedReason)
         {
-            _requestAccountService.UpdateRequestAccountHistory(requestId, responseStatusId);
+            _requestAccountService.UpdateRequestAccountHistory(requestId, responseStatusId, rejectedReason);
             return new JsonResult(new { data = true, status = HttpStatusCode.OK });
         }
     }

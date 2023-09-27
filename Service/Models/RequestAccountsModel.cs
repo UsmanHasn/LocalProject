@@ -32,5 +32,8 @@ namespace Service.Models
         public char? Type { get; set; }
         public string? NameEn { get; set;}
         public string? NameAr { get; set; }
+
+        public string? RequestStatusNameEn { get; set; }
+        public string? RequestStatusNameAr { get; set; }
     }
 }

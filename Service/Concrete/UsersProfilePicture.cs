@@ -206,11 +206,19 @@ namespace Service.Concrete
             return _find;
         }
 
-       //public byte[] GetImage(string UserId, string imageName)
-       // {
-       //     var imagePath = Path.Combine(environment.WebRootPath, "users", "posts", UserId, imageName);
-       //     //var imageBytes = File.ReadAllBytes(imagePath);
-       //     return File.ReadAllBytes(imagePath);
-       // }
+        public bool UpdateImageUrl(int UserId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", UserId);
+            _systemSettingRepository.ExecuteStoredProcedure("Sjc_UpdateUsersFilePath", spParams);// socialDbContext.UsersProfilePicture.Find(28);
+            return true;
+        }
+
+        //public byte[] GetImage(string UserId, string imageName)
+        // {
+        //     var imagePath = Path.Combine(environment.WebRootPath, "users", "posts", UserId, imageName);
+        //     //var imageBytes = File.ReadAllBytes(imagePath);
+        //     return File.ReadAllBytes(imagePath);
+        // }
     }
 }

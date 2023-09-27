@@ -28,6 +28,7 @@ namespace Service.Interface
         public Task DownloadFileById(int userId);
 
         public PostRequest GetFileName(int UserId);
+        public bool UpdateImageUrl(int UserId);
 
         //public   byte[]  GetImage(string UserId, string imageName);
     }

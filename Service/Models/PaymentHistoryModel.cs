@@ -9,8 +9,10 @@ namespace Service.Models
     public class PaymentHistoryModel
     {
         public string? caseNo { get; set; }
-        public string? date { get; set;}
-        public string? fee { get; set; }
-        public string? status { get; set; }
+        public string? FiledOn { get; set;}
+        public string? caseStatusNameEn { get; set; }
+        public string? CaseStatusNameAr { get; set; }
+        public string? CaseTypeNameEn { get; set; }
+        public string? CaseTypeNameAr { get; set; }
     }
 }

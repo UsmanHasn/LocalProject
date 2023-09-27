@@ -58,5 +58,8 @@ namespace Service.Interface
         List<LKTPartyType> GetPartyTypes(int caseGroupId, int partyCategoryId);
         List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId);
         List<CaseCategoryTypesModel> GetAssignedCaseTypes(int caseGroupId, int caseCategoryId);
+
+        string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel , string dmlType);
+        List<LKT_SubjectModel> GetAll();
     }
 }

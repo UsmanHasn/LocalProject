@@ -13,6 +13,7 @@ using System.Data.Entity;
 using System.IO;
 using System.Net;
 
+
 namespace WebAPI.Controllers
 {
     [ApiController]
@@ -24,7 +25,7 @@ namespace WebAPI.Controllers
         private readonly IUsersProfilePicture postService;
         private readonly IWebHostEnvironment environment;
         public string userId = "";
-        public UsersProfilePictureController(IWebHostEnvironment repository, ApplicationDbContext Db ,ILogger<UsersProfilePictureController> logger, IUsersProfilePicture postService)
+        public UsersProfilePictureController(IWebHostEnvironment repository, ApplicationDbContext Db, ILogger<UsersProfilePictureController> logger, IUsersProfilePicture postService)
         {
             environment = repository;
             this._DbContext = Db;
@@ -69,7 +70,7 @@ namespace WebAPI.Controllers
                 return NotFound(postResponse);
             }
 
-          //  this.GetImage(postRequest.UserId.ToString(), postRequest.Image.FileName);
+            //  this.GetImage(postRequest.UserId.ToString(), postRequest.Image.FileName);
             return Ok(postResponse.Post);
 
         }
@@ -82,7 +83,7 @@ namespace WebAPI.Controllers
         /// <returns></returns>
         /// 
 
-       
+
         [HttpPost("UploadUserProfileImage")]
         public async Task<ActionResult> PostUserProfile([FromForm] FileUploadModel fileDetails)
         {
@@ -102,7 +103,7 @@ namespace WebAPI.Controllers
             }
         }
 
-    
+
 
         [HttpGet("DownloadProfileImage")]
         public async Task<ActionResult> DownloadFile(int userId)
@@ -154,26 +155,59 @@ namespace WebAPI.Controllers
 
 
         [HttpGet("{imageName}")]
-        public  IActionResult GetImage(string UserId,string imageName)
+        public IActionResult GetImage(string UserId, string imageName)
         {
             // Retrieve the image file and return it as a file result.
             var imagePath = Path.Combine(environment.WebRootPath, "users", "posts", UserId, imageName);
-            var imageBytes = System.IO.File.ReadAllBytes(imagePath);
-            return File(imageBytes, "image/PNG"); // Adjust the content type as needed.
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                var imageBytes = System.IO.File.ReadAllBytes(imagePath);
+                return File(imageBytes, "image/PNG"); // Adjust the content type as needed.
+            }
+            else
+            {
+                var noImage = Path.Combine(environment.WebRootPath, "users", "posts", "", "no_image.jpg");
+                var imageBytes = System.IO.File.ReadAllBytes(noImage);
+                return File(imageBytes, "image/PNG"); // Adjust the content type as needed.
+            }
         }
+
+        [HttpDelete("{fileName}")]
+        public IActionResult DeleteImage(string UserId, string fileName)
+        {
+            try
+            {
+                string filePath = Path.Combine(environment.WebRootPath, "users", "posts", UserId, fileName); // Replace with your folder path
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    postService.UpdateImageUrl(Convert.ToInt32(UserId));
+                    //GetImage(UserId, fileName);
+                    //GetFileName(Convert.ToInt32(UserId));
+                    return File(filePath, "image/PNG");
+
+                }
+                else
+                {
+                    return NotFound($"File {filePath} not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
 
         [HttpGet("GetFileName")]
         public IActionResult GetFileName(int UserId)
         {
             PostRequest model = new PostRequest();
             model = postService.GetFileName(UserId);
-            if (model != null)
-            {
-                var data = model.FileName;
-                // var data = model.FileName;
-                return new JsonResult(new { data = data, status = HttpStatusCode.OK });
-            }
-            return new JsonResult(new { data = "", status = HttpStatusCode.OK });
+            var data = model.FileName == "" ? "no_image.jpg" : model.FileName;
+            // var data = model.FileName;
+            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
         }
     }
 }

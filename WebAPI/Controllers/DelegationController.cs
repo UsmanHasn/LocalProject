@@ -85,7 +85,8 @@ namespace WebAPI.Controllers
                                         pageNameAr = y.pageNameAr,
                                         pageModuleEn = y.pageModuleEn,
                                         EffectiveFrom=y.EffectiveFrom,
-                                        EffectiveTo=y.EffectiveTo
+                                        EffectiveTo=y.EffectiveTo,
+                                        CivilExpiryDate=y.CivilExpiryDate
 
                                     }).ToList(),
                                     group = x,
@@ -122,6 +123,14 @@ namespace WebAPI.Controllers
             List<DelegationModel> model = new List<DelegationModel>();
             model = _delegationService.GetUserDelegatedPermission(delegatedByUserId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpDelete]
+        [Route("DeleteUserDelegation")]
+        public IActionResult DeleteUserDelegation(int userId)
+        {
+            _delegationService.DeleteUserDelegation(userId);
+            return new JsonResult(new { data = userId, status = HttpStatusCode.OK });
         }
     }
 }

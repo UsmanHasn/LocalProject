@@ -9,6 +9,8 @@ namespace Service.Interface
 {
     public interface IReportService
     {
-        List<PaymentHistoryModel> GetPaymentHistory(string? caseNo,string?date,string?fee,string?status);
+        List<PaymentHistoryModel> GetPaymentHistory(string? caseNo, string? date, string? caseStatus, string? caseType);
+        List<CaseType> BindCaseType();
+        List<CaseStatus> BindCaseStatus();
     }
 }

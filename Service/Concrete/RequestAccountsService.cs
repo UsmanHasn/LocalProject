@@ -41,9 +41,9 @@ namespace Service.Concrete
             return true;
         }
 
-        public bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName, string folderName)
+        public bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName, string folderName, int count)
         {
-            SqlParameter[] spParams = new SqlParameter[13];
+            SqlParameter[] spParams = new SqlParameter[14];
             spParams[0] = new SqlParameter("RequestId", requestAccountsModel.RequestId);
             spParams[1] = new SqlParameter("ActionTypeId", requestAccountsModel.ActionTypeId);
             spParams[2] = new SqlParameter("Role", requestAccountsModel.Role);
@@ -57,6 +57,7 @@ namespace Service.Concrete
             spParams[10] = new SqlParameter("FileName", requestAccountsModel.FileName);
             spParams[11] = new SqlParameter("Type", requestAccountsModel.Type);
             spParams[12] = new SqlParameter("UserId", requestAccountsModel.UserId);
+            spParams[13] = new SqlParameter("Count", count);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_requestAccounts", spParams);
             return true;
@@ -99,13 +100,14 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
         }
 
-        public bool UpdateRequestAccountHistory(int requestId,int responseStatusId)
+        public bool UpdateRequestAccountHistory(int requestId,int responseStatusId,string rejectedReason)
         {
-            SqlParameter[] spParams = new SqlParameter[4];
+            SqlParameter[] spParams = new SqlParameter[5];
             spParams[0] = new SqlParameter("RequestId", requestId);
             spParams[1] = new SqlParameter("RequestStatusId", responseStatusId);
             spParams[2] = new SqlParameter("AssignedTo", 1);
             spParams[3] = new SqlParameter("ResponseStatusId", responseStatusId);
+            spParams[4] = new SqlParameter("RejectedReason", rejectedReason);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_RequestAccountsHistory", spParams);
             return true;

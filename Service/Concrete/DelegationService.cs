@@ -79,7 +79,8 @@ namespace Service.Concrete
                 userId = x.userId,
                 UsernameEn = x.UsernameEn,
                 EffectiveFrom= x.EffectiveFrom,
-                EffectiveTo=x.EffectiveTo
+                EffectiveTo=x.EffectiveTo,
+                CivilExpiryDate=x.CivilExpiryDate
             }).ToList();
             return model;
         }
@@ -142,6 +143,15 @@ namespace Service.Concrete
         {
             var data = _rolesPermissionRepository.ExecuteStoredProcedure<DelegationModel>("sjc_GetUserDelegatedPermissions", new Microsoft.Data.SqlClient.SqlParameter("DelegatedByUserId", delegatedByUserId));
             return data.ToList();
+        }
+
+        public bool DeleteUserDelegation(int userId)
+        {
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("UserId ", userId);
+            spParams[1] = new SqlParameter("Deleted ", true);
+            _rolesPermissionRepository.ExecuteStoredProcedure("Sjc_delete_UserDelegationPermission", spParams);
+            return true;
         }
     }
 }

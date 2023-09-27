@@ -494,5 +494,27 @@ namespace Service.Concrete
             parameters[1] = new SqlParameter("@CaseCategoryId", caseCategoryId);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryTypesModel>("sp_Get_Assinged_COR_CaseTypes", parameters).ToList();
         }
+
+        public string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel, string dmlType)
+        {
+            SqlParameter[] parameters = new SqlParameter[8];
+            parameters[0] = new SqlParameter("SubjectId", lKT_SubjectModel.SubjectId);
+            parameters[1] = new SqlParameter("CAAJ_Code", lKT_SubjectModel.CAAJ_Code);
+            parameters[2] = new SqlParameter("ACO_Code", lKT_SubjectModel.ACO_Code);
+            parameters[3] = new SqlParameter("NameEn", lKT_SubjectModel.NameEn);
+            parameters[4] = new SqlParameter("NameAr", lKT_SubjectModel.NameAr);
+            parameters[5] = new SqlParameter("CreatedBy", lKT_SubjectModel.CreatedBy);
+            parameters[6] = new SqlParameter("@DmlType", dmlType);
+            parameters[7] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
+
+            _systemSettingRepository.ExecuteStoredProcedure("sjc_manage_LKT_Subject", parameters);
+            return parameters[7].Value.ToString() ?? "";
+        }
+
+        public List<LKT_SubjectModel> GetAll()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<LKT_SubjectModel>("sjc_GetLKT_Subject", parameters).ToList();
+        }
     }
 }

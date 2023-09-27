@@ -163,10 +163,10 @@ namespace WebAPI.Controllers
             _caseService.UpdateCase(caseId, caseStatusId, fee, paymentDrawId, exempted, userName);
             return new JsonResult(new { data = new { CaseId = caseId, CaseStatus = caseStatusId, fee = fee, paymentDrawId = paymentDrawId, exempted = exempted }, status = HttpStatusCode.OK });
         }
-       
 
-       
-       
+
+
+
         [HttpGet]
         [Route("GetCasesByUserName")]
         public IActionResult GetCasesByUserName(string UserName)
@@ -191,7 +191,7 @@ namespace WebAPI.Controllers
         [Route("AddCaseTypeLookup")]
         public IActionResult AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string UserName)
         {
-            if (caseTypesLookupModel.CaseTypeId>0)
+            if (caseTypesLookupModel.CaseTypeId > 0)
             {
                 _caseService.UpdateCaseTypeLookup(caseTypesLookupModel, UserName);
             }
@@ -242,7 +242,7 @@ namespace WebAPI.Controllers
         {
             List<CaseParties> model = new List<CaseParties>();
             model = _caseService.GetCasePartiesDetail(caseId);
-            var groupData = model.Select(x => new { group = x.PartyNo}).Distinct();
+            var groupData = model.Select(x => new { group = x.PartyNo }).Distinct();
             List<CasePartyModel> modelPermissions = groupData.Select(x =>
                                 new CasePartyModel()
                                 {
@@ -253,14 +253,14 @@ namespace WebAPI.Controllers
                                         CaseId = y.CaseId,
                                         PartyNo = y.PartyNo,
                                         LegalType = y.LegalType,
-                                        PartyType=y.PartyType,
+                                        PartyType = y.PartyType,
                                         PartyCategoryId = y.PartyCategoryId,
                                         PartyTypeId = y.PartyTypeId,
-                                        PartyTypeName=y.PartyTypeName,
-                                        partyTypeNameAr=y.partyTypeNameAr,
+                                        PartyTypeName = y.PartyTypeName,
+                                        partyTypeNameAr = y.partyTypeNameAr,
                                         EntityId = y.EntityId,
-                                        EntityName=y.EntityName,
-                                        EntityNameAr=y.EntityNameAr,
+                                        EntityName = y.EntityName,
+                                        EntityNameAr = y.EntityNameAr,
                                         CivilNo = y.CivilNo,
                                         CivilExpiry = y.CivilExpiry,
                                         CRNo = y.CRNo,
@@ -271,10 +271,10 @@ namespace WebAPI.Controllers
                                         Email = y.Email,
                                         Country = y.Country,
                                         City = y.City,
-                                        DocEn=y.DocEn,
-                                        DocAr=y.DocAr,
-                                        DocumentPath=y.DocumentPath,
-                                        Description=y.Description
+                                        DocEn = y.DocEn,
+                                        DocAr = y.DocAr,
+                                        DocumentPath = y.DocumentPath,
+                                        Description = y.Description
                                     }).ToList(),
                                     group = x.group.ToString(),
                                 }).ToList();
@@ -384,7 +384,7 @@ namespace WebAPI.Controllers
         [Route("insUpDel_LktLoction")]
         public IActionResult InsUpDel_LktLocation(LKTLocationModel lKTLocationModel)
         {
-            string message = _caseService.InsUpDel_LktLocation(lKTLocationModel,(lKTLocationModel.LocationId > 0 ? "U" : "I") );
+            string message = _caseService.InsUpDel_LktLocation(lKTLocationModel, (lKTLocationModel.LocationId > 0 ? "U" : "I"));
             return new JsonResult(new { data = lKTLocationModel, message = message, status = HttpStatusCode.OK });
         }
         [HttpGet]
@@ -464,5 +464,29 @@ namespace WebAPI.Controllers
             string message = _caseService.InsUpDel_CaseType(caseCategoryTypesModel, (caseCategoryTypesModel.CaseTypeId > 0 ? "U" : "I"));
             return new JsonResult(new { data = caseCategoryTypesModel, message = message, status = HttpStatusCode.OK });
         }
+
+
+
+
+        [HttpPost]
+        [Route("insert_LKT_Subject")]
+        public IActionResult insert_LKT_Subject(LKT_SubjectModel lKT_SubjectModel)
+        {
+            string message = _caseService.InsertLKT_Subject(lKT_SubjectModel, (lKT_SubjectModel.SubjectId > 0 ? "U" : "I"));
+            return new JsonResult(new { data = lKT_SubjectModel, message = message, status = HttpStatusCode.OK });
+        }
+
+        [HttpGet]
+        [Route("getLKT_Subject")]
+        public IActionResult getLKT_Subject()
+        {
+            List<LKT_SubjectModel> model = new List<LKT_SubjectModel>();
+            model = _caseService.GetAll();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
     }
 }
+
+
+
+
