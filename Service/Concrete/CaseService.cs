@@ -470,7 +470,7 @@ namespace Service.Concrete
             parameters[8] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
             parameters[9] = new SqlParameter("@FirstPartyTypeId", caseGroupCategoryModel.FirstPartyTypeId);
             parameters[10] = new SqlParameter("@SecondPartyTypeId", caseGroupCategoryModel.SecondPartyTypeId);
-            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COA_CaseCategory", parameters);
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COA_CaseType", parameters);
             return parameters[8].Value.ToString() ?? "";
         }
         public List<LKTPartyType> GetPartyTypes(int caseGroupId, int partyCategoryId)

@@ -341,7 +341,7 @@ namespace WebAPI.Controllers
         public IActionResult GetCaseCategoryByGroup(int caseGroupId)
         {
             List<CaseCategoryGroupModel> model = new List<CaseCategoryGroupModel>();
-            model = _caseService.GetCategoryByLocationId(caseGroupId);
+            model = _caseService.GetCategoryByGroupId(caseGroupId);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]
