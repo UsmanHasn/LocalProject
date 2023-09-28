@@ -20,6 +20,6 @@ namespace Service.Interface
         bool UpdateUserDelegate(UserDelegatePermissionModel assignRole, string userName);
         UserDelegatePermissionModel GetUserPermissionById(int Id);
 
-        bool DeleteUserDelegation(int userId);
+        bool DeleteUserDelegation(int userId, int delegatedByUserId);
     }
 }

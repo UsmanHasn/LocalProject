@@ -45,8 +45,8 @@ namespace Service.Concrete
             {
                 userPermissionId = x.userPermissionId,
                 pageId = x.pageId,
-                PageNameEn = x.PageNameEn,
-                pageNameAr = x.pageNameAr,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
                 pageModuleEn = x.pageModuleEn,
                 ReadPermission = x.ReadPermission,
                 WritePermission = x.WritePermission,
@@ -70,8 +70,8 @@ namespace Service.Concrete
                 pageModuleAr = x.pageModuleAr,
                 UsernameAr = x.UsernameAr,
                 pageId = x.pageId,
-                PageNameEn = x.PageNameEn,
-                pageNameAr = x.pageNameAr,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
                 pageModuleEn = x.pageModuleEn,
                 ReadPermission = x.ReadPermission,
                 WritePermission = x.WritePermission,
@@ -145,11 +145,12 @@ namespace Service.Concrete
             return data.ToList();
         }
 
-        public bool DeleteUserDelegation(int userId)
+        public bool DeleteUserDelegation(int userId, int delegatedByUserId)
         {
-            SqlParameter[] spParams = new SqlParameter[2];
+            SqlParameter[] spParams = new SqlParameter[3];
             spParams[0] = new SqlParameter("UserId ", userId);
             spParams[1] = new SqlParameter("Deleted ", true);
+            spParams[2] = new SqlParameter("DelegatedByUserId ", delegatedByUserId);
             _rolesPermissionRepository.ExecuteStoredProcedure("Sjc_delete_UserDelegationPermission", spParams);
             return true;
         }

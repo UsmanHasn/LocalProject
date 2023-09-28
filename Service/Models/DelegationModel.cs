@@ -15,8 +15,8 @@ namespace Service.Models
         public int userId { get; set; }
         public string? UsernameEn { get; set; }
         public string? UsernameAr { get; set; }
-        public string? PageNameEn { get; set; }
-        public string? pageNameAr { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameAr { get; set; }
         public string? pageModuleEn { get; set; }
         public string? pageModuleAr { get; set; }
         public bool? ReadPermission { get; set; }

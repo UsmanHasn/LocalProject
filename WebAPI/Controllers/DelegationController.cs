@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
 using Service.Interface;
 using Service.Models;
@@ -24,11 +25,11 @@ namespace WebAPI.Controllers
             List<DelegationModel> model = new List<DelegationModel>();
             model = _delegationService.GetAllDelegations(civilId);
 
-            var distinctModules = model.Select(x => x.pageModuleEn).Distinct();
+            var distinctModules = model.Select(x => new { pageModuleEn = x.pageModuleEn, pageModuleAr = x.pageModuleAr }).Distinct();
             List<UserDelegationModel> modelPermissions = distinctModules.Select(x =>
                                 new UserDelegationModel()
                                 {
-                                    items = model.Where(y => y.pageModuleEn == x)
+                                    items = model.Where(y => y.pageModuleEn == x.pageModuleEn)
                                     .Select(y => new DelegationModel()
                                     {
                                         userPermissionId = y.userPermissionId,
@@ -37,13 +38,14 @@ namespace WebAPI.Controllers
                                         ReadPermission = y.ReadPermission,
                                         WritePermission = y.WritePermission,
                                         DeletePermission = y.DeletePermission,
-                                        PageNameEn = y.PageNameEn,
-                                        pageNameAr = y.pageNameAr,
+                                        NameEn = y.NameEn,
+                                        NameAr = y.NameAr,
                                         pageModuleEn = y.pageModuleEn,
                                         UsernameEn=y.UsernameEn
                                         
                                     }).ToList(),
-                                    group = x,
+                                    group = x.pageModuleEn,
+                                    groupAr = x.pageModuleAr,
                                 }).ToList();
 
             return new JsonResult(new { data = modelPermissions, status = HttpStatusCode.OK });
@@ -63,12 +65,12 @@ namespace WebAPI.Controllers
         {
             List<DelegationModel> model = new List<DelegationModel>();
             model = _delegationService.GetDelegatedUserPermission(civilNo, roleId, delegatedUserId);
-
-            var distinctModules = model.Select(x => x.pageModuleEn).Distinct();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            var distinctModules = model.Select(x => new { pageModeueEn = x.pageModuleEn, pageModuleAr  = x.pageModuleAr }).Distinct();
             List<UserDelegationModel> modelPermissions = distinctModules.Select(x =>
                                 new UserDelegationModel()
                                 {
-                                    items = model.Where(y => y.pageModuleEn == x)
+                                    items = model.Where(y => y.pageModuleEn == x.pageModeueEn)
                                     .Select(y => new DelegationModel()
                                     {
                                         userPermissionId = y.userPermissionId,
@@ -81,15 +83,16 @@ namespace WebAPI.Controllers
                                         ReadPermission = y.ReadPermission,
                                         WritePermission = y.WritePermission,
                                         DeletePermission = y.DeletePermission,
-                                        PageNameEn = y.PageNameEn,
-                                        pageNameAr = y.pageNameAr,
+                                        NameEn = y.NameEn,
+                                        NameAr = y.NameAr,
                                         pageModuleEn = y.pageModuleEn,
                                         EffectiveFrom=y.EffectiveFrom,
                                         EffectiveTo=y.EffectiveTo,
                                         CivilExpiryDate=y.CivilExpiryDate
 
                                     }).ToList(),
-                                    group = x,
+                                    group = x.pageModeueEn,
+                                    groupAr = x.pageModuleAr
                                 }).ToList();
 
             return new JsonResult(new { data = modelPermissions, status = HttpStatusCode.OK });
@@ -98,6 +101,7 @@ namespace WebAPI.Controllers
         [Route("AddDelegationPermission")]
         public IActionResult Add(List<UserDelegatePermissionModel> model, string userId, string userName)
         {
+            _delegationService.DeleteUserDelegation(model.First().UserId, model.First().DelegatedUserId);
             foreach (UserDelegatePermissionModel item in model)
             {
                 if (item.UserPermissionId > 0)
@@ -127,9 +131,9 @@ namespace WebAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteUserDelegation")]
-        public IActionResult DeleteUserDelegation(int userId)
+        public IActionResult DeleteUserDelegation(int userId, int delegatedByUserId)
         {
-            _delegationService.DeleteUserDelegation(userId);
+            _delegationService.DeleteUserDelegation(userId, delegatedByUserId);
             return new JsonResult(new { data = userId, status = HttpStatusCode.OK });
         }
     }
