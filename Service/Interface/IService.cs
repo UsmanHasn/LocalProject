@@ -15,6 +15,7 @@ namespace Service.Interface
         List<ServicesSubCategoryModel> BindSubCategory();
         List<ServicesModel> GetAllService();
         ServicesModel GetDataById(int id);
+        bool DeleteServiceItem(int Id, string userName);
 
         bool AddService(ServicesModel services, string userName);
         bool UpdateService(int id, ServicesModel services, string userName);
