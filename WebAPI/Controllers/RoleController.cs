@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                roleService.Add(model, userName);
+                model.Id = roleService.Add(model, userName);
             }
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }

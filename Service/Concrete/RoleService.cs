@@ -24,7 +24,7 @@ namespace Service.Concrete
         {
             _rolesRepository = repository;
         }
-        public bool Add(RoleModel roleModel, string userName)
+        public int Add(RoleModel roleModel, string userName)
         {
             Roles role = new Roles()
             {
@@ -36,7 +36,7 @@ namespace Service.Concrete
             };
             _rolesRepository.Create(role, userName);
             _rolesRepository.Save();
-            return true;
+            return role.Id;
         }
 
         public bool DeleteRole(RoleModel roleModel, string userName)

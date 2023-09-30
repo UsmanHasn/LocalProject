@@ -11,8 +11,8 @@ namespace Service.Models
         public int RolePermissionId { get; set; }
         public int pageId { get; set; }
         public int roleId { get; set; }
-        public string? PageNameEn { get; set; }
-        public string? pageNameAr { get; set; }
+        public string? NameEn { get; set; }
+        public string? NameAr { get; set; }
         public string? pageModuleEn { get; set; }
         public string? pageModuleAr { get; set; }
         public bool ReadPermission { get; set; }

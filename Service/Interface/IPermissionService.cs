@@ -17,5 +17,6 @@ namespace Service.Interface
 
         List<AssignRole> GetAssignRoles(string roleId);
         bool AddUpdRolePermission(List<AssignRole> rolePermissions, string userName);
+        bool DeleteRolePermission(int roleId);
     }
 }

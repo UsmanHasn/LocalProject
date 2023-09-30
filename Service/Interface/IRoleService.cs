@@ -10,7 +10,7 @@ namespace Service.Interface
     public interface IRoleService
     {
         List<RoleModel> GetAllRole();
-        bool Add(RoleModel roleViewModel,string userName);
+        int Add(RoleModel roleViewModel,string userName);
         RoleModel GetRoleById(int Id);
         bool UpdateRole(RoleModel roleModel, string userName);
         bool DeleteRole(RoleModel roleModel, string userName);

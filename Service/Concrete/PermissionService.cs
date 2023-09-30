@@ -79,8 +79,8 @@ namespace Service.Concrete
             var model = dataMenu.Select(x => new AssignRole()
             {
                 pageId = x.pageId,
-                PageNameEn = x.PageNameEn,
-                pageNameAr = x.pageNameAr,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
                 pageModuleEn=x.pageModuleEn,
                 pageModuleAr = x.pageModuleAr,
                 ReadPermission = x.ReadPermission,
@@ -124,6 +124,20 @@ namespace Service.Concrete
                 spParams[0] = new SqlParameter("@RolePermissions", rolePermissions);
                 spParams[1] = new SqlParameter("@UserName", userName);
                 _rolesPermissionRepository.ExecuteStoredProcedure("sp_dml_rolePermissions", spParams);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool DeleteRolePermission(int roleId)
+        {
+            try
+            {
+                SqlParameter[] spParams = new SqlParameter[1];
+                spParams[0] = new SqlParameter("@RoleId", roleId);
+                _rolesPermissionRepository.ExecuteStoredProcedure("sp_Delete_RolePermission", spParams);
                 return true;
             }
             catch (Exception ex)

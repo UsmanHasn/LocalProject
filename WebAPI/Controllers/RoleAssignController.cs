@@ -22,6 +22,7 @@ namespace WebAPI.Controllers
         {
             List<AssignRole> model = new List<AssignRole>();
             model = _permissionService.GetAssignRoles(roleId);
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             var distinctModules = model.Select(x => x.pageModuleEn).Distinct();
             List<RolePermissionsModel> modelPermissions = distinctModules.Select(x =>
                                 new RolePermissionsModel()
@@ -34,8 +35,8 @@ namespace WebAPI.Controllers
                                         ReadPermission = y.ReadPermission,
                                         WritePermission = y.WritePermission,
                                         DeletePermission = y.DeletePermission,
-                                        PageNameEn = y.PageNameEn,
-                                        pageNameAr = y.pageNameAr,
+                                        NameEn = y.NameEn,
+                                        NameAr = y.NameAr,
                                         pageModuleEn = y.pageModuleEn,
                                         pageModuleAr = y.pageModuleAr,
                                         RolePermissionId = y.RolePermissionId
@@ -51,7 +52,7 @@ namespace WebAPI.Controllers
         [Route("manageRolepermission")]
         public IActionResult Add(List<AssignRole> model, string userName)
         {
-            //_permissionService.AddUpdRolePermission(model, userName);
+            _permissionService.DeleteRolePermission(model.First().roleId);
             foreach (AssignRole item in model)
             {
                 if (item.RolePermissionId > 0)
