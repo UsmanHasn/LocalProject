@@ -93,5 +93,23 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_services", spParams);
             return true;
         }
+         public bool DeleteServiceItem(int Id, string userName)
+        {
+            try
+            {
+                SqlParameter[] spParams = new SqlParameter[13];
+                spParams[0] = new SqlParameter("ServiceId", Id);
+                spParams[10] = new SqlParameter("LastModifiedBy", userName);
+                _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_services_delete", spParams);
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
+        }
     }
 }

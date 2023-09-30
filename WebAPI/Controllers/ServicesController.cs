@@ -69,5 +69,21 @@ namespace WebAPI.Controllers
            var model = _service.GetDataById(id);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
+
+        [HttpDelete]
+        [Route("DeleteService")]
+        public IActionResult DeleteService(int id, string userName)
+        {
+            if (id != 0)
+            {
+                var systemParameterModel = _service.DeleteServiceItem(id, userName);
+                return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+            }
+            else
+            {
+                return new JsonResult(new { status = HttpStatusCode.OK });
+            }
+
+        }
     }
 }

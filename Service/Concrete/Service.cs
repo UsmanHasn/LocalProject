@@ -59,5 +59,9 @@ namespace Service.Concrete
         {
             throw new NotImplementedException();
         }
+        public bool DeleteServiceItem(int id, string userName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

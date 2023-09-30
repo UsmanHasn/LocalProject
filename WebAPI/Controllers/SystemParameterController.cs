@@ -55,9 +55,16 @@ namespace WebAPI.Controllers
         [HttpDelete]
         [Route("deletesystemparameter")]
         public IActionResult Deletesystemparameter(int id, string userName)
-        {
-            var systemParameterModel = _isystemParameterService.DeletesystemParameter(id, userName);
-            return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+        {if (id != 0)
+            {
+                var systemParameterModel = _isystemParameterService.DeletesystemParameter(id, userName);
+                return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+            }
+            else
+            {
+                return new JsonResult(new { status = HttpStatusCode.OK });
+            }
+
         }
         [HttpPut]
         [Route("Updatesystemparameter")]
