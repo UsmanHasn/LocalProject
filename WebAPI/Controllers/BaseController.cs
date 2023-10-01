@@ -7,7 +7,7 @@ namespace WebAPI.Controllers
         //public string acoApiUrl = "https://localhost:7140/api/";
         //public string jcmsApiUrl = "https://localhost:7233/api/";
 
-        public string acoApiUrl = "http://sjcepacoapi/api/";
-        public string jcmsApiUrl = "http://sjcepjcmsapi/api/";
+        public string acoApiUrl = "http://sjcepportal:82/api/";
+        public string jcmsApiUrl = "http://sjcepportal:83/api/";
     }
 }

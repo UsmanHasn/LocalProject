@@ -15,4 +15,8 @@
         public string data { get; set; }
         public int status { get; set; }
     }
+    public class HttpRequestModel<T> where T : class
+    {
+        public T request { get; set; }
+    }
 }

@@ -13,5 +13,9 @@
         public string? CivilID { get; set; }
         public string? Email { get; set; }
         public DateTime? LastLoginDate { get; set; }
+        public string CRNo { get; set; }
+        public string CRName { get; set; }
+        public int EntityId { get; set; }
+        public string EntityName { get; set; }
     }
 }

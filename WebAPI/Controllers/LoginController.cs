@@ -42,9 +42,6 @@ namespace WebAPI.Controllers
         [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
-
-
-
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
                 var user = Authenticate(userLogin);
@@ -169,7 +166,7 @@ namespace WebAPI.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,user.Username),
+                new Claim(ClaimTypes.NameIdentifier,user.CivilID),
                 new Claim(ClaimTypes.Role,user.Role)
             };
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -219,7 +216,11 @@ namespace WebAPI.Controllers
                     RoleId = role == null ? 0 : role.Id,
                     Role = role == null ? "" : role.Name,
                     RoleAr = role == null ? "" : role.NameAr,
-                    LastLoginDate = currentUser.LastLoginDate
+                    LastLoginDate = currentUser.LastLoginDate,
+                    CRNo = "",
+                    CRName = "",
+                    EntityId = 0,
+                    EntityName = ""
                 };
                 //return currentUser;
             }
@@ -256,7 +257,8 @@ namespace WebAPI.Controllers
                 RoleId = role == null ? 0 : role.Id,
                 Role = role == null ? "" : role.Name,
                 RoleAr = role == null ? "" : role.Name,
-                LastLoginDate = userByCivilNo.LastLoginDate
+                LastLoginDate = userByCivilNo.LastLoginDate,
+                CRNo = "", CRName = "", EntityId = 0, EntityName = ""
             };
             return user;
         }

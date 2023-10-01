@@ -1,5 +1,12 @@
 ﻿namespace WebAPI.Models
 {
+    public class CaseRequest
+    {
+        public string civilNo { get; set; }
+        public string crNo { get; set; }
+        public int? entityId { get; set; }
+        public string roleName { get; set; }
+    }
     public class CaseListModel
     {
         public string Case_No { get; set; }

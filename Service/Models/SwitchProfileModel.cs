@@ -16,5 +16,9 @@ namespace Service.Models
         public string RoleNameEn { get; set; }
         public string RoleNameAr { get; set; }
         public string ProfileType { get; set; }
+        public string CRNo { get; set; }
+        public string CRName { get; set; }
+        public int EntityId { get; set; }
+        public string EntityName { get; set; }
     }
 }

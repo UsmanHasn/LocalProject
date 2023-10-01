@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.Data.SqlClient;
 using Service.Concrete;
@@ -15,29 +17,38 @@ namespace WebAPI.Controllers
     public class HttpRequestController : BaseController
     {
         #region Case Requests
-        [HttpGet]
+        [HttpPost]
         [Route("getcases")]
-        public async Task<IActionResult> GetCases(string civilNo)
+        public async Task<IActionResult> GetCases(CaseRequest caseRequest)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
             {
-                { "civilNo", civilNo}
-            };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCases", HttpMethod.Get, null, parameters);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCases", HttpMethod.Get, null, parameters);
-            var response = new List<CasesModel>();
-            if (responseACO != null && responseACO.data != null)
-            {
-                response.AddRange(responseACO.data);
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
+                {
+                    { "civilNo", caseRequest.civilNo}
+                };
+                HttpRequestModel<CaseRequest> httpRequestModel = new Models.HttpRequestModel<CaseRequest>() { request = caseRequest };
+                var responseACO = await httpClientHelper.MakeHttpRequest<CaseRequest, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCases", HttpMethod.Post, caseRequest, null);
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<CaseRequest, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCases", HttpMethod.Post, caseRequest, null);
+                var response = new List<CasesModel>();
+                if (responseACO != null && responseACO.data != null)
+                {
+                    response.AddRange(responseACO.data);
+                }
+                if (responseJCMS != null && responseJCMS.data != null)
+                {
+                    response.AddRange(responseJCMS.data);
+                }
+                response.OrderBy(x => x.CaseFiledDate);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
             }
-            if (responseJCMS != null && responseJCMS.data != null)
+            catch (Exception ex)
             {
-                response.AddRange(responseJCMS.data);
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
-            response.OrderBy(x => x.CaseFiledDate);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            
         }
         [HttpGet]
         [Route("getcasebyid")]
