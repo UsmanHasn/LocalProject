@@ -70,6 +70,14 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+        [HttpPost]
+        [Route("DeleteService")]
+        public void DeleteService(int id)
+        {
+            _service.DeleteService(id);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
+
         [HttpDelete]
         [Route("DeleteService")]
         public IActionResult DeleteService(int id, string userName)
@@ -87,3 +95,4 @@ namespace WebAPI.Controllers
         }
     }
 }
+

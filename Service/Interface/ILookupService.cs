@@ -70,7 +70,7 @@ namespace Service.Interface
         bool UpdateCaseSubCategoryLookup(CaseSubCategoryLookupModel caseSubCategoryLookup, string userName);
 
         bool DeleteCaseTypeLookup(CaseTypesLookupModelDelete deletecaseTypesLookup);
-        bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel);
+        bool DeleteCaseCategoryLookup(int id);
         bool DeleteCaseSubCategoryLookupModel(CaseSubCategoryLookupModelDelete deleteCaseSubCategoryLookupModel);
 
 

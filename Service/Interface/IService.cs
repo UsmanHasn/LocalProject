@@ -19,6 +19,7 @@ namespace Service.Interface
 
         bool AddService(ServicesModel services, string userName);
         bool UpdateService(int id, ServicesModel services, string userName);
+        bool DeleteService(int id);
 
     }
 }

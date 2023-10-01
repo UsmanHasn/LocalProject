@@ -503,10 +503,10 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("DeleteCaseCategoryLookup")]
-        public IActionResult DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete caseCategoryLookupModelDelete, long CaseCategoryId)
+        public IActionResult DeleteCaseCategoryLookup(int id)
         {
-            _lookupService.DeleteCaseCategoryLookup(caseCategoryLookupModelDelete);
-            return new JsonResult(new { data = caseCategoryLookupModelDelete, status = HttpStatusCode.OK });
+            _lookupService.DeleteCaseCategoryLookup(id);
+            return new JsonResult(new { data = id, status = HttpStatusCode.OK });
         }
         [HttpPost]
         [Route("DeleteCaseSubCategoryLookupModel")]

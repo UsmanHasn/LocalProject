@@ -53,6 +53,14 @@ namespace Service.Concrete
             return data;
         }
 
+        public bool DeleteService(int id)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("ServiceId ", id);
+            _systemSettingRepository.ExecuteStoredProcedure("Sjc_delete_Services", spParams);
+            return true;
+        }
+
         public List<ServicesModel> GetAllService()
         {
             SqlParameter[] spParams = new SqlParameter[0];

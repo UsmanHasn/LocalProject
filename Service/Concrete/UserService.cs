@@ -95,7 +95,8 @@ namespace Service.Concrete
                 City = userModel.City,
                 Password = userModel.Password,
                 SupervisorUserId = userModel.SupervisorUserId,
-                UserStatusId=1
+                UserStatusId=1,
+                CivilExpiryDate=userModel.CivilExpiryDate
             };
 
             _userRepository.Create(users, userName);

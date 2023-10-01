@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                SystemParameterModel sysModel = _isystemParameterService.GetsystemParameterByName(systemParameterModel.keyName);
+                SystemParameterModel sysModel = _isystemParameterService.GetsystemParameterByName(systemParameterModel.keyName) ;
                 if (sysModel == null)
                 {
                     _isystemParameterService.Add(systemParameterModel, userName);

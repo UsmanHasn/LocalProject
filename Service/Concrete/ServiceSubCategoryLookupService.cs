@@ -153,6 +153,14 @@ namespace Service.Concrete
             
         }
 
+        public bool DeleteServiceSubCat(int id)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("ServiceSubCategoryId ", id);
+            _rolesRepository.ExecuteStoredProcedure("Sjc_delete_ServicesSubCat", spParams);
+            return true;
+        }
+
         //public Domain.Modeles.ServicesModel GetUserById(int ServiceId)
         //{
         //    var dataMenu = _userRepository.ExecuteStoredProcedure<Domain.Modeles.ServicesModel>("sjc_GetServiceId", new Microsoft.Data.SqlClient.SqlParameter("ServiceId", ServiceId));

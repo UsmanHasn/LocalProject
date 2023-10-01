@@ -468,11 +468,10 @@ namespace Service.Concrete
             return true;
         }
 
-        public bool DeleteCaseCategoryLookup(CaseCategoryLookupModelDelete deletecaseCategoryLookupModel)
+        public bool DeleteCaseCategoryLookup(int id)
         {
-            SqlParameter[] spParams = new SqlParameter[2];
-            spParams[0] = new SqlParameter("CaseCategoryId", deletecaseCategoryLookupModel.CaseCategoryId);
-            spParams[1] = new SqlParameter("Deleted", deletecaseCategoryLookupModel.Deleted);
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CaseCategoryId", id);
             _languagesRepository.ExecuteStoredProcedure("Sjc_delete_CaseCategoryLookup", spParams);
             return true;
         }

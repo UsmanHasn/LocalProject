@@ -276,5 +276,13 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+
+        [HttpPost]
+        [Route("DeleteServiceSubcat")]
+        public void DeleteServiceSubcat(int id)
+        {
+            serviceSubCategory.DeleteServiceSubCat(id);
+            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+        }
     }
 }
