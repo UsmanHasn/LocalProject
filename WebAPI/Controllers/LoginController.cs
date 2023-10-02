@@ -106,7 +106,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://sjcintgerationsvc/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
+                    ("http://sjcepportal:84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -125,7 +125,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://sjcintgerationsvc/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
+                    ("http://sjcepportal:84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });

@@ -16,4 +16,13 @@ namespace Service.Models
         public bool Deleted { get; set;}
         public string? LastModifiedBy { get; set; }
     }
+    public class PaginatedLanguageLookupModel
+    {
+        public List<LanguageLookupModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
+    }
+    internal class TotalCountModel
+    {
+        public int TotalCount { get; set; }
+    }
 }

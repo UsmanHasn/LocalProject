@@ -18,6 +18,7 @@ namespace WebAPI.Helper
             {
                 ServerCertificateCustomValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
             });
+            _httpClient.Timeout = TimeSpan.FromSeconds(15);
         }
 
         public async Task<TResponse> MakeHttpRequest<TRequest,TResponse>(string requestURL, HttpMethod httpMethod, TRequest requestBody = default, Dictionary<string, string> parameters = null)

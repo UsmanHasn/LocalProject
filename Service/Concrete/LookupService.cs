@@ -559,6 +559,21 @@ namespace Service.Concrete
             var data = _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetAll_LanguageLookup", param).FirstOrDefault();
             return data;
         }
+        public PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber)
+        {
+
+            SqlParameter[] param = new SqlParameter[2];
+            param[0] = new SqlParameter("pageSize", pageSize);
+            param[1] = new SqlParameter("pageNumber", pageNumber);
+            var data = _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetAll_LanguageLookup", param).ToList();
+            var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount").FirstOrDefault();
+            PaginatedLanguageLookupModel paginatedLanguageLookupModel = new PaginatedLanguageLookupModel()
+            {
+                PaginatedData = data,
+                TotalCount = count.TotalCount
+            };
+            return paginatedLanguageLookupModel;
+        }
 
         public List<CaseCategoryLookupModel> GetcaseCategoryLookup()
         {

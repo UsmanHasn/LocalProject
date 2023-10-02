@@ -76,7 +76,8 @@ namespace Service.Interface
 
         bool AddLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
         bool UpdateLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
-        List<LanguageLookupModel> GetLanguageLookup();
+        PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber);
+
         LanguageLookupModel GetLanguageLookupById(int languageLookupId);
         List<LookupsModel> GetPartyTypes(int CaseTypeId);
     }

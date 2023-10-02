@@ -549,12 +549,20 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = languageLookupModel, status = HttpStatusCode.OK });
         }
 
+        //[HttpGet]
+        //[Route("GetLanguageLookup")]
+        //public IActionResult GetLanguageLookup()
+        //{
+        //    List<LanguageLookupModel> model = new List<LanguageLookupModel>();
+        //    model = _lookupService.GetLanguageLookup();
+        //    return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        //}
         [HttpGet]
         [Route("GetLanguageLookup")]
-        public IActionResult GetLanguageLookup()
+        public IActionResult GetLanguageLookup(int pageSize, int pageNumber)
         {
-            List<LanguageLookupModel> model = new List<LanguageLookupModel>();
-            model = _lookupService.GetLanguageLookup();
+            PaginatedLanguageLookupModel model = new PaginatedLanguageLookupModel();
+            model = _lookupService.GetLanguageLookup(pageSize, pageNumber);
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         [HttpGet]

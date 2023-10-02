@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
             {
                 //Get Personal Information
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<CompanyApiRequestModel, CompanyApiResponseModel>
-                    ("http://sjcintgerationsvc/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
+                    ("http://sjcepportal:84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<CompanyApiResponseModel>(httpStringResponse.data);
                 var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
@@ -66,7 +66,7 @@ namespace WebAPI.Controllers
             {
                 //Get Personal Information
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<PersonalApiRequestModel, PersonalApiResponseModel>
-                    ("http://sjcintgerationsvc/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
+                    ("http://sjcepportal:84/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<PersonalApiResponseModel>(httpStringResponse.data);
 
@@ -149,7 +149,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetLawyerByCivilNo(string civilNo)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://integrationsvc.com/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://sjcepportal:84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
             var response = new List<LawyerJsonModel>();
             response.AddRange(responseLaywer.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
@@ -160,7 +160,7 @@ namespace WebAPI.Controllers
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcintgerationsvc/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://sjcepportal:84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -240,7 +240,7 @@ namespace WebAPI.Controllers
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseInstituteString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                ("http://sjcintgerationsvc/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
+                ("http://sjcepportal:84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
             HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseInstituteString);
             InstituteApiModel responseInstitute = JsonConvert.DeserializeObject<InstituteApiModel>(httpStringResponse.data);
             BodyObject instituteBody = responseInstitute.Body;
@@ -354,7 +354,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetExpertbyCivilNo(string civilNo)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://integrationsvc.com/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
+            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://sjcepportal:84/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
             var response = new List<ExpertApiResponseModel>();
             response.AddRange(responseLaywer.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
@@ -365,7 +365,7 @@ namespace WebAPI.Controllers
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcintgerationsvc/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
+                    ("http://sjcepportal:84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -387,12 +387,12 @@ namespace WebAPI.Controllers
                         new SqlParameter("@ExpertGender", responseExpert.ExpertGender),
                         new SqlParameter("@ExpertMobile", responseExpert.ExpertMobile),
                         new SqlParameter("@ExpertNationality", responseExpert.ExpertNationality),
-                        new SqlParameter("@ExpertLandLine", responseExpert.ExpertLandLine),
-                        new SqlParameter("@ExpertAddressVillage", responseExpert.ExpertAddressVillage),
+                        new SqlParameter("@ExpertLandLine", responseExpert.ExpertLandLine == null ? "" : responseExpert.ExpertLandLine),
+                        new SqlParameter("@ExpertAddressVillage", responseExpert.ExpertAddressVillage == null ? "" : responseExpert.ExpertAddressVillage),
                         new SqlParameter("@ExpertFieldName", responseExpert.ExpertFieldName),
                         new SqlParameter("@ExpertLicenseEndDate", responseExpert.ExpertLicenseEndDate),
                         new SqlParameter("@ExpertLicenseStartDate", responseExpert.ExpertLicenseStartDate),
-                        new SqlParameter("@ExpertRegistrationNo", responseExpert.ExpertRegistrationNo),
+                        new SqlParameter("@ExpertRegistrationNo", responseExpert.ExpertRegistrationNo == null ? "" : responseExpert.ExpertRegistrationNo),
                         new SqlParameter("@ExpertStatus", responseExpert.ExpertStatus)
                     };
                     try
