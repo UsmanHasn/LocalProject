@@ -224,9 +224,9 @@ namespace Service.Concrete
             spParams[0] = new SqlParameter("LocationId", locationLookup.LocationId);
             spParams[1] = new SqlParameter("GovernatesId", locationLookup.GovernatesId);
             spParams[2] = new SqlParameter("Code", locationLookup.Code);
-            spParams[3] = new SqlParameter("NameEn", locationLookup.NameAr);
+            spParams[3] = new SqlParameter("NameEn", locationLookup.NameEn);
             spParams[4] = new SqlParameter("NameAr", locationLookup.NameAr);
-            spParams[5] = new SqlParameter("LinkLocationId", locationLookup.NameAr);
+            spParams[5] = new SqlParameter("LinkLocationId", "");;
             spParams[6] = new SqlParameter("LastModifiedBy ", locationLookup.LastModifiedBy);
             spParams[7] = new SqlParameter("LastModifiedDate", DateTime.Now);
             _languagesRepository.ExecuteStoredProcedure("Sjc_Update_LocationLookup", spParams);
@@ -622,6 +622,13 @@ namespace Service.Concrete
             spParams[1] = new SqlParameter("Status", status);
             _languagesRepository.ExecuteStoredProcedure("Sjc_update_CaseGroupStatus", spParams);
             return true;
+        }
+
+        public LanguageLookupModel GetCode(string code)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("Key", code);
+            return _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetLanguageCode", spParams).FirstOrDefault();
         }
     }
 }

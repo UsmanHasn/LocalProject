@@ -211,7 +211,7 @@ namespace WebAPI.Controllers
                 // var data = model.FileName;
                 return new JsonResult(new { data = data, status = HttpStatusCode.OK });
             }
-            return new JsonResult(new { data = "", status = HttpStatusCode.OK });
+            return new JsonResult(new { data = model.FileName, status = HttpStatusCode.OK });
         }
     }
 }

@@ -80,5 +80,6 @@ namespace Service.Interface
 
         LanguageLookupModel GetLanguageLookupById(int languageLookupId);
         List<LookupsModel> GetPartyTypes(int CaseTypeId);
+        public LanguageLookupModel GetCode(string code);
     }
 }

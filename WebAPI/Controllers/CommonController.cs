@@ -300,8 +300,8 @@ namespace WebAPI.Controllers
         [Route("AddLocationLookup")]
         public IActionResult AddLocationLookup(LocationLookupModel locationLookup)
         {
-            string Message;
-            Message = _lookupService.AddLocationLookup(locationLookup);
+            //string Message;
+            //Message = _lookupService.AddLocationLookup(locationLookup);
 
             if (locationLookup.LocationId > 0)
             {
@@ -311,7 +311,7 @@ namespace WebAPI.Controllers
             {
                 _lookupService.AddLocationLookup(locationLookup);
             }
-            return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK, msg = Message });
+            return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK });
         }
         
         [HttpPost]
@@ -541,12 +541,23 @@ namespace WebAPI.Controllers
             if (languageLookupModel.LanguageId > 0)
             {
                 _lookupService.UpdateLanguageLookup(languageLookupModel, userName);
+                return new JsonResult(new { data = languageLookupModel, status = HttpStatusCode.OK });
             }
             else
             {
-                _lookupService.AddLanguageLookup(languageLookupModel, userName);
+                LanguageLookupModel sysModel = _lookupService.GetCode(languageLookupModel.Key);
+                if (sysModel == null)
+                {
+                    _lookupService.AddLanguageLookup(languageLookupModel, userName);
+                    return new JsonResult(new { data = languageLookupModel, status = HttpStatusCode.OK });
+                }
+                else
+                {
+                    return null;
+                }
+
             }
-            return new JsonResult(new { data = languageLookupModel, status = HttpStatusCode.OK });
+            return null;
         }
 
         //[HttpGet]
