@@ -6,6 +6,7 @@
         public string crNo { get; set; }
         public int? entityId { get; set; }
         public string roleName { get; set; }
+        public int? statusId { get; set; }
     }
     public class CaseListModel
     {

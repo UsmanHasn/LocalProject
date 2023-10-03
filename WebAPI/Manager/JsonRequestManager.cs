@@ -1,162 +1,77 @@
-﻿using Azure;
+﻿using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
+using System.Data;
+using WebAPI.Helper;
+using WebAPI.Models.APIModels;
+using WebAPI.Models;
 using Data.Interface;
 using Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Newtonsoft.Json;
-using Service.Models;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Net;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using WebAPI.Helper;
-using WebAPI.Manager;
-using WebAPI.Models;
-using WebAPI.Models.APIModels;
-using static Azure.Core.HttpHeader;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Manager
 {
-    [ApiController]
-    [Route("api/httpjson/")]
-    public class HttpJsonRequestController : Controller
+    public class JsonRequestManager
     {
         private readonly IRepository<Users> _userRepository;
-        private readonly JsonRequestManager jsonRequestManager;
-        public HttpJsonRequestController(IRepository<Users> userRepository)
+
+        public JsonRequestManager(IRepository<Users> userRepository)
         {
             _userRepository = userRepository;
-            jsonRequestManager = new JsonRequestManager(_userRepository);
         }
-        [HttpPost]
-        [Route("getcompanyinfo")]
-        public async Task<IActionResult> GetCompanyInfo(CompanyApiRequestModel companyApiRequest)
+        public async Task<string> ExpertInfo_UpsertExpert(string civilNo)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var response = new CompanyApiResponseModel();
             try
             {
-                //Get Personal Information
-                var responseString = await httpClientHelper.MakeHttpRequestJsonString<CompanyApiRequestModel, CompanyApiResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
-                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
-                response = JsonConvert.DeserializeObject<CompanyApiResponseModel>(httpStringResponse.data);
-                var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
-                return new JsonResult(new { companydata = response, signatory = responseSignatory, status = HttpStatusCode.OK});
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
+                    ("http://sjcepportal:84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
+                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
+                if (httpStringResponse.data.Contains("Error"))
+                {
+                    return "";
+                }
+                ExpertApiResponseModel responseExpert = JsonConvert.DeserializeObject<ExpertApiResponseModel>(httpStringResponse.data);
+                if (httpStringResponse.data != null && responseExpert != null && !string.IsNullOrEmpty(responseExpert.ExpertCivilNO))
+                {
+                    // Create an array of SqlParameter objects
+                    SqlParameter[] sqlParameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@ExpertId", 0) { Direction = ParameterDirection.Output },
+                        new SqlParameter("@ExpertAddressRegion", responseExpert.ExpertAddressRegion),
+                        new SqlParameter("@ExpertAddressState", responseExpert.ExpertAddressState),
+                        new SqlParameter("@ExpertNameArabic", responseExpert.ExpertNameArabic),
+                        new SqlParameter("@ExpertNameEnglish", responseExpert.ExpertNameEnglish),
+                        new SqlParameter("@ExpertCivilNO", responseExpert.ExpertCivilNO),
+                        new SqlParameter("@ExpertEmail", responseExpert.ExpertEmail),
+                        new SqlParameter("@ExpertGender", responseExpert.ExpertGender),
+                        new SqlParameter("@ExpertMobile", responseExpert.ExpertMobile),
+                        new SqlParameter("@ExpertNationality", responseExpert.ExpertNationality),
+                        new SqlParameter("@ExpertLandLine", responseExpert.ExpertLandLine == null ? "" : responseExpert.ExpertLandLine),
+                        new SqlParameter("@ExpertAddressVillage", responseExpert.ExpertAddressVillage == null ? "" : responseExpert.ExpertAddressVillage),
+                        new SqlParameter("@ExpertFieldName", responseExpert.ExpertFieldName),
+                        new SqlParameter("@ExpertLicenseEndDate", responseExpert.ExpertLicenseEndDate),
+                        new SqlParameter("@ExpertLicenseStartDate", responseExpert.ExpertLicenseStartDate),
+                        new SqlParameter("@ExpertRegistrationNo", responseExpert.ExpertRegistrationNo == null ? "" : responseExpert.ExpertRegistrationNo),
+                        new SqlParameter("@ExpertStatus", responseExpert.ExpertStatus)
+                    };
+                    try
+                    {
+                        _userRepository.ExecuteStoredProcedure("UpsertExpertInformation", sqlParameters);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+                return "";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return null;
-            }
-           
-            return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
-        }
-        [HttpPost]
-        [Route("getpersonalinfo")]
-        public async Task<IActionResult> GetPersonalInfo(PersonalApiRequestModel personalApiRequest)
-        {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var response = new PersonalApiResponseModel();
-            try
-            {
-                //Get Personal Information
-                var responseString = await httpClientHelper.MakeHttpRequestJsonString<PersonalApiRequestModel, PersonalApiResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
-                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
-                response = JsonConvert.DeserializeObject<PersonalApiResponseModel>(httpStringResponse.data);
 
+                return "";
             }
-            catch (Exception ex)
-            {
-                return null;                
-            }
-            if (response != null)
-            {
-                /*
-                    here we will call Expert api and check if it is expert then insert into experts
-                    http://sjcintgerationsvc/api/GovServ/getExpertInformation/personalApiRequest.CardCivilNo
-                    this api returns placecode which will pass to instituteapi and get all lawyer in that institute we will insert all these lawyers
-                    http://sjcintgerationsvc/api/GovServ/InstitutionInformation?code={371}
-                */
-                SqlParameter[] parameters = new SqlParameter[33]
-                {
-                    new SqlParameter("UserName", response.fullname_en),
-                    new SqlParameter("UserNameAr", response.fullname),
-                    new SqlParameter("CivilNumber", response.civilNumber),
-                    new SqlParameter("CivilExpiryDate", personalApiRequest.cardExpiryDate),
-                    new SqlParameter("Nationalitycode", response.Nationalitycode),
-                    new SqlParameter("Nationalitydesc_en", response.Nationalitydesc_en),
-                    new SqlParameter("Nationalitydesc_ar", response.Nationalitydesc_ar),
-                    new SqlParameter("DateOfBirth", response.dateOfBirth),
-                    new SqlParameter("CountryCode", response.passportCountryCode),
-                    new SqlParameter("Countrydesc_ar", response.Countrydesc_ar),
-                    new SqlParameter("title_ar", response.title_ar),
-                    new SqlParameter("name_1_ar", response.name_1_ar),
-                    new SqlParameter("name_2_ar", response.name_2_ar),
-                    new SqlParameter("name_3_ar", response.name_3_ar),
-                    new SqlParameter("name_4_ar", response.name_4_ar),
-                    new SqlParameter("name_5_ar", response.name_5_ar),
-                    new SqlParameter("name_6_ar", response.name_6_ar),
-                    new SqlParameter("Wilayatcode", response.Wilayatcode),
-                    new SqlParameter("Wilayatdesc_ar", response.Wilayatdesc_ar),
-                    new SqlParameter("Towncode", response.Towncode),
-                    new SqlParameter("Towndesc_ar", response.Towndesc_ar),
-                    new SqlParameter("PassportNumber", response.passportNumber),
-                    new SqlParameter("PassportExpiryDate", response.passportExpireDate),
-                    new SqlParameter("VisaNumber", response.visaNumber),
-                    new SqlParameter("VisaExpiryDate", response.visaNumberExpirydate),
-                    new SqlParameter("DateofDeath", response.dateOfDeath),
-                    new SqlParameter("Email", personalApiRequest.email),
-                    new SqlParameter("BuildingNumber", response.buildingNumber),
-                    new SqlParameter("City", response.city),
-                    new SqlParameter("WayNumber", response.wayNumber),
-                    new SqlParameter("PhoneNumber", response.mobileNumber),
-                    new SqlParameter("TelephoneNumber", response.telephoneNumber),
-                    new SqlParameter("Gender", response.Gender)
-                };
-                try
-                {
-                    Console.WriteLine(parameters);
-                    _userRepository.ExecuteStoredProcedure("UpsertUsers", parameters);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
 
-                //Get Expert Info
-                try
-                {
-                    await jsonRequestManager.ExpertInfo_UpsertExpert(personalApiRequest.CardCivilNo);
-                }
-                catch (Exception ex)
-                {
-                    
-                }
-                
-                //Get Lawyer Info
-                string lawyerWorkPlaceCode = await jsonRequestManager.LawyerInfo_UpsertLawyer(personalApiRequest.CardCivilNo, personalApiRequest.email);
-            }
-            return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
         }
-        [HttpGet]
-        [Route("getlawyerbycivilno")]
-        public async Task<IActionResult> GetLawyerByCivilNo(string civilNo)
-        {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://sjcepportal:84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
-            var response = new List<LawyerJsonModel>();
-            response.AddRange(responseLaywer.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
-        }
-        private async Task<string> LawyerInfo_UpsertLawyer(string civilNo, string email)
+        public async Task<string> LawyerInfo_UpsertLawyer(string civilNo, string email)
         {
             try
             {
@@ -236,9 +151,9 @@ namespace WebAPI.Controllers
 
                 return "";
             }
-            
+
         }
-        private async Task InstituteInfo_UpsertInstitute(string workplaceCode)
+        public async Task InstituteInfo_UpsertInstitute(string workplaceCode)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseInstituteString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
@@ -351,77 +266,5 @@ namespace WebAPI.Controllers
 
             }
         }
-        [HttpGet]
-        [Route("getExpertbyCivilNo")]
-        public async Task<IActionResult> GetExpertbyCivilNo(string civilNo)
-        {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://sjcepportal:84/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
-            var response = new List<ExpertApiResponseModel>();
-            response.AddRange(responseLaywer.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
-        }
-        private async Task<string> ExpertInfo_UpsertExpert(string civilNo)
-        {
-            try
-            {
-                HttpClientHelper httpClientHelper = new HttpClientHelper();
-                var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcepportal:84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
-                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
-                if (httpStringResponse.data.Contains("Error"))
-                {
-                    return "";
-                }
-                ExpertApiResponseModel responseExpert = JsonConvert.DeserializeObject<ExpertApiResponseModel>(httpStringResponse.data);
-                if (httpStringResponse.data != null && responseExpert != null && !string.IsNullOrEmpty(responseExpert.ExpertCivilNO))
-                {
-                    // Create an array of SqlParameter objects
-                    SqlParameter[] sqlParameters = new SqlParameter[]
-                    {
-                        new SqlParameter("@ExpertId", 0) { Direction = ParameterDirection.Output },
-                        new SqlParameter("@ExpertAddressRegion", responseExpert.ExpertAddressRegion),
-                        new SqlParameter("@ExpertAddressState", responseExpert.ExpertAddressState),
-                        new SqlParameter("@ExpertNameArabic", responseExpert.ExpertNameArabic),
-                        new SqlParameter("@ExpertNameEnglish", responseExpert.ExpertNameEnglish),
-                        new SqlParameter("@ExpertCivilNO", responseExpert.ExpertCivilNO),
-                        new SqlParameter("@ExpertEmail", responseExpert.ExpertEmail),
-                        new SqlParameter("@ExpertGender", responseExpert.ExpertGender),
-                        new SqlParameter("@ExpertMobile", responseExpert.ExpertMobile),
-                        new SqlParameter("@ExpertNationality", responseExpert.ExpertNationality),
-                        new SqlParameter("@ExpertLandLine", responseExpert.ExpertLandLine == null ? "" : responseExpert.ExpertLandLine),
-                        new SqlParameter("@ExpertAddressVillage", responseExpert.ExpertAddressVillage == null ? "" : responseExpert.ExpertAddressVillage),
-                        new SqlParameter("@ExpertFieldName", responseExpert.ExpertFieldName),
-                        new SqlParameter("@ExpertLicenseEndDate", responseExpert.ExpertLicenseEndDate),
-                        new SqlParameter("@ExpertLicenseStartDate", responseExpert.ExpertLicenseStartDate),
-                        new SqlParameter("@ExpertRegistrationNo", responseExpert.ExpertRegistrationNo == null ? "" : responseExpert.ExpertRegistrationNo),
-                        new SqlParameter("@ExpertStatus", responseExpert.ExpertStatus)
-                    };
-                    try
-                    {
-                        _userRepository.ExecuteStoredProcedure("UpsertExpertInformation", sqlParameters);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex);
-                    }
-                }
-                return "";
-            }
-            catch (Exception)
-            {
-
-                return "";
-            }
-
-        }
-        [HttpGet]
-        [Route("getEntity")]
-        public IActionResult GetEntity()
-        {
-            var data = _userRepository.ExecuteStoredProcedure<EntityModel>("sjc_GetEntity").ToList();
-            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
-        }
-
     }
 }

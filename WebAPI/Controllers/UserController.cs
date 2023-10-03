@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Data.Interface;
+using Domain.Entities;
 using Domain.Modeles;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Service.Models;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using WebAPI.Manager;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -18,10 +20,13 @@ namespace WebAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-
-        public UserController(IUserService userService)
+        private readonly IRepository<Users> _userRepository;
+        private readonly JsonRequestManager jsonRequestManager;
+        public UserController(IUserService userService, IRepository<Users> userRepository)
         {
             _userService = userService;
+            _userRepository = userRepository;
+            jsonRequestManager = new JsonRequestManager(_userRepository);
         }
 
         [HttpGet]
@@ -70,6 +75,20 @@ namespace WebAPI.Controllers
                 if (usrModel == null)
                 {
                     _userService.Add(model, userName);
+                    try
+                    {
+                        jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    try
+                    {
+                        jsonRequestManager.LawyerInfo_UpsertLawyer(model.CivilID, model.Email);
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
                 else
                 {
