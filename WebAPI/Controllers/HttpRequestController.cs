@@ -52,111 +52,183 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("getcasebyid")]
-        public async Task<IActionResult> GetCasesById(string caseId)
+        public async Task<IActionResult> GetCasesById(string caseId, string caseSource)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
             {
-                { "caseId", caseId}
-            };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
-            var response = new CasesModel();
-            if (responseACO != null && responseACO.data != null && responseACO.data.Count() > 0)
-            {
-                response = responseACO.data.FirstOrDefault();
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
+                {
+                    { "caseId", caseId}
+                };
+                var response = new CasesModel();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
+                    if (responseACO != null && responseACO.data != null && responseACO.data.Count() > 0)
+                    {
+                        response = responseACO.data.FirstOrDefault();
+                    }
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCaseById?caseId=" + caseId, HttpMethod.Get, null, null);
+                if (responseJCMS != null)
+                {
+                    response = responseJCMS.data.FirstOrDefault();
+                }
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
             }
-            else if (responseJCMS != null)
+            catch (Exception ex)
             {
-                response = responseJCMS.data.FirstOrDefault();
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            
         }
         [HttpGet]
         [Route("getsubjectbycaseid")]
-        public async Task<IActionResult> GetSubjectsByCaseId(string caseId)
+        public async Task<IActionResult> GetSubjectsByCaseId(string caseId, string caseSource)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
+            {
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
             {
                 { "caseId", caseId}
             };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.acoApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.jcmsApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var response = new List<CaseSubjectsModel>();
-            response.AddRange(responseACO.data);
-            response.AddRange(responseJCMS.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                var response = new List<CaseSubjectsModel>();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.acoApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                    response.AddRange(responseACO.data);
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseSubjectsModel>, HttpResponseModel<CaseSubjectsModel>>(base.jcmsApiUrl + "case/GetSubjectByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                response.AddRange(responseJCMS.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
         [HttpGet]
         [Route("getpartiesbycaseid")]
-        public async Task<IActionResult> GetPartiesByCaseId(string caseId)
+        public async Task<IActionResult> GetPartiesByCaseId(string caseId, string caseSource)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
+            {
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
             {
                 { "caseId", caseId}
             };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.acoApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.jcmsApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var response = new List<CasePartiesModel>();
-            response.AddRange(responseACO.data);
-            response.AddRange(responseJCMS.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                var response = new List<CasePartiesModel>();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.acoApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                    response.AddRange(responseACO.data);
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasePartiesModel>, HttpResponseModel<CasePartiesModel>>(base.jcmsApiUrl + "case/GetPartiesByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                response.AddRange(responseJCMS.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
         [HttpGet]
         [Route("getannouncementsbycaseid")]
-        public async Task<IActionResult> GetAnnouncementByCaseId(string caseId)
+        public async Task<IActionResult> GetAnnouncementByCaseId(string caseId, string caseSource)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
+            {
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
             {
                 { "caseId", caseId}
             };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.acoApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.jcmsApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var response = new List<CaseAnnouncementModel>();
-            response.AddRange(responseACO.data);
-            response.AddRange(responseJCMS.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                var response = new List<CaseAnnouncementModel>();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.acoApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                    response.AddRange(responseACO.data);
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseAnnouncementModel>, HttpResponseModel<CaseAnnouncementModel>>(base.jcmsApiUrl + "case/GetAnnouncementsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                response.AddRange(responseJCMS.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
         [HttpGet]
         [Route("gethearingsbycaseid")]
-        public async Task<IActionResult> GetHearingsByCaseId(string caseId)
+        public async Task<IActionResult> GetHearingsByCaseId(string caseId, string caseSource)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
+            {
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
             {
                 { "caseId", caseId}
             };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.acoApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.jcmsApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var response = new List<CaseHearingModel>();
-            response.AddRange(responseACO.data);
-            response.AddRange(responseJCMS.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                var response = new List<CaseHearingModel>();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.acoApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                    response.AddRange(responseACO.data);
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseHearingModel>, HttpResponseModel<CaseHearingModel>>(base.jcmsApiUrl + "case/GetHearingsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                response.AddRange(responseJCMS.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
         [HttpGet]
         [Route("getdocumentsbycaseid")]
-        public async Task<IActionResult> GetDocumentsByCaseId(string caseId)
+        public async Task<IActionResult> GetDocumentsByCaseId(string caseId, string caseSource)
         {
-            HttpClientHelper httpClientHelper = new HttpClientHelper();
-            //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
-            var parameters = new Dictionary<string, string>
+            try
+            {
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var parameters = new Dictionary<string, string>
             {
                 { "caseId", caseId}
             };
-            var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.acoApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.jcmsApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
-            var response = new List<CaseDocumentModel>();
-            response.AddRange(responseACO.data);
-            response.AddRange(responseJCMS.data);
-            return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                var response = new List<CaseDocumentModel>();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.acoApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                    response.AddRange(responseACO.data);
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CaseDocumentModel>, HttpResponseModel<CaseDocumentModel>>(base.jcmsApiUrl + "case/GetDocumentsByCaseId?caseId=" + caseId, HttpMethod.Get, null, null);
+                response.AddRange(responseJCMS.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+            
         }
 
         [HttpGet]
