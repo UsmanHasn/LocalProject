@@ -40,14 +40,14 @@ namespace WebAPI.Controllers
                 }
                 logger.LogInformation("Language data found");
                 return new JsonResult(new { data = json, status = HttpStatusCode.OK });
-                
+
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error Language values");
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
-            
+
         }
         [HttpGet]
         [Route("getlanguagevaluesar")]
@@ -70,7 +70,7 @@ namespace WebAPI.Controllers
                 logger.LogError(ex, "Error Arabic Language values");
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
-            
+
         }
 
         [HttpGet]
@@ -313,7 +313,7 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(new { data = locationLookup, status = HttpStatusCode.OK });
         }
-        
+
         [HttpPost]
         [Route("AddCaseTypeLookup")]
         public IActionResult AddCaseTypeLookup(CaseTypesLookupModel caseTypeLookup)

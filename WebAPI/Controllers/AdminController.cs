@@ -95,6 +95,42 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
+        [HttpGet]
+        [Route("GetallEntity")]
+        public IActionResult GetallEntity()
+        {
+            List<Lkt_EntityModel> model = new List<Lkt_EntityModel>();
+            model = _AdminService.GetAllEntity();
+            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("DeleteEntity")]
+        public IActionResult DeleteEntity(Lkt_EntityModel model,string userName)
+        {
+            string Message;
+            Message = _AdminService.DeleteEntity(model, userName);
+            return new JsonResult(new { data = true, status = HttpStatusCode.OK,msg = Message });
+        }
+
+        [HttpGet]
+        [Route("GetEntityById")]
+        public IActionResult GetEntityById(int EntityId)
+        {
+            Lkt_EntityModel lkt_EntityModel = new Lkt_EntityModel();
+            lkt_EntityModel = _AdminService.GetEntityById(EntityId);
+            return new JsonResult(new { data = lkt_EntityModel, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("InsUpdLKT_Entity")]
+        public IActionResult InsUpdLKT_Entity(Lkt_EntityModel model, string userName)
+        {
+            string Message;
+            Message = _AdminService.InsUpdLKT_Entity(model, userName);
+            return new JsonResult(new { data = true, status = HttpStatusCode.OK, msg = Message });
+
+        }
 
         [HttpPost]
         [Route("InsertSms")]
@@ -117,7 +153,7 @@ namespace WebAPI.Controllers
         ///
 
 
-      
+
 
         [HttpGet]
         [Route("getSJCESP_AlertandNotification")]
@@ -125,16 +161,16 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Int64 CaseID, Boolean Affichable)
         {
-            var issue = await _context.SJCESP_AlertandNotification.FindAsync(CaseID , Affichable);
+            var issue = await _context.SJCESP_AlertandNotification.FindAsync(CaseID, Affichable);
             return issue == null ? NotFound() : Ok(issue);
         }
 
-        
+
         [HttpGet]
         [Route("getSJCESP_CaseInformation")]
         [ProducesResponseType(typeof(SJCESP_CaseInformation), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByIdentifiantAndAffichable(Int64 Identifiant , Boolean Affichable)
+        public async Task<IActionResult> GetByIdentifiantAndAffichable(Int64 Identifiant, Boolean Affichable)
         {
             var issue = await _context.SJCESP_CaseInformation.FindAsync(Identifiant, Affichable);
             return issue == null ? NotFound() : Ok(issue);
@@ -146,7 +182,7 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_Cases(string CRNO, Int64 IdDossierCivil)
         {
-            var issue = await _context.SJCESP_Cases.FindAsync(CRNO , IdDossierCivil);
+            var issue = await _context.SJCESP_Cases.FindAsync(CRNO, IdDossierCivil);
             return issue == null ? NotFound() : Ok(issue);
         }
 
@@ -282,7 +318,7 @@ namespace WebAPI.Controllers
         [Route("getUserActivityInfoLog")]
         public IActionResult GetUserActivityInfoLog(int Id, bool isSystemAdmin, string? userName, string? fromdate, string? todate)
         {
-            
+
             List<UserActivityLog> model = new List<UserActivityLog>();
             model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin, userName, fromdate, todate);
             //var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();
@@ -306,7 +342,7 @@ namespace WebAPI.Controllers
             return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
 
-       
+
 
     }
 }

@@ -11,6 +11,7 @@ using Service.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace Service.Concrete
             _smsRepository = smsRepository;
 
         }
-       
+
         public List<UserActivityLog> GetActivityLogs()
         {
 
@@ -334,12 +335,70 @@ namespace Service.Concrete
             return data;
         }
 
+        public List<Lkt_EntityModel> GetAllEntity()
+        {
+            SqlParameter[] param = new SqlParameter[0];
+            var data = _smsRepository.ExecuteStoredProcedure<Lkt_EntityModel>("sjc_getAllEntity", param);
+            return data.ToList();
+        }
+
+        public Lkt_EntityModel GetEntityById(int EntityId)
+        {
+            SqlParameter[] param = new SqlParameter[1];
+            param[0] = new SqlParameter("EntityId", EntityId);
+            var data = _smsRepository.ExecuteStoredProcedure<Lkt_EntityModel>("sjc_GetEntityById", param).FirstOrDefault();
+            return data;
+        }
+
+        public string DeleteEntity(Lkt_EntityModel lkt_EntityModel, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[11];
+            spParams[0] = new SqlParameter("@EntityId", lkt_EntityModel.EntityId);
+            spParams[1] = new SqlParameter("@Code", lkt_EntityModel.Code);
+            spParams[2] = new SqlParameter("@NameEn", lkt_EntityModel.NameEn);
+            spParams[3] = new SqlParameter("@NameAr", lkt_EntityModel.NameAr);
+            spParams[4] = new SqlParameter("@Createdby", userName);
+            spParams[5] = new SqlParameter("@CreatedDate", lkt_EntityModel.CreatedDate);
+            spParams[6] = new SqlParameter("@LastModifiedBy", userName);
+            spParams[7] = new SqlParameter("@LastModifiedDate", lkt_EntityModel.LastModifiedDate);
+            spParams[8] = new SqlParameter("@IsActive", lkt_EntityModel.IsActive);
+            spParams[9] = new SqlParameter("@Action", "d");
+            spParams[10] = new SqlParameter("Message", SqlDbType.NVarChar, 255);
+            spParams[10].Direction = ParameterDirection.Output;
+            _smsRepository.ExecuteStoredProcedure("sp_InsUpdLKT_Entity", spParams);
+            string msg = spParams[10].Value.ToString();
+
+            return msg;
+
+        }
+        public string InsUpdLKT_Entity(Lkt_EntityModel lkt_EntityModel, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[11];
+            spParams[0] = new SqlParameter("@EntityId", lkt_EntityModel.EntityId);
+            spParams[1] = new SqlParameter("@Code", lkt_EntityModel.Code);
+            spParams[2] = new SqlParameter("@NameEn", lkt_EntityModel.NameEn);
+            spParams[3] = new SqlParameter("@NameAr", lkt_EntityModel.NameAr);
+            spParams[4] = new SqlParameter("@Createdby", userName);
+            spParams[5] = new SqlParameter("@CreatedDate", lkt_EntityModel.CreatedDate);
+            spParams[6] = new SqlParameter("@LastModifiedBy", userName);
+            spParams[7] = new SqlParameter("@LastModifiedDate", lkt_EntityModel.LastModifiedDate);
+            spParams[8] = new SqlParameter("@IsActive", lkt_EntityModel.IsActive);
+            spParams[9] = new SqlParameter("@Action", lkt_EntityModel.@EntityId > 0 ? "u" : "i");
+            spParams[10] = new SqlParameter("Message", SqlDbType.NVarChar, 255);
+            spParams[10].Direction = ParameterDirection.Output;
+            _smsRepository.ExecuteStoredProcedure("sp_InsUpdLKT_Entity", spParams);
+            string msg = spParams[10].Value.ToString();
+
+            return msg;
+
+
+        }
 
         public List<UserActivityLog> GetActivityInfoLogs(int userId, bool isSystemAdmin, string? userName, string? fromdate, string? todate)
         {
             SqlParameter[] spParams = new SqlParameter[4];
             spParams[0] = new SqlParameter("UserId", isSystemAdmin != true ? userId : DBNull.Value);
-            spParams[1] = new SqlParameter("UserName", string.IsNullOrEmpty(userName)  ? "" : userName);
+            spParams[1] = new SqlParameter("UserName", string.IsNullOrEmpty(userName) ? "" : userName);
             spParams[2] = new SqlParameter("FromDate", string.IsNullOrEmpty(fromdate) ? "" : fromdate);
             spParams[3] = new SqlParameter("ToDate", string.IsNullOrEmpty(todate) ? "" : todate);
             var model = _systemSettingRepository.ExecuteStoredProcedure<UserActivityLog>("sjc_GetUserActivityInfoLogById", spParams).ToList();
