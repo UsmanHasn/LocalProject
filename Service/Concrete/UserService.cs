@@ -403,11 +403,12 @@ namespace Service.Concrete
             return null;
         }
 
-        public RevokedTokenModel GetrevokedTokenModel(int userId)
+        public RevokedTokenModel GetrevokedTokenModel(string? CivilID,string? Token)
         {
             RevokedTokenModel user = new RevokedTokenModel();
-            SqlParameter[] Param = new SqlParameter[1];
-            Param[0] = new SqlParameter("@UserId", userId);
+            SqlParameter[] Param = new SqlParameter[2];
+            Param[0] = new SqlParameter("@CivilID", CivilID);
+            Param[1] = new SqlParameter("@Token", Token);
             var data = _userRepository.ExecuteStoredProcedure<RevokedTokenModel>("GetRevokedTokens", Param).FirstOrDefault();
             if (data != null)
             {
@@ -426,7 +427,17 @@ namespace Service.Concrete
             Param[0] = new SqlParameter("Token", revokedToken.Token);
             Param[1] = new SqlParameter("Reason", revokedToken.Reason);
             Param[2] = new SqlParameter("CivilID", revokedToken.CivilID);
-            _userRepository.ExecuteStoredProcedure("UpsertRevokedToken", Param);
+            _userRepository.ExecuteStoredProcedure("InsertRevokedToken", Param);
+        }
+
+        public void UpdaterevokedTokenModel(RevokedTokenModel revokedToken)
+        {
+            RevokedTokenModel user = new RevokedTokenModel();
+            SqlParameter[] Param = new SqlParameter[3];
+            Param[0] = new SqlParameter("Token", revokedToken.Token);
+            Param[1] = new SqlParameter("Reason", revokedToken.Reason);
+            Param[2] = new SqlParameter("CivilID", revokedToken.CivilID);
+            _userRepository.ExecuteStoredProcedure("UpdateRevokedToken", Param);
         }
         //--------------------------------------------------------------------------------------------------------------------------
         //public bool AddActivity(UserActivityLog userModel, string userName)

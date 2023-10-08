@@ -22,8 +22,11 @@ namespace WebAPI.Controllers
         [Authorize]
         [HttpGet]
         [Route("getall")]
+        [ServiceFilter(typeof(TokenBasedAuthorizeFilter))]
         public IActionResult GetAll()
         {
+           // string token = GetTokenFromRequest();
+
             var check = GetCurrentUser();
             var pagesModel = _IpagesService.GetAllPages();
             return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });

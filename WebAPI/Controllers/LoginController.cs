@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
 
                     if (check.UserStatusId == 1)
                     {
-                        var data =_userService.GetrevokedTokenModel(user.UserId);
+                        var data =_userService.GetrevokedTokenModel(user.CivilID,null);
                         Service.Models.RevokedTokenModel revokedTokenModel = new Service.Models.RevokedTokenModel();
 
                         var token = GenerateToken(user);
@@ -72,7 +72,7 @@ namespace WebAPI.Controllers
                             {
                                 TokenRevocationService tokenRevocationService = new TokenRevocationService();
 
-                                _userService.InsertrevokedTokenModel(revokedTokenModel);
+                                _userService.UpdaterevokedTokenModel(revokedTokenModel);
                                 tokenRevocationService.RevokeToken(data.Token);
 
                             }

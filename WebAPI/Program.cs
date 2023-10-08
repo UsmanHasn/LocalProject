@@ -12,6 +12,7 @@ using Service.Models;
 using NLog.Web;
 using NLog.Config;
 using NLog;
+using Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +88,7 @@ builder.Services.AddScoped<IPagesService, PagesService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
 builder.Services.AddScoped<IRequestAccountService, RequestAccountsService>();
+builder.Services.AddScoped<TokenBasedAuthorizeFilter>();
 //builder.Services.AddSingleton<ILookupService>(new LookupService);
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
