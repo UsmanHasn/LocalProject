@@ -1,4 +1,6 @@
 ﻿using Data.Context;
+using Data.Interface;
+using Domain.Entities;
 using Domain.Helper;
 using Domain.Modeles;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,8 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
+using WebAPI.Manager;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace WebAPI.Controllers
 {
@@ -21,12 +25,16 @@ namespace WebAPI.Controllers
         private readonly IRequestAccountService? _requestAccountService;
         private readonly string UploadFolder = "\\wwwroot\\requestaccount\\"; // Replace with actual path
         private readonly IWebHostEnvironment environment;
+        private readonly IRepository<Users> _userRepository;
+        private readonly JsonRequestManager jsonRequestManager;
         string folderName = "";
         //string
-        public RequestAccountsController(IRequestAccountService requestAccountService, IWebHostEnvironment repository)
+        public RequestAccountsController(IRequestAccountService requestAccountService, IRepository<Users> userRepository, IWebHostEnvironment repository)
         {
             _requestAccountService = requestAccountService;
             environment = repository;
+            _userRepository = userRepository;
+            jsonRequestManager = new JsonRequestManager(_userRepository);
         }
 
         [HttpGet]
@@ -58,7 +66,7 @@ namespace WebAPI.Controllers
             //Approved
             requestAccountsModel.RequestStatusId = Convert.ToInt32(Approved.KeyValue);
             _requestAccountService.AddRequestAccount(requestAccountsModel, userName, "", 2);
-            
+
             return new JsonResult(new { data = requestAccountsModel, status = HttpStatusCode.OK });
         }
 
@@ -162,5 +170,27 @@ namespace WebAPI.Controllers
             _requestAccountService.UpdateRequestAccountHistory(requestId, responseStatusId, rejectedReason);
             return new JsonResult(new { data = true, status = HttpStatusCode.OK });
         }
+
+        [HttpGet]
+        [Route("LawyerVerify")]
+        public async Task<IActionResult> LawyerVerify(string civilId, string email)
+        {
+            try
+            {
+                string code = await jsonRequestManager.LawyerInfo_UpsertLawyer(civilId, email);
+                if (string.IsNullOrEmpty(code))
+                {
+                    return new JsonResult(new { success = false, Response = HttpStatusCode.OK });
+                }
+                return new JsonResult(new { success = true, Response = HttpStatusCode.OK,code=code });
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new { success = false, Response = HttpStatusCode.InternalServerError });
+            }
+
+        }
+
+
     }
 }

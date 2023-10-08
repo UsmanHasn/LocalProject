@@ -56,5 +56,7 @@ namespace Service.Models
         public bool IsEmailVerified { get; set; }
         public bool IsPhoneVerified { get; set; }
 
+        public int RoleId { get; set; }
+
     }
 }
