@@ -5,6 +5,7 @@ using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -23,8 +24,21 @@ namespace WebAPI.Controllers
         [Route("getall")]
         public IActionResult GetAll()
         {
+            var check = GetCurrentUser();
             var pagesModel = _IpagesService.GetAllPages();
             return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+        }
+        private Object GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+                var object1 = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+                var object2 = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            }
+            return null;
         }
 
         [HttpGet]

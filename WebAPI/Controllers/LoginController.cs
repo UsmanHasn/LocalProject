@@ -17,6 +17,8 @@ using Service.Interface;
 using Service.Concrete;
 using Service.Helper;
 using Microsoft.AspNet.Identity;
+using System.Drawing;
+using WebAPI.Manager;
 
 namespace WebAPI.Controllers
 {
@@ -54,8 +56,35 @@ namespace WebAPI.Controllers
 
                     if (check.UserStatusId == 1)
                     {
+                        var data =_userService.GetrevokedTokenModel(user.UserId);
+                        Service.Models.RevokedTokenModel revokedTokenModel = new Service.Models.RevokedTokenModel();
+
                         var token = GenerateToken(user);
+                        if (data != null)
+                        {
+                            
+                            
+                                revokedTokenModel.Token = data.Token;
+                                revokedTokenModel.Reason = "Revoked login again";
+                                revokedTokenModel.CivilID = data.CivilID;
+
+                            if (data.IsActive)
+                            {
+                                TokenRevocationService tokenRevocationService = new TokenRevocationService();
+
+                                _userService.InsertrevokedTokenModel(revokedTokenModel);
+                                tokenRevocationService.RevokeToken(data.Token);
+
+                            }
+                          
+                        }
                         //inser token into db 
+                        revokedTokenModel.Token = token;
+                        revokedTokenModel.Reason = "Revoked login again";
+                        revokedTokenModel.CivilID = user.CivilID;
+
+                        _userService.InsertrevokedTokenModel(revokedTokenModel);
+
                         _userService.AddActivity(user.UserId, "Login", "Form Authentication - User Logged In", DateTime.Now, user.Username);
                         return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
                     }

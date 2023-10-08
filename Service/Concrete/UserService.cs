@@ -5,11 +5,13 @@ using Domain.Modeles;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json.Linq;
 using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -399,6 +401,32 @@ namespace Service.Concrete
             }
 
             return null;
+        }
+
+        public RevokedTokenModel GetrevokedTokenModel(int userId)
+        {
+            RevokedTokenModel user = new RevokedTokenModel();
+            SqlParameter[] Param = new SqlParameter[1];
+            Param[0] = new SqlParameter("@UserId", userId);
+            var data = _userRepository.ExecuteStoredProcedure<RevokedTokenModel>("GetRevokedTokens", Param).FirstOrDefault();
+            if (data != null)
+            {
+                user = data;
+                // user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+                return user;
+            }
+
+            return null;
+        }
+
+        public void InsertrevokedTokenModel(RevokedTokenModel revokedToken)
+        {
+            RevokedTokenModel user = new RevokedTokenModel();
+            SqlParameter[] Param = new SqlParameter[3];
+            Param[0] = new SqlParameter("Token", revokedToken.Token);
+            Param[1] = new SqlParameter("Reason", revokedToken.Reason);
+            Param[2] = new SqlParameter("CivilID", revokedToken.CivilID);
+            _userRepository.ExecuteStoredProcedure("UpsertRevokedToken", Param);
         }
         //--------------------------------------------------------------------------------------------------------------------------
         //public bool AddActivity(UserActivityLog userModel, string userName)

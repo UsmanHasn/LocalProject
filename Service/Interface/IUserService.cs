@@ -15,7 +15,8 @@ namespace Service.Interface
     {
         List<UserListModel> GetAllUsers(int userId);
         List<UserAssignRole> GetAllUserRole(int UID);
-
+        void InsertrevokedTokenModel(RevokedTokenModel revokedToken);
+        RevokedTokenModel GetrevokedTokenModel(int userId);
         bool Add(UserModel userModel, string userName);
         bool UpdateUser(UserModel userModel, string userName);
         bool UpdateUserFirstLogin(int UserId, string userName);
