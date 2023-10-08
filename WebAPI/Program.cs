@@ -92,6 +92,8 @@ builder.Services.AddScoped<IRequestAccountService, RequestAccountsService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
@@ -126,6 +128,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors();
 app.UseRouting();
+//app.UseAuthorization();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {

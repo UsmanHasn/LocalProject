@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
 using Service.Interface;
@@ -17,6 +18,7 @@ namespace WebAPI.Controllers
         {
             _IpagesService = pagesService;
         }
+        [Authorize]
         [HttpGet]
         [Route("getall")]
         public IActionResult GetAll()
