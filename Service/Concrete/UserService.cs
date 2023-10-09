@@ -148,15 +148,23 @@ namespace Service.Concrete
         }
         public bool VerifyOtp(OtpModel DATA)
         {
-            int dataMenu = _userRepository.ExecuteStoredProcedure<int>("sp_VerifyOTP",
+            try
+            {
+                var dataMenu = _userRepository.ExecuteStoredProcedure<OTPResult>("sp_VerifyOTP",
                 new Microsoft.Data.SqlClient.SqlParameter("otp", (int)Convert.ToInt64(DATA.OtpId.ToString()))
                  , new Microsoft.Data.SqlClient.SqlParameter("userId", DATA.UserId)
                  , new Microsoft.Data.SqlClient.SqlParameter("OtpType", DATA.OtpType)
                  , new Microsoft.Data.SqlClient.SqlParameter("Email", DATA.Email)
                  , new Microsoft.Data.SqlClient.SqlParameter("MobileNumber", DATA.MobileNumber)
-                 ).FirstOrDefault();
+                 );
 
-            return dataMenu == 1 ? true : false;
+                return dataMenu == null ? false : dataMenu.FirstOrDefault().result == 1 ? true : false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
         public bool UpdateUser(UserModel userModel, string userName)
         {

@@ -204,14 +204,16 @@ namespace WebAPI.Controllers
         public IActionResult GetFileName(int UserId)
         {
             PostRequest model = new PostRequest();
+            var data = "no_image.jpg";
             model = postService.GetFileName(UserId);
             if (model == null)
             {
-                var data = model.FileName == "" ? "no_image.jpg" : model.FileName;
+                //var data =  model.FileName == "" ? "no_image.jpg" : model.FileName;
                 // var data = model.FileName;
                 return new JsonResult(new { data = data, status = HttpStatusCode.OK });
             }
-            return new JsonResult(new { data = model.FileName, status = HttpStatusCode.OK });
+            data = model.FileName == "" ? "no_image.jpg" : model.FileName;
+            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
         }
     }
 }

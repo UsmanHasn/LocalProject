@@ -106,7 +106,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -125,7 +125,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -204,7 +204,7 @@ namespace WebAPI.Controllers
             var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == userLogin.Username && x.Password == userLogin.Password);
             if (currentUser != null)
             {
-                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id && x.Deleted == false, x => x.Role).Role;
                 return new UsersModel()
                 {
                     UserId = currentUser.Id,

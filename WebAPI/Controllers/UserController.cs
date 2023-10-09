@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("InsertUser")]
-        public IActionResult Add(UserModel model, string userName)
+        public async Task<IActionResult> Add(UserModel model, string userName)
         {
             if (model.Id > 0)
             {
@@ -77,14 +77,14 @@ namespace WebAPI.Controllers
                     _userService.Add(model, userName);
                     try
                     {
-                        jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
+                        await jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
                     }
                     catch (Exception)
                     {
                     }
                     try
                     {
-                        jsonRequestManager.LawyerInfo_UpsertLawyer(model.CivilID, model.Email);
+                        await jsonRequestManager.LawyerInfo_UpsertLawyer(model.CivilID, model.Email);
                     }
                     catch (Exception)
                     {
@@ -159,8 +159,15 @@ namespace WebAPI.Controllers
                 int index = dataByte % validChars.Length;
                 otpBuilder.Append(validChars[index]);
             }
-
-            EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
+            if (OTPType == 1)
+            {
+                EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
+            }
+            else
+            {
+                
+                EmailHelper.sendMail(Email + "@test.com", "SMS OTP Verification - "+ Email +" - التحقق من OTP SMS", otpBuilder.ToString());
+            }
             Service.Models.OtpModel model = new Service.Models.OtpModel()
             {
                 OtpId = otpBuilder.ToString(),

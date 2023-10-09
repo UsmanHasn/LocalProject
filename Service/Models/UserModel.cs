@@ -59,4 +59,8 @@ namespace Service.Models
         public int RoleId { get; set; }
 
     }
+    public class OTPResult
+    {
+        public int? result { get; set; }
+    }
 }
