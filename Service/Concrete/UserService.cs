@@ -243,7 +243,7 @@ namespace Service.Concrete
         }
         public bool UpdateLoginAttempts(int UserId)
         {
-            UserModel userModel = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId)).FirstOrDefault();
+            UserModel userModel = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserByCivilId", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId)).FirstOrDefault();
             Users users = new Users()
             {
                 Id = userModel.Id,

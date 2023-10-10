@@ -232,8 +232,15 @@ namespace WebAPI.Controllers
                 int index = dataByte % validChars.Length;
                 otpBuilder.Append(validChars[index]);
             }
-
-            EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
+            if (OTPType == 1)
+            {
+                EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
+            }
+            else
+            {
+                
+                EmailHelper.sendMail(Email + "@test.com", "SMS OTP Verification - "+ Email +" - التحقق من OTP SMS", otpBuilder.ToString());
+            }
             Service.Models.OtpModel model = new Service.Models.OtpModel()
             {
                 OtpId = otpBuilder.ToString(),
