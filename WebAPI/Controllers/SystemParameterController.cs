@@ -21,57 +21,92 @@ namespace WebAPI.Controllers
         [Route("getallsystemparameter")]
         public IActionResult GetAllSystemParmeter()
         {
-            var systemParameterModel = _isystemParameterService.GetAllsystemParameter();
-            return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+            try
+            {
+                var systemParameterModel = _isystemParameterService.GetAllsystemParameter();
+                return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+               return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+
         }
 
         [HttpPost]
         [Route("insertsystemparameter")]
         public IActionResult Add(SystemParameterModel systemParameterModel, string userName)
         {
-            if (systemParameterModel.systemSettingId > 0)
+            try
             {
-                SystemParameterModel model = _isystemParameterService.GetsystemParameterById(systemParameterModel.systemSettingId);
-                systemParameterModel.createdDate = model.createdDate;
-                systemParameterModel.createdBy = model.createdBy;
-                _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
-                return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
-            }
-            else
-            {
-                SystemParameterModel sysModel = _isystemParameterService.GetsystemParameterByName(systemParameterModel.keyName) ;
-                if (sysModel == null)
+                if (systemParameterModel.systemSettingId > 0)
                 {
-                    _isystemParameterService.Add(systemParameterModel, userName);
+                    SystemParameterModel model = _isystemParameterService.GetsystemParameterById(systemParameterModel.systemSettingId);
+                    systemParameterModel.createdDate = model.createdDate;
+                    systemParameterModel.createdBy = model.createdBy;
+                    _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
                     return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
                 }
                 else
                 {
-                    return null;
+                    SystemParameterModel sysModel = _isystemParameterService.GetsystemParameterByName(systemParameterModel.keyName);
+                    if (sysModel == null)
+                    {
+                        _isystemParameterService.Add(systemParameterModel, userName);
+                        return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
-            return null;
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         [HttpDelete]
         [Route("deletesystemparameter")]
         public IActionResult Deletesystemparameter(int id, string userName)
-        {if (id != 0)
+        {
+            try
             {
-                var systemParameterModel = _isystemParameterService.DeletesystemParameter(id, userName);
-                return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+                if (id != 0)
+                {
+                    var systemParameterModel = _isystemParameterService.DeletesystemParameter(id, userName);
+                    return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
+                }
+                else
+                {
+                    return new JsonResult(new { status = HttpStatusCode.OK });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new JsonResult(new { status = HttpStatusCode.OK });
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
+            
 
         }
         [HttpPut]
         [Route("Updatesystemparameter")]
         public IActionResult Updatesystemparameter(SystemParameterModel systemParameterModel, string userName)
         {
-            var systemparameter = _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
-            return new JsonResult(new { data = systemparameter, status = HttpStatusCode.OK });
+            try
+            {
+                var systemparameter = _isystemParameterService.UpdatesystemParameter(systemParameterModel, userName);
+                return new JsonResult(new { data = systemparameter, status = HttpStatusCode.OK });
+
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
 
         }
         [HttpGet]
@@ -79,8 +114,17 @@ namespace WebAPI.Controllers
         public IActionResult GetUserById(int Id)
         {
             SystemParameterModel model = new SystemParameterModel();
-            model = _isystemParameterService.GetsystemParameterById(Id);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _isystemParameterService.GetsystemParameterById(Id);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

@@ -31,8 +31,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllService()
         {
             List<Domain.Modeles.ServicesModel> model = new List<Domain.Modeles.ServicesModel>();
-            model = serviceSubCategory.GetAllServices();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = serviceSubCategory.GetAllServices();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+           
         }
 
         [HttpPut]
@@ -42,9 +51,18 @@ namespace WebAPI.Controllers
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(int ServiceId, Services issue)
         {
-            _context.Entry(issue).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                _context.Entry(issue).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+            
         }
 
         //[HttpPut]
@@ -67,11 +85,20 @@ namespace WebAPI.Controllers
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int ServiceId)
         {
-            var issueToDelete = await _context.Services.FindAsync(ServiceId);
-            if (issueToDelete == null) return NotFound();
-            _context.Services.Remove(issueToDelete);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                var issueToDelete = await _context.Services.FindAsync(ServiceId);
+                if (issueToDelete == null) return NotFound();
+                _context.Services.Remove(issueToDelete);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+          
         }
 
 
@@ -92,9 +119,18 @@ namespace WebAPI.Controllers
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateServiceCategoryLookup(int ServiceCategoryId, Domain.Entities.ServiceCategoryLookup issue)
         {
-            _context.Entry(issue).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                _context.Entry(issue).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -105,11 +141,20 @@ namespace WebAPI.Controllers
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteServiceCategoryLookup(int ServiceCategoryId)
         {
-            var ServiceCategoryLookupToDelete = await _context.ServiceCategoryLookup.FindAsync(ServiceCategoryId);
-            if (ServiceCategoryLookupToDelete == null) return NotFound();
-            _context.ServiceCategoryLookup.Remove(ServiceCategoryLookupToDelete);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                var ServiceCategoryLookupToDelete = await _context.ServiceCategoryLookup.FindAsync(ServiceCategoryId);
+                if (ServiceCategoryLookupToDelete == null) return NotFound();
+                _context.ServiceCategoryLookup.Remove(ServiceCategoryLookupToDelete);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -119,8 +164,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllServiceSubCategoryLookup()
         {
             List<ServiceSubCategoryLookupModel> model = new List<ServiceSubCategoryLookupModel>();
-            model = serviceSubCategory.GetAllSubService();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = serviceSubCategory.GetAllSubService();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPut]
@@ -130,9 +184,18 @@ namespace WebAPI.Controllers
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateServiceSubCategoryLookup(int ServiceSubCategoryId, ServiceSubCategoryLookup issue)
         {
-            _context.Entry(issue).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                _context.Entry(issue).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         [HttpDelete]
         [Route("DeleteServiceSubCategoryLookup")]
@@ -141,11 +204,20 @@ namespace WebAPI.Controllers
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteServiceSubCategoryLookup(int ServiceSubCategoryId)
         {
-            var ServiceSubCategoryLookupToDelete = await _context.ServiceSubCategoryLookup.FindAsync(ServiceSubCategoryId);
-            if (ServiceSubCategoryLookupToDelete == null) return NotFound();
-            _context.ServiceSubCategoryLookup.Remove(ServiceSubCategoryLookupToDelete);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                var ServiceSubCategoryLookupToDelete = await _context.ServiceSubCategoryLookup.FindAsync(ServiceSubCategoryId);
+                if (ServiceSubCategoryLookupToDelete == null) return NotFound();
+                _context.ServiceSubCategoryLookup.Remove(ServiceSubCategoryLookupToDelete);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         //[HttpGet]
@@ -181,8 +253,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var issue = await _context.Services.FindAsync(id);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.Services.FindAsync(id);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
@@ -190,9 +271,18 @@ namespace WebAPI.Controllers
         [ProducesResponseType(typeof(Services), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(Services issue)
         {
-            await _context.Services.AddAsync(issue);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = issue.ServiceSubCategoryId }, issue);
+            try
+            {
+                await _context.Services.AddAsync(issue);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = issue.ServiceSubCategoryId }, issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 /// <summary>
 /// /////////////////////
@@ -205,8 +295,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByServiceSubCategoryLookupid(int id)
         {
-            var issue = await _context.ServiceSubCategoryLookup.FindAsync(id);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.ServiceSubCategoryLookup.FindAsync(id);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
@@ -214,9 +313,18 @@ namespace WebAPI.Controllers
         [ProducesResponseType(typeof(ServiceSubCategoryLookup), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateServiceSubCategoryLookup(ServiceSubCategoryLookup issue)
         {
-            await _context.ServiceSubCategoryLookup.AddAsync(issue);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = issue.ServiceSubCategoryId }, issue);
+            try
+            {
+                await _context.ServiceSubCategoryLookup.AddAsync(issue);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = issue.ServiceSubCategoryId }, issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         ////////////////////////////////////////////
@@ -228,8 +336,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByServiceCategoryLookupid(int id)
         {
-            var issue = await _context.ServiceCategoryLookup.FindAsync(id);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.ServiceCategoryLookup.FindAsync(id);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+            
         }
 
         [HttpPost]
@@ -237,43 +354,79 @@ namespace WebAPI.Controllers
         [ProducesResponseType(typeof(Domain.Entities.ServiceCategoryLookup), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateServiceCategoryLookup(Domain.Entities.ServiceCategoryLookup issue)
         {
-            await _context.ServiceCategoryLookup.AddAsync(issue);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = issue.ServiceCategoryId }, issue);
+            try
+            {
+                await _context.ServiceCategoryLookup.AddAsync(issue);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = issue.ServiceCategoryId }, issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
         [HttpGet]
         [Route("BindServiceCat")]
         public IActionResult BindServiceCat()
-
         {
+
             List<Service.Models.ServiceCategoryLookup> model = new List<Service.Models.ServiceCategoryLookup>();
-            model = serviceSubCategory.BindServiceCategory();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = serviceSubCategory.BindServiceCategory();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
         [Route("AddServiceSubCat")]
         public IActionResult AddServiceSubCat(ServiceSubCategoryLookupModel model,string userName)
         {
-            if (model.Id > 0)
+            try
             {
-                serviceSubCategory.UpdateServiceSubCat(model.Id, model, userName);
+                if (model.Id > 0)
+                {
+                    serviceSubCategory.UpdateServiceSubCat(model.Id, model, userName);
+                }
+                else
+                {
+                    serviceSubCategory.AddServiceSubCat(model, userName);
+                }
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
-            else
+            catch (Exception ex)
             {
-                serviceSubCategory.AddServiceSubCat(model, userName);
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+
         }
 
         [HttpGet]
         [Route("GetAllServiceSubCategoryLookupById")]
         public IActionResult GetAllServiceSubCategoryLookupById(int id)
         {
-            var model = serviceSubCategory.GetDataById(id);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = serviceSubCategory.GetDataById(id);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -281,8 +434,17 @@ namespace WebAPI.Controllers
         [Route("DeleteServiceSubcat")]
         public void DeleteServiceSubcat(int id)
         {
-            serviceSubCategory.DeleteServiceSubCat(id);
-            new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            try
+            {
+                serviceSubCategory.DeleteServiceSubCat(id);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                 new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

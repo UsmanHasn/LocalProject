@@ -42,6 +42,7 @@ namespace WebAPI.Controllers
         [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
+           
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
                 var user = Authenticate(userLogin);
@@ -83,19 +84,28 @@ namespace WebAPI.Controllers
         [Route("authenticatemobile")]
         public async Task<ActionResult> Login(string civilNo)
         {
-            var user = await Authenticate(civilNo);
-            if (user != null && user.UserId == 0)
+            try
             {
-                return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
+                var user = await Authenticate(civilNo);
+                if (user != null && user.UserId == 0)
+                {
+                    return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
+                }
+                else if (user != null && user.UserId > 0)
+                {
+                    var token = GenerateToken(user);
+                    //inser token into db 
+                    _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
+                    return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                }
+                return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
             }
-            else if (user != null && user.UserId > 0)
+            catch (Exception ex)
             {
-                var token = GenerateToken(user);
-                //inser token into db 
-                _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
-                return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
-            return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
+
         }
         [HttpGet]
         [Route("InvokeMobilePKI")]
@@ -139,25 +149,34 @@ namespace WebAPI.Controllers
         [Route("RefreshToken")]
         public async Task<ActionResult> RefreshToken(string token, string identifier) 
         {
-            var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == identifier);
-            if (currentUser != null)
+            try
             {
-                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
-                var user = new UsersModel()
+                var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == identifier);
+                if (currentUser != null)
                 {
-                    UserId = currentUser.Id,
-                    Username = currentUser.UserName,
-                    UsernameAr = currentUser.UserNameAr,
-                    CivilID = currentUser.CivilNumber.ToString(),
-                    Email = currentUser.Email,
-                    MobileNo = currentUser.PhoneNumber,
-                    RoleId = role == null ? 0 : role.Id,
-                    Role = role == null ? "" : role.Name,
-                    LastLoginDate = currentUser.LastLoginDate
-                };
-                return new JsonResult(new { token = GetRefreshToken(user), status = true });
+                    Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                    var user = new UsersModel()
+                    {
+                        UserId = currentUser.Id,
+                        Username = currentUser.UserName,
+                        UsernameAr = currentUser.UserNameAr,
+                        CivilID = currentUser.CivilNumber.ToString(),
+                        Email = currentUser.Email,
+                        MobileNo = currentUser.PhoneNumber,
+                        RoleId = role == null ? 0 : role.Id,
+                        Role = role == null ? "" : role.Name,
+                        LastLoginDate = currentUser.LastLoginDate
+                    };
+                    return new JsonResult(new { token = GetRefreshToken(user), status = true });
+                }
+                return new JsonResult(new { message = "Invalid Authentication", status = false });
             }
-            return new JsonResult(new { message = "Invalid Authentication", status = false  });
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         // To generate token
         private string GenerateToken(UsersModel user)

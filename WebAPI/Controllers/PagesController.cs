@@ -21,8 +21,17 @@ namespace WebAPI.Controllers
         [Route("getall")]
         public IActionResult GetAll()
         {
-            var pagesModel = _IpagesService.GetAllPages();
-            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            try
+            {
+                var pagesModel = _IpagesService.GetAllPages();
+                return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -30,40 +39,77 @@ namespace WebAPI.Controllers
         public IActionResult GetPageById(int Id)
         {
             PagesModel model = new PagesModel();
-            model = _IpagesService.GetpagesById(Id);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _IpagesService.GetpagesById(Id);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
         [Route("Insertpages")]
         public IActionResult Addpages(PagesModel pagesModel, string username)
         {
-            if (pagesModel.Id > 0)
+            try
             {
-                PagesModel model = _IpagesService.GetpagesById(pagesModel.Id);
-                pagesModel.CreatedDate = model.CreatedDate;
-                pagesModel.CreatedBy = model.CreatedBy;
-                _IpagesService.Updatepages(pagesModel, username);
+                if (pagesModel.Id > 0)
+                {
+                    PagesModel model = _IpagesService.GetpagesById(pagesModel.Id);
+                    pagesModel.CreatedDate = model.CreatedDate;
+                    pagesModel.CreatedBy = model.CreatedBy;
+                    _IpagesService.Updatepages(pagesModel, username);
+                }
+                else
+                {
+                    _IpagesService.Addpages(pagesModel, username);
+                }
+                return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
             }
-            else
+            catch (Exception ex)
             {
-                _IpagesService.Addpages(pagesModel, username);
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
-            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK});
+          
         }
         [HttpDelete]
         [Route("Deletepages")]
         public IActionResult Deletepages(int id, string username)
         {
-            var pagesModel = _IpagesService.Deletepages(id, username);
-            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            try
+            {
+                var pagesModel = _IpagesService.Deletepages(id, username);
+                return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         [HttpPut]
         [Route("Updatepages")]
         public IActionResult Updatepages(PagesModel pagesModel, string username) 
         {
-            var model = _IpagesService.Updatepages(pagesModel, username);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = _IpagesService.Updatepages(pagesModel, username);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

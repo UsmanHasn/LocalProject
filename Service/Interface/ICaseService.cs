@@ -61,5 +61,11 @@ namespace Service.Interface
 
         string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel , string dmlType);
         List<LKT_SubjectModel> GetAll();
+
+        List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId);
+
+        List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId);
+
+        void InsUpDel_CorCaseSubject(CORCaseSubject cORCaseSubject);
     }
 }

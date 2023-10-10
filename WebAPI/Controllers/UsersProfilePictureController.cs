@@ -38,8 +38,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int UserId)
         {
-            var issue = await _DbContext.UsersProfilePictureView.FindAsync(UserId);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _DbContext.UsersProfilePictureView.FindAsync(UserId);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+         
         }
 
         [HttpPut]

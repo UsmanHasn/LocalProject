@@ -22,29 +22,65 @@ namespace WebAPI.Controllers
         [Route("getall")]
         public IActionResult GetAll()
         {
-            var pagesModel = _IRolePermissionService.GetAllRolePermissions();
-            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            try
+            {
+                var pagesModel = _IRolePermissionService.GetAllRolePermissions();
+                return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+          
         }
         [HttpPost]
         [Route("Insertrolepermission")]
         public IActionResult Addrolepermission(RolePermissionModel rolePermissionModel,string userName)
         {
-            _IRolePermissionService.AddRolePermission(rolePermissionModel, userName);
-            return new JsonResult(new { data = rolePermissionModel, status = HttpStatusCode.OK });
+            try
+            {
+                _IRolePermissionService.AddRolePermission(rolePermissionModel, userName);
+                return new JsonResult(new { data = rolePermissionModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+            
         }
         [HttpDelete]
         [Route("Deleterolepermission")]
         public IActionResult Deleterolepermission(int id, string userName)
         {
-         var rolePermissionModel =   _IRolePermissionService.DeleteRolePermission(id, userName);
-            return new JsonResult(new { data = rolePermissionModel, status = HttpStatusCode.OK });
+            try
+            {
+                var rolePermissionModel = _IRolePermissionService.DeleteRolePermission(id, userName);
+                return new JsonResult(new { data = rolePermissionModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+         
         }
         [HttpPut]
         [Route("Updaterolepermission")]
         public IActionResult Updaterolepermission(RolePermissionModel rolePermissionModel, string userName)
         {
-            var rolePermission = _IRolePermissionService.UpdateRolePermission(rolePermissionModel, userName);
-            return new JsonResult(new { data = rolePermission, status = HttpStatusCode.OK });
+            try
+            {
+                var rolePermission = _IRolePermissionService.UpdateRolePermission(rolePermissionModel, userName);
+                return new JsonResult(new { data = rolePermission, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

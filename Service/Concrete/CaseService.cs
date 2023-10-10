@@ -519,5 +519,34 @@ namespace Service.Concrete
             SqlParameter[] parameters = new SqlParameter[0];
             return _systemSettingRepository.ExecuteStoredProcedure<LKT_SubjectModel>("sjc_GetLKT_Subject", parameters).ToList();
         }
+
+        public List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CaseGrpCatTypeId ", CaseGrpCatTypeId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CORCaseSubjectModel>("sjc_GetUnAssignedSubject", spParams).ToList();
+        }
+
+        public List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CaseGrpCatTypeId ", CaseGrpCatTypeId);
+            return _systemSettingRepository.ExecuteStoredProcedure<CORCaseSubjectModel>("sjc_GetAssignedSubject", spParams).ToList();
+        }
+
+        public void InsUpDel_CorCaseSubject(CORCaseSubject cORCaseSubject)
+        {
+            string sId = "";
+            foreach (var subjectId in cORCaseSubject.SubjectId)
+            {
+                sId = sId + subjectId.ToString() + ",";
+            }
+            sId = sId.Substring(0, sId.Length - 1);
+            SqlParameter[] parameters = new SqlParameter[3];
+            parameters[0] = new SqlParameter("@CaseGrpCatTypeId", cORCaseSubject.CaseGrpCatTypeId);
+            parameters[1] = new SqlParameter("@SubjectId", sId);
+            parameters[2] = new SqlParameter("@CreatedBy", cORCaseSubject.CreatedBy);
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COR_CaseSubject", parameters);
+        }
     }
 }

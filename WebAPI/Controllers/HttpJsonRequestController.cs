@@ -419,9 +419,16 @@ namespace WebAPI.Controllers
         [Route("getEntity")]
         public IActionResult GetEntity()
         {
-            var data = _userRepository.ExecuteStoredProcedure<EntityModel>("sjc_GetEntity").ToList();
-            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
-        }
+            try
+            {
+                var data = _userRepository.ExecuteStoredProcedure<EntityModel>("sjc_GetEntity").ToList();
+                return new JsonResult(new { data = data, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+              return  new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
+            }
+        }
     }
 }
