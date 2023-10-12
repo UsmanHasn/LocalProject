@@ -22,11 +22,13 @@ namespace WebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IRepository<Users> _userRepository;
         private readonly JsonRequestManager jsonRequestManager;
-        public UserController(IUserService userService, IRepository<Users> userRepository)
+        private readonly IAdminService? _AdminService;
+        public UserController(IUserService userService, IRepository<Users> userRepository, IAdminService adminService)
         {
             _userService = userService;
             _userRepository = userRepository;
             jsonRequestManager = new JsonRequestManager(_userRepository);
+            _AdminService = adminService;
         }
 
         [HttpGet]
@@ -44,7 +46,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
 
@@ -97,6 +99,9 @@ namespace WebAPI.Controllers
                     model.CreatedBy = _userModel.CreatedBy;
                     model.CivilExpiryDate = _userModel.CivilExpiryDate;
                     _userService.UpdateUser(model, userName);
+
+
+
                 }
                 else
                 {
@@ -106,7 +111,7 @@ namespace WebAPI.Controllers
                         _userService.Add(model, userName);
                         try
                         {
-                         await   jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
+                            await jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
                         }
                         catch (Exception)
                         {
@@ -126,6 +131,9 @@ namespace WebAPI.Controllers
 
                 }
                 _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
+
+                
+
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -133,12 +141,12 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
         [Route("UpdateUserFirstLogin")]
-        public IActionResult UpdateFirstLogin(int UserId,string userName)
+        public IActionResult UpdateFirstLogin(int UserId, string userName)
         {
             try
             {
@@ -155,7 +163,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-     
+
         }
 
 
@@ -214,7 +222,7 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GenerateNumericOTP")]
-        public IActionResult GenerateNumericOTP(string Email, int UserId,int OTPType)
+        public IActionResult GenerateNumericOTP(string Email, int UserId, int OTPType)
         {
             try
             {
@@ -226,30 +234,30 @@ namespace WebAPI.Controllers
                     rng.GetBytes(randomBytes);
                 }
 
-            StringBuilder otpBuilder = new StringBuilder(6);
-            foreach (byte dataByte in randomBytes)
-            {
-                int index = dataByte % validChars.Length;
-                otpBuilder.Append(validChars[index]);
-            }
-            if (OTPType == 1)
-            {
-                EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
-            }
-            else
-            {
-                
-                EmailHelper.sendMail(Email + "@test.com", "SMS OTP Verification - "+ Email +" - التحقق من OTP SMS", otpBuilder.ToString());
-            }
-            Service.Models.OtpModel model = new Service.Models.OtpModel()
-            {
-                OtpId = otpBuilder.ToString(),
-                OtpType = OTPType,
-                UserId = UserId,
-                EmailSent = true,
-                OTPExpiry = DateTime.Now.AddMinutes(2)
-            };
-            _userService.InsertOtp(model);
+                StringBuilder otpBuilder = new StringBuilder(6);
+                foreach (byte dataByte in randomBytes)
+                {
+                    int index = dataByte % validChars.Length;
+                    otpBuilder.Append(validChars[index]);
+                }
+                if (OTPType == 1)
+                {
+                    EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
+                }
+                else
+                {
+
+                    EmailHelper.sendMail(Email + "@test.com", "SMS OTP Verification - " + Email + " - التحقق من OTP SMS", otpBuilder.ToString());
+                }
+                Service.Models.OtpModel model = new Service.Models.OtpModel()
+                {
+                    OtpId = otpBuilder.ToString(),
+                    OtpType = OTPType,
+                    UserId = UserId,
+                    EmailSent = true,
+                    OTPExpiry = DateTime.Now.AddMinutes(2)
+                };
+                _userService.InsertOtp(model);
 
 
                 return new JsonResult(new { data = otpBuilder.ToString(), email = Email, otpexpiry = model.OTPExpiry, status = HttpStatusCode.OK });

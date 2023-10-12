@@ -189,6 +189,22 @@ namespace WebAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("getallApprovedRequest")]
+        public IActionResult getallApprovedRequest(int userId)
+        {
+            List<RequestAccountsModel> model = new List<RequestAccountsModel>();
+            try
+            {
+                model = _requestAccountService.GetAllApproved(userId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+        }
+
         [HttpGet("{imageName}")]
         public IActionResult GetImage(string imageName)
         {

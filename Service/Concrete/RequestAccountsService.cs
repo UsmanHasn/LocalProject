@@ -77,6 +77,31 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
         }
 
+        public List<RequestAccountsModel> GetAllApproved(int userId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", userId);
+            var data = _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
+            var model = data.Select(x => new RequestAccountsModel()
+            {
+                ActionTypeId = x.ActionTypeId,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
+                Role = x.Role,
+                RoleNameEn = x.RoleNameEn,
+                RoleNameAr = x.RoleNameAr,
+                EntityId = x.EntityId,
+                EntityNameEn = x.EntityNameEn,
+                EntityNameAr = x.EntityNameAr,
+                Comments = x.Comments,
+                RequestStatusId = x.RequestStatusId,
+                RequestStatusNameEn = x.RequestStatusNameEn,
+                RequestStatusNameAr = x.RequestStatusNameAr,
+                CreatedDate = x.CreatedDate
+            }).Where(x => x.RequestStatusNameEn == "Approved").ToList();
+            return model;
+        }
+
         public List<RequestAccountsModel> GetAllForAdmin(string ActionTypeId, string CivilNo, string UserName)
         {
             SqlParameter[] spParams = new SqlParameter[3];

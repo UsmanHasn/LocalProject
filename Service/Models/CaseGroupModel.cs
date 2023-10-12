@@ -68,6 +68,7 @@
     {
         public int CaseGroupId { get; set; }
         public int LocationId { get; set; }
+        public int LinkLocationId { get; set; }
         public int GovernateId { get; set; }
         public string Code { get; set; }
         public string NameEn { get; set; }

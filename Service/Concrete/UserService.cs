@@ -408,6 +408,17 @@ namespace Service.Concrete
 
             return null;
         }
+
+        public bool InsertAlert(int userId, string roleId, string createdBy)
+        {
+            SqlParameter[] spParams = new SqlParameter[3];
+            spParams[0] = new SqlParameter("@UserId", userId);
+            spParams[1] = new SqlParameter("@RoleId", roleId);
+            spParams[2] = new SqlParameter("@CreatedBy", createdBy);
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_InsertAlert", spParams);
+            return true;
+
+        }
         //--------------------------------------------------------------------------------------------------------------------------
         //public bool AddActivity(UserActivityLog userModel, string userName)
         //{
