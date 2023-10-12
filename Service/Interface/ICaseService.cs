@@ -37,7 +37,7 @@ namespace Service.Interface
 
         bool DeleteCaseParties(CasePartiesDelete deleteCaseParties);
         List<CaseGroupModel> GetCaseGroup();
-        CaseGroupCountValues GetCaseGroupCountValues();
+        List<CaseGroupCountValues> GetCaseGroupCountValues();
         List<GovernoratesModel> GetGovernoratesByCaseGroupId(int caseGroupId);
         List<LocationModel> GetLocationByGovernorateId(int governorateId);
         List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations();

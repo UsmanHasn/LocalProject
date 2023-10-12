@@ -261,10 +261,10 @@ namespace Service.Concrete
             SqlParameter[] parameters = new SqlParameter[0];
             return _systemSettingRepository.ExecuteStoredProcedure<CaseGroupModel>("COR_GetCaseGroup", parameters).ToList();
         }
-        public CaseGroupCountValues GetCaseGroupCountValues()
+        public List<CaseGroupCountValues> GetCaseGroupCountValues()
         {
             SqlParameter[] parameters = new SqlParameter[0];
-            return _systemSettingRepository.ExecuteStoredProcedure<CaseGroupCountValues>("sp_COA_GroupCounts", parameters).FirstOrDefault();
+            return _systemSettingRepository.ExecuteStoredProcedure<CaseGroupCountValues>("sp_COA_GroupCounts", parameters).ToList();
         }
         public List<GovernoratesModel> GetGovernoratesByCaseGroupId(int caseGroupId)
         {

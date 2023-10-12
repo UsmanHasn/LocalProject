@@ -498,7 +498,7 @@ namespace WebAPI.Controllers
             try
             {
                 model = _caseService.GetCaseGroup();
-                CaseGroupCountValues modelCountValues = _caseService.GetCaseGroupCountValues();
+                List<CaseGroupCountValues> modelCountValues = _caseService.GetCaseGroupCountValues();
                 return new JsonResult(new { data = model, countValues = modelCountValues, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

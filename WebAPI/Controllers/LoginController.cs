@@ -49,7 +49,10 @@ namespace WebAPI.Controllers
                 if (user != null)
                 {
                     var check = _userService.GetUserById(user.UserId);
-
+                    if (user.RoleId == 0)
+                    {
+                        return new JsonResult(new { token = "Noroleassigned", success = false, status = HttpStatusCode.OK });
+                    }
                     if (check.WrongPassword == 5)
                         return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
 
@@ -93,6 +96,10 @@ namespace WebAPI.Controllers
                 }
                 else if (user != null && user.UserId > 0)
                 {
+                    if (user.RoleId == 0)
+                    {
+                        return new JsonResult(new { token = "Noroleassigned", success = false, status = HttpStatusCode.OK });
+                    }
                     var token = GenerateToken(user);
                     //inser token into db 
                     _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
@@ -223,7 +230,8 @@ namespace WebAPI.Controllers
             var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == userLogin.Username && x.Password == userLogin.Password);
             if (currentUser != null)
             {
-                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id && x.Deleted == false, x => x.Role).Role;
+                var roleRepo = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id && x.Deleted == false, x => x.Role);
+                Roles? role = roleRepo != null ? roleRepo.Role : null;
                 return new UsersModel()
                 {
                     UserId = currentUser.Id,

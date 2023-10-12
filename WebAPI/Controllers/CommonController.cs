@@ -774,7 +774,7 @@ namespace WebAPI.Controllers
             List<CaseSubCategoryLookupModel> model = new List<CaseSubCategoryLookupModel>();
             try
             {
-                model = _lookupService.GetcaseSubCategoryLookup(CaseCategoryId).Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId }).ToList();
+                model = _lookupService.GetcaseSubCategoryLookup(CaseCategoryId).ToList();//.Select(x => new CaseSubCategoryLookupModel() { CaseSubCategoryId = x.CaseSubCategoryId, NameEn = x.NameEn, NameAr = x.NameAr, CaseCategoryId = x.CaseCategoryId }).ToList();
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
