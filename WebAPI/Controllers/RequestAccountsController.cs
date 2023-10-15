@@ -1,20 +1,11 @@
-﻿using Data.Context;
-using Data.Interface;
+﻿using Data.Interface;
 using Domain.Entities;
-using Domain.Helper;
-using Domain.Modeles;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Service.Concrete;
 using Service.Interface;
 using Service.Models;
-using System;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Reflection.Metadata;
-using System.Xml.Linq;
 using WebAPI.Manager;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace WebAPI.Controllers
 {
