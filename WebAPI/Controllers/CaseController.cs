@@ -943,6 +943,22 @@ namespace WebAPI.Controllers
 
             }
         }
+        [HttpPost]
+        [Route("insUpDel_CaseGroupCatType")]
+        public IActionResult InsUpDel_CaseGroupCatType(COR_GroupCatTypeModel cor_GroupCatTypeModel)
+        {
+            try
+            {
+                _caseService.InsUpDel_CORGrpCatType(cor_GroupCatTypeModel);
+                return new JsonResult(new { data = cor_GroupCatTypeModel, message = "Message.RecordSavedSuccessfully", status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
     }
 }
 

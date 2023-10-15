@@ -120,4 +120,11 @@
         public bool? IsActive { get; set; }
         public string? CreatedBy { get; set; }
     }
+    public class COR_GroupCatTypeModel
+    {
+        public int CaseGroupId { get; set; }
+        public int CaseCategoryId { get; set; }
+        public int[] CaseTypeId { get; set; }
+        public string CreatedBy { get; set; }
+    }
 }

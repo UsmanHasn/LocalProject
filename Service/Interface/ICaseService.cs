@@ -67,5 +67,6 @@ namespace Service.Interface
         List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId);
 
         void InsUpDel_CorCaseSubject(CORCaseSubject cORCaseSubject);
+        void InsUpDel_CORGrpCatType(COR_GroupCatTypeModel cor_GroupCatTypeModel);
     }
 }

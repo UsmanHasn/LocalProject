@@ -549,5 +549,21 @@ namespace Service.Concrete
             parameters[2] = new SqlParameter("@CreatedBy", cORCaseSubject.CreatedBy);
             _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COR_CaseSubject", parameters);
         }
+        public void InsUpDel_CORGrpCatType(COR_GroupCatTypeModel cor_GroupCatTypeModel)
+        {
+            string cIds = "";
+            foreach (var caseTypeId in cor_GroupCatTypeModel.CaseTypeId)
+            {
+                cIds = cIds + caseTypeId.ToString() + ",";
+            }
+            cIds = cIds.Substring(0, cIds.Length - 1);
+            SqlParameter[] parameters = new SqlParameter[4];
+            parameters[0] = new SqlParameter("@CaseGroupId", cor_GroupCatTypeModel.CaseGroupId);
+            parameters[1] = new SqlParameter("@CaseCategoryId", cor_GroupCatTypeModel.CaseCategoryId);
+            parameters[2] = new SqlParameter("@CaseTypeId", cIds);
+            parameters[3] = new SqlParameter("@CreatedBy", cor_GroupCatTypeModel.CreatedBy);
+            _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COR_CaseGrpCatType", parameters);
+
+        }
     }
 }
