@@ -13,29 +13,57 @@ namespace WebAPI.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _IpaymentService;
+        private readonly IConfiguration Configuration;
 
-        public PaymentController(IPaymentService paymentService)
+
+        public PaymentController(IPaymentService paymentService, IConfiguration configuration)
         {
             _IpaymentService = paymentService;
+            Configuration = configuration;
         }
 
         [HttpPost]
         [Route("PaymentPayLoadEnc")]
         public IActionResult PaymentPayLoadEnc(PaymentPayLoad payLoad)
         {
-            string workingKey = "79BB21236EBF098862CAD341113F9BFA";//put in the 32bit alpha numeric key in the quotes provided here 	
+            string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
             CCACrypto ccaCrypto = new CCACrypto();
             DateTime now = DateTime.Now;
             long timestamp = now.Ticks;
             payLoad.tid = timestamp;
-            payLoad.merchant_id = 339;
+            payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
             payLoad.order_id = timestamp.ToString();
-            payLoad.redirect_url = "http://localhost:5003/api/Payment/PaymentResponse";
-            payLoad.cancel_url = "http://localhost:5003/api/Payment/PaymentResponse";
+
+            payLoad.redirect_url = Configuration["Payment:redirect_url"];
+            
+            payLoad.cancel_url = Configuration["Payment:cancel_url"];
             string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
             PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
             paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
             return new JsonResult(new { data = paymentPayloadEncResponse, status = HttpStatusCode.OK });
+        }
+
+        [HttpPost]
+        [Route("PaymentRedirection")]
+        public IActionResult PaymentRedirection(PaymentPayLoad payLoad)
+        {
+            string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
+            CCACrypto ccaCrypto = new CCACrypto();
+            DateTime now = DateTime.Now;
+            long timestamp = now.Ticks;
+            payLoad.tid = timestamp;
+            payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
+            payLoad.order_id = timestamp.ToString();
+            payLoad.currency=Configuration["Payment:_currency"];
+            payLoad.amount= 10;
+            payLoad.language = Configuration["Payment:_language"];
+            payLoad.redirect_url = Configuration["Payment:redirect_url"];
+
+            payLoad.cancel_url = Configuration["Payment:cancel_url"];
+            string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
+            PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
+            paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
+            return RedirectPermanent(Configuration["Payment:_Transaction_Url"]+""+ paymentPayloadEncResponse.strEncRequest+ "&access_code=" + Configuration["Payment:_strAccessCode"]);
         }
 
         [HttpPost]
@@ -46,7 +74,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest("Invalid request data");
             }
-            string workingKey = "79BB21236EBF098862CAD341113F9BFA"; // Your working key
+            string workingKey = Configuration["Payment:workingKey"]; // Your working key
             CCACrypto ccaCrypto = new CCACrypto();
             string encResponse = ccaCrypto.Decrypt(data.encResp, workingKey);
             NameValueCollection Params = new NameValueCollection();
@@ -111,9 +139,7 @@ namespace WebAPI.Controllers
             responseModel.merchant_param7 = Params["merchant_param7"];
             _IpaymentService.InsertIntoPaymentResponse(responseModel);
 
-            return RedirectPermanent("http://elawyers.caaj.gov.om/#/response-handler");
-
-            return Ok(); // Return the processed data
+            return RedirectPermanent(Configuration["Payment:AngularResponseUrl"]);
         }
     }
 }
