@@ -63,7 +63,8 @@ namespace WebAPI.Controllers
             string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
             PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
             paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
-            return RedirectPermanent(Configuration["Payment:_Transaction_Url"]+""+ paymentPayloadEncResponse.strEncRequest+ "&access_code=" + Configuration["Payment:_strAccessCode"]);
+            string redirectu = Configuration["Payment:_Transaction_Url"] + "" + paymentPayloadEncResponse.strEncRequest + "&access_code=" + Configuration["Payment:_strAccessCode"];
+            return RedirectPermanent(redirectu);
         }
 
         [HttpPost]
