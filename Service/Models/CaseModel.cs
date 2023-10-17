@@ -48,7 +48,7 @@ namespace Service.Models
     }
     public class CaseDocumentsModel
     {
-        // public string CaseDocumentId { get;set; }
+        public long CaseDocumentId { get;set; }
         public long CaseId { get; set; }
         public long DocumentTypeId { get; set; }
         public string DocNameEn { get; set; }

@@ -247,7 +247,8 @@ namespace WebAPI.Controllers
                     CRNo = "",
                     CRName = "",
                     EntityId = 0,
-                    EntityName = ""
+                    EntityName = "",
+                    CivilExpiry = currentUser.CivilExpiryDate
                 };
                 //return currentUser;
             }
@@ -285,7 +286,8 @@ namespace WebAPI.Controllers
                 Role = role == null ? "" : role.Name,
                 RoleAr = role == null ? "" : role.Name,
                 LastLoginDate = userByCivilNo.LastLoginDate,
-                CRNo = "", CRName = "", EntityId = 0, EntityName = ""
+                CRNo = "", CRName = "", EntityId = 0, EntityName = "",
+                CivilExpiry = userByCivilNo.CivilExpiryDate
             };
             return user;
         }

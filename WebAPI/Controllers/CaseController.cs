@@ -5,6 +5,8 @@ using Service.Interface;
 using Service.Models;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata;
+using System.Xml.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
@@ -124,7 +126,8 @@ namespace WebAPI.Controllers
                     DocumentTypeId = x.DocumentTypeId,
                     nameAr = x.nameAr,
                     nameEn = x.nameEn,
-                    UploadDate = x.UploadDate
+                    UploadDate = x.UploadDate,
+                    CaseDocumentId = x.CaseDocumentId
                 }).ToList();
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
@@ -198,6 +201,29 @@ namespace WebAPI.Controllers
 
             }
             
+        }
+        [HttpPost]
+        [Route("deletecasedocument")]
+        public IActionResult DeleteCaseDocument(string caseId, string documentId, string documentType, string description, string userName)
+        {
+            try
+            {
+                CaseDocumentModel caseDocumentModel = new CaseDocumentModel()
+                {
+                    CaseId = Convert.ToInt64(caseId),
+                    DocumentId = Convert.ToInt64(documentId),
+                    DocumentPath = description,
+                    Description = description,
+                    DocumentType = Convert.ToInt32(documentType)
+                };
+                _caseService.DeleteCaseDocument(caseDocumentModel, userName);
+                return new JsonResult(new { data = documentId, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
         }
         [HttpGet]
         [Route("GetAllCases")]

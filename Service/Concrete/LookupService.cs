@@ -630,5 +630,28 @@ namespace Service.Concrete
             spParams[0] = new SqlParameter("Key", code);
             return _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetLanguageCode", spParams).FirstOrDefault();
         }
+        public List<LKTGovernorateModel> getGovernorates()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LKTGovernorateModel>("sp_GetGovernorates", parameters).ToList();
+        }
+        public List<LookupsModel> getWilayaByGovernorate(int GovernorateId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("@GovernorateId", GovernorateId);
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetWilaya", parameters).ToList();
+        }
+        public List<LookupsModel> getVillageByWilaya(int GovernorateId, int WilayaId)
+        {
+            SqlParameter[] parameters = new SqlParameter[2];
+            parameters[0] = new SqlParameter("@GovernorateId", GovernorateId);
+            parameters[1] = new SqlParameter("@WilayaId", WilayaId);
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetVillage", parameters).ToList();
+        }
+        public List<LookupsModel> getAddressType()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetAddressype", parameters).ToList();
+        }
     }
 }

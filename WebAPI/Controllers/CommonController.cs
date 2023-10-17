@@ -103,7 +103,7 @@ namespace WebAPI.Controllers
             List<CountryModel> model = new List<CountryModel>();
             try
             {
-                model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Name = x.Name, NameAr = x.NameAr }).ToList();
+                model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Code = x.Code, Name = x.Name, NameAr = x.NameAr }).ToList();
                 //var json = new Dictionary<string, string>();
                 //foreach (var item in model)
                 //{
@@ -1100,6 +1100,74 @@ namespace WebAPI.Controllers
 
             }
            
+        }
+        [HttpGet]
+        [Route("getGovernorates")]
+        public IActionResult GetGovernorates()
+        {
+            List<LKTGovernorateModel> model = new List<LKTGovernorateModel>();
+            try
+            {
+                model = _lookupService.getGovernorates().ToList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+        [HttpGet]
+        [Route("getWilaya")]
+        public IActionResult GetWilaya(int governorateId)
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            try
+            {
+                model = _lookupService.getWilayaByGovernorate(governorateId).ToList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+        [HttpGet]
+        [Route("getVillage")]
+        public IActionResult GetVillage(int governorateId, int wilayaId)
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            try
+            {
+                model = _lookupService.getVillageByWilaya(governorateId, wilayaId).ToList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+        [HttpGet]
+        [Route("getAddressType")]
+        public IActionResult GetAddressType()
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            try
+            {
+                model = _lookupService.getAddressType().ToList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

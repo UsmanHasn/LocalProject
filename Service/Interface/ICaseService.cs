@@ -16,6 +16,7 @@ namespace Service.Interface
         List<CaseParties> GetCaseParties(long caseId, long partyNo);
         List<CaseDocumentsModel> GeCaseDocumentsByCaseId(long CaseId);
         bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName);
+        bool DeleteCaseDocument(CaseDocumentModel caseDocumentModel, string userName);
         UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName);
         List<CaseModel> GetAllCases();
         List<CaseModel> GetAllPendingCase(string CivilNo, int CaseStatusId);

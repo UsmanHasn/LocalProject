@@ -81,5 +81,9 @@ namespace Service.Interface
         LanguageLookupModel GetLanguageLookupById(int languageLookupId);
         List<LookupsModel> GetPartyTypes(int CaseTypeId);
         public LanguageLookupModel GetCode(string code);
+        List<LKTGovernorateModel> getGovernorates();
+        List<LookupsModel> getWilayaByGovernorate(int GovernorateId);
+        List<LookupsModel> getVillageByWilaya(int GovernorateId, int WilayaId);
+        List<LookupsModel> getAddressType();
     }
 }

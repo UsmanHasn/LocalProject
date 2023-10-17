@@ -51,7 +51,7 @@ namespace Service.Concrete
 
         public bool AddCaseParties(CaseParties caseParties, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[19];
+            SqlParameter[] spParams = new SqlParameter[31];
             spParams[0] = new SqlParameter("CasePartyId", caseParties.CasePartyId);
             spParams[1] = new SqlParameter("CaseId", caseParties.CaseId);
             spParams[2] = new SqlParameter("PartyType", caseParties.PartyType);
@@ -70,7 +70,19 @@ namespace Service.Concrete
             spParams[15] = new SqlParameter("FamilyName", caseParties.FamilyName);
             spParams[16] = new SqlParameter("Email", caseParties.Email);
             spParams[17] = new SqlParameter("Country", caseParties.Country);
-            spParams[18] = new SqlParameter("City", caseParties.City);
+            spParams[18] = new SqlParameter("FirstName", caseParties.FirstName);
+            spParams[19] = new SqlParameter("LastName", caseParties.LastName);
+            spParams[20] = new SqlParameter("MiddleName", caseParties.MiddleName);
+            spParams[21] = new SqlParameter("FourthName", caseParties.FourthName);
+            spParams[22] = new SqlParameter("CountryId", caseParties.CountryId);
+            spParams[23] = new SqlParameter("GovernorateId", caseParties.GovernorateId);
+            spParams[24] = new SqlParameter("WialayId", caseParties.WilayaId);
+            spParams[25] = new SqlParameter("VillageId", caseParties.VillageId);
+            spParams[26] = new SqlParameter("AddressTypeId", caseParties.AddressTypeId);
+            spParams[27] = new SqlParameter("WayNo", caseParties.WayNo);
+            spParams[28] = new SqlParameter("AddressLine1", caseParties.AddressLine1);
+            spParams[29] = new SqlParameter("AddressLine2", caseParties.AddressLine2);
+            spParams[30] = new SqlParameter("CompanyName", caseParties.CompanyName);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
             return true;
@@ -89,10 +101,19 @@ namespace Service.Concrete
         }
         public List<CaseParties> GetCaseParties(long caseId, long PartyNo)
         {
-            SqlParameter[] parameters = new SqlParameter[2];
-            parameters[0] = new SqlParameter("CaseId", caseId);
-            parameters[1] = new SqlParameter("PartyNo", PartyNo);
-            return _systemSettingRepository.ExecuteStoredProcedure<CaseParties>("sjc_GetPartiesByCaseId", parameters).ToList();
+            try
+            {
+                SqlParameter[] parameters = new SqlParameter[2];
+                parameters[0] = new SqlParameter("CaseId", caseId);
+                parameters[1] = new SqlParameter("PartyNo", PartyNo);
+                return _systemSettingRepository.ExecuteStoredProcedure<CaseParties>("sjc_GetPartiesByCaseId", parameters).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                return null;
+            }
+           
         }
         public bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName)
         {
@@ -102,12 +123,24 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("DocumentType", caseDocumentModel.DocumentType);
             spParams[3] = new SqlParameter("DocumentPath", caseDocumentModel.DocumentPath);
             spParams[4] = new SqlParameter("Description", caseDocumentModel.Description);
-            spParams[5] = new SqlParameter("DML", "I");
+            spParams[5] = new SqlParameter("DML", caseDocumentModel.DocumentId == 0 ? "I" : "U");
             spParams[6] = new SqlParameter("UploadedBy", userName);
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_casedocument", spParams);
             return true;
         }
-
+        public bool DeleteCaseDocument(CaseDocumentModel caseDocumentModel, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[7];
+            spParams[0] = new SqlParameter("CaseDocumentId", caseDocumentModel.DocumentId);
+            spParams[1] = new SqlParameter("CaseId", caseDocumentModel.CaseId);
+            spParams[2] = new SqlParameter("DocumentType", caseDocumentModel.DocumentType);
+            spParams[3] = new SqlParameter("DocumentPath", caseDocumentModel.DocumentPath);
+            spParams[4] = new SqlParameter("Description", caseDocumentModel.Description);
+            spParams[5] = new SqlParameter("DML", "D");
+            spParams[6] = new SqlParameter("UploadedBy", userName);
+            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_casedocument", spParams);
+            return true;
+        }
         public List<CaseDocumentsModel> GeCaseDocumentsByCaseId(long CaseId)
         {
             SqlParameter[] parameters = new SqlParameter[1];
