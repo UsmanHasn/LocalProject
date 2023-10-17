@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MimeKit.Encodings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace Service.Models
         public string? NameEn { get; set; }
         public string? NameAr { get; set; }
         public bool Assigned { get; set; }
+        public int AssignedRole { get; set; }
 
     }
 

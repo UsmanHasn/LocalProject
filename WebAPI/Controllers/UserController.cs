@@ -7,6 +7,7 @@ using Service.Concrete;
 using Service.Helper;
 using Service.Interface;
 using Service.Models;
+using System;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -72,10 +73,12 @@ namespace WebAPI.Controllers
         [Route("getallroles")]
         public IActionResult GetAllRoles(int UID)
         {
+            UserAssignRole role = new UserAssignRole();
             List<UserAssignRole> model = new List<UserAssignRole>();
             try
             {
                 model = _userService.GetAllUserRole(UID);
+
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -88,10 +91,11 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("InsertUser")]
-        public async Task<IActionResult> Add(UserModel model, string userName)
+        public async Task<IActionResult> Add(UserModel model, string userName, int userId)
         {
             try
             {
+
                 if (model.Id > 0)
                 {
                     UserModel _userModel = _userService.GetUserById(model.Id);
@@ -99,16 +103,22 @@ namespace WebAPI.Controllers
                     model.CreatedBy = _userModel.CreatedBy;
                     model.CivilExpiryDate = _userModel.CivilExpiryDate;
                     _userService.UpdateUser(model, userName);
-
-
-
+                    if (userId > 0)
+                    {
+                        _userService.AddActivity(userId, "ManageUser", "Update User Information Of " + model.Name, DateTime.Now, model.Name);
+                    }
                 }
                 else
                 {
                     UserModel usrModel = _userService.checkDuplicate(model.CivilID, model.Email, model.Mobile);
                     if (usrModel == null)
                     {
-                        _userService.Add(model, userName);
+                        _userService.Add(model, userName, userId);
+                        if (userId > 0)
+                        {
+                            _userService.AddActivity(userId, "ManageUser", "Add User " + model.Name, DateTime.Now, model.Name);
+                        }
+
                         try
                         {
                             await jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
@@ -130,9 +140,22 @@ namespace WebAPI.Controllers
                     }
 
                 }
-                _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
 
-                
+                List<UserAssignRole> RoleAssignModel = new List<UserAssignRole>();
+                RoleAssignModel = _userService.GetAllUserRole(model.Id);
+                var AssignedRole = RoleAssignModel.Where(x => x.Assigned == true).Count();
+
+                _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
+                //string gIds = "";
+                //foreach (var roleId in model.AssignRoleIds)
+                //{
+                //    gIds = gIds + roleId.ToString() + ",";
+                //}
+                //gIds = gIds.Substring(0, gIds.Length - 1);
+                if (model.AssignRoleIds.Count > AssignedRole)
+                {
+                    _userService.InsertAlert(model.Id, "", userName, model.Email, model.Mobile, userName + " Assigned you a new role", userName + " Assigned you a new role");
+                }
 
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }

@@ -118,6 +118,13 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<LinkCompanyModel>("sjc_GetCivilNo", spParams).FirstOrDefault();
         }
 
+        public RequestAccountsModel GetRequestStatusByStatusId(int UserId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("@UserId", UserId);
+            return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestStatusByReqStatusId", spParams).FirstOrDefault();
+        }
+
         public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName)
         {
             SqlParameter[] spParams = new SqlParameter[1];

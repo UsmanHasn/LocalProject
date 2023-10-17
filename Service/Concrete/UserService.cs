@@ -67,7 +67,7 @@ namespace Service.Concrete
             //return model;
         }
 
-        public bool Add(UserModel userModel, string userName)
+        public bool Add(UserModel userModel, string userName, int userId)
         {
             // UserModel usrModel = this.checkDuplicate(userModel.CivilID, userModel.Email, userModel.Mobile);
             //if (usrModel == null)
@@ -409,12 +409,16 @@ namespace Service.Concrete
             return null;
         }
 
-        public bool InsertAlert(int userId, string roleId, string createdBy)
+        public bool InsertAlert(int userId, string roleId, string createdBy, string Email, string MobileNo, string Subject, string Msg)
         {
-            SqlParameter[] spParams = new SqlParameter[3];
+            SqlParameter[] spParams = new SqlParameter[7];
             spParams[0] = new SqlParameter("@UserId", userId);
             spParams[1] = new SqlParameter("@RoleId", roleId);
             spParams[2] = new SqlParameter("@CreatedBy", createdBy);
+            spParams[3] = new SqlParameter("@Email", Email);
+            spParams[4] = new SqlParameter("@MobileNo", MobileNo);
+            spParams[5] = new SqlParameter("@Subject", Subject);
+            spParams[6] = new SqlParameter("@Message", Msg);
             _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_InsertAlert", spParams);
             return true;
 

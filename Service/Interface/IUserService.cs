@@ -16,7 +16,7 @@ namespace Service.Interface
         List<UserListModel> GetAllUsers(int userId);
         List<UserAssignRole> GetAllUserRole(int UID);
 
-        bool Add(UserModel userModel, string userName);
+        bool Add(UserModel userModel, string userName,int userId);
         bool UpdateUser(UserModel userModel, string userName);
         bool UpdateUserFirstLogin(int UserId, string userName);
         bool UpdateLoginAttempts(int UserId);
@@ -34,6 +34,6 @@ namespace Service.Interface
         bool AddUserInRole(List<int> roleIds, int userId, string userName);
         UserModel GetUserByCivilId(string civilId);
 
-        bool InsertAlert(int userId, string roleId, string createdBy);
+        bool InsertAlert(int userId, string roleId, string createdBy,string Email,string MobileNo,string Subject,string Msg);
     }
 }

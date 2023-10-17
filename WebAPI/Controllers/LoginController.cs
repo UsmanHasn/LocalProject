@@ -17,6 +17,8 @@ using Service.Interface;
 using Service.Concrete;
 using Service.Helper;
 using Microsoft.AspNet.Identity;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace WebAPI.Controllers
 {
@@ -42,7 +44,7 @@ namespace WebAPI.Controllers
         [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
-           
+
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
                 var user = Authenticate(userLogin);
@@ -123,7 +125,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -142,7 +144,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -154,7 +156,7 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("RefreshToken")]
-        public async Task<ActionResult> RefreshToken(string token, string identifier) 
+        public async Task<ActionResult> RefreshToken(string token, string identifier)
         {
             try
             {
@@ -199,8 +201,8 @@ namespace WebAPI.Controllers
                 _config["Jwt:Audience"],
                 claims,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: credentials); 
-            
+                signingCredentials: credentials);
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
@@ -256,12 +258,12 @@ namespace WebAPI.Controllers
         }
         private async Task<UsersModel> Authenticate(string civilNo)
         {
-            #if debug
+#if debug
                if (civilNo == "85923849")
                {
                     civilNo = "2189511";
                }             
-            #endif
+#endif
             var userByCivilNo = _usersRepository.GetSingle(x => x.CivilNumber == civilNo);
             if (userByCivilNo == null)
             {
@@ -270,7 +272,7 @@ namespace WebAPI.Controllers
                     CivilID = civilNo,
                     UserId = 0
                 };
-                
+
             }
 
             Roles role = _userInRoleRepository.GetSingle(x => x.UserId == userByCivilNo.Id && x.Role.Name == SjcConstants.roleIndividual, x => x.Role).Role;
@@ -292,7 +294,7 @@ namespace WebAPI.Controllers
             return user;
         }
 
-        
+
 
 
 
@@ -301,11 +303,12 @@ namespace WebAPI.Controllers
         [Route("forgotPassword")]
         public ActionResult ForgotPassword([FromBody] ForgotPasswordModel forgotPassword)
         {
+            string message = "";
             var user = _usersRepository.GetSingle(x => x.CivilNumber == forgotPassword.CivilNo && x.Email == forgotPassword.Email);
             if (user != null)
             {
 
-                var pass = Guid.NewGuid(); 
+                var pass = Guid.NewGuid();
                 user.Password = "12345";
                 _usersRepository.Update(user, "System");
                 _usersRepository.Save();
@@ -315,10 +318,11 @@ namespace WebAPI.Controllers
                 string messageBody = System.IO.File.ReadAllText(fullPath);
                 if (!string.IsNullOrEmpty(messageBody))
                 {
-                    messageBody.Replace("{username}", user.UserName);
+                    message = messageBody.Replace("{username}", user.UserName);
+                    message = message + " " + user.Password;
                 }
 
-                EmailHelper.sendMail(user.Email, "ForgotPassword ", messageBody);
+                EmailHelper.sendMail(user.Email, "ForgotPassword ", message);
                 return new JsonResult(new { success = true, status = HttpStatusCode.OK });
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });

@@ -226,7 +226,7 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("Code", locationLookup.Code);
             spParams[3] = new SqlParameter("NameEn", locationLookup.NameEn);
             spParams[4] = new SqlParameter("NameAr", locationLookup.NameAr);
-            spParams[5] = new SqlParameter("LinkLocationId", "");;
+            spParams[5] = new SqlParameter("LinkLocationId", ""); ;
             spParams[6] = new SqlParameter("LastModifiedBy ", locationLookup.LastModifiedBy);
             spParams[7] = new SqlParameter("LastModifiedDate", DateTime.Now);
             _languagesRepository.ExecuteStoredProcedure("Sjc_Update_LocationLookup", spParams);
@@ -629,6 +629,13 @@ namespace Service.Concrete
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("Key", code);
             return _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetLanguageCode", spParams).FirstOrDefault();
+        }
+
+        public SystemParameterModel GetSystemSettingByName(string KeyName)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("@KeyName", KeyName);
+            return _languagesRepository.ExecuteStoredProcedure<SystemParameterModel>("sjc_GetSystemSettingsByKeyName", spParams).FirstOrDefault();
         }
         public List<LKTGovernorateModel> getGovernorates()
         {

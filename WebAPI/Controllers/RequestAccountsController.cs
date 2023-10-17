@@ -85,49 +85,60 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var file = Request.Form.Files[0];
-                folderName = Path.Combine("Assets", "requestaccount");
-                var pathTotSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                if (file.Length > 0)
+                RequestAccountsModel sysModel = _requestAccountService.GetRequestStatusByStatusId(userId);
+                if (sysModel == null)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathTotSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
-                    //folderName = fullPath;
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    var file = Request.Form.Files[0];
+                    folderName = Path.Combine("Assets", "requestaccount");
+                    var pathTotSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                    if (file.Length > 0)
                     {
-                        file.CopyTo(stream);
-                        var InitiateRequest = _requestAccountService.GetRequestStatusIdFromSystemSetting("InitiateRequest");
-                        var Assigned = _requestAccountService.GetRequestStatusIdFromSystemSetting("Assigned");
-                        RequestAccountsModel requestAccountsModel = new RequestAccountsModel()
+                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        var fullPath = Path.Combine(pathTotSave, fileName);
+                        var dbPath = Path.Combine(folderName, fileName);
+                        //folderName = fullPath;
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
                         {
-                            ActionTypeId = actionTypeId,
-                            Role = role,
-                            EntityId = entityId,
-                            Comments = comments,
-                            RequestStatusId = 1,
-                            CreatedBy = createdBy,
-                            CreatedDate = createdDate,
-                            LastModifiedBy = lastModifiedBy,
-                            LastModifiedDate = lastModifiedDate,
-                            DocumentTypeId = documentTypeId,
-                            DocPath = fullPath,
-                            FileName = fileName,
-                            Type = _type,
-                            UserId = userId
-                        };
-                        requestAccountsModel.RequestStatusId = Convert.ToInt32(InitiateRequest.KeyValue);
-                        _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath, 1);
+                            file.CopyTo(stream);
+                            var InitiateRequest = _requestAccountService.GetRequestStatusIdFromSystemSetting("InitiateRequest");
+                            var Assigned = _requestAccountService.GetRequestStatusIdFromSystemSetting("Assigned");
+                            RequestAccountsModel requestAccountsModel = new RequestAccountsModel()
+                            {
+                                ActionTypeId = actionTypeId,
+                                Role = role,
+                                EntityId = entityId,
+                                Comments = comments,
+                                RequestStatusId = 1,
+                                CreatedBy = createdBy,
+                                CreatedDate = createdDate,
+                                LastModifiedBy = lastModifiedBy,
+                                LastModifiedDate = lastModifiedDate,
+                                DocumentTypeId = documentTypeId,
+                                DocPath = fullPath,
+                                FileName = fileName,
+                                Type = _type,
+                                UserId = userId
+                            };
+                            requestAccountsModel.RequestStatusId = Convert.ToInt32(InitiateRequest.KeyValue);
+                            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath, 1);
 
-                        requestAccountsModel.RequestStatusId = Convert.ToInt32(Assigned.KeyValue);
-                        _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath, 2);
+                            requestAccountsModel.RequestStatusId = Convert.ToInt32(Assigned.KeyValue);
+                            _requestAccountService.AddRequestAccount(requestAccountsModel, userName, fullPath, 2);
+                        }
+                        return new JsonResult(new { data = dbPath, status = HttpStatusCode.OK });
                     }
-                    return new JsonResult(new { data = dbPath, status = HttpStatusCode.OK });
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {
-                    return BadRequest();
+                    return new JsonResult(new { data = "dubpicate", status = HttpStatusCode.InternalServerError });
                 }
+
+
+                
             }
             catch (Exception ex)
             {

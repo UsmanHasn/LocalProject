@@ -13,9 +13,11 @@ namespace WebAPI.Controllers
     public class DelegationController : Controller
     {
         private readonly IDelegationService? _delegationService;
-        public DelegationController(IDelegationService delegationService)
+        private readonly IUserService _userService;
+        public DelegationController(IDelegationService delegationService, IUserService userService)
         {
             _delegationService = delegationService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -141,7 +143,11 @@ namespace WebAPI.Controllers
                         _delegationService.AddUserDelegate(item, userName);
                     }
                 }
-
+                if (Convert.ToInt32(userId) > 0)
+                {
+                    _userService.AddActivity(Convert.ToInt32(userId), "Delegation", "Delegate Role", DateTime.Now, userName);
+                }
+                _userService.InsertAlert(model.First().UserId, "", userName, "", "",userName+ " Delegate Role to you", userName + " Delegate Role to you");
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

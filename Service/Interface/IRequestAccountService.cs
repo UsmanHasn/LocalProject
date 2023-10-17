@@ -15,6 +15,8 @@ namespace Service.Interface
         bool AddLinkCompany(LinkCompanyModel linkCompanyModel, string userName);
         bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName,string folderName,int count);
         public LinkCompanyModel GetCivilNo(string CivilNo);
+
+        public RequestAccountsModel GetRequestStatusByStatusId(int UserId);
         List<RequestAccountsModel> GetAll(int userId);
 
         List<RequestAccountsModel> GetAllApproved(int userId);

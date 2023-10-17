@@ -1169,5 +1169,24 @@ namespace WebAPI.Controllers
             }
 
         }
+
+
+        [HttpGet]
+        [Route("GetKeyValueByKeyName")]
+        public IActionResult GetKeyValueByKeyName(string KeyName)
+        {
+            SystemParameterModel sysModel = new SystemParameterModel();
+            try
+            {
+                sysModel = _lookupService.GetSystemSettingByName(KeyName);
+                return new JsonResult(new { data = sysModel.keyValue, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
     }
 }
