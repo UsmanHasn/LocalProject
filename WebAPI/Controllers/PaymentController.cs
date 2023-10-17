@@ -26,27 +26,36 @@ namespace WebAPI.Controllers
         [Route("PaymentPayLoadEnc")]
         public IActionResult PaymentPayLoadEnc(PaymentPayLoad payLoad)
         {
-            string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
-            CCACrypto ccaCrypto = new CCACrypto();
-            DateTime now = DateTime.Now;
-            long timestamp = now.Ticks;
-            payLoad.tid = timestamp;
-            payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
-            payLoad.order_id = timestamp.ToString();
+            try
+            {
+                string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
+                CCACrypto ccaCrypto = new CCACrypto();
+                DateTime now = DateTime.Now;
+                long timestamp = now.Ticks;
+                payLoad.tid = timestamp;
+                payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
+                payLoad.order_id = timestamp.ToString();
 
-            payLoad.redirect_url = Configuration["Payment:redirect_url"];
-            
-            payLoad.cancel_url = Configuration["Payment:cancel_url"];
-            string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
-            PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
-            paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
-            return new JsonResult(new { data = paymentPayloadEncResponse, status = HttpStatusCode.OK });
+                payLoad.redirect_url = Configuration["Payment:redirect_url"];
+
+                payLoad.cancel_url = Configuration["Payment:cancel_url"];
+                string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
+                PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
+                paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
+                return new JsonResult(new { data = paymentPayloadEncResponse, status = HttpStatusCode.OK });
+            }
+            catch(Exception es)
+            {
+
+            }
+            return BadRequest();
         }
 
         [HttpPost]
         [Route("PaymentRedirection")]
         public IActionResult PaymentRedirection(PaymentPayLoad payLoad)
         {
+            try { 
             string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
             CCACrypto ccaCrypto = new CCACrypto();
             DateTime now = DateTime.Now;
@@ -66,11 +75,18 @@ namespace WebAPI.Controllers
             string redirectu = Configuration["Payment:_Transaction_Url"] + "" + paymentPayloadEncResponse.strEncRequest + "&access_code=" + Configuration["Payment:_strAccessCode"];
             return RedirectPermanent(redirectu);
         }
+            catch(Exception es)
+            {
+
+            }
+            return BadRequest();
+}
 
         [HttpPost]
         [Route("PaymentResponse")]
         public IActionResult ProcessResponse([FromForm] PaymentDecResponse data)
         {
+            try { 
             if (data == null)
             {
                 return BadRequest("Invalid request data");
@@ -142,5 +158,11 @@ namespace WebAPI.Controllers
 
             return RedirectPermanent(Configuration["Payment:AngularResponseUrl"]);
         }
+            catch(Exception es)
+            {
+
+            }
+            return BadRequest();
+}
     }
 }
