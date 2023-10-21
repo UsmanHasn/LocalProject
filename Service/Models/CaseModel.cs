@@ -37,6 +37,7 @@ namespace Service.Models
         public string? LastModifiedBy { get;set; }
         public int? CaseStatusId { get; set; }
         public string? CaseStatusName { get; set; }
+        public string? CaseStatusNameAr { get; set; }
         public string CaseSource { get; set; }
         public string? caseCategoryName { get; set; }
         public string? CaseSubCategoryName { get; set; }

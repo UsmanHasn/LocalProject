@@ -13,9 +13,11 @@ namespace Service.Models
         public string NameAr { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        public string RoleAr { get; set; }
         public string MobileNumber  { get; set; }
         public string CivilId { get; set; }
         public string Status { get; set; }
+        public string StatusAr { get; set; }
 
     }
 }

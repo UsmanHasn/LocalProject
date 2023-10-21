@@ -251,7 +251,8 @@ namespace Service.Concrete
             var model = dataMenu.Select(x => new PagesModel()
             {
                 Id = x.Id,
-                PageName = x.PageName
+                PageName = x.PageName,
+                PageNameAr=x.PageNameAr
             }).ToList();
             return model;
         }
@@ -263,7 +264,8 @@ namespace Service.Concrete
             var model = dataMenu.Select(x => new MenuModel()
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                NameAr=x.NameAr
             }).ToList();
             return model;
         }

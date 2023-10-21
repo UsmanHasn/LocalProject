@@ -47,7 +47,9 @@ namespace Service.Concrete
                 MobileNumber = x.MobileNumber,
                 CivilId = x.CivilId,
                 Status = x.Status,
-                NameAr=x.NameAr
+                NameAr=x.NameAr,
+                RoleAr=x.RoleAr,
+                StatusAr=x.StatusAr
             }).ToList();
             return model;
         }
