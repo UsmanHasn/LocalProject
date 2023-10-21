@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Azure.Identity;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,17 @@ namespace Service.Interface
 
         string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel , string dmlType);
         List<LKT_SubjectModel> GetAll();
+
+        string InsUpdCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName);
+
+        List<CaseCategoryDetails> GetAllCaseCategoryDetails();
+        CaseCategoryDetails GetCaseCategoryDetailsbyId(int CaseCatDtlId);
+
+        string DeleteCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName);
+
+
+
+
 
         List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId);
 

@@ -344,10 +344,10 @@ namespace Service.Concrete
             return data.ToList();
         }
 
-        public Lkt_EntityModel GetEntityById(int EntityId)
+        public Lkt_EntityModel GetEntityById(int entityId)
         {
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("EntityId", EntityId);
+            param[0] = new SqlParameter("EntityId", entityId);
             var data = _smsRepository.ExecuteStoredProcedure<Lkt_EntityModel>("sjc_GetEntityById", param).FirstOrDefault();
             return data;
         }

@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Service.Concrete;
 using Service.Interface;
 using Service.Models;
@@ -984,6 +986,83 @@ namespace WebAPI.Controllers
 
             }
 
+        }
+
+        [HttpPost]
+        [Route("InsUpdCaseCategoryDetails")]
+        public IActionResult InsUpdCaseCategoryDetails(CaseCategoryDetails model, string userName)
+        {
+            try
+            {
+                string Message;
+                Message = _caseService.InsUpdCaseCategoryDetails(model, userName);
+                return new JsonResult(new { data = true, status = HttpStatusCode.OK, msg = Message });
+
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+                
+            }
+            
+
+        }
+
+        [HttpGet]
+        [Route("GetAllCaseCategoryDetails")]
+        public IActionResult GetAllCaseCategoryDetails()
+        {
+            try
+            {
+                List<CaseCategoryDetails> model = new List<CaseCategoryDetails>();
+                model = _caseService.GetAllCaseCategoryDetails();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+                
+            }
+         
+        }
+
+        [HttpGet]
+        [Route("GetCaseCategoryDetailsbyId")]
+        public IActionResult GetCaseCategoryDetailsbyId(int CaseCatDtlId)
+        {
+            try
+            {
+
+                CaseCategoryDetails caseCategoryDetails = new CaseCategoryDetails();
+                caseCategoryDetails = _caseService.GetCaseCategoryDetailsbyId(CaseCatDtlId);
+                return new JsonResult(new { data = caseCategoryDetails, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+        }
+
+        [HttpPost]
+        [Route("DeleteCaseCategoryDetails")]
+        public IActionResult DeleteCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName)
+        {
+            try
+            {
+                string Message;
+                Message = _caseService.DeleteCaseCategoryDetails(caseCategoryDetails, userName);
+                return new JsonResult(new { data = true, status = HttpStatusCode.OK, msg = Message });
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+           
         }
     }
 }
