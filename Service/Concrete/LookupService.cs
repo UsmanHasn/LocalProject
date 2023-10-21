@@ -559,18 +559,32 @@ namespace Service.Concrete
             var data = _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetAll_LanguageLookup", param).FirstOrDefault();
             return data;
         }
-        public PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber)
+        public PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber, string? SearchText)
         {
 
-            SqlParameter[] param = new SqlParameter[2];
+            SqlParameter[] param = new SqlParameter[3];
             param[0] = new SqlParameter("pageSize", pageSize);
             param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
             var data = _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetAll_LanguageLookup", param).ToList();
-            var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount").FirstOrDefault();
+            int countItem = 0;
+            if (SearchText != null)
+            {
+                SqlParameter[] paramSearch = new SqlParameter[1];
+                paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount", paramSearch).FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            else
+            {
+                var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount").FirstOrDefault();
+                countItem = count.TotalCount;
+            }
             PaginatedLanguageLookupModel paginatedLanguageLookupModel = new PaginatedLanguageLookupModel()
             {
                 PaginatedData = data,
-                TotalCount = count.TotalCount
+                TotalCount = countItem
             };
             return paginatedLanguageLookupModel;
         }

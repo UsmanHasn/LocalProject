@@ -1,10 +1,17 @@
 ﻿using CCAV.Util;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Service.Concrete;
 using Service.Interface;
+using Service.Models;
 using System.Collections.Specialized;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Reflection.Metadata;
 using System.Web;
+using System.Xml.Linq;
 using WebAPI.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
 {
@@ -44,7 +51,7 @@ namespace WebAPI.Controllers
                 paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
                 return new JsonResult(new { data = paymentPayloadEncResponse, status = HttpStatusCode.OK });
             }
-            catch(Exception es)
+            catch (Exception es)
             {
 
             }
@@ -55,63 +62,65 @@ namespace WebAPI.Controllers
         [Route("PaymentRedirection")]
         public IActionResult PaymentRedirection(PaymentPayLoad payLoad)
         {
-            try { 
-            string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
-            CCACrypto ccaCrypto = new CCACrypto();
-            DateTime now = DateTime.Now;
-            long timestamp = now.Ticks;
-            payLoad.tid = timestamp;
-            payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
-            payLoad.order_id = timestamp.ToString();
-            payLoad.currency=Configuration["Payment:_currency"];
-            payLoad.amount= 10;
-            payLoad.language = Configuration["Payment:_language"];
-            payLoad.redirect_url = Configuration["Payment:redirect_url"];
+            try
+            {
+                string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
+                CCACrypto ccaCrypto = new CCACrypto();
+                DateTime now = DateTime.Now;
+                long timestamp = now.Ticks;
+                payLoad.tid = timestamp;
+                payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
+                payLoad.order_id = timestamp.ToString();
+                payLoad.currency = Configuration["Payment:_currency"];
+                payLoad.amount = 10;
+                payLoad.language = Configuration["Payment:_language"];
+                payLoad.redirect_url = Configuration["Payment:redirect_url"];
 
-            payLoad.cancel_url = Configuration["Payment:cancel_url"];
-            string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
-            PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
-            paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
-            string redirectu = Configuration["Payment:_Transaction_Url"] + "" + paymentPayloadEncResponse.strEncRequest + "&access_code=" + Configuration["Payment:_strAccessCode"];
-            return RedirectPermanent(redirectu);
-        }
-            catch(Exception es)
+                payLoad.cancel_url = Configuration["Payment:cancel_url"];
+                string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
+                PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
+                paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
+                string redirectu = Configuration["Payment:_Transaction_Url"] + "" + paymentPayloadEncResponse.strEncRequest + "&access_code=" + Configuration["Payment:_strAccessCode"];
+                return RedirectPermanent(redirectu);
+            }
+            catch (Exception es)
             {
 
             }
             return BadRequest();
-}
+        }
 
         [HttpPost]
         [Route("PaymentResponse")]
         public IActionResult ProcessResponse([FromForm] PaymentDecResponse data)
         {
-            try { 
-            if (data == null)
+            try
             {
-                return BadRequest("Invalid request data");
-            }
-            string workingKey = Configuration["Payment:workingKey"]; // Your working key
-            CCACrypto ccaCrypto = new CCACrypto();
-            string encResponse = ccaCrypto.Decrypt(data.encResp, workingKey);
-            NameValueCollection Params = new NameValueCollection();
-            string[] segments = encResponse.Split('&');
-
-            foreach (string seg in segments)
-            {
-                string[] parts = seg.Split('=');
-                if (parts.Length > 0)
+                if (data == null)
                 {
-                    string Key = parts[0].Trim();
-                    string Value = parts[1].Trim();
-                    Params.Add(Key, Value);
+                    return BadRequest("Invalid request data");
                 }
-            }
+                string workingKey = Configuration["Payment:workingKey"]; // Your working key
+                CCACrypto ccaCrypto = new CCACrypto();
+                string encResponse = ccaCrypto.Decrypt(data.encResp, workingKey);
+                NameValueCollection Params = new NameValueCollection();
+                string[] segments = encResponse.Split('&');
 
-            // Now, map the values to your class properties
+                foreach (string seg in segments)
+                {
+                    string[] parts = seg.Split('=');
+                    if (parts.Length > 0)
+                    {
+                        string Key = parts[0].Trim();
+                        string Value = parts[1].Trim();
+                        Params.Add(Key, Value);
+                    }
+                }
 
-            Service.Models.PaymentdecryptResponseModel responseModel = new Service.Models.PaymentdecryptResponseModel();
-            
+                // Now, map the values to your class properties
+
+                Service.Models.PaymentdecryptResponseModel responseModel = new Service.Models.PaymentdecryptResponseModel();
+
                 responseModel.order_id = Params["order_id"];
                 responseModel.tracking_id = Params["tracking_id"];
                 responseModel.bank_ref_no = Params["bank_ref_no"];
@@ -153,16 +162,17 @@ namespace WebAPI.Controllers
                 responseModel.token_number = Params["token_number"];
                 responseModel.token_eligibility = Params["token_eligibility"];
                 responseModel.merchant_param6 = Params["merchant_param6"];
-            responseModel.merchant_param7 = Params["merchant_param7"];
-            _IpaymentService.InsertIntoPaymentResponse(responseModel);
+                responseModel.merchant_param7 = Params["merchant_param7"];
+                _IpaymentService.InsertIntoPaymentResponse(responseModel);
 
-            return RedirectPermanent(Configuration["Payment:AngularResponseUrl"]);
-        }
-            catch(Exception es)
+                return RedirectPermanent(Configuration["Payment:AngularResponseUrl"]);
+            }
+            catch (Exception es)
             {
 
             }
             return BadRequest();
-}
+        }
+
     }
 }

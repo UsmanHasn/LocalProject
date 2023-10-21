@@ -984,12 +984,12 @@ namespace WebAPI.Controllers
         //}
         [HttpGet]
         [Route("GetLanguageLookup")]
-        public IActionResult GetLanguageLookup(int pageSize, int pageNumber)
+        public IActionResult GetLanguageLookup(int pageSize, int pageNumber, string? SearchText)
         {
             PaginatedLanguageLookupModel model = new PaginatedLanguageLookupModel();
             try
             {
-                model = _lookupService.GetLanguageLookup(pageSize, pageNumber);
+                model = _lookupService.GetLanguageLookup(pageSize, pageNumber, SearchText);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
