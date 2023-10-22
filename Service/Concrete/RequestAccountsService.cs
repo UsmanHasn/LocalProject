@@ -19,10 +19,10 @@ namespace Service.Concrete
 {
     public class RequestAccountsService : IRequestAccountService
     {
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
         private readonly IWebHostEnvironment environment;
 
-        public RequestAccountsService(IWebHostEnvironment repository, IRepository<SystemSettings> systemSettingRepository)
+        public RequestAccountsService(IWebHostEnvironment repository, IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             environment = repository;
             _systemSettingRepository = systemSettingRepository;
@@ -125,11 +125,11 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestStatusByReqStatusId", spParams).FirstOrDefault();
         }
 
-        public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName)
+        public SYS_SystemSettings GetRequestStatusIdFromSystemSetting(string keyName)
         {
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("KeyName", keyName);
-            return _systemSettingRepository.ExecuteStoredProcedure<SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
+            return _systemSettingRepository.ExecuteStoredProcedure<SYS_SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
         }
 
         public bool UpdateRequestAccountHistory(int requestId,int responseStatusId,string rejectedReason)

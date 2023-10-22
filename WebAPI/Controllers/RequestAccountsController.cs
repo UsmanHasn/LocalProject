@@ -16,11 +16,11 @@ namespace WebAPI.Controllers
         private readonly IRequestAccountService? _requestAccountService;
         private readonly string UploadFolder = "\\wwwroot\\requestaccount\\"; // Replace with actual path
         private readonly IWebHostEnvironment environment;
-        private readonly IRepository<Users> _userRepository;
+        private readonly IRepository<SEC_Users> _userRepository;
         private readonly JsonRequestManager jsonRequestManager;
         string folderName = "";
         //string
-        public RequestAccountsController(IRequestAccountService requestAccountService, IRepository<Users> userRepository, IWebHostEnvironment repository)
+        public RequestAccountsController(IRequestAccountService requestAccountService, IRepository<SEC_Users> userRepository, IWebHostEnvironment repository)
         {
             _requestAccountService = requestAccountService;
             environment = repository;

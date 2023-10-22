@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class UsersProfilePicture
+    public class SEC_UsersProfilePicture
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]

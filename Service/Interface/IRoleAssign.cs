@@ -10,6 +10,6 @@ namespace Service.Interface
 {
     public interface IRoleAssign
     {
-        List<RolePermissions> RolePermissions();
+        List<SEC_RolePermissions> RolePermissions();
     }
 }

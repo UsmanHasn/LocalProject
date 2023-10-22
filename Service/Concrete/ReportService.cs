@@ -15,9 +15,9 @@ namespace Service.Concrete
 {
     public class ReportService : IReportService
     {
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
 
-        public ReportService(IRepository<SystemSettings> systemSettingRepository)
+        public ReportService(IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             _systemSettingRepository = systemSettingRepository;
         }

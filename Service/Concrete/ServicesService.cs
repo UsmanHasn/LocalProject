@@ -13,9 +13,9 @@ namespace Service.Concrete
 {
     public class ServicesService : IService
     {
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
 
-        public ServicesService(IRepository<SystemSettings> systemSettingRepository)
+        public ServicesService(IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             _systemSettingRepository = systemSettingRepository;
         }
@@ -69,7 +69,7 @@ namespace Service.Concrete
             return model;
         }
 
-        public Task<List<Services>> GetAllServices()
+        public Task<List<SYS_Services>> GetAllServices()
         {
             throw new NotImplementedException();
         }

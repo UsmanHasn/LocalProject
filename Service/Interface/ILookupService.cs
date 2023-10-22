@@ -11,9 +11,9 @@ namespace Service.Interface
 {
     public interface ILookupService
     {
-        List<LanguageLookup> GetLanguageValues();
-        List<NationalityLookup> GetNationalityLookups();
-        List<CountryLookup> GetCountryLookups();
+        List<SYS_Language> GetLanguageValues();
+        List<LKT_Nationality> GetNationalityLookups();
+        List<LKT_Country> GetCountryLookups();
         List<ServicesSubCategoryModel> GetServicesSubCategory();
         List<AlertModel> GetAlerts(string userId);
         AlertModel GetAlertsById(string alertId);

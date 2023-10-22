@@ -15,27 +15,32 @@ namespace Service.Concrete
 {
     public class LookupService : ILookupService
     {
-        private readonly IRepository<LanguageLookup> _languagesRepository;
-        private readonly IRepository<CountryLookup> _countryRepository;
-        private readonly IRepository<NationalityLookup> _nationalityRepository;
+        private readonly IRepository<SYS_Language> _languagesRepository;
+        private readonly IRepository<LKT_Country> _countryRepository;
+        private readonly IRepository<LKT_Nationality> _nationalityRepository;
 
-        public LookupService(IRepository<LanguageLookup> languagesRepository, IRepository<CountryLookup> countryRepository, IRepository<NationalityLookup> nationalityRepository)
+        public LookupService(IRepository<SYS_Language> languagesRepository, IRepository<LKT_Country> countryRepository, IRepository<LKT_Nationality> nationalityRepository)
         {
             _languagesRepository = languagesRepository;
             _countryRepository = countryRepository;
             _nationalityRepository = nationalityRepository;
         }
-        List<CountryLookup> ILookupService.GetCountryLookups()
+        List<LKT_Country> ILookupService.GetCountryLookups()
         {
             return _countryRepository.GetAll().ToList();
         }
 
-        List<LanguageLookup> ILookupService.GetLanguageValues()
+        List<SYS_Language> ILookupService.GetLanguageValues()
         {
             return _languagesRepository.GetAll().ToList();
+            /*
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("PageSize", 5000);
+            spParams[0] = new SqlParameter("PageNumber", 1);
+            return _languagesRepository.ExecuteStoredProcedure<SYS_Language>("sjc_GetAll_LanguageLookup", spParams).ToList();*/
         }
 
-        List<NationalityLookup> ILookupService.GetNationalityLookups()
+        List<LKT_Nationality> ILookupService.GetNationalityLookups()
         {
             return _nationalityRepository.GetAll().ToList();
         }

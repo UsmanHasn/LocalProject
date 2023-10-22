@@ -21,10 +21,10 @@ namespace WebAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IRepository<Users> _userRepository;
+        private readonly IRepository<SEC_Users> _userRepository;
         private readonly JsonRequestManager jsonRequestManager;
         private readonly IAdminService? _AdminService;
-        public UserController(IUserService userService, IRepository<Users> userRepository, IAdminService adminService)
+        public UserController(IUserService userService, IRepository<SEC_Users> userRepository, IAdminService adminService)
         {
             _userService = userService;
             _userRepository = userRepository;

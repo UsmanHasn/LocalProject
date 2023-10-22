@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class UserInRole : BaseEntity
+    public class SEC_UserInRole : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public Users User { get; set; }
+        public SEC_Users User { get; set; }
         public int UserId { get; set; }
-        public Roles Role { get; set; }
+        public SEC_Roles Role { get; set; }
         public int RoleId { get; set; }
     }
 }

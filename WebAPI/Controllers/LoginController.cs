@@ -27,10 +27,10 @@ namespace WebAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly IRepository<Users> _usersRepository;
-        private readonly IRepository<UserInRole> _userInRoleRepository;
+        private readonly IRepository<SEC_Users> _usersRepository;
+        private readonly IRepository<SEC_UserInRole> _userInRoleRepository;
         private readonly IUserService _userService;
-        public LoginController(IConfiguration config, IRepository<Users> usersRepository, IRepository<UserInRole> userInRoleRepository,
+        public LoginController(IConfiguration config, IRepository<SEC_Users> usersRepository, IRepository<SEC_UserInRole> userInRoleRepository,
                IUserService userService)
         {
             _config = config;
@@ -163,7 +163,7 @@ namespace WebAPI.Controllers
                 var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == identifier);
                 if (currentUser != null)
                 {
-                    Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                    SEC_Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
                     var user = new UsersModel()
                     {
                         UserId = currentUser.Id,
@@ -233,7 +233,7 @@ namespace WebAPI.Controllers
             if (currentUser != null)
             {
                 var roleRepo = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id && x.Deleted == false, x => x.Role);
-                Roles? role = roleRepo != null ? roleRepo.Role : null;
+                SEC_Roles? role = roleRepo != null ? roleRepo.Role : null;
                 return new UsersModel()
                 {
                     UserId = currentUser.Id,
@@ -275,7 +275,7 @@ namespace WebAPI.Controllers
 
             }
 
-            Roles role = _userInRoleRepository.GetSingle(x => x.UserId == userByCivilNo.Id && x.Role.Name == SjcConstants.roleIndividual, x => x.Role).Role;
+            SEC_Roles role = _userInRoleRepository.GetSingle(x => x.UserId == userByCivilNo.Id && x.Role.Name == SjcConstants.roleIndividual, x => x.Role).Role;
             var user = new UsersModel()
             {
                 UserId = userByCivilNo.Id,

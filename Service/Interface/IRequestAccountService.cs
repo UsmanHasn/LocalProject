@@ -24,6 +24,6 @@ namespace Service.Interface
 
         bool UpdateRequestAccountHistory(int requestId, int responseStatusId, string rejectedReason);
 
-        public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName); 
+        public SYS_SystemSettings GetRequestStatusIdFromSystemSetting(string keyName); 
     }
 }

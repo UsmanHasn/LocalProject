@@ -10,7 +10,7 @@ namespace Service.Interface
 {
     public interface IService
     {
-        Task<List<Services>> GetAllServices();
+        Task<List<SYS_Services>> GetAllServices();
 
         List<ServicesSubCategoryModel> BindSubCategory();
         List<ServicesModel> GetAllService();

@@ -16,8 +16,8 @@ namespace Service.Concrete
 {
     public class MenuService : IMenuService
     {
-        private readonly IRepository<Menu> _menuRepository;
-        public MenuService(IRepository<Menu> menuRepository)
+        private readonly IRepository<SYS_Menu> _menuRepository;
+        public MenuService(IRepository<SYS_Menu> menuRepository)
         {
             _menuRepository = menuRepository;
         }

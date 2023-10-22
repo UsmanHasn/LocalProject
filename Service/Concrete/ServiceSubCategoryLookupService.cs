@@ -22,11 +22,11 @@ namespace Service.Concrete
     public class ServiceSubCategoryLookupService : IServiceSubCategoryLookupService
     {
 
-        private readonly IRepository<ServiceSubCategoryLookup> _rolesRepository;
+        private readonly IRepository<SYS_ServiceSubCategory> _rolesRepository;
         private readonly ApplicationDbContext dbContextClass;
-        public readonly IRepository<Services> _userRepository;
+        public readonly IRepository<SYS_Services> _userRepository;
 
-        public ServiceSubCategoryLookupService(IRepository<ServiceSubCategoryLookup> repository, ApplicationDbContext dbContextClass)
+        public ServiceSubCategoryLookupService(IRepository<SYS_ServiceSubCategory> repository, ApplicationDbContext dbContextClass)
         {
             _rolesRepository = repository;
             this.dbContextClass = dbContextClass;
@@ -78,7 +78,7 @@ namespace Service.Concrete
             return model;
         }
 
-        List<Domain.Entities.ServiceCategoryLookup> IServiceSubCategoryLookupService.GetAllServiceLookup()
+        List<Domain.Entities.SYS_ServiceCategory> IServiceSubCategoryLookupService.GetAllServiceLookup()
         {
             throw new NotImplementedException();
         }
@@ -87,7 +87,7 @@ namespace Service.Concrete
 
         public bool Add(Domain.Modeles.ServicesModel userModel, string userName)
         {
-            Services users = new Services()
+            SYS_Services users = new SYS_Services()
             {
                 Name = userModel.Name,
                 NameAr = userModel.NameAr,

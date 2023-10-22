@@ -19,14 +19,14 @@ namespace Service.Concrete
 {
     public class RoleService : IRoleService
     {
-        private readonly IRepository<Roles> _rolesRepository;
-        public RoleService(IRepository<Roles> repository)
+        private readonly IRepository<SEC_Roles> _rolesRepository;
+        public RoleService(IRepository<SEC_Roles> repository)
         {
             _rolesRepository = repository;
         }
         public int Add(RoleModel roleModel, string userName)
         {
-            Roles role = new Roles()
+            SEC_Roles role = new SEC_Roles()
             {
                 Id = roleModel.Id,
                 Name = roleModel.Name,
@@ -41,7 +41,7 @@ namespace Service.Concrete
 
         public bool DeleteRole(RoleModel roleModel, string userName)
         {
-            Roles role = new Roles()
+            SEC_Roles role = new SEC_Roles()
             {
                 Id = roleModel.Id,
                 Name = roleModel.Name,
@@ -65,7 +65,7 @@ namespace Service.Concrete
 
         public bool UpdateRole(RoleModel roleModel, string userName)
         {
-            Roles role = new Roles()
+            SEC_Roles role = new SEC_Roles()
             {
                 Id = roleModel.Id,
                 Name = roleModel.Name,

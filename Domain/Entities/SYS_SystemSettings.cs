@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.Lookups
+namespace Domain.Entities
 {
-    public class LanguageLookup : BaseEntity
+    public class SYS_SystemSettings : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Key { get; set; }
-        public string EnglishValue { get; set; }
-        public string ArabicValue { get; set; }
+        public string KeyName { get; set; }
+        public string KeyValue { get; set; }
+        public string Description { get; set; }
     }
 }

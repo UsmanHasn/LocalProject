@@ -18,11 +18,11 @@ namespace Service.Concrete
     public class CaseService : ICaseService
     {
 
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
 
         public readonly IRepository<SMS_Trans> _smsRepository;
 
-        public CaseService(IRepository<SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
+        public CaseService(IRepository<SYS_SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
 
         {
             _systemSettingRepository = systemSettingRepository;

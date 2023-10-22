@@ -13,9 +13,9 @@ namespace Service.Concrete
 {
     public class DelegationService : IDelegationService
     {
-        private readonly IRepository<RolePermissions> _rolesPermissionRepository;
-        private readonly IRepository<UserDelegatedPermissions> _userPermissionRepository;
-        public DelegationService(IRepository<RolePermissions> rolesPermissionRepository, IRepository<UserDelegatedPermissions> userPermissionRepository)
+        private readonly IRepository<SEC_RolePermissions> _rolesPermissionRepository;
+        private readonly IRepository<SEC_UserDelegatedPermissions> _userPermissionRepository;
+        public DelegationService(IRepository<SEC_RolePermissions> rolesPermissionRepository, IRepository<SEC_UserDelegatedPermissions> userPermissionRepository)
         {
             _rolesPermissionRepository = rolesPermissionRepository;
             _userPermissionRepository = userPermissionRepository;
@@ -86,7 +86,7 @@ namespace Service.Concrete
         }
         public bool AddUserDelegate(UserDelegatePermissionModel assignRole, string userName)
         {
-            UserDelegatedPermissions userDelegatedPermissions = new UserDelegatedPermissions()
+            SEC_UserDelegatedPermissions userDelegatedPermissions = new SEC_UserDelegatedPermissions()
             {
                 PageId = assignRole.PageId,
                 UserId = assignRole.UserId,
@@ -104,7 +104,7 @@ namespace Service.Concrete
         }
         public bool UpdateUserDelegate(UserDelegatePermissionModel assignRole, string userName)
         {
-            UserDelegatedPermissions userDelegatedPermissions = new UserDelegatedPermissions()
+            SEC_UserDelegatedPermissions userDelegatedPermissions = new SEC_UserDelegatedPermissions()
             {
                 Id = assignRole.UserPermissionId,
                 PageId = assignRole.PageId,

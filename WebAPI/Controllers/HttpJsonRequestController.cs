@@ -28,9 +28,9 @@ namespace WebAPI.Controllers
     [Route("api/httpjson/")]
     public class HttpJsonRequestController : Controller
     {
-        private readonly IRepository<Users> _userRepository;
+        private readonly IRepository<SEC_Users> _userRepository;
         private readonly JsonRequestManager jsonRequestManager;
-        public HttpJsonRequestController(IRepository<Users> userRepository)
+        public HttpJsonRequestController(IRepository<SEC_Users> userRepository)
         {
             _userRepository = userRepository;
             jsonRequestManager = new JsonRequestManager(_userRepository);

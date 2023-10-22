@@ -6,6 +6,6 @@ namespace WebAPI.Controllers
     {
         public bool Status { get; set; }
         public string Message { get; set; }
-        public List<Services> Data { get; set; }
+        public List<SYS_Services> Data { get; set; }
     }
 }

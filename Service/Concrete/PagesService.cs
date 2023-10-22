@@ -13,16 +13,16 @@ namespace Service.Concrete
 {
     public class PagesService : IPagesService
     {
-        private readonly IRepository<Pages> _pagesRepository;
+        private readonly IRepository<SYS_Pages> _pagesRepository;
 
-        public PagesService(IRepository<Pages> pagesRepository)
+        public PagesService(IRepository<SYS_Pages> pagesRepository)
         {
             _pagesRepository = pagesRepository;
         }
 
         public bool Addpages(PagesModel pagesModel, string userName)
         {
-            Pages pages = new Pages() 
+            SYS_Pages pages = new SYS_Pages() 
             { 
             PageName = pagesModel.PageName,
             PageNameAr = pagesModel.PageNameAr,
@@ -41,7 +41,7 @@ namespace Service.Concrete
                 PagesModel pageModel = this.GetpagesById(Id);
                 if (pageModel != null)
                 {
-                    Pages pages = new Pages()
+                    SYS_Pages pages = new SYS_Pages()
                     {
                         PageName = pageModel.PageName,
                         PageNameAr = pageModel.PageNameAr,
@@ -82,7 +82,7 @@ namespace Service.Concrete
         {
             try
             {
-                Pages pages = new Pages()
+                SYS_Pages pages = new SYS_Pages()
                 {
                     Id = pagesModel.Id,
                     PageName = pagesModel.PageName,

@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
         //[Route("UpdateService")]
         //[ProducesResponseType(StatusCodes.Status204NoContent)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(int ServiceId, Services issue)
+        public async Task<IActionResult> Update(int ServiceId, SYS_Services issue)
         {
             try
             {
@@ -87,9 +87,9 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var issueToDelete = await _context.Services.FindAsync(ServiceId);
+                var issueToDelete = await _context.SYS_Services.FindAsync(ServiceId);
                 if (issueToDelete == null) return NotFound();
-                _context.Services.Remove(issueToDelete);
+                _context.SYS_Services.Remove(issueToDelete);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -117,7 +117,7 @@ namespace WebAPI.Controllers
         //[Route("UpdateService")]
         //[ProducesResponseType(StatusCodes.Status204NoContent)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateServiceCategoryLookup(int ServiceCategoryId, Domain.Entities.ServiceCategoryLookup issue)
+        public async Task<IActionResult> UpdateServiceCategoryLookup(int ServiceCategoryId, Domain.Entities.SYS_ServiceCategory issue)
         {
             try
             {
@@ -143,9 +143,9 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var ServiceCategoryLookupToDelete = await _context.ServiceCategoryLookup.FindAsync(ServiceCategoryId);
+                var ServiceCategoryLookupToDelete = await _context.SYS_ServiceCategory.FindAsync(ServiceCategoryId);
                 if (ServiceCategoryLookupToDelete == null) return NotFound();
-                _context.ServiceCategoryLookup.Remove(ServiceCategoryLookupToDelete);
+                _context.SYS_ServiceCategory.Remove(ServiceCategoryLookupToDelete);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -182,7 +182,7 @@ namespace WebAPI.Controllers
         //[Route("UpdateService")]
         //[ProducesResponseType(StatusCodes.Status204NoContent)]
         //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateServiceSubCategoryLookup(int ServiceSubCategoryId, ServiceSubCategoryLookup issue)
+        public async Task<IActionResult> UpdateServiceSubCategoryLookup(int ServiceSubCategoryId, SYS_ServiceSubCategory issue)
         {
             try
             {
@@ -206,9 +206,9 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var ServiceSubCategoryLookupToDelete = await _context.ServiceSubCategoryLookup.FindAsync(ServiceSubCategoryId);
+                var ServiceSubCategoryLookupToDelete = await _context.SYS_ServiceSubCategory.FindAsync(ServiceSubCategoryId);
                 if (ServiceSubCategoryLookupToDelete == null) return NotFound();
-                _context.ServiceSubCategoryLookup.Remove(ServiceSubCategoryLookupToDelete);
+                _context.SYS_ServiceSubCategory.Remove(ServiceSubCategoryLookupToDelete);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -249,13 +249,13 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetByServiceId")]
-        [ProducesResponseType(typeof(Services), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SYS_Services), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var issue = await _context.Services.FindAsync(id);
+                var issue = await _context.SYS_Services.FindAsync(id);
                 return issue == null ? NotFound() : Ok(issue);
             }
             catch (Exception ex)
@@ -268,12 +268,12 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("AddService")]
-        [ProducesResponseType(typeof(Services), StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create(Services issue)
+        [ProducesResponseType(typeof(SYS_Services), StatusCodes.Status201Created)]
+        public async Task<IActionResult> Create(SYS_Services issue)
         {
             try
             {
-                await _context.Services.AddAsync(issue);
+                await _context.SYS_Services.AddAsync(issue);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetById), new { id = issue.ServiceSubCategoryId }, issue);
             }
@@ -291,13 +291,13 @@ namespace WebAPI.Controllers
 /// <returns></returns>
         [HttpGet]
         [Route("GetByServiceSubCategoryLookupId")]
-        [ProducesResponseType(typeof(ServiceSubCategoryLookup), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SYS_ServiceSubCategory), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByServiceSubCategoryLookupid(int id)
         {
             try
             {
-                var issue = await _context.ServiceSubCategoryLookup.FindAsync(id);
+                var issue = await _context.SYS_ServiceSubCategory.FindAsync(id);
                 return issue == null ? NotFound() : Ok(issue);
             }
             catch (Exception ex)
@@ -310,12 +310,12 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("AddServiceSubCategoryLookup")]
-        [ProducesResponseType(typeof(ServiceSubCategoryLookup), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateServiceSubCategoryLookup(ServiceSubCategoryLookup issue)
+        [ProducesResponseType(typeof(SYS_ServiceSubCategory), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateServiceSubCategoryLookup(SYS_ServiceSubCategory issue)
         {
             try
             {
-                await _context.ServiceSubCategoryLookup.AddAsync(issue);
+                await _context.SYS_ServiceSubCategory.AddAsync(issue);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetById), new { id = issue.ServiceSubCategoryId }, issue);
             }
@@ -332,13 +332,13 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetByServiceCategoryLookupId")]
-        [ProducesResponseType(typeof(Domain.Entities.ServiceCategoryLookup), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Domain.Entities.SYS_ServiceCategory), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByServiceCategoryLookupid(int id)
         {
             try
             {
-                var issue = await _context.ServiceCategoryLookup.FindAsync(id);
+                var issue = await _context.SYS_ServiceCategory.FindAsync(id);
                 return issue == null ? NotFound() : Ok(issue);
             }
             catch (Exception ex)
@@ -351,12 +351,12 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("AddServiceCategoryLookup")]
-        [ProducesResponseType(typeof(Domain.Entities.ServiceCategoryLookup), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateServiceCategoryLookup(Domain.Entities.ServiceCategoryLookup issue)
+        [ProducesResponseType(typeof(Domain.Entities.SYS_ServiceCategory), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateServiceCategoryLookup(Domain.Entities.SYS_ServiceCategory issue)
         {
             try
             {
-                await _context.ServiceCategoryLookup.AddAsync(issue);
+                await _context.SYS_ServiceCategory.AddAsync(issue);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetById), new { id = issue.ServiceCategoryId }, issue);
             }

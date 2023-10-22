@@ -23,8 +23,8 @@ namespace Service.Concrete
     {
         public readonly IRepository<SMS_Trans> _smsRepository;
 
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
-        public AdminService(IRepository<SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
+        public AdminService(IRepository<SYS_SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
         {
             _systemSettingRepository = systemSettingRepository;
             _smsRepository = smsRepository;

@@ -24,9 +24,9 @@ namespace Service.Concrete
     {
         private readonly IWebHostEnvironment environment;
         private readonly ApplicationDbContext socialDbContext;
-        public readonly IRepository<SystemSettings> _systemSettingRepository;
+        public readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
         public string _FileName = "";
-        public UsersProfilePicture(IWebHostEnvironment repository, ApplicationDbContext dbContextClass, IRepository<SystemSettings> systemSettingRepository)
+        public UsersProfilePicture(IWebHostEnvironment repository, ApplicationDbContext dbContextClass, IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             environment = repository;
             this.socialDbContext = dbContextClass;
@@ -35,7 +35,7 @@ namespace Service.Concrete
         public async Task<PostResponse> CreatePostAsync(PostRequest postRequest)
         {
            
-            var post = new Domain.Entities.UsersProfilePicture
+            var post = new Domain.Entities.SEC_UsersProfilePicture
             {
                 UserId = postRequest.UserId,
                 CreatedBy = postRequest.CreatedBy,
@@ -51,7 +51,7 @@ namespace Service.Concrete
                 var _find = _systemSettingRepository.ExecuteStoredProcedure<PostRequest>("Sjc_GetUsersProfilePicture", spParams).FirstOrDefault();// socialDbContext.UsersProfilePicture.Find(28);
                 if (_find == null)
                 {
-                    var _ = await socialDbContext.UsersProfilePicture.AddAsync(post);
+                    var _ = await socialDbContext.SEC_UsersProfilePicture.AddAsync(post);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace Service.Concrete
         {
             try
             {
-                var file = socialDbContext.UsersProfilePicture.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                var file = socialDbContext.SEC_UsersProfilePicture.Where(x => x.UserId == userId).FirstOrDefaultAsync();
 
                 var content = new System.IO.MemoryStream(file.Result.FileContent);
                 var path = Path.Combine(
@@ -163,7 +163,7 @@ namespace Service.Concrete
         {
             try
             {
-                var fileDetails = new Domain.Entities.UsersProfilePicture()
+                var fileDetails = new Domain.Entities.SEC_UsersProfilePicture()
                 {
                     //  UserId = 0,
                     FileName = fileData.FileName,
@@ -184,7 +184,7 @@ namespace Service.Concrete
                     fileDetails.FileContent = stream.ToArray();
                 }
 
-                var result = socialDbContext.UsersProfilePicture.Add(fileDetails);
+                var result = socialDbContext.SEC_UsersProfilePicture.Add(fileDetails);
                 await socialDbContext.SaveChangesAsync();
             }
             catch (Exception)

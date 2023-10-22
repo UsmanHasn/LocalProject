@@ -6,17 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.Lookups
+namespace Domain.Entities
 {
-    public class UserStatusLookup : BaseEntity
+    public class SYS_Pages : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [MaxLength(100)]
         [Required]
-        public string Name { get; set; }
-        [MaxLength(100)]
-        [Required]
-        public string NameAr { get; set; }
+        public string PageName { get; set; }
+        public string PageNameAr { get; set; }
+        public string PageModuleEn { get; set; }
+        public string PageModuleAr { get; set; }
     }
 }

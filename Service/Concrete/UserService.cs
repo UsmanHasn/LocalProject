@@ -19,13 +19,13 @@ namespace Service.Concrete
 {
     public class UserService : IUserService
     {
-        public readonly IRepository<Users> _userRepository;
-        public readonly IRepository<UserActivityInfoLog> _userRepository1;
-        public readonly IRepository<UserInRole> _userRoleRepository;
-        public readonly IRepository<SystemSettings> _systemSettingRepository;
+        public readonly IRepository<SEC_Users> _userRepository;
+        public readonly IRepository<SEC_UserActivityInfoLog> _userRepository1;
+        public readonly IRepository<SEC_UserInRole> _userRoleRepository;
+        public readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
 
 
-        public UserService(IRepository<Users> userRepository, IRepository<UserActivityInfoLog> userRepository1, IRepository<UserInRole> userRoleRepository, IRepository<SystemSettings> systemSettingRepository)
+        public UserService(IRepository<SEC_Users> userRepository, IRepository<SEC_UserActivityInfoLog> userRepository1, IRepository<SEC_UserInRole> userRoleRepository, IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             _userRepository = userRepository;
             _userRoleRepository = userRoleRepository;
@@ -74,7 +74,7 @@ namespace Service.Concrete
             // UserModel usrModel = this.checkDuplicate(userModel.CivilID, userModel.Email, userModel.Mobile);
             //if (usrModel == null)
             //{
-            Users users = new Users()
+            SEC_Users users = new SEC_Users()
             {
                 Id = userModel.Id,
                 UserName = userModel.Name,
@@ -170,7 +170,7 @@ namespace Service.Concrete
         }
         public bool UpdateUser(UserModel userModel, string userName)
         {
-            Users users = new Users()
+            SEC_Users users = new SEC_Users()
             {
                 Id = userModel.Id,
                 UserName = userModel.Name,
@@ -207,7 +207,7 @@ namespace Service.Concrete
         public bool UpdateUserFirstLogin(int UserId, string userName)
         {
             UserModel userModel = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserById", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId)).FirstOrDefault();
-            Users users = new Users()
+            SEC_Users users = new SEC_Users()
             {
                 Id = userModel.Id,
                 UserName = userModel.Name,
@@ -246,7 +246,7 @@ namespace Service.Concrete
         public bool UpdateLoginAttempts(int UserId)
         {
             UserModel userModel = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserByCivilId", new Microsoft.Data.SqlClient.SqlParameter("UserId", UserId)).FirstOrDefault();
-            Users users = new Users()
+            SEC_Users users = new SEC_Users()
             {
                 Id = userModel.Id,
                 UserName = userModel.Name,
@@ -295,11 +295,11 @@ namespace Service.Concrete
         }
         public bool AddUserInRole(List<int> roleIds, int userId, string userName)
         {
-            List<UserInRole> assignedRoles = _userRoleRepository.GetAll(x => x.UserId == userId).ToList();
+            List<SEC_UserInRole> assignedRoles = _userRoleRepository.GetAll(x => x.UserId == userId).ToList();
             if (assignedRoles.Any() && assignedRoles.Count() > 0)
             {
-                List<UserInRole> deletedRoles = assignedRoles.Where(x => !roleIds.Contains(x.RoleId)).ToList();
-                foreach (UserInRole userRole in deletedRoles)
+                List<SEC_UserInRole> deletedRoles = assignedRoles.Where(x => !roleIds.Contains(x.RoleId)).ToList();
+                foreach (SEC_UserInRole userRole in deletedRoles)
                 {
                     userRole.Deleted = true;
                     _userRoleRepository.Delete(userRole, userName);
@@ -314,7 +314,7 @@ namespace Service.Concrete
                     }
                     else
                     {
-                        UserInRole userRole = new UserInRole() { UserId = userId, RoleId = roleId };
+                        SEC_UserInRole userRole = new SEC_UserInRole() { UserId = userId, RoleId = roleId };
                         _userRoleRepository.Create(userRole, userName);
                     }
                 }
@@ -324,7 +324,7 @@ namespace Service.Concrete
             {
                 foreach (int roleId in roleIds)
                 {
-                    UserInRole userRole = new UserInRole() { UserId = userId, RoleId = roleId };
+                    SEC_UserInRole userRole = new SEC_UserInRole() { UserId = userId, RoleId = roleId };
                     _userRoleRepository.Create(userRole, userName);
                 }
                 _userRepository.Save();
@@ -335,7 +335,7 @@ namespace Service.Concrete
 
         public bool AddActivity(UserActivityInfoLogModel userModel, string userName)
         {
-            UserActivityInfoLog userActivityInfoLog = new UserActivityInfoLog()
+            SEC_UserActivityInfoLog userActivityInfoLog = new SEC_UserActivityInfoLog()
             {
                 UserId = userModel.UserId,
                 PageName = userModel.PageName,
@@ -349,7 +349,7 @@ namespace Service.Concrete
         }
         public bool AddActivity(int userId, string pageName, string activity, DateTime loggedIn, string userName)
         {
-            UserActivityInfoLog userActivityInfoLog = new UserActivityInfoLog()
+            SEC_UserActivityInfoLog userActivityInfoLog = new SEC_UserActivityInfoLog()
             {
                 UserId = userId,
                 PageName = pageName,
@@ -372,7 +372,7 @@ namespace Service.Concrete
 
         public bool UpdateUserActivity(UserActivityInfoLogModel userModel, string userName)
         {
-            UserActivityInfoLog users = new UserActivityInfoLog()
+            SEC_UserActivityInfoLog users = new SEC_UserActivityInfoLog()
             {
                 UserId = userModel.UserId,
                 PageName = userModel.PageName,
