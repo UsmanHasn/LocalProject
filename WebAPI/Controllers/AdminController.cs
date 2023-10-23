@@ -1,7 +1,9 @@
 ﻿using Data.Context;
 using Domain.Entities;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
+using Service.Helper;
 using Service.Interface;
 using Service.Models;
 using System.Net;
@@ -141,7 +143,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("getallservices")]
@@ -158,7 +160,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -176,7 +178,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpPost]
@@ -194,7 +196,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -319,7 +321,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -338,7 +340,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -357,7 +359,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
 
@@ -387,7 +389,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-          
+
         }
 
         [HttpGet]
@@ -406,7 +408,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
 
         [HttpGet]
@@ -425,7 +427,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -444,7 +446,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -463,7 +465,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
 
         [HttpGet]
@@ -482,7 +484,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-          
+
         }
 
 
@@ -496,7 +498,15 @@ namespace WebAPI.Controllers
         {
             try
             {
-                _AdminService.Add(alertModel, userName);
+                if (alertModel.userId > 0)
+                {
+                    _AdminService.Add(alertModel, userName);
+                }
+                if (alertModel.alertType == "E")
+                {
+                    string messageBody = alertModel.message;
+                    EmailHelper.sendMail(alertModel.email, alertModel.subject, messageBody);
+                }
                 return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -504,7 +514,6 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
         }
         [HttpGet]
         [Route("getusers")]
@@ -521,7 +530,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getalerts")]
@@ -537,7 +546,7 @@ namespace WebAPI.Controllers
             {
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
-            
+
         }
         [HttpGet]
         [Route("getAlertbyId")]
@@ -554,7 +563,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
 
         [HttpGet]
@@ -591,7 +600,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
 

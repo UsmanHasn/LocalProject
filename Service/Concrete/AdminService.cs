@@ -332,7 +332,8 @@ namespace Service.Concrete
                 Id = x.Id,
                 Name = x.Name,
                 Name_Civil = x.Name +" | "+ x.CivilID,
-                Name_CivilAr = x.NameAr + " | " + x.CivilID
+                Name_CivilAr = x.NameAr + " | " + x.CivilID,
+                Email=x.Email
             }).ToList();
             return data;
         }
