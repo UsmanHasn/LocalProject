@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Utilities;
+using System.Security.Cryptography;
 
 namespace Service.Concrete
 {
@@ -30,8 +33,9 @@ namespace Service.Concrete
 
         public bool InsertIntoPaymentResponse(PaymentdecryptResponseModel paymentdecryptResponse)
         {  // Create an array of SqlParameter objects to pass the values
-            SqlParameter[] spParams = new SqlParameter[40]; // Adjust the size based on the number of parameters in your stored procedure
+            SqlParameter[] spParams = new SqlParameter[42]; // Adjust the size based on the number of parameters in your stored procedure
 
+            var splitOrderInfo = paymentdecryptResponse.order_id.Split("_");
             spParams[0] = new SqlParameter("@order_id", paymentdecryptResponse.order_id);
             spParams[1] = new SqlParameter("@tracking_id", paymentdecryptResponse.tracking_id);
             spParams[2] = new SqlParameter("@bank_ref_no", paymentdecryptResponse.bank_ref_no);
@@ -72,10 +76,35 @@ namespace Service.Concrete
             spParams[37] = new SqlParameter("@order_date_time", paymentdecryptResponse.order_date_time);
             spParams[38] = new SqlParameter("@token_number", paymentdecryptResponse.token_number);
             spParams[39] = new SqlParameter("@token_eligibility", paymentdecryptResponse.token_eligibility);
-
+            spParams[40] = new SqlParameter("@Request_Id", 1);
+            spParams[41] = new SqlParameter("@UserId", 1);
             _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentResponse", spParams);
             return true;
 
+        }
+
+        public bool InsertPaymentRequest(PaymentPayLoad PaymentPayLoad)
+        { // Create an array of SqlParameter objects to pass the values
+            try
+            {
+                SqlParameter[] spParams = new SqlParameter[10]; // Adjust the size based on the number of parameters in your stored procedure
+
+                spParams[0] = new SqlParameter("@RequestId ", PaymentPayLoad.RequestId);
+                spParams[1] = new SqlParameter("@UserId ", PaymentPayLoad.UserId);
+                spParams[2] = new SqlParameter("@tid", PaymentPayLoad.tid);
+                spParams[3] = new SqlParameter("@merchant_id", PaymentPayLoad.merchant_id);
+                spParams[4] = new SqlParameter("@order_id ", PaymentPayLoad.order_id);
+                spParams[5] = new SqlParameter("@amount ", PaymentPayLoad.amount);
+                spParams[6] = new SqlParameter("@currency ", PaymentPayLoad.currency);
+                spParams[7] = new SqlParameter("@redirect_url ", PaymentPayLoad.redirect_url);
+                spParams[8] = new SqlParameter("@cancel_url ", PaymentPayLoad.cancel_url);
+                spParams[9] = new SqlParameter("@language ", PaymentPayLoad.language);
+                _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentRequest", spParams);
+            }catch(Exception e )
+            {
+
+            }
+            return true;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("PaymentPayLoadEnc")]
-        public IActionResult PaymentPayLoadEnc(PaymentPayLoad payLoad)
+        public IActionResult PaymentPayLoadEnc(Models.PaymentPayLoad payLoad)
         {
             try
             {
@@ -39,14 +39,26 @@ namespace WebAPI.Controllers
                 CCACrypto ccaCrypto = new CCACrypto();
                 DateTime now = DateTime.Now;
                 long timestamp = now.Ticks;
-                payLoad.tid = timestamp;
+                payLoad.tid = timestamp + payLoad.RequestId + payLoad.UserId;
                 payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
-                payLoad.order_id = timestamp.ToString();
+                payLoad.order_id = timestamp.ToString()+""+payLoad.RequestId +""+ payLoad.UserId;
 
                 payLoad.redirect_url = Configuration["Payment:redirect_url"];
 
                 payLoad.cancel_url = Configuration["Payment:cancel_url"];
                 string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
+                Service.Models.PaymentPayLoad payloadService = new Service.Models.PaymentPayLoad();
+                payloadService.merchant_id=  payLoad.merchant_id;
+                payloadService.tid = payLoad.tid;
+                payloadService.redirect_url = payLoad.redirect_url;
+                payloadService.amount = payLoad.amount;
+                payloadService.cancel_url = payLoad.cancel_url;
+                payloadService.order_id = payLoad.order_id;
+                payloadService.language = payLoad.language;
+                payloadService.RequestId = payLoad.RequestId;
+                payloadService.UserId = payLoad.UserId;
+                payloadService.currency = payLoad.currency;
+                _IpaymentService.InsertPaymentRequest(payloadService);
                 PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
                 paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
                 return new JsonResult(new { data = paymentPayloadEncResponse, status = HttpStatusCode.OK });
@@ -60,7 +72,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("PaymentRedirection")]
-        public IActionResult PaymentRedirection(PaymentPayLoad payLoad)
+        public IActionResult PaymentRedirection(Models.PaymentPayLoad payLoad)
         {
             try
             {
@@ -165,7 +177,7 @@ namespace WebAPI.Controllers
                 responseModel.merchant_param7 = Params["merchant_param7"];
                 _IpaymentService.InsertIntoPaymentResponse(responseModel);
 
-                return RedirectPermanent(Configuration["Payment:AngularResponseUrl"]);
+                return RedirectPermanent(Configuration["Payment:AngularResponseUrl"].ToString());
             }
             catch (Exception es)
             {
