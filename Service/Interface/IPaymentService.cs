@@ -6,6 +6,6 @@ namespace Service.Interface
     {
         bool InsertIntoPaymentResponse(PaymentdecryptResponseModel paymentdecryptResponse);
         bool InsertPaymentRequest(PaymentPayLoad PaymentPayLoad);
-        PaymentdecryptResponseModel GetPaymentdecryptResponse(int Id);
+        PaginatedTransactionModel GetPaymentResponse(int pageSize, int pageNumber, string? SearchText);
     }
 }

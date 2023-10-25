@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
                 long timestamp = now.Ticks;
                 payLoad.tid = timestamp + payLoad.RequestId + payLoad.UserId;
                 payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
-                payLoad.order_id = timestamp.ToString()+""+payLoad.RequestId +""+ payLoad.UserId;
+                payLoad.order_id = timestamp.ToString()+"R"+payLoad.RequestId +"U"+ payLoad.UserId;
 
                 payLoad.redirect_url = Configuration["Payment:redirect_url"];
 
@@ -132,6 +132,7 @@ namespace WebAPI.Controllers
                 // Now, map the values to your class properties
 
                 Service.Models.PaymentdecryptResponseModel responseModel = new Service.Models.PaymentdecryptResponseModel();
+               
 
                 responseModel.order_id = Params["order_id"];
                 responseModel.tracking_id = Params["tracking_id"];
@@ -164,7 +165,7 @@ namespace WebAPI.Controllers
                 responseModel.mer_amount = Params["mer_amount"];
                 responseModel.eci_value = Params["eci_value"];
                 responseModel.retry = Params["retry"];
-                responseModel.response_code = Params["response_code"];
+                responseModel.response_code = Convert.ToInt32(Params["response_code"]);
                 responseModel.billing_notes = Params["billing_notes"];
                 responseModel.trans_date = Params["trans_date"];
                 responseModel.bin_country = Params["bin_country"];
@@ -185,6 +186,23 @@ namespace WebAPI.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet]
+        [Route("GetPaymentResponse")]
+        public IActionResult GetPaymentResponse(int pageSize, int pageNumber, string? SearchText)
+        {
+            try
+            {
+                var paymentModel = _IpaymentService.GetPaymentResponse(pageSize, pageNumber, SearchText);
+                return new JsonResult(new { data = paymentModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+        }
+
 
     }
 }

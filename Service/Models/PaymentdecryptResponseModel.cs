@@ -39,7 +39,7 @@ namespace Service.Models
         public string mer_amount { get; set; }
         public string eci_value { get; set; }
         public string retry { get; set; }
-        public string response_code { get; set; }
+        public int response_code { get; set; }
         public string billing_notes { get; set; }
         public string trans_date { get; set; }
         public string bin_country { get; set; }
@@ -50,5 +50,12 @@ namespace Service.Models
         public string token_eligibility { get; set; }
         public string merchant_param6 { get; set; }
         public string merchant_param7 { get; set; }
+        public long Request_Id { get; set; }
+        public long UserId { get; set; }
+    }
+    public class PaginatedTransactionModel
+    {
+        public List<PaymentdecryptResponseModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
     }
 }

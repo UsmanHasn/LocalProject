@@ -29,7 +29,7 @@ BEGIN
 END;
 
 
-alter PROCEDURE [dbo].[InsertPaymentRequest]  
+alter PROCEDURE [dbo].[InsertPaymentResponse]  
     @order_id VARCHAR(255) null,   
     @tracking_id VARCHAR(255)null,   
     @bank_ref_no VARCHAR(255)null,   

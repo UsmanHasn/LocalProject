@@ -26,16 +26,48 @@ namespace Service.Concrete
             _PaymentdecryptResponseRepository = PaymentdecryptResponseRepository;
         }
 
-        public PaymentdecryptResponseModel GetPaymentdecryptResponse(int Id)
+        public PaginatedTransactionModel GetPaymentResponse(int pageSize, int pageNumber, string? SearchText)
         {
-            throw new NotImplementedException();
-        }
+            try { 
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("pageSize", pageSize);
+            param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
+            var data = _PaymentdecryptResponseRepository.ExecuteStoredProcedure<PaymentdecryptResponseModel>("GetPaymentResponse", param).ToList();
+                int countItem = 0;
+                if (SearchText != null)
+                {
+                    SqlParameter[] paramSearch = new SqlParameter[1];
+                    paramSearch[0] = new SqlParameter("SearchText", SearchText);
 
+                    var count = _PaymentdecryptResponseRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetPaymentResponseCount", paramSearch).FirstOrDefault();
+                    countItem = count.TotalCount;
+                }
+                else
+                {
+                    var count = _PaymentdecryptResponseRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetPaymentResponseCount").FirstOrDefault();
+                    countItem = count.TotalCount;
+                }
+                PaginatedTransactionModel paginatedTransactionModel =new PaginatedTransactionModel()
+                {
+                    PaginatedData = data,
+                    TotalCount = countItem
+                };
+                return paginatedTransactionModel;
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return null;
+        }
         public bool InsertIntoPaymentResponse(PaymentdecryptResponseModel paymentdecryptResponse)
         {  // Create an array of SqlParameter objects to pass the values
             SqlParameter[] spParams = new SqlParameter[42]; // Adjust the size based on the number of parameters in your stored procedure
 
-            var splitOrderInfo = paymentdecryptResponse.order_id.Split("_");
+
+            string[] responseUsersegments = paymentdecryptResponse.order_id.Split('U');
+            string[] responseRequestsegments = responseUsersegments[0].Split('R');
             spParams[0] = new SqlParameter("@order_id", paymentdecryptResponse.order_id);
             spParams[1] = new SqlParameter("@tracking_id", paymentdecryptResponse.tracking_id);
             spParams[2] = new SqlParameter("@bank_ref_no", paymentdecryptResponse.bank_ref_no);
@@ -76,8 +108,8 @@ namespace Service.Concrete
             spParams[37] = new SqlParameter("@order_date_time", paymentdecryptResponse.order_date_time);
             spParams[38] = new SqlParameter("@token_number", paymentdecryptResponse.token_number);
             spParams[39] = new SqlParameter("@token_eligibility", paymentdecryptResponse.token_eligibility);
-            spParams[40] = new SqlParameter("@Request_Id", 1);
-            spParams[41] = new SqlParameter("@UserId", 1);
+            spParams[40] = new SqlParameter("@Request_Id", responseRequestsegments[1]);
+            spParams[41] = new SqlParameter("@UserId", responseUsersegments[1]);
             _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentResponse", spParams);
             return true;
 
