@@ -85,7 +85,8 @@ namespace Service.Interface
         List<LookupsModel> getWilayaByGovernorate(int GovernorateId);
         List<LookupsModel> getVillageByWilaya(int GovernorateId, int WilayaId);
         List<LookupsModel> getAddressType();
-
+        List<DocumentTypeLookupModel> GetRequiredDocumentTypes(string docIds);
         public SystemParameterModel GetSystemSettingByName(string KeyName);
+        List<LookupsModel> getRequestLinkSource();
     }
 }

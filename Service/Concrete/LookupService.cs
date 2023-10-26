@@ -679,5 +679,17 @@ namespace Service.Concrete
             SqlParameter[] parameters = new SqlParameter[0];
             return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetAddressype", parameters).ToList();
         }
+        public List<DocumentTypeLookupModel> GetRequiredDocumentTypes(string docIds)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("@DocIds", docIds);
+            var model = _languagesRepository.ExecuteStoredProcedure<DocumentTypeLookupModel>("sp_ReqiuredDocumentType", spParams).ToList();
+            return model;
+        }
+        public List<LookupsModel> getRequestLinkSource()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetRequestLinkSource", parameters).ToList();
+        }
     }
 }

@@ -267,7 +267,7 @@ namespace WebAPI.Controllers
         [Route("BindPaymentDraw")]
         public IActionResult BindPaymentDraw()
         {
-            List<LookupsModel> model = new List<LookupsModel>();
+            List<PaymentActionModel> model = new List<PaymentActionModel>();
             try
             {
                 model = _caseService.BindPaymentDraw();

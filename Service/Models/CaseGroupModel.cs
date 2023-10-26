@@ -107,6 +107,7 @@
         public string ACO_Code { get; set; }
         public string CaseCategoryAr { get; set; }
         public string CaseCategoryEn { get; set; }
+        public string RequestLinkSource { get; set; }
     }
     public class CaseCategoryTypesModel
     {
@@ -119,6 +120,7 @@
         public int? SecondPartyTypeId { get; set; }
         public bool? IsActive { get; set; }
         public string? CreatedBy { get; set; }
+        public bool? AllowLinkCase { get; set; }
     }
     public class COR_GroupCatTypeModel
     {

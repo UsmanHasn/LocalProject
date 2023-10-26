@@ -430,5 +430,27 @@ namespace WebAPI.Controllers
 
             }
         }
+        [HttpPost]
+        [Route("getPPCaseLitigants")]
+        public async Task<IActionResult> GetPPCaseLitigants(PPCaseLitigantsApiRequestModel ppCaseLitigantApiRequest)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new PPCaseLitigantsModel();
+            try
+            {
+                //Get Personal Information
+                var responseString = await httpClientHelper.MakeHttpRequestJsonString<PPCaseLitigantsApiRequestModel, PPCaseLitigantsModel>
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/getPPCaseLitigants?caseno=" + ppCaseLitigantApiRequest.CaseNo, HttpMethod.Post, null, null);
+                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
+                response = JsonConvert.DeserializeObject<PPCaseLitigantsModel>(httpStringResponse.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
+        }
     }
 }

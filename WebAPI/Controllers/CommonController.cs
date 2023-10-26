@@ -1188,5 +1188,39 @@ namespace WebAPI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("getrequireddocuments")]
+        public IActionResult getrequireddocuments(string docIds)
+        {
+            List<DocumentTypeLookupModel> model = new List<DocumentTypeLookupModel>();
+            try
+            {
+                model = _lookupService.GetRequiredDocumentTypes(docIds);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+        [HttpGet]
+        [Route("getRequestLinkSource")]
+        public IActionResult GetRequestLinkSource()
+        {
+            List<LookupsModel> model = new List<LookupsModel>();
+            try
+            {
+                model = _lookupService.getRequestLinkSource().ToList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
     }
 }

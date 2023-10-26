@@ -178,10 +178,10 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetPendingCase", parameters).ToList();
         }
 
-        public List<LookupsModel> BindPaymentDraw()
+        public List<PaymentActionModel> BindPaymentDraw()
         {
             SqlParameter[] param = new SqlParameter[0];
-            var dataMenu = _systemSettingRepository.ExecuteStoredProcedure<LookupsModel>("sjc_GetPaymentDraw", param);
+            var dataMenu = _systemSettingRepository.ExecuteStoredProcedure<PaymentActionModel>("sjc_GetPaymentDraw", param);
             return dataMenu.ToList();
         }
 
