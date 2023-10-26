@@ -124,7 +124,7 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("AddDelegationPermission")]
-        public IActionResult Add(List<UserDelegatePermissionModel> model, string userId, string userName)
+        public IActionResult Add(List<UserDelegatePermissionModel> model, string userId, string userName, string delegatedUserName)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace WebAPI.Controllers
                 }
                 if (Convert.ToInt32(userId) > 0)
                 {
-                    _userService.AddActivity(Convert.ToInt32(userId), "Delegation", "Delegate Role", DateTime.Now, userName);
+                    _userService.AddActivity(Convert.ToInt32(userId), "Delegation", "Delegate Role to " + delegatedUserName, DateTime.Now, userName);
                 }
                 _userService.InsertAlert(model.First().UserId, "", userName, "", "",userName+ " Delegate Role to you", userName + " Delegate Role to you");
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });

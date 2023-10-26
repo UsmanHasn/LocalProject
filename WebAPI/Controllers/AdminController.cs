@@ -498,10 +498,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                if (alertModel.userId > 0)
-                {
-                    _AdminService.Add(alertModel, userName);
-                }
+                _AdminService.Add(alertModel, userName);
                 if (alertModel.alertType == "E")
                 {
                     string messageBody = alertModel.message;

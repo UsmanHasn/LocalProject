@@ -20,7 +20,7 @@ namespace Service.Models
         public string? Name_CivilAr { get; set; }
 
         public string Nationality { get; set; }
-        public string NationalityAr { get; set; }
+        public string? NationalityAr { get; set; }
         public int nationalityID { get; set; }
 
         public string countryName { get; set; }
@@ -35,7 +35,7 @@ namespace Service.Models
 
         public string PassportNo { get; set; }
 
-        public DateTime PassportExpDate { get; set; }
+        public DateTime? PassportExpDate { get; set; }
 
         public int PassportCountryCode { get; set; }
 
