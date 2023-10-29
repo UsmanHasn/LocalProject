@@ -637,8 +637,6 @@ namespace Service.Concrete
             try
             {
                 SqlParameter[] spParams = new SqlParameter[21];
-
-
                 spParams[0] = new SqlParameter("CaseCatDtlId", caseCategoryDetails.CaseCatDtlId);
                 spParams[1] = new SqlParameter("CaseCateggoryId", caseCategoryDetails.CaseCategoryId);
                 spParams[2] = new SqlParameter("Description_en", caseCategoryDetails.Descriptionen);
@@ -718,6 +716,58 @@ namespace Service.Concrete
             parameters[3] = new SqlParameter("@CreatedBy", cor_GroupCatTypeModel.CreatedBy);
             _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_COR_CaseGrpCatType", parameters);
 
+        }
+
+        public bool InsUpDel_CorAdvanceLinkingConfig(COR_AdvanceLinkingConfigModel cOR_AdvanceLinkingConfigModel)
+        {
+            try
+            {
+                SqlParameter[] parameters = new SqlParameter[11];
+                parameters[0] = new SqlParameter("LinkId", cOR_AdvanceLinkingConfigModel.LinkId);
+                parameters[1] = new SqlParameter("CaseGroupId", cOR_AdvanceLinkingConfigModel.CaseGroupId);
+                parameters[2] = new SqlParameter("LocationId", cOR_AdvanceLinkingConfigModel.LocationId);
+                parameters[3] = new SqlParameter("CategoryId", cOR_AdvanceLinkingConfigModel.CategoryId);
+                parameters[4] = new SqlParameter("CaseTypeId", cOR_AdvanceLinkingConfigModel.CaseTypeId);
+                parameters[5] = new SqlParameter("SubjectId", cOR_AdvanceLinkingConfigModel.SubjectId);
+                parameters[6] = new SqlParameter("LinkAllow", cOR_AdvanceLinkingConfigModel.LinkAllow);
+                parameters[7] = new SqlParameter("LinkGroupId", cOR_AdvanceLinkingConfigModel.LinkGroupId);
+                parameters[8] = new SqlParameter("LinkSources", cOR_AdvanceLinkingConfigModel.LinkSources);
+                parameters[9] = new SqlParameter("RoleId", cOR_AdvanceLinkingConfigModel.RoleId);
+                parameters[10] = new SqlParameter("Action", cOR_AdvanceLinkingConfigModel.LinkId > 0 ? "U" : "I");
+                _systemSettingRepository.ExecuteStoredProcedure("sjc_InsUpdDltCOR_AdvanceLinkingConfig", parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public List<COR_AdvanceLinkingConfigModel> GetCOR_AdvanceLinkingConfig()
+        {
+            try
+            {
+                SqlParameter[] parameters = new SqlParameter[0];
+                return _systemSettingRepository.ExecuteStoredProcedure<COR_AdvanceLinkingConfigModel>("sjc_GetCOR_AdvanceLinkingConfig", parameters).ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public COR_AdvanceLinkingConfigModel GetCOR_AdvanceLinkingConfigById(int LinkId)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("LinkId", LinkId);
+                var data = _systemSettingRepository.ExecuteStoredProcedure<COR_AdvanceLinkingConfigModel>("sjc_GetCOR_AdvanceLinkingConfig", param).FirstOrDefault();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

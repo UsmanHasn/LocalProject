@@ -1064,6 +1064,53 @@ namespace WebAPI.Controllers
             }
            
         }
+
+        [HttpPost]
+        [Route("InsUpDel_CorAdvanceLinkingConfig")]
+        public IActionResult InsUpDel_CorAdvanceLinkingConfig(COR_AdvanceLinkingConfigModel cOR_AdvanceLinkingConfigModel)
+        {
+            try
+            {
+                _caseService.InsUpDel_CorAdvanceLinkingConfig(cOR_AdvanceLinkingConfigModel);
+                return new JsonResult(new { data = cOR_AdvanceLinkingConfigModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+        [HttpGet]
+        [Route("GetCorAdvanceLinkingConfigbyId")]
+        public IActionResult GetCorAdvanceLinkingConfigbyId(int LinkId)
+        {
+            try
+            {
+                COR_AdvanceLinkingConfigModel cOR_AdvanceLinkingConfigModel = new COR_AdvanceLinkingConfigModel();
+                cOR_AdvanceLinkingConfigModel = _caseService.GetCOR_AdvanceLinkingConfigById(LinkId);
+                return new JsonResult(new { data = cOR_AdvanceLinkingConfigModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+        }
+        [HttpGet]
+        [Route("GetCorAdvanceLinkingConfig")]
+        public IActionResult GetCorAdvanceLinkingConfig()
+        {
+            try
+            {
+                List<COR_AdvanceLinkingConfigModel> model = new List<COR_AdvanceLinkingConfigModel>();
+                model = _caseService.GetCOR_AdvanceLinkingConfig();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+        }
     }
 }
 

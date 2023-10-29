@@ -28,7 +28,7 @@ namespace Service.Interface
 
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
-        public List<CaseTypesLookupModel>  GetAllCaseTypeLookup();
+        public List<CaseTypesLookupModel> GetAllCaseTypeLookup();
 
         public CaseTypesLookupModel GetCaseTypeLookupById(int CaseTypeId);
         public List<CourtTypeLookupModel> GetAllCourtTypeLookup();
@@ -61,7 +61,7 @@ namespace Service.Interface
         List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId);
         List<CaseCategoryTypesModel> GetAssignedCaseTypes(int caseGroupId, int caseCategoryId);
 
-        string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel , string dmlType);
+        string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel, string dmlType);
         List<LKT_SubjectModel> GetAll();
 
         string InsUpdCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName);
@@ -81,5 +81,8 @@ namespace Service.Interface
 
         void InsUpDel_CorCaseSubject(CORCaseSubject cORCaseSubject);
         void InsUpDel_CORGrpCatType(COR_GroupCatTypeModel cor_GroupCatTypeModel);
+        bool InsUpDel_CorAdvanceLinkingConfig(COR_AdvanceLinkingConfigModel cOR_AdvanceLinkingConfigModel);
+        List<COR_AdvanceLinkingConfigModel> GetCOR_AdvanceLinkingConfig();
+        public COR_AdvanceLinkingConfigModel GetCOR_AdvanceLinkingConfigById(int LinkId);
     }
 }
