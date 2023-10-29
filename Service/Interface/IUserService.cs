@@ -34,6 +34,11 @@ namespace Service.Interface
         bool AddUserInRole(List<int> roleIds, int userId, string userName);
         UserModel GetUserByCivilId(string civilId);
 
+
+        void InsertrevokedTokenModel(RevokedTokenModel revokedToken);
+        void UpdaterevokedTokenModel(RevokedTokenModel revokedToken);
+        RevokedTokenModel GetrevokedTokenModel(string? CivilID, string? Token);
+
         bool InsertAlert(int userId, string roleId, string createdBy,string Email,string MobileNo,string Subject,string Msg);
     }
 }

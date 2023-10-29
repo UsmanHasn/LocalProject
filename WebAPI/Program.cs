@@ -12,6 +12,7 @@ using Service.Models;
 using NLog.Web;
 using NLog.Config;
 using NLog;
+using Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,11 +89,14 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
 builder.Services.AddScoped<IRequestAccountService, RequestAccountsService>();
+builder.Services.AddScoped<TokenBasedAuthorizeFilter>();
 //builder.Services.AddSingleton<ILookupService>(new LookupService);
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
@@ -127,6 +131,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors();
 app.UseRouting();
+//app.UseAuthorization();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {

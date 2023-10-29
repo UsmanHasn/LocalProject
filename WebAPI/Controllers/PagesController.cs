@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
 using Service.Interface;
 using Service.Models;
 using System.Net;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -17,10 +19,15 @@ namespace WebAPI.Controllers
         {
             _IpagesService = pagesService;
         }
+        [Authorize]
         [HttpGet]
         [Route("getall")]
+        [ServiceFilter(typeof(TokenBasedAuthorizeFilter))]
         public IActionResult GetAll()
         {
+            // string token = GetTokenFromRequest();
+
+            //var check = GetCurrentUser();
             try
             {
                 var pagesModel = _IpagesService.GetAllPages();
@@ -31,8 +38,19 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-
         }
+        //private Object GetCurrentUser()
+        //{
+        //    var identity = HttpContext.User.Identity as ClaimsIdentity;
+        //    if (identity != null)
+        //    {
+        //        var userClaims = identity.Claims;
+        //        var object1 = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+        //        var object2 = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        //    }
+        //    return null;
+        //}
 
         [HttpGet]
         [Route("getPagebyId")]
