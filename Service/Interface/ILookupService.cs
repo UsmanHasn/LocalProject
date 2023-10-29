@@ -88,5 +88,9 @@ namespace Service.Interface
         List<DocumentTypeLookupModel> GetRequiredDocumentTypes(string docIds);
         public SystemParameterModel GetSystemSettingByName(string KeyName);
         List<LookupsModel> getRequestLinkSource();
+
+        AccountDetail CheckAccountDetail(int UserId);
+
+
     }
 }

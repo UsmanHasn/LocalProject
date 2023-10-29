@@ -18,5 +18,7 @@
         public int EntityId { get; set; }
         public string EntityName { get; set; }
         public DateTime? CivilExpiry { get; set; }
+        public bool? IsEmailVerified { get; set; } = false;
+        public bool? IsPhoneVerified { get; set; } = false;
     }
 }
