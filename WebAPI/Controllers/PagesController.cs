@@ -25,11 +25,19 @@ namespace WebAPI.Controllers
         [ServiceFilter(typeof(TokenBasedAuthorizeFilter))]
         public IActionResult GetAll()
         {
-           // string token = GetTokenFromRequest();
+            // string token = GetTokenFromRequest();
 
             //var check = GetCurrentUser();
-            var pagesModel = _IpagesService.GetAllPages();
-            return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            try
+            {
+                var pagesModel = _IpagesService.GetAllPages();
+                return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
         }
         //private Object GetCurrentUser()
         //{
@@ -43,18 +51,6 @@ namespace WebAPI.Controllers
         //    }
         //    return null;
         //}
-            try
-            {
-                var pagesModel = _IpagesService.GetAllPages();
-                return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
-
-            }
-
-        }
 
         [HttpGet]
         [Route("getPagebyId")]
