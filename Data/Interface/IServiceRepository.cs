@@ -2,7 +2,7 @@
 
 namespace Data.Interface
 {
-    public interface IServiceRepository : IGenericRepository<Services>
+    public interface IServiceRepository : IGenericRepository<SYS_Services>
     {
     }
 }

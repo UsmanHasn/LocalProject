@@ -28,9 +28,9 @@ namespace WebAPI.Controllers
     [Route("api/httpjson/")]
     public class HttpJsonRequestController : Controller
     {
-        private readonly IRepository<Users> _userRepository;
+        private readonly IRepository<SEC_Users> _userRepository;
         private readonly JsonRequestManager jsonRequestManager;
-        public HttpJsonRequestController(IRepository<Users> userRepository)
+        public HttpJsonRequestController(IRepository<SEC_Users> userRepository)
         {
             _userRepository = userRepository;
             jsonRequestManager = new JsonRequestManager(_userRepository);
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
             {
                 //Get Personal Information
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<CompanyApiRequestModel, CompanyApiResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<CompanyApiResponseModel>(httpStringResponse.data);
                 var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
@@ -68,7 +68,7 @@ namespace WebAPI.Controllers
             {
                 //Get Personal Information
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<PersonalApiRequestModel, PersonalApiResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<PersonalApiResponseModel>(httpStringResponse.data);
 
@@ -151,7 +151,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetLawyerByCivilNo(string civilNo)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://sjcepportal:84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://"+ SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
             var response = new List<LawyerJsonModel>();
             response.AddRange(responseLaywer.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
@@ -162,7 +162,7 @@ namespace WebAPI.Controllers
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcepportal:84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -242,7 +242,7 @@ namespace WebAPI.Controllers
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseInstituteString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                ("http://sjcepportal:84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
+                ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
             HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseInstituteString);
             InstituteApiModel responseInstitute = JsonConvert.DeserializeObject<InstituteApiModel>(httpStringResponse.data);
             BodyObject instituteBody = responseInstitute.Body;
@@ -356,7 +356,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetExpertbyCivilNo(string civilNo)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://sjcepportal:84/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
+            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://"+ SjcConstants.baseIp + "84/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
             var response = new List<ExpertApiResponseModel>();
             response.AddRange(responseLaywer.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
@@ -367,7 +367,7 @@ namespace WebAPI.Controllers
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcepportal:84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -419,9 +419,38 @@ namespace WebAPI.Controllers
         [Route("getEntity")]
         public IActionResult GetEntity()
         {
-            var data = _userRepository.ExecuteStoredProcedure<EntityModel>("sjc_GetEntity").ToList();
-            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
-        }
+            try
+            {
+                var data = _userRepository.ExecuteStoredProcedure<EntityModel>("sjc_GetEntity").ToList();
+                return new JsonResult(new { data = data, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+              return  new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
+            }
+        }
+        [HttpPost]
+        [Route("getPPCaseLitigants")]
+        public async Task<IActionResult> GetPPCaseLitigants(PPCaseLitigantsApiRequestModel ppCaseLitigantApiRequest)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new PPCaseLitigantsModel();
+            try
+            {
+                //Get Personal Information
+                var responseString = await httpClientHelper.MakeHttpRequestJsonString<PPCaseLitigantsApiRequestModel, PPCaseLitigantsModel>
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/getPPCaseLitigants?caseno=" + ppCaseLitigantApiRequest.CaseNo, HttpMethod.Post, null, null);
+                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
+                response = JsonConvert.DeserializeObject<PPCaseLitigantsModel>(httpStringResponse.data);
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
+        }
     }
 }

@@ -7,6 +7,7 @@ using Service.Concrete;
 using Service.Helper;
 using Service.Interface;
 using Service.Models;
+using System;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -20,13 +21,15 @@ namespace WebAPI.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IRepository<Users> _userRepository;
+        private readonly IRepository<SEC_Users> _userRepository;
         private readonly JsonRequestManager jsonRequestManager;
-        public UserController(IUserService userService, IRepository<Users> userRepository)
+        private readonly IAdminService? _AdminService;
+        public UserController(IUserService userService, IRepository<SEC_Users> userRepository, IAdminService adminService)
         {
             _userService = userService;
             _userRepository = userRepository;
             jsonRequestManager = new JsonRequestManager(_userRepository);
+            _AdminService = adminService;
         }
 
         [HttpGet]
@@ -34,8 +37,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllUser(int userId)
         {
             List<UserListModel> model = new List<UserListModel>();
-            model = _userService.GetAllUsers(userId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _userService.GetAllUsers(userId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -44,73 +56,137 @@ namespace WebAPI.Controllers
         public IActionResult GetUserById(int Id)
         {
             UserModel model = new UserModel();
-            model = _userService.GetUserById(Id);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _userService.GetUserById(Id);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
         [Route("getallroles")]
         public IActionResult GetAllRoles(int UID)
         {
+            UserAssignRole role = new UserAssignRole();
             List<UserAssignRole> model = new List<UserAssignRole>();
-            model = _userService.GetAllUserRole(UID);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _userService.GetAllUserRole(UID);
+
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
         [Route("InsertUser")]
-        public IActionResult Add(UserModel model, string userName)
+        public async Task<IActionResult> Add(UserModel model, string userName, int userId)
         {
-            if (model.Id > 0)
+            try
             {
-                UserModel _userModel = _userService.GetUserById(model.Id);
-                model.CreatedDate = _userModel.CreatedDate;
-                model.CreatedBy = _userModel.CreatedBy;
-                model.CivilExpiryDate = _userModel.CivilExpiryDate;
-                _userService.UpdateUser(model, userName);
-            }
-            else
-            {
-                UserModel usrModel = _userService.checkDuplicate(model.CivilID, model.Email, model.Mobile);
-                if (usrModel == null)
+
+                if (model.Id > 0)
                 {
-                    _userService.Add(model, userName);
-                    try
+                    UserModel _userModel = _userService.GetUserById(model.Id);
+                    model.CreatedDate = _userModel.CreatedDate;
+                    model.CreatedBy = _userModel.CreatedBy;
+                    model.CivilExpiryDate = _userModel.CivilExpiryDate;
+                    _userService.UpdateUser(model, userName);
+                    if (userId > 0)
                     {
-                        jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                    try
-                    {
-                        jsonRequestManager.LawyerInfo_UpsertLawyer(model.CivilID, model.Email);
-                    }
-                    catch (Exception)
-                    {
+                        _userService.AddActivity(userId, "ManageUser", "Update User Information Of " + model.Name, DateTime.Now, model.Name);
                     }
                 }
                 else
                 {
-                    return null;
-                } 
-                
+                    UserModel usrModel = _userService.checkDuplicate(model.CivilID, model.Email, model.Mobile);
+                    if (usrModel == null)
+                    {
+                        _userService.Add(model, userName, userId);
+                        if (userId > 0)
+                        {
+                            _userService.AddActivity(userId, "ManageUser", "Add User " + model.Name, DateTime.Now, model.Name);
+                        }
+
+                        try
+                        {
+                            await jsonRequestManager.ExpertInfo_UpsertExpert(model.CivilID);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        try
+                        {
+                            await jsonRequestManager.LawyerInfo_UpsertLawyer(model.CivilID, model.Email);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                }
+
+                List<UserAssignRole> RoleAssignModel = new List<UserAssignRole>();
+                RoleAssignModel = _userService.GetAllUserRole(model.Id);
+                var AssignedRole = RoleAssignModel.Where(x => x.Assigned == true).Count();
+
+                _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
+                //string gIds = "";
+                //foreach (var roleId in model.AssignRoleIds)
+                //{
+                //    gIds = gIds + roleId.ToString() + ",";
+                //}
+                //gIds = gIds.Substring(0, gIds.Length - 1);
+                if (model.AssignRoleIds.Count > AssignedRole)
+                {
+                    _userService.InsertAlert(model.Id, "", userName, model.Email, model.Mobile, userName + " Assigned you a new role", userName + " Assigned you a new role");
+                }
+
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
-            _userService.AddUserInRole(model.AssignRoleIds, model.Id, userName);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
         [Route("UpdateUserFirstLogin")]
-        public IActionResult UpdateFirstLogin(int UserId,string userName)
+        public IActionResult UpdateFirstLogin(int UserId, string userName)
         {
-            if (UserId > 0)
+            try
             {
-                
-                _userService.UpdateUserFirstLogin(UserId, userName);
+                if (UserId > 0)
+                {
+
+                    _userService.UpdateUserFirstLogin(UserId, userName);
+                }
+                UserModel _userModel = _userService.GetUserById(UserId);
+                return new JsonResult(new { data = _userModel, status = HttpStatusCode.OK });
             }
-            UserModel _userModel = _userService.GetUserById(UserId);
-            return new JsonResult(new { data = _userModel, status = HttpStatusCode.OK });
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -118,8 +194,17 @@ namespace WebAPI.Controllers
         [Route("InsertUserActivity")]
         public IActionResult AddUserActivity(UserActivityInfoLogModel model, string userName)
         {
-            _userService.AddActivity(model, userName);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                _userService.AddActivity(model, userName);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -127,8 +212,17 @@ namespace WebAPI.Controllers
         public IActionResult GetUserUserActivityLogById(int ID)
         {
             UserActivityInfoLogModel model = new UserActivityInfoLogModel();
-            model = _userService.GetActivityById(ID);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _userService.GetActivityById(ID);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -136,43 +230,67 @@ namespace WebAPI.Controllers
         [Route("updateUserStatus")]
         public IActionResult UpdateUserStatus(Service.Models.UserStatusModel model)
         {
-            _userService.UpdateUserStatus(model);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                _userService.UpdateUserStatus(model);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
         [Route("GenerateNumericOTP")]
-        public IActionResult GenerateNumericOTP(string Email, int UserId,int OTPType)
+        public IActionResult GenerateNumericOTP(string Email, int UserId, int OTPType)
         {
-            
-            const string validChars = "0123456789";
-            byte[] randomBytes = new byte[6];
-
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            try
             {
-                rng.GetBytes(randomBytes);
+                const string validChars = "0123456789";
+                byte[] randomBytes = new byte[6];
+
+                using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+                {
+                    rng.GetBytes(randomBytes);
+                }
+
+                StringBuilder otpBuilder = new StringBuilder(6);
+                foreach (byte dataByte in randomBytes)
+                {
+                    int index = dataByte % validChars.Length;
+                    otpBuilder.Append(validChars[index]);
+                }
+                if (OTPType == 1)
+                {
+                    EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
+                }
+                else
+                {
+
+                    EmailHelper.sendMail(Email + "@test.com", "SMS OTP Verification - " + Email + " - التحقق من OTP SMS", otpBuilder.ToString());
+                }
+                Service.Models.OtpModel model = new Service.Models.OtpModel()
+                {
+                    OtpId = otpBuilder.ToString(),
+                    OtpType = OTPType,
+                    UserId = UserId,
+                    EmailSent = true,
+                    OTPExpiry = DateTime.Now.AddMinutes(2)
+                };
+                _userService.InsertOtp(model);
+
+
+                return new JsonResult(new { data = otpBuilder.ToString(), email = Email, otpexpiry = model.OTPExpiry, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
 
-            StringBuilder otpBuilder = new StringBuilder(6);
-            foreach (byte dataByte in randomBytes)
-            {
-                int index = dataByte % validChars.Length;
-                otpBuilder.Append(validChars[index]);
-            }
-
-            EmailHelper.sendMail(Email, "OTP Verification - التحقق من OTP", otpBuilder.ToString());
-            Service.Models.OtpModel model = new Service.Models.OtpModel()
-            {
-                OtpId = otpBuilder.ToString(),
-                OtpType = OTPType,
-                UserId = UserId,
-                EmailSent = true,
-                OTPExpiry = DateTime.Now.AddMinutes(2)
-            };
-            _userService.InsertOtp(model);
-
-
-            return new JsonResult(new { data = otpBuilder.ToString(), email=Email, otpexpiry = model.OTPExpiry, status = HttpStatusCode.OK });
         }
 
         [HttpPost]
@@ -186,8 +304,18 @@ namespace WebAPI.Controllers
         public IActionResult GetUserByCivilId(string civilId)
         {
             UserModel model = new UserModel();
-            model = _userService.GetUserByCivilId(civilId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+
+            try
+            {
+                model = _userService.GetUserByCivilId(civilId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

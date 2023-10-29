@@ -68,6 +68,7 @@
     {
         public int CaseGroupId { get; set; }
         public int LocationId { get; set; }
+        public int LinkLocationId { get; set; }
         public int GovernateId { get; set; }
         public string Code { get; set; }
         public string NameEn { get; set; }
@@ -106,6 +107,7 @@
         public string ACO_Code { get; set; }
         public string CaseCategoryAr { get; set; }
         public string CaseCategoryEn { get; set; }
+        public string RequestLinkSource { get; set; }
     }
     public class CaseCategoryTypesModel
     {
@@ -118,5 +120,13 @@
         public int? SecondPartyTypeId { get; set; }
         public bool? IsActive { get; set; }
         public string? CreatedBy { get; set; }
+        public bool? AllowLinkCase { get; set; }
+    }
+    public class COR_GroupCatTypeModel
+    {
+        public int CaseGroupId { get; set; }
+        public int CaseCategoryId { get; set; }
+        public int[] CaseTypeId { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

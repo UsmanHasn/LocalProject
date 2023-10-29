@@ -17,5 +17,6 @@
         public string CRName { get; set; }
         public int EntityId { get; set; }
         public string EntityName { get; set; }
+        public DateTime? CivilExpiry { get; set; }
     }
 }

@@ -33,6 +33,20 @@
         public string? DocAr { get; set; }
         public string? DocumentPath { get; set; }
         public string? Description { get; set; }
+
+        public string? FirstName { get; set; }
+        public string? MiddleName { get; set; }
+        public string? LastName { get; set; }
+        public string? FourthName { get; set; }
+        public int? CountryId { get; set; }
+        public int? GovernorateId { get; set; }
+        public int? WilayaId { get; set; }
+        public int? VillageId { get; set; }
+        public int? AddressTypeId { get; set; }
+        public string? WayNo { get; set; }
+        public string? AddressLine1 { get; set; }
+        public string? AddressLine2 { get; set; }
+        public string? CompanyName { get; set; }
     }
 
     public class CasePartiesDelete

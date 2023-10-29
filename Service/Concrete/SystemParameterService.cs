@@ -13,9 +13,9 @@ namespace Service.Concrete
 {
     public class SystemParameterService : ISystemParameterService
     {
-        public readonly IRepository<SystemSettings> _systemSettingRepository;
+        public readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
 
-        public SystemParameterService(IRepository<SystemSettings> systemSettingRepository)
+        public SystemParameterService(IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             _systemSettingRepository = systemSettingRepository;
         }
@@ -25,7 +25,7 @@ namespace Service.Concrete
             //SystemParameterModel sysModel = this.GetsystemParameterByName(systemParameterModel.keyName);
             //if (sysModel==null)
             //{
-                SystemSettings settings = new SystemSettings()
+                SYS_SystemSettings settings = new SYS_SystemSettings()
                 {
                     KeyName = systemParameterModel.keyName,
                     KeyValue = systemParameterModel.keyValue,
@@ -47,7 +47,7 @@ namespace Service.Concrete
             try
             {
                 SystemParameterModel sysModel = this.GetsystemParameterById(Id);
-                SystemSettings model = new SystemSettings()
+                SYS_SystemSettings model = new SYS_SystemSettings()
                 {
                     KeyName = sysModel.keyName,
                     KeyValue = sysModel.keyValue,
@@ -95,7 +95,7 @@ namespace Service.Concrete
         {
             try
             {
-                SystemSettings model = new SystemSettings()
+                SYS_SystemSettings model = new SYS_SystemSettings()
                 {
                     KeyName = systemParameterModel.keyName,
                     KeyValue = systemParameterModel.keyValue,

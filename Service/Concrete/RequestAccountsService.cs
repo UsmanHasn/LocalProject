@@ -19,10 +19,10 @@ namespace Service.Concrete
 {
     public class RequestAccountsService : IRequestAccountService
     {
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
         private readonly IWebHostEnvironment environment;
 
-        public RequestAccountsService(IWebHostEnvironment repository, IRepository<SystemSettings> systemSettingRepository)
+        public RequestAccountsService(IWebHostEnvironment repository, IRepository<SYS_SystemSettings> systemSettingRepository)
         {
             environment = repository;
             _systemSettingRepository = systemSettingRepository;
@@ -77,6 +77,31 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
         }
 
+        public List<RequestAccountsModel> GetAllApproved(int userId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("UserId", userId);
+            var data = _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
+            var model = data.Select(x => new RequestAccountsModel()
+            {
+                ActionTypeId = x.ActionTypeId,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
+                Role = x.Role,
+                RoleNameEn = x.RoleNameEn,
+                RoleNameAr = x.RoleNameAr,
+                EntityId = x.EntityId,
+                EntityNameEn = x.EntityNameEn,
+                EntityNameAr = x.EntityNameAr,
+                Comments = x.Comments,
+                RequestStatusId = x.RequestStatusId,
+                RequestStatusNameEn = x.RequestStatusNameEn,
+                RequestStatusNameAr = x.RequestStatusNameAr,
+                CreatedDate = x.CreatedDate
+            }).Where(x => x.RequestStatusNameEn == "Approved").ToList();
+            return model;
+        }
+
         public List<RequestAccountsModel> GetAllForAdmin(string ActionTypeId, string CivilNo, string UserName)
         {
             SqlParameter[] spParams = new SqlParameter[3];
@@ -93,11 +118,18 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<LinkCompanyModel>("sjc_GetCivilNo", spParams).FirstOrDefault();
         }
 
-        public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName)
+        public RequestAccountsModel GetRequestStatusByStatusId(int UserId)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("@UserId", UserId);
+            return _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestStatusByReqStatusId", spParams).FirstOrDefault();
+        }
+
+        public SYS_SystemSettings GetRequestStatusIdFromSystemSetting(string keyName)
         {
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("KeyName", keyName);
-            return _systemSettingRepository.ExecuteStoredProcedure<SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
+            return _systemSettingRepository.ExecuteStoredProcedure<SYS_SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
         }
 
         public bool UpdateRequestAccountHistory(int requestId,int responseStatusId,string rejectedReason)

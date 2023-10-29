@@ -14,16 +14,16 @@ namespace Service.Concrete
 {
     public class RolePermissionService : IRolePermissionService
     {
-        private readonly IRepository<RolePermissions> _rolePermissionRepository;
+        private readonly IRepository<SEC_RolePermissions> _rolePermissionRepository;
 
-        public RolePermissionService(IRepository<RolePermissions> rolePermissionRepository)
+        public RolePermissionService(IRepository<SEC_RolePermissions> rolePermissionRepository)
         {
             _rolePermissionRepository = rolePermissionRepository;
         }
 
         public bool AddRolePermission(RolePermissionModel rolePermissionModel, string userName)
         {
-            RolePermissions rolePermissions = new RolePermissions()
+            SEC_RolePermissions rolePermissions = new SEC_RolePermissions()
             {
                 RoleId = rolePermissionModel.RoleId,
                 PageId = rolePermissionModel.PageId,
@@ -41,7 +41,7 @@ namespace Service.Concrete
             try
             {
                 RolePermissionModel rolePermissionModel = this.GetRolePermissionById(id);
-                RolePermissions rolePermissions = new RolePermissions()
+                SEC_RolePermissions rolePermissions = new SEC_RolePermissions()
                 {
                     RoleId = rolePermissionModel.RoleId,
                     PageId = rolePermissionModel.PageId,
@@ -83,7 +83,7 @@ namespace Service.Concrete
         {
             try
             {
-                RolePermissions rolePermissions = new RolePermissions()
+                SEC_RolePermissions rolePermissions = new SEC_RolePermissions()
                 {
                     RoleId = rolePermissionModel.RoleId,
                     PageId = rolePermissionModel.PageId,

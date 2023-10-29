@@ -15,27 +15,32 @@ namespace Service.Concrete
 {
     public class LookupService : ILookupService
     {
-        private readonly IRepository<LanguageLookup> _languagesRepository;
-        private readonly IRepository<CountryLookup> _countryRepository;
-        private readonly IRepository<NationalityLookup> _nationalityRepository;
+        private readonly IRepository<SYS_Language> _languagesRepository;
+        private readonly IRepository<LKT_Country> _countryRepository;
+        private readonly IRepository<LKT_Nationality> _nationalityRepository;
 
-        public LookupService(IRepository<LanguageLookup> languagesRepository, IRepository<CountryLookup> countryRepository, IRepository<NationalityLookup> nationalityRepository)
+        public LookupService(IRepository<SYS_Language> languagesRepository, IRepository<LKT_Country> countryRepository, IRepository<LKT_Nationality> nationalityRepository)
         {
             _languagesRepository = languagesRepository;
             _countryRepository = countryRepository;
             _nationalityRepository = nationalityRepository;
         }
-        List<CountryLookup> ILookupService.GetCountryLookups()
+        List<LKT_Country> ILookupService.GetCountryLookups()
         {
             return _countryRepository.GetAll().ToList();
         }
 
-        List<LanguageLookup> ILookupService.GetLanguageValues()
+        List<SYS_Language> ILookupService.GetLanguageValues()
         {
             return _languagesRepository.GetAll().ToList();
+            /*
+            SqlParameter[] spParams = new SqlParameter[2];
+            spParams[0] = new SqlParameter("PageSize", 5000);
+            spParams[0] = new SqlParameter("PageNumber", 1);
+            return _languagesRepository.ExecuteStoredProcedure<SYS_Language>("sjc_GetAll_LanguageLookup", spParams).ToList();*/
         }
 
-        List<NationalityLookup> ILookupService.GetNationalityLookups()
+        List<LKT_Nationality> ILookupService.GetNationalityLookups()
         {
             return _nationalityRepository.GetAll().ToList();
         }
@@ -226,7 +231,7 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("Code", locationLookup.Code);
             spParams[3] = new SqlParameter("NameEn", locationLookup.NameEn);
             spParams[4] = new SqlParameter("NameAr", locationLookup.NameAr);
-            spParams[5] = new SqlParameter("LinkLocationId", "");;
+            spParams[5] = new SqlParameter("LinkLocationId", ""); ;
             spParams[6] = new SqlParameter("LastModifiedBy ", locationLookup.LastModifiedBy);
             spParams[7] = new SqlParameter("LastModifiedDate", DateTime.Now);
             _languagesRepository.ExecuteStoredProcedure("Sjc_Update_LocationLookup", spParams);
@@ -559,18 +564,32 @@ namespace Service.Concrete
             var data = _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetAll_LanguageLookup", param).FirstOrDefault();
             return data;
         }
-        public PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber)
+        public PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber, string? SearchText)
         {
 
-            SqlParameter[] param = new SqlParameter[2];
+            SqlParameter[] param = new SqlParameter[3];
             param[0] = new SqlParameter("pageSize", pageSize);
             param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
             var data = _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetAll_LanguageLookup", param).ToList();
-            var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount").FirstOrDefault();
+            int countItem = 0;
+            if (SearchText != null)
+            {
+                SqlParameter[] paramSearch = new SqlParameter[1];
+                paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount", paramSearch).FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            else
+            {
+                var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_LanguageLookupCount").FirstOrDefault();
+                countItem = count.TotalCount;
+            }
             PaginatedLanguageLookupModel paginatedLanguageLookupModel = new PaginatedLanguageLookupModel()
             {
                 PaginatedData = data,
-                TotalCount = count.TotalCount
+                TotalCount = countItem
             };
             return paginatedLanguageLookupModel;
         }
@@ -629,6 +648,48 @@ namespace Service.Concrete
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("Key", code);
             return _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetLanguageCode", spParams).FirstOrDefault();
+        }
+
+        public SystemParameterModel GetSystemSettingByName(string KeyName)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("@KeyName", KeyName);
+            return _languagesRepository.ExecuteStoredProcedure<SystemParameterModel>("sjc_GetSystemSettingsByKeyName", spParams).FirstOrDefault();
+        }
+        public List<LKTGovernorateModel> getGovernorates()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LKTGovernorateModel>("sp_GetGovernorates", parameters).ToList();
+        }
+        public List<LookupsModel> getWilayaByGovernorate(int GovernorateId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("@GovernorateId", GovernorateId);
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetWilaya", parameters).ToList();
+        }
+        public List<LookupsModel> getVillageByWilaya(int GovernorateId, int WilayaId)
+        {
+            SqlParameter[] parameters = new SqlParameter[2];
+            parameters[0] = new SqlParameter("@GovernorateId", GovernorateId);
+            parameters[1] = new SqlParameter("@WilayaId", WilayaId);
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetVillage", parameters).ToList();
+        }
+        public List<LookupsModel> getAddressType()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetAddressype", parameters).ToList();
+        }
+        public List<DocumentTypeLookupModel> GetRequiredDocumentTypes(string docIds)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("@DocIds", docIds);
+            var model = _languagesRepository.ExecuteStoredProcedure<DocumentTypeLookupModel>("sp_ReqiuredDocumentType", spParams).ToList();
+            return model;
+        }
+        public List<LookupsModel> getRequestLinkSource()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetRequestLinkSource", parameters).ToList();
         }
     }
 }

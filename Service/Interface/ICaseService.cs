@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Azure.Identity;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,11 @@ namespace Service.Interface
         List<CaseParties> GetCaseParties(long caseId, long partyNo);
         List<CaseDocumentsModel> GeCaseDocumentsByCaseId(long CaseId);
         bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName);
+        bool DeleteCaseDocument(CaseDocumentModel caseDocumentModel, string userName);
         UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName);
         List<CaseModel> GetAllCases();
         List<CaseModel> GetAllPendingCase(string CivilNo, int CaseStatusId);
-        public List<LookupsModel> BindPaymentDraw();
+        public List<PaymentActionModel> BindPaymentDraw();
         public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
         CaseModel GetCasesByUserName(string CreatedBy);
         CaseModel GetCasesByCaseId(string CaseId);
@@ -37,7 +39,7 @@ namespace Service.Interface
 
         bool DeleteCaseParties(CasePartiesDelete deleteCaseParties);
         List<CaseGroupModel> GetCaseGroup();
-        CaseGroupCountValues GetCaseGroupCountValues();
+        List<CaseGroupCountValues> GetCaseGroupCountValues();
         List<GovernoratesModel> GetGovernoratesByCaseGroupId(int caseGroupId);
         List<LocationModel> GetLocationByGovernorateId(int governorateId);
         List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations();
@@ -61,5 +63,23 @@ namespace Service.Interface
 
         string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel , string dmlType);
         List<LKT_SubjectModel> GetAll();
+
+        string InsUpdCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName);
+
+        List<CaseCategoryDetails> GetAllCaseCategoryDetails();
+        CaseCategoryDetails GetCaseCategoryDetailsbyId(int CaseCatDtlId);
+
+        string DeleteCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName);
+
+
+
+
+
+        List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId);
+
+        List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId);
+
+        void InsUpDel_CorCaseSubject(CORCaseSubject cORCaseSubject);
+        void InsUpDel_CORGrpCatType(COR_GroupCatTypeModel cor_GroupCatTypeModel);
     }
 }

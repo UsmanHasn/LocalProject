@@ -85,6 +85,7 @@ builder.Services.AddTransient<IUsersProfilePicture, Service.Concrete.UsersProfil
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
 builder.Services.AddScoped<IPagesService, PagesService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 builder.Services.AddScoped<ISystemParameterService, SystemParameterService>();
 builder.Services.AddScoped<IRequestAccountService, RequestAccountsService>();

@@ -1,7 +1,9 @@
 ﻿using Data.Context;
 using Domain.Entities;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
+using Service.Helper;
 using Service.Interface;
 using Service.Models;
 using System.Net;
@@ -26,16 +28,30 @@ namespace WebAPI.Controllers
         public IActionResult GetAllCourt()
         {
             List<CourtList> model = new List<CourtList>();
-            model = _AdminService.GetAllCourts();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllCourts();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
         }
         [HttpGet]
         [Route("getallcases")]
         public IActionResult GetAllCases()
         {
             List<Service.Models.CaseListModel> model = new List<Service.Models.CaseListModel>();
-            model = _AdminService.GetAllCases();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllCases();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
         }
 
         [HttpGet]
@@ -43,8 +59,15 @@ namespace WebAPI.Controllers
         public IActionResult GetAllCalendar()
         {
             List<Calendar> model = new List<Calendar>();
-            model = _AdminService.GetAllCalendar();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllCalendar();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
         }
 
 
@@ -53,8 +76,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllAccouncement()
         {
             List<Announcement> model = new List<Announcement>();
-            model = _AdminService.GetAllAnnouncements();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllAnnouncements();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -64,8 +96,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllNotification()
         {
             List<Notification> model = new List<Notification>();
-            model = _AdminService.GetAllNotifications();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllNotifications();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -74,8 +115,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllUseractivitylog()
         {
             List<UserActivityLog> model = new List<UserActivityLog>();
-            model = _AdminService.GetActivityLogs();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetActivityLogs();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -83,16 +133,34 @@ namespace WebAPI.Controllers
         public IActionResult GetAllLawyers(int civilNo)
         {
             List<LawyersModels> model = new List<LawyersModels>();
-            model = _AdminService.GetAllLawyers(civilNo);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllLawyers(civilNo);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         [HttpGet]
         [Route("getallservices")]
         public IActionResult GetAlServices(int categoryId, int subCategoryId)
         {
             List<ServicesModel> model = new List<ServicesModel>();
-            model = _AdminService.GetAllServices(categoryId, subCategoryId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllServices(categoryId, subCategoryId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -100,17 +168,35 @@ namespace WebAPI.Controllers
         public IActionResult GetallEntity()
         {
             List<Lkt_EntityModel> model = new List<Lkt_EntityModel>();
-            model = _AdminService.GetAllEntity();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAllEntity();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
         [Route("DeleteEntity")]
-        public IActionResult DeleteEntity(Lkt_EntityModel model,string userName)
+        public IActionResult DeleteEntity(Lkt_EntityModel model, string userName)
         {
             string Message;
-            Message = _AdminService.DeleteEntity(model, userName);
-            return new JsonResult(new { data = true, status = HttpStatusCode.OK,msg = Message });
+            try
+            {
+                Message = _AdminService.DeleteEntity(model, userName);
+                return new JsonResult(new { data = true, status = HttpStatusCode.OK, msg = Message });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -118,36 +204,61 @@ namespace WebAPI.Controllers
         public IActionResult GetEntityById(int EntityId)
         {
             Lkt_EntityModel lkt_EntityModel = new Lkt_EntityModel();
-            lkt_EntityModel = _AdminService.GetEntityById(EntityId);
-            return new JsonResult(new { data = lkt_EntityModel, status = HttpStatusCode.OK });
+            try
+            {
+                lkt_EntityModel = _AdminService.GetEntityById(EntityId);
+                return new JsonResult(new { data = lkt_EntityModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpPost]
         [Route("InsUpdLKT_Entity")]
         public IActionResult InsUpdLKT_Entity(Lkt_EntityModel model, string userName)
         {
-            string Message;
-            Message = _AdminService.InsUpdLKT_Entity(model, userName);
-            return new JsonResult(new { data = true, status = HttpStatusCode.OK, msg = Message });
-
+            try
+            {
+                string Message;
+                Message = _AdminService.InsUpdLKT_Entity(model, userName);
+                return new JsonResult(new { data = true, status = HttpStatusCode.OK, msg = Message });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
         }
 
         [HttpPost]
         [Route("InsertSms")]
         public IActionResult Add(SMS_TransModel model, string smsId)
         {
-            if (model.SMS_Trans_ID > 0)
+
+            try
             {
-                SMS_TransModel _smsModel = _AdminService.GetSmsById(model.SMS_Trans_ID);
-                model.CreatedDate = _smsModel.CreatedDate;
-                model.Created_On = _smsModel.Created_On;
-                _AdminService.UpdateSms(model, smsId);
+                if (model.SMS_Trans_ID > 0)
+                {
+                    SMS_TransModel _smsModel = _AdminService.GetSmsById(model.SMS_Trans_ID);
+                    model.CreatedDate = _smsModel.CreatedDate;
+                    model.Created_On = _smsModel.Created_On;
+                    _AdminService.UpdateSms(model, smsId);
+                }
+                else
+                {
+                    _AdminService.Add(model, smsId);
+                }
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+
             }
-            else
+            catch (Exception ex)
             {
-                _AdminService.Add(model, smsId);
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///
@@ -161,8 +272,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Int64 CaseID, Boolean Affichable)
         {
-            var issue = await _context.SJCESP_AlertandNotification.FindAsync(CaseID, Affichable);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_AlertandNotification.FindAsync(CaseID, Affichable);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -172,8 +292,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByIdentifiantAndAffichable(Int64 Identifiant, Boolean Affichable)
         {
-            var issue = await _context.SJCESP_CaseInformation.FindAsync(Identifiant, Affichable);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_CaseInformation.FindAsync(Identifiant, Affichable);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -182,8 +311,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_Cases(string CRNO, Int64 IdDossierCivil)
         {
-            var issue = await _context.SJCESP_Cases.FindAsync(CRNO, IdDossierCivil);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_Cases.FindAsync(CRNO, IdDossierCivil);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -192,8 +330,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_civilno(Int64 IdDossierCivil, string NumeroPieceIdentite)
         {
-            var issue = await _context.SJCESP_civilno.FindAsync(IdDossierCivil, NumeroPieceIdentite);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_civilno.FindAsync(IdDossierCivil, NumeroPieceIdentite);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -202,8 +349,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_Denominations(Int64 IdDossierCivil, string NumRegistreCommerce)
         {
-            var issue = await _context.SJCESP_Denominations.FindAsync(IdDossierCivil, NumRegistreCommerce);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_Denominations.FindAsync(IdDossierCivil, NumRegistreCommerce);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -223,8 +379,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_Judge_Information(Int64 IdDossierCivil)
         {
-            var issue = await _context.SJCESP_Judge_Information.FindAsync(IdDossierCivil);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_Judge_Information.FindAsync(IdDossierCivil);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -233,8 +398,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSSJCESP_LawyerAddress(string LicenseNo)
         {
-            var issue = await _context.SJCESP_LawyerAddress.FindAsync(LicenseNo);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_LawyerAddress.FindAsync(LicenseNo);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -243,8 +417,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_LawyerCaces(Int64 CaseID, string NumeroPieceIdentite)
         {
-            var issue = await _context.SJCESP_LawyerCaces.FindAsync(CaseID, NumeroPieceIdentite);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_LawyerCaces.FindAsync(CaseID, NumeroPieceIdentite);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -253,8 +436,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_LawyerInformation(Int64 lawyerid, string CivilNo)
         {
-            var issue = await _context.SJCESP_LawyerInformation.FindAsync(lawyerid, CivilNo);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_LawyerInformation.FindAsync(lawyerid, CivilNo);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -263,8 +455,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_RoleParties(Int64 CaseID, string CivilNumberParties)
         {
-            var issue = await _context.SJCESP_RoleParties.FindAsync(CaseID, CivilNumberParties);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_RoleParties.FindAsync(CaseID, CivilNumberParties);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -273,8 +474,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSJCESP_Session_Information(Int64 CaseID)
         {
-            var issue = await _context.SJCESP_Session_Information.FindAsync(CaseID);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _context.SJCESP_Session_Information.FindAsync(CaseID);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -286,32 +496,71 @@ namespace WebAPI.Controllers
         [Route("insertalert")]
         public IActionResult Add(AlertModel alertModel, string userName)
         {
-            _AdminService.Add(alertModel, userName);
-            return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
+            try
+            {
+                _AdminService.Add(alertModel, userName);
+                if (alertModel.alertType == "E")
+                {
+                    string messageBody = alertModel.message;
+                    EmailHelper.sendMail(alertModel.email, alertModel.subject, messageBody);
+                }
+                return new JsonResult(new { data = alertModel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
         }
         [HttpGet]
         [Route("getusers")]
         public IActionResult Getusers()
         {
             //List<UserModel> model = new List<UserModel>();
-            var model = _AdminService.GetUsers();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = _AdminService.GetUsers();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         [HttpGet]
         [Route("getalerts")]
         public IActionResult GetAll(int userId)
         {
             //  List<UserModel> model = new List<UserModel>();
-            var model = _AdminService.GetAllAlerts(userId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = _AdminService.GetAllAlerts(userId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+
         }
         [HttpGet]
         [Route("getAlertbyId")]
         public IActionResult GetAlertById(int Id)
         {
             AlertModel model = new AlertModel();
-            model = _AdminService.GetAlertById(Id);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = _AdminService.GetAlertById(Id);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -320,26 +569,35 @@ namespace WebAPI.Controllers
         {
 
             List<UserActivityLog> model = new List<UserActivityLog>();
-            model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin, userName, fromdate, todate);
-            //var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();
-            //List<UserActivityLogModel> modelPermissions = groupData.Select(x =>
-            //                    new UserActivityLogModel()
-            //                    {
-            //                        items = model.Where(y => y.UserName == x.group)
-            //                        .Select(y => new UserActivityLog()
-            //                        {
-            //                            UserId = y.UserId,
-            //                            UserNameAr=y.UserNameAr,
-            //                            PageName = y.PageName,
-            //                            Message = y.Message,
-            //                            TimeLoggedIn = y.TimeLoggedIn,
-            //                            TimeLoggedOut = y.TimeLoggedOut
+            try
+            {
+                model = _AdminService.GetActivityInfoLogs(Id, isSystemAdmin, userName, fromdate, todate);
+                //var groupData = model.Select(x => new { group=x.UserName,groupAr=x.UserNameAr }).Distinct();
+                //List<UserActivityLogModel> modelPermissions = groupData.Select(x =>
+                //                    new UserActivityLogModel()
+                //                    {
+                //                        items = model.Where(y => y.UserName == x.group)
+                //                        .Select(y => new UserActivityLog()
+                //                        {
+                //                            UserId = y.UserId,
+                //                            UserNameAr=y.UserNameAr,
+                //                            PageName = y.PageName,
+                //                            Message = y.Message,
+                //                            TimeLoggedIn = y.TimeLoggedIn,
+                //                            TimeLoggedOut = y.TimeLoggedOut
 
-            //                        }).ToList(),
-            //                        group = x.group,
-            //                        groupAr=x.groupAr
-            //                    }).ToList();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+                //                        }).ToList(),
+                //                        group = x.group,
+                //                        groupAr=x.groupAr
+                //                    }).ToList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 

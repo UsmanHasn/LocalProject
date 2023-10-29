@@ -11,9 +11,9 @@ namespace WebAPI.Manager
 {
     public class JsonRequestManager
     {
-        private readonly IRepository<Users> _userRepository;
+        private readonly IRepository<SEC_Users> _userRepository;
 
-        public JsonRequestManager(IRepository<Users> userRepository)
+        public JsonRequestManager(IRepository<SEC_Users> userRepository)
         {
             _userRepository = userRepository;
         }
@@ -23,7 +23,7 @@ namespace WebAPI.Manager
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcepportal:84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -77,7 +77,7 @@ namespace WebAPI.Manager
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://sjcepportal:84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -157,7 +157,7 @@ namespace WebAPI.Manager
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseInstituteString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                ("http://sjcepportal:84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
+                ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
             HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseInstituteString);
             InstituteApiModel responseInstitute = JsonConvert.DeserializeObject<InstituteApiModel>(httpStringResponse.data);
             BodyObject instituteBody = responseInstitute.Body;

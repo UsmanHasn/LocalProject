@@ -23,8 +23,8 @@ namespace Service.Concrete
     {
         public readonly IRepository<SMS_Trans> _smsRepository;
 
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
-        public AdminService(IRepository<SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
+        public AdminService(IRepository<SYS_SystemSettings> systemSettingRepository, IRepository<SMS_Trans> smsRepository)
         {
             _systemSettingRepository = systemSettingRepository;
             _smsRepository = smsRepository;
@@ -331,6 +331,9 @@ namespace Service.Concrete
             {
                 Id = x.Id,
                 Name = x.Name,
+                Name_Civil = x.Name +" | "+ x.CivilID,
+                Name_CivilAr = x.NameAr + " | " + x.CivilID,
+                Email=x.Email
             }).ToList();
             return data;
         }
@@ -342,10 +345,10 @@ namespace Service.Concrete
             return data.ToList();
         }
 
-        public Lkt_EntityModel GetEntityById(int EntityId)
+        public Lkt_EntityModel GetEntityById(int entityId)
         {
             SqlParameter[] param = new SqlParameter[1];
-            param[0] = new SqlParameter("EntityId", EntityId);
+            param[0] = new SqlParameter("EntityId", entityId);
             var data = _smsRepository.ExecuteStoredProcedure<Lkt_EntityModel>("sjc_GetEntityById", param).FirstOrDefault();
             return data;
         }

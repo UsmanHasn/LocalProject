@@ -38,8 +38,17 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int UserId)
         {
-            var issue = await _DbContext.UsersProfilePictureView.FindAsync(UserId);
-            return issue == null ? NotFound() : Ok(issue);
+            try
+            {
+                var issue = await _DbContext.UsersProfilePictureView.FindAsync(UserId);
+                return issue == null ? NotFound() : Ok(issue);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+         
         }
 
         [HttpPut]
@@ -204,14 +213,16 @@ namespace WebAPI.Controllers
         public IActionResult GetFileName(int UserId)
         {
             PostRequest model = new PostRequest();
+            var data = "no_image.jpg";
             model = postService.GetFileName(UserId);
             if (model == null)
             {
-                var data = model.FileName == "" ? "no_image.jpg" : model.FileName;
+                //var data =  model.FileName == "" ? "no_image.jpg" : model.FileName;
                 // var data = model.FileName;
                 return new JsonResult(new { data = data, status = HttpStatusCode.OK });
             }
-            return new JsonResult(new { data = model.FileName, status = HttpStatusCode.OK });
+            data = model.FileName == "" ? "no_image.jpg" : model.FileName;
+            return new JsonResult(new { data = data, status = HttpStatusCode.OK });
         }
     }
 }

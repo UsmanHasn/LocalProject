@@ -21,8 +21,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllMenu(int profileId, string profileType, int profileDelegatedId)
         {
             List<MenuModel> model = new List<MenuModel>();
-            model = menuService.GetAllMenu(profileId, profileType, profileDelegatedId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = menuService.GetAllMenu(profileId, profileType, profileDelegatedId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -30,8 +39,17 @@ namespace WebAPI.Controllers
         public IActionResult GetMenu()
         {
             List<MenuModel> model = new List<MenuModel>();
-            model = menuService.GetMenu();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = menuService.GetMenu();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+           
         }
 
         [HttpGet]
@@ -39,27 +57,44 @@ namespace WebAPI.Controllers
         public IActionResult GetAllMenuCompany()
         {
             List<MenuModel> model = new List<MenuModel>();
-            model = menuService.GetAllMenuCompany();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = menuService.GetAllMenuCompany();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         [HttpPost]
         [Route("addMenu")]
         public IActionResult AddMenu(MenuModel menuModel, string username)
         {
-      
+            try
+            {
 
-            if (menuModel.Id > 0)
-            {
-                //MenuModel mode = menuService.GetMenuById(menuModel.Id);
-                //menuModel. = model.CreatedDate;
-                //menuModel.CreatedBy = model.CreatedBy;
-                menuService.UpdateMenu(menuModel.Id, menuModel, username);
+                if (menuModel.Id > 0)
+                {
+                    //MenuModel mode = menuService.GetMenuById(menuModel.Id);
+                    //menuModel. = model.CreatedDate;
+                    //menuModel.CreatedBy = model.CreatedBy;
+                    menuService.UpdateMenu(menuModel.Id, menuModel, username);
+                }
+                else
+                {
+                    menuService.Add(menuModel, username);
+                }
+                return new JsonResult(new { data = menuModel, status = HttpStatusCode.OK });
             }
-            else
+            catch (Exception ex)
             {
-                menuService.Add(menuModel, username);
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
-            return new JsonResult(new { data = menuModel, status = HttpStatusCode.OK });
+
         }
 
         [HttpGet]
@@ -67,8 +102,17 @@ namespace WebAPI.Controllers
         public IActionResult Getpages()
         {
             //List<PageModel> model = new List<PageModel>();
-            var model = menuService.Getpages();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = menuService.Getpages();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+            
         }
 
         [HttpGet]
@@ -76,8 +120,17 @@ namespace WebAPI.Controllers
         public IActionResult GetParentMenu()
         {
             //List<PageModel> model = new List<PageModel>();
-            var model = menuService.getParentMenu();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = menuService.getParentMenu();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -85,17 +138,35 @@ namespace WebAPI.Controllers
         public IActionResult GetPageById(int Id)
         {
             MenuModel model = new MenuModel();
-            model = menuService.GetMenuById(Id);
+            try
+            {
+                model = menuService.GetMenuById(Id);
 
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+            
         }
 
         [HttpDelete]
         [Route("deleteMenu")]
         public IActionResult DeleteMenu(int id)
         {
-            var menu = menuService.DeleteMenu(id);
-            return new JsonResult(new { data = menu, status = HttpStatusCode.OK });
+            try
+            {
+                var menu = menuService.DeleteMenu(id);
+                return new JsonResult(new { data = menu, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

@@ -8,21 +8,16 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Lookups
 {
-    public class ServiceSubCategoryLookup : BaseEntity
+    public class LKT_Country : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        public int ServiceSubCategoryId { get; set; }
-        //public ServiceCategoryLookup ServiceCategory { get; set; }
-        public int? ServiceCategoryId { get; set; }
-                    
+        public int Id { get; set; }
+        public string Code { get; set; }
         [MaxLength(50)]
         [Required]
         public string Name { get; set; }
+        [MaxLength(50)]
         [Required]
         public string NameAr { get; set; }
-        public int Deleted { get; set; }
-
     }
-
 }

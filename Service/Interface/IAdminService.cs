@@ -28,7 +28,7 @@ namespace Service.Interface
         List<Lkt_EntityModel> GetAllEntity();
         string InsUpdLKT_Entity (Lkt_EntityModel lkt_EntityModel, string userName);
         string DeleteEntity(Lkt_EntityModel lkt_EntityModel, string userName);
-        Lkt_EntityModel GetEntityById(int EntityId);
+        Lkt_EntityModel GetEntityById(int entityId);
         List<UserModel> GetUsers();
         List<AlertModel> GetAllAlerts(int userId);
         bool Add(AlertModel alertModel, string userName);

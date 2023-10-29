@@ -17,6 +17,8 @@ using Service.Interface;
 using Service.Concrete;
 using Service.Helper;
 using Microsoft.AspNet.Identity;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Drawing;
 using WebAPI.Manager;
 
@@ -27,10 +29,10 @@ namespace WebAPI.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly IRepository<Users> _usersRepository;
-        private readonly IRepository<UserInRole> _userInRoleRepository;
+        private readonly IRepository<SEC_Users> _usersRepository;
+        private readonly IRepository<SEC_UserInRole> _userInRoleRepository;
         private readonly IUserService _userService;
-        public LoginController(IConfiguration config, IRepository<Users> usersRepository, IRepository<UserInRole> userInRoleRepository,
+        public LoginController(IConfiguration config, IRepository<SEC_Users> usersRepository, IRepository<SEC_UserInRole> userInRoleRepository,
                IUserService userService)
         {
             _config = config;
@@ -44,13 +46,17 @@ namespace WebAPI.Controllers
         [Route("authenticate")]
         public ActionResult Login([FromBody] UserLoginModel userLogin)
         {
+
             if (!string.IsNullOrEmpty(userLogin.Password))
             {
                 var user = Authenticate(userLogin);
                 if (user != null)
                 {
                     var check = _userService.GetUserById(user.UserId);
-
+                    if (user.RoleId == 0)
+                    {
+                        return new JsonResult(new { token = "Noroleassigned", success = false, status = HttpStatusCode.OK });
+                    }
                     if (check.WrongPassword == 5)
                         return new JsonResult(new { token = "Your account has been locked, Please contact the admin", success = false, status = HttpStatusCode.OK });
 
@@ -112,19 +118,32 @@ namespace WebAPI.Controllers
         [Route("authenticatemobile")]
         public async Task<ActionResult> Login(string civilNo)
         {
-            var user = await Authenticate(civilNo);
-            if (user != null && user.UserId == 0)
+            try
             {
-                return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
+                var user = await Authenticate(civilNo);
+                if (user != null && user.UserId == 0)
+                {
+                    return new JsonResult(new { message = "PKI Authentication successfully. User does not exist", user = user, success = true, status = HttpStatusCode.NoContent });
+                }
+                else if (user != null && user.UserId > 0)
+                {
+                    if (user.RoleId == 0)
+                    {
+                        return new JsonResult(new { token = "Noroleassigned", success = false, status = HttpStatusCode.OK });
+                    }
+                    var token = GenerateToken(user);
+                    //inser token into db 
+                    _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
+                    return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                }
+                return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
             }
-            else if (user != null && user.UserId > 0)
+            catch (Exception ex)
             {
-                var token = GenerateToken(user);
-                //inser token into db 
-                _userService.AddActivity(user.UserId, "Login", "Mobile PKI - User Authenticated by PKI and logged In", DateTime.Now, user.Username);
-                return new JsonResult(new { token = token, user = user, success = true, status = HttpStatusCode.OK });
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
             }
-            return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });
+
         }
         [HttpGet]
         [Route("InvokeMobilePKI")]
@@ -135,7 +154,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKI/" + mobileNo, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -154,7 +173,7 @@ namespace WebAPI.Controllers
             try
             {
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<InovokeMobilePKIRequestModel, InovokeMobilePKIResponseModel>
-                    ("http://sjcepportal:84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/InvokeMobilePKIStatus/" + transId, HttpMethod.Get, null, null);
                 HttpPKIResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpPKIResponseModel>(responseString);
                 //response = JsonConvert.DeserializeObject<InovokeMobilePKIResponseModel>(httpStringResponse.data);
                 return new JsonResult(new { data = httpStringResponse });
@@ -166,27 +185,36 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("RefreshToken")]
-        public async Task<ActionResult> RefreshToken(string token, string identifier) 
+        public async Task<ActionResult> RefreshToken(string token, string identifier)
         {
-            var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == identifier);
-            if (currentUser != null)
+            try
             {
-                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
-                var user = new UsersModel()
+                var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == identifier);
+                if (currentUser != null)
                 {
-                    UserId = currentUser.Id,
-                    Username = currentUser.UserName,
-                    UsernameAr = currentUser.UserNameAr,
-                    CivilID = currentUser.CivilNumber.ToString(),
-                    Email = currentUser.Email,
-                    MobileNo = currentUser.PhoneNumber,
-                    RoleId = role == null ? 0 : role.Id,
-                    Role = role == null ? "" : role.Name,
-                    LastLoginDate = currentUser.LastLoginDate
-                };
-                return new JsonResult(new { token = GetRefreshToken(user), status = true });
+                    SEC_Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                    var user = new UsersModel()
+                    {
+                        UserId = currentUser.Id,
+                        Username = currentUser.UserName,
+                        UsernameAr = currentUser.UserNameAr,
+                        CivilID = currentUser.CivilNumber.ToString(),
+                        Email = currentUser.Email,
+                        MobileNo = currentUser.PhoneNumber,
+                        RoleId = role == null ? 0 : role.Id,
+                        Role = role == null ? "" : role.Name,
+                        LastLoginDate = currentUser.LastLoginDate
+                    };
+                    return new JsonResult(new { token = GetRefreshToken(user), status = true });
+                }
+                return new JsonResult(new { message = "Invalid Authentication", status = false });
             }
-            return new JsonResult(new { message = "Invalid Authentication", status = false  });
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
         // To generate token
         private string GenerateToken(UsersModel user)
@@ -202,8 +230,8 @@ namespace WebAPI.Controllers
                 _config["Jwt:Audience"],
                 claims,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: credentials); 
-            
+                signingCredentials: credentials);
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
@@ -233,7 +261,8 @@ namespace WebAPI.Controllers
             var currentUser = _usersRepository.GetSingle(x => x.CivilNumber == userLogin.Username && x.Password == userLogin.Password);
             if (currentUser != null)
             {
-                Roles role = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id, x => x.Role).Role;
+                var roleRepo = _userInRoleRepository.GetSingle(x => x.UserId == currentUser.Id && x.Deleted == false, x => x.Role);
+                SEC_Roles? role = roleRepo != null ? roleRepo.Role : null;
                 return new UsersModel()
                 {
                     UserId = currentUser.Id,
@@ -249,7 +278,8 @@ namespace WebAPI.Controllers
                     CRNo = "",
                     CRName = "",
                     EntityId = 0,
-                    EntityName = ""
+                    EntityName = "",
+                    CivilExpiry = currentUser.CivilExpiryDate
                 };
                 //return currentUser;
             }
@@ -257,12 +287,12 @@ namespace WebAPI.Controllers
         }
         private async Task<UsersModel> Authenticate(string civilNo)
         {
-            #if debug
+#if debug
                if (civilNo == "85923849")
                {
                     civilNo = "2189511";
                }             
-            #endif
+#endif
             var userByCivilNo = _usersRepository.GetSingle(x => x.CivilNumber == civilNo);
             if (userByCivilNo == null)
             {
@@ -271,10 +301,10 @@ namespace WebAPI.Controllers
                     CivilID = civilNo,
                     UserId = 0
                 };
-                
+
             }
 
-            Roles role = _userInRoleRepository.GetSingle(x => x.UserId == userByCivilNo.Id && x.Role.Name == SjcConstants.roleIndividual, x => x.Role).Role;
+            SEC_Roles role = _userInRoleRepository.GetSingle(x => x.UserId == userByCivilNo.Id && x.Role.Name == SjcConstants.roleIndividual, x => x.Role).Role;
             var user = new UsersModel()
             {
                 UserId = userByCivilNo.Id,
@@ -287,12 +317,13 @@ namespace WebAPI.Controllers
                 Role = role == null ? "" : role.Name,
                 RoleAr = role == null ? "" : role.Name,
                 LastLoginDate = userByCivilNo.LastLoginDate,
-                CRNo = "", CRName = "", EntityId = 0, EntityName = ""
+                CRNo = "", CRName = "", EntityId = 0, EntityName = "",
+                CivilExpiry = userByCivilNo.CivilExpiryDate
             };
             return user;
         }
 
-        
+
 
 
 
@@ -301,11 +332,12 @@ namespace WebAPI.Controllers
         [Route("forgotPassword")]
         public ActionResult ForgotPassword([FromBody] ForgotPasswordModel forgotPassword)
         {
+            string message = "";
             var user = _usersRepository.GetSingle(x => x.CivilNumber == forgotPassword.CivilNo && x.Email == forgotPassword.Email);
             if (user != null)
             {
 
-                var pass = Guid.NewGuid(); 
+                var pass = Guid.NewGuid();
                 user.Password = "12345";
                 _usersRepository.Update(user, "System");
                 _usersRepository.Save();
@@ -315,10 +347,11 @@ namespace WebAPI.Controllers
                 string messageBody = System.IO.File.ReadAllText(fullPath);
                 if (!string.IsNullOrEmpty(messageBody))
                 {
-                    messageBody.Replace("{username}", user.UserName);
+                    message = messageBody.Replace("{username}", user.UserName);
+                    message = message + " " + user.Password;
                 }
 
-                EmailHelper.sendMail(user.Email, "ForgotPassword ", messageBody);
+                EmailHelper.sendMail(user.Email, "ForgotPassword ", message);
                 return new JsonResult(new { success = true, status = HttpStatusCode.OK });
             }
             return new JsonResult(new { token = "Invalid authentication", success = false, status = HttpStatusCode.OK });

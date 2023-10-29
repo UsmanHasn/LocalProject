@@ -20,16 +20,34 @@ namespace WebAPI.Controllers
         public IActionResult GetAll(string? caseNo, string? date, string? caseStatus, string? caseType)
         {
             List<PaymentHistoryModel> models = new List<PaymentHistoryModel>();
-            models = _reportService.GetPaymentHistory(caseNo, date, caseStatus, caseType);
-            return new JsonResult(new { data = models, status = HttpStatusCode.OK });
+            try
+            {
+                models = _reportService.GetPaymentHistory(caseNo, date, caseStatus, caseType);
+                return new JsonResult(new { data = models, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+           
         }
         [HttpGet]
         [Route("BindCaseType")]
         public IActionResult BindCaseType()
         {
             List<CaseType> models = new List<CaseType>();
-            models = _reportService.BindCaseType();
-            return new JsonResult(new { data = models, status = HttpStatusCode.OK });
+            try
+            {
+                models = _reportService.BindCaseType();
+                return new JsonResult(new { data = models, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
         [HttpGet]
@@ -37,8 +55,17 @@ namespace WebAPI.Controllers
         public IActionResult BindCaseStatus()
         {
             List<CaseStatus> models = new List<CaseStatus>();
-            models = _reportService.BindCaseStatus();
-            return new JsonResult(new { data = models, status = HttpStatusCode.OK });
+            try
+            {
+                models = _reportService.BindCaseStatus();
+                return new JsonResult(new { data = models, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

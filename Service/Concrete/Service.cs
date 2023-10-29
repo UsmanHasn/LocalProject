@@ -17,7 +17,7 @@ namespace Service.Concrete
 
         public IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IRepository<SystemSettings> _systemSettingRepository;
+        private readonly IRepository<SYS_SystemSettings> _systemSettingRepository;
 
         public Service(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -26,10 +26,10 @@ namespace Service.Concrete
         }
 
 
-        public async Task<List<Services>> GetAllServices()
+        public async Task<List<SYS_Services>> GetAllServices()
         {
             var stafflist = await _unitOfWork.Services.GetAll();
-            var staflist = _mapper.Map<List<Services>>(stafflist);
+            var staflist = _mapper.Map<List<SYS_Services>>(stafflist);
             return staflist;
         }
 

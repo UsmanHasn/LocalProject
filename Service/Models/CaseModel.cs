@@ -37,6 +37,7 @@ namespace Service.Models
         public string? LastModifiedBy { get;set; }
         public int? CaseStatusId { get; set; }
         public string? CaseStatusName { get; set; }
+        public string? CaseStatusNameAr { get; set; }
         public string CaseSource { get; set; }
         public string? caseCategoryName { get; set; }
         public string? CaseSubCategoryName { get; set; }
@@ -44,10 +45,11 @@ namespace Service.Models
         public string? CourtBuildingName { get; set; }
         public string? CaseTypeName { get; set; }
         public string? Fee { get; set; }
+        public string? AdditionalSubjectIds { get; set; }
     }
     public class CaseDocumentsModel
     {
-        // public string CaseDocumentId { get;set; }
+        public long CaseDocumentId { get;set; }
         public long CaseId { get; set; }
         public long DocumentTypeId { get; set; }
         public string DocNameEn { get; set; }

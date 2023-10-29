@@ -28,8 +28,17 @@ namespace WebAPI.Controllers
         public IActionResult GetAllData()
         {
             List<UserProfileModel> model = new List<UserProfileModel>();
-            model = userProfileService.GetAllUserFile();
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                model = userProfileService.GetAllUserFile();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
 
 
@@ -37,8 +46,17 @@ namespace WebAPI.Controllers
         [Route("GetSwitchProfiles")]
         public IActionResult GetSwitchProfiles(int UserId)
         {
-            var model = userProfileService.GetSwitchProfiles(UserId);
-            return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            try
+            {
+                var model = userProfileService.GetSwitchProfiles(UserId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
        
 

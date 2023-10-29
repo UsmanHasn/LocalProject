@@ -8,7 +8,7 @@ using System.Net.Http;
 
 namespace Domain.Entities
 {
-    public class Users : BaseEntity
+    public class SEC_Users : BaseEntity
     {
        
         [Key]
@@ -18,7 +18,7 @@ namespace Domain.Entities
         public string UserNameAr { get; set; }
         public string Password { get; set; }
         public string CivilNumber { get; set; }
-        public NationalityLookup Nationality { get; set; }
+        public LKT_Nationality Nationality { get; set; }
         public int? NationalityId { get; set; }
         public DateTime? DateOfBirth { get; set; }
        // public CountryLookup Country { get; set; }
@@ -48,9 +48,9 @@ namespace Domain.Entities
         public DateTime? LockedDate { get; set; }
         public int WrongPassword { get; set; } = 0;
         public int? UserStatusId { get; set; }
-        public UserStatusLookup UserStatus { get; set; }
+        public SEC_UserStatusLookup UserStatus { get; set; }
         public int? SupervisorUserId { get; set; }
-        public Users SupervisorUser { get; set; }
+        public SEC_Users SupervisorUser { get; set; }
         public string? title_ar { get; set; }
         public string? name_1_ar { get; set; }
         public string? name_2_ar { get; set; }

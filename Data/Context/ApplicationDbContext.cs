@@ -17,16 +17,16 @@ namespace Data.Context
 
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             //Tables
-            modelBuilder.Entity<Roles>().Property(p => p.Id).HasColumnName("RoleId");
-            modelBuilder.Entity<Users>().Property(p => p.Id).HasColumnName("UserId");
-            modelBuilder.Entity<Menu>().Property(p => p.Id).HasColumnName("MenuId");
-            modelBuilder.Entity<UserInRole>().Property(p => p.Id).HasColumnName("UserRoleId");
-            modelBuilder.Entity<UserActivityInfoLog>().Property(p => p.UserId).HasColumnName("UserId");
-            modelBuilder.Entity<Services>().Property(p => p.ServiceSubCategoryId).HasColumnName("ServiceId");
-            modelBuilder.Entity<Pages>().Property(p => p.Id).HasColumnName("PageId");
-            modelBuilder.Entity<RolePermissions>().Property(p => p.Id).HasColumnName("RolePermissionId");
-            modelBuilder.Entity<UserDelegatedPermissions>().Property(p => p.Id).HasColumnName("UserPermissionId");
-            modelBuilder.Entity<SystemSettings>().Property(p => p.Id).HasColumnName("SystemSettingId");
+            modelBuilder.Entity<SEC_Roles>().Property(p => p.Id).HasColumnName("RoleId");
+            modelBuilder.Entity<SEC_Users>().Property(p => p.Id).HasColumnName("UserId");
+            modelBuilder.Entity<SYS_Menu>().Property(p => p.Id).HasColumnName("MenuId");
+            modelBuilder.Entity<SEC_UserInRole>().Property(p => p.Id).HasColumnName("UserRoleId");
+            modelBuilder.Entity<SEC_UserActivityInfoLog>().Property(p => p.UserId).HasColumnName("UserId");
+            modelBuilder.Entity<SYS_Services>().Property(p => p.ServiceSubCategoryId).HasColumnName("ServiceId");
+            modelBuilder.Entity<SYS_Pages>().Property(p => p.Id).HasColumnName("PageId");
+            modelBuilder.Entity<SEC_RolePermissions>().Property(p => p.Id).HasColumnName("RolePermissionId");
+            modelBuilder.Entity<SEC_UserDelegatedPermissions>().Property(p => p.Id).HasColumnName("UserPermissionId");
+            modelBuilder.Entity<SYS_SystemSettings>().Property(p => p.Id).HasColumnName("SystemSettingId");
             modelBuilder.Entity<SJCESP_AlertandNotification>().HasKey(m => new { m.CaseID, m.Affichable });
             modelBuilder.Entity<SJCESP_CaseInformation>().HasKey(m => new { m.Identifiant, m.Affichable });
             modelBuilder.Entity<SJCESP_Cases>().HasKey(m => new { m.CRNO ,m.IdDossierCivil });
@@ -40,13 +40,13 @@ namespace Data.Context
             modelBuilder.Entity<SJCESP_RoleParties>().HasKey(m => new { m.CaseID, m.CivilNumberParties });
             modelBuilder.Entity<SJCESP_Session_Information>().HasKey(m => new { m.CaseID });
             //Lookup
-            modelBuilder.Entity<UserStatusLookup>().Property(p => p.Id).HasColumnName("UserStatusId");
-            modelBuilder.Entity<NationalityLookup>().Property(p => p.Id).HasColumnName("NationalityId");
-            modelBuilder.Entity<CountryLookup>().Property(p => p.Id).HasColumnName("CountryId");
-            modelBuilder.Entity<LanguageLookup>().Property(p => p.Id).HasColumnName("LanguageId");
-            modelBuilder.Entity<ServiceCategoryLookup>().Property(p => p.ServiceCategoryId).HasColumnName("ServiceCategoryId");
-            modelBuilder.Entity<ServiceSubCategoryLookup>().Property(p => p.ServiceSubCategoryId).HasColumnName("ServiceSubCategoryId");
-            modelBuilder.Entity<UsersProfilePicture>().Property(p => p.UserId).HasColumnName("UserId");
+            modelBuilder.Entity<SEC_UserStatusLookup>().Property(p => p.Id).HasColumnName("UserStatusId");
+            modelBuilder.Entity<LKT_Nationality>().Property(p => p.Id).HasColumnName("NationalityId");
+            modelBuilder.Entity<LKT_Country>().Property(p => p.Id).HasColumnName("CountryId");
+            modelBuilder.Entity<SYS_Language>().Property(p => p.Id).HasColumnName("LanguageId");
+            modelBuilder.Entity<SYS_ServiceCategory>().Property(p => p.ServiceCategoryId).HasColumnName("ServiceCategoryId");
+            modelBuilder.Entity<SYS_ServiceSubCategory>().Property(p => p.ServiceSubCategoryId).HasColumnName("ServiceSubCategoryId");
+            modelBuilder.Entity<SEC_UsersProfilePicture>().Property(p => p.UserId).HasColumnName("UserId");
             // modelBuilder.Entity<SJCESP_LawyerInformation>().Property(p => p.lawyerid).HasConversion("LawyerName");
             //  modelBuilder.Entity<UpdateUsers>().Property(p => p.UserId).HasColumnName("UserId");
             // In OnModelCreating method
@@ -77,24 +77,24 @@ namespace Data.Context
         }
     
         // DbSet properties for your entities
-        public DbSet<Roles> Roles { get; set; }
-        public DbSet<Users> Users { get; set; }
-        public DbSet<UserStatusLookup> UserStatusLookup { get; set; }
-        public DbSet<UserInRole> UserInRole { get; set; }
-        public DbSet<UserActivityInfoLog> UserActivityInfoLog { get; set; }
-        public DbSet<Menu> Menu { get; set; }
-        public DbSet<Services> Services { get; set; }
-        public DbSet<Pages> Pages { get; set; }
-        public DbSet<RolePermissions> RolePermissions { get; set; }
-        public DbSet<UserDelegatedPermissions> UserDelegatedPermissions { get; set; }
-        public DbSet<SystemSettings> SystemSettings { get; set; }
+        public DbSet<SEC_Roles> SEC_Roles { get; set; }
+        public DbSet<SEC_Users> SEC_Users { get; set; }
+        public DbSet<SEC_UserStatusLookup> SEC_UserStatusLookup { get; set; }
+        public DbSet<SEC_UserInRole> SEC_UserInRole { get; set; }
+        public DbSet<SEC_UserActivityInfoLog> SEC_UserActivityInfoLog { get; set; }
+        public DbSet<SYS_Menu> SYS_Menu { get; set; }
+        public DbSet<SYS_Services> SYS_Services { get; set; }
+        public DbSet<SYS_Pages> SYS_Pages { get; set; }
+        public DbSet<SEC_RolePermissions> SEC_RolePermissions { get; set; }
+        public DbSet<SEC_UserDelegatedPermissions> SEC_UserDelegatedPermissions { get; set; }
+        public DbSet<SYS_SystemSettings> SYS_SystemSettings { get; set; }
         //Lookup
-        public DbSet<NationalityLookup> NationalityLookup { get; set; }
-        public DbSet<CountryLookup> CountryLookup { get; set; }
-        public DbSet<LanguageLookup> LanguageLookup { get; set; }
-        public DbSet<ServiceCategoryLookup> ServiceCategoryLookup { get; set; }
-        public DbSet<ServiceSubCategoryLookup> ServiceSubCategoryLookup { get; set; }
-        public virtual DbSet<UsersProfilePicture> UsersProfilePicture { get; set; }
+        public DbSet<LKT_Nationality> LKT_Nationality { get; set; }
+        public DbSet<LKT_Country> LKT_Country { get; set; }
+        public DbSet<SYS_Language> SYS_Language { get; set; }
+        public DbSet<SYS_ServiceCategory> SYS_ServiceCategory { get; set; }
+        public DbSet<SYS_ServiceSubCategory> SYS_ServiceSubCategory { get; set; }
+        public virtual DbSet<SEC_UsersProfilePicture> SEC_UsersProfilePicture { get; set; }
 
         public virtual DbSet<UsersProfilePictureView> UsersProfilePictureView { get; set; }
         public virtual DbSet<DwonloadUsersProfilePicture> DwonloadUsersProfilePicture { get; set; }

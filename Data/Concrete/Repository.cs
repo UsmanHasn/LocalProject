@@ -556,11 +556,11 @@ namespace Data.Concrete
                             {
                                 property.SetValue(item, Convert.ToDecimal(value));
                             }
-                            else if (property.PropertyType.Name.ToLower() == "int" || property.PropertyType.Name.ToLower() == "int32")
+                            else if (property.PropertyType.Name.ToLower() == "int" || property.PropertyType.FullName.ToLower().Contains("int32") || property.PropertyType.Name.ToLower() == "int32")
                             {
                                 property.SetValue(item, Convert.ToInt32(value));
                             }
-                            else if (property.PropertyType.Name.ToLower() == "long")
+                            else if (property.PropertyType.Name.ToLower() == "long" || property.PropertyType.FullName.ToLower().Contains("long"))
                             {
                                 property.SetValue(item, Convert.ToInt64(value));
                             }

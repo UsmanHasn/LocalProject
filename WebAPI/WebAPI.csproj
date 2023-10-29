@@ -45,6 +45,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\..\..\Document\ASP.Net_Kit_Version_3.5\ASP.Net_Kit_Version_3.5\CUSTOM_CHECKOUT_FORM_KIT\MCPG.ASP.net.ENC\bin\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="MCPG.CCAV.Util">
+      <HintPath>..\..\..\Document\ASP.Net_Kit_Version_3.5\ASP.Net_Kit_Version_3.5\CUSTOM_CHECKOUT_FORM_KIT\MCPG.ASP.net.ENC\bin\MCPG.CCAV.Util.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\Case Document\11\Capture1.PNG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

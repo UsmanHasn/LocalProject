@@ -11,9 +11,9 @@ namespace Service.Interface
 {
     public interface ILookupService
     {
-        List<LanguageLookup> GetLanguageValues();
-        List<NationalityLookup> GetNationalityLookups();
-        List<CountryLookup> GetCountryLookups();
+        List<SYS_Language> GetLanguageValues();
+        List<LKT_Nationality> GetNationalityLookups();
+        List<LKT_Country> GetCountryLookups();
         List<ServicesSubCategoryModel> GetServicesSubCategory();
         List<AlertModel> GetAlerts(string userId);
         AlertModel GetAlertsById(string alertId);
@@ -76,10 +76,17 @@ namespace Service.Interface
 
         bool AddLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
         bool UpdateLanguageLookup(LanguageLookupModel languageLookupModel, string userName);
-        PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber);
+        PaginatedLanguageLookupModel GetLanguageLookup(int pageSize, int pageNumber, string? SearchText);
 
         LanguageLookupModel GetLanguageLookupById(int languageLookupId);
         List<LookupsModel> GetPartyTypes(int CaseTypeId);
         public LanguageLookupModel GetCode(string code);
+        List<LKTGovernorateModel> getGovernorates();
+        List<LookupsModel> getWilayaByGovernorate(int GovernorateId);
+        List<LookupsModel> getVillageByWilaya(int GovernorateId, int WilayaId);
+        List<LookupsModel> getAddressType();
+        List<DocumentTypeLookupModel> GetRequiredDocumentTypes(string docIds);
+        public SystemParameterModel GetSystemSettingByName(string KeyName);
+        List<LookupsModel> getRequestLinkSource();
     }
 }

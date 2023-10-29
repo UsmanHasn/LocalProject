@@ -15,11 +15,15 @@ namespace Service.Interface
         bool AddLinkCompany(LinkCompanyModel linkCompanyModel, string userName);
         bool AddRequestAccount(RequestAccountsModel requestAccountsModel, string userName,string folderName,int count);
         public LinkCompanyModel GetCivilNo(string CivilNo);
+
+        public RequestAccountsModel GetRequestStatusByStatusId(int UserId);
         List<RequestAccountsModel> GetAll(int userId);
+
+        List<RequestAccountsModel> GetAllApproved(int userId);
         List<RequestAccountsModel> GetAllForAdmin(string ActionTypeId, string CivilNo, string UserName);
 
         bool UpdateRequestAccountHistory(int requestId, int responseStatusId, string rejectedReason);
 
-        public SystemSettings GetRequestStatusIdFromSystemSetting(string keyName); 
+        public SYS_SystemSettings GetRequestStatusIdFromSystemSetting(string keyName); 
     }
 }

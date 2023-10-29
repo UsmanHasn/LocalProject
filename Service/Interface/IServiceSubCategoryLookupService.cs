@@ -15,7 +15,7 @@ namespace Service.Interface
     public interface IServiceSubCategoryLookupService
     {
         List<ServiceSubCategoryLookupModel> GetAllSubService();
-        List<Domain.Entities.ServiceCategoryLookup> GetAllServiceLookup();
+        List<Domain.Entities.SYS_ServiceCategory> GetAllServiceLookup();
         List<Domain.Modeles.ServicesModel> GetAllServices();
 
         List<Service.Models.ServiceCategoryLookup> BindServiceCategory();

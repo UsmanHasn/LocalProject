@@ -16,8 +16,8 @@ namespace Service.Concrete
     public class UserProfileService : IUserProfileService
     {
         private readonly List<UserProfileModel> _UserProfileModel = new List<UserProfileModel>();
-        private readonly IRepository<Users> _userService;
-        public UserProfileService(IRepository<Users> userService)
+        private readonly IRepository<SEC_Users> _userService;
+        public UserProfileService(IRepository<SEC_Users> userService)
         {
             _userService = userService;
         }

@@ -11,6 +11,9 @@ namespace WebAPI.Helper
 {
     public static class SjcConstants
     {
+        //public static string baseIp = "10.146.3.46:"; // Testing Server CAAJ
+        public static string baseIp = "sjcepportal:"; // Dev Server 
+
         #region Roles
         public const string roleSystemAdmin = "System Admin";
         public const string roleCompanyManager = "Company Manager";
