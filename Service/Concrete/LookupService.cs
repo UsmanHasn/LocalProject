@@ -691,5 +691,13 @@ namespace Service.Concrete
             SqlParameter[] parameters = new SqlParameter[0];
             return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sp_GetRequestLinkSource", parameters).ToList();
         }
+
+        public AccountDetail CheckAccountDetail(int UserId)
+        {
+            SqlParameter[] parameters = new SqlParameter[1];
+            parameters[0] = new SqlParameter("@UserId", UserId);
+            return _languagesRepository.ExecuteStoredProcedure<AccountDetail>("SJC_GetCheckAccountDetail", parameters).FirstOrDefault();
+
+        }
     }
 }

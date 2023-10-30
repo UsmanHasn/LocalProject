@@ -19,10 +19,10 @@ namespace WebAPI.Controllers
         {
             _IpagesService = pagesService;
         }
-        [Authorize]
+      //  [Authorize]
         [HttpGet]
         [Route("getall")]
-        [ServiceFilter(typeof(TokenBasedAuthorizeFilter))]
+      //  [ServiceFilter(typeof(TokenBasedAuthorizeFilter))]
         public IActionResult GetAll()
         {
             // string token = GetTokenFromRequest();

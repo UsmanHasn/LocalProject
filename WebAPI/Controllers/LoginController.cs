@@ -279,7 +279,9 @@ namespace WebAPI.Controllers
                     CRName = "",
                     EntityId = 0,
                     EntityName = "",
-                    CivilExpiry = currentUser.CivilExpiryDate
+                    CivilExpiry = currentUser.CivilExpiryDate,
+                    IsEmailVerified = currentUser.isEmailVerified,
+                    IsPhoneVerified = currentUser.isPhoneVerified,
                 };
                 //return currentUser;
             }
