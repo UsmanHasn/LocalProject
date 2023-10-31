@@ -51,6 +51,37 @@ namespace WebAPI.Controllers
             
         }
         [HttpGet]
+        [Route("getcasebyno")]
+        public async Task<IActionResult> GetCasesByNo(string caseNo, string caseSource)
+        {
+            try
+            {
+                HttpClientHelper httpClientHelper = new HttpClientHelper();
+                //var requestBody = new MyRequestModel { Property1 = "value1", Property2 = "value2" };
+                var response = new CasesModel();
+                if (caseSource == "A")
+                {
+                    var responseACO = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.acoApiUrl + "case/GetCaseByNo?caseNo=" + caseNo, HttpMethod.Get, null, null);
+                    if (responseACO != null && responseACO.data != null && responseACO.data.Count() > 0)
+                    {
+                        response = responseACO.data.FirstOrDefault();
+                    }
+                    return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+                }
+                var responseJCMS = await httpClientHelper.MakeHttpRequest<HttpResponseModel<CasesModel>, HttpResponseModel<CasesModel>>(base.jcmsApiUrl + "case/GetCaseById?caseId=" + caseNo, HttpMethod.Get, null, null);
+                if (responseJCMS != null)
+                {
+                    response = responseJCMS.data.FirstOrDefault();
+                }
+                return new JsonResult(new { data = response, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+
+        }
+        [HttpGet]
         [Route("getcasebyid")]
         public async Task<IActionResult> GetCasesById(string caseId, string caseSource)
         {

@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
         //public string acoApiUrl = "http://"+ SjcConstants.baseIp + "82/api/";
         //public string jcmsApiUrl = "http://"+ SjcConstants.baseIp + "83/api/";
 
-        public string acoApiUrl = "http://"+ SjcConstants.baseIp + "82/api/";
-        public string jcmsApiUrl = "http://"+ SjcConstants.baseIp + "83/api/";
+        public string acoApiUrl = "http://" + SjcConstants.baseIp + "82/api/";
+        public string jcmsApiUrl = "http://" + SjcConstants.baseIp + "83/api/";
     }
 }

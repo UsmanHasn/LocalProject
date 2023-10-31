@@ -64,3 +64,18 @@ CREATE TABLE RequestEventLog
   FOREIGN KEY (ActionId) REFERENCES RequestAction(ActionId),
   FOREIGN KEY (StatusId) REFERENCES RequestStatus(StatusId)
 );
+Create Table COR_AdvanceLinkingConfig
+(
+   LinkId int identity(1,1),
+   CaseGroupId int,
+   LocationId int,
+   CategoryId int,
+   CaseTypeId int,
+   SubjectId int,
+   LinkAllow bit,
+   LinkGroupId varchar(200),
+   LinkSources varchar(200),
+   RoleId varchar(200), 
+   Primary key (LinkId)
+   
+)
