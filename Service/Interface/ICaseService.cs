@@ -25,18 +25,14 @@ namespace Service.Interface
         public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
         CaseModel GetCasesByUserName(string CreatedBy);
         CaseModel GetCasesByCaseId(string CaseId);
-
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
         public List<CaseTypesLookupModel> GetAllCaseTypeLookup();
-
         public CaseTypesLookupModel GetCaseTypeLookupById(int CaseTypeId);
         public List<CourtTypeLookupModel> GetAllCourtTypeLookup();
-
         public CaseModel GetCaseDetail(int CaseId);
         public List<CaseParties> GetCasePartiesDetail(int CaseId);
         List<CaseBasicModel> GetCasesByStatusName(string UserName, string CaseStatusName);
-
         bool DeleteCaseParties(CasePartiesDelete deleteCaseParties);
         List<CaseGroupModel> GetCaseGroup();
         List<CaseGroupCountValues> GetCaseGroupCountValues();
@@ -70,10 +66,6 @@ namespace Service.Interface
         CaseCategoryDetails GetCaseCategoryDetailsbyId(int CaseCatDtlId);
 
         string DeleteCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName);
-
-
-
-
 
         List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId);
 

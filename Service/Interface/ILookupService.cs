@@ -92,5 +92,13 @@ namespace Service.Interface
         AccountDetail CheckAccountDetail(int UserId);
 
 
+
+        void InsUpdRequestLinkSource(RequestLinkSource requestLinkSource, string userName);
+        RequestLinkSource GetRequestLinkSourceById(int Id);
+        List<RequestLinkSource> GetRequestLinkSourceList();
+
+        void DeleteRequestLinkSource(RequestLinkSource requestLinkSource, string userName);
+
+
     }
 }

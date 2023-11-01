@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpPost]
         [Route("insertcaseparties")]
@@ -55,7 +55,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("GetCaseByCivilNo")]
@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("GetPartiesByCaseId")]
@@ -138,7 +138,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("UpdateCaseStatus")]
@@ -202,7 +202,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpPost]
         [Route("deletecasedocument")]
@@ -242,7 +242,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
 
         [HttpGet]
@@ -260,7 +260,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -278,7 +278,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpPost]
         [Route("UpdateCase")]
@@ -315,7 +315,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("GetCasesByCaseId")]
@@ -332,7 +332,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         #endregion
@@ -359,7 +359,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
 
         }
         [HttpGet]
@@ -394,7 +394,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -412,7 +412,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-         
+
         }
 
         [HttpGet]
@@ -430,7 +430,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("GetCasePartiesDetail")]
@@ -483,7 +483,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("GetCasesByStatus")]
@@ -500,7 +500,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpPost]
         [Route("DeleteCaseParties")]
@@ -516,7 +516,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("getcasegroup")]
@@ -534,7 +534,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getgroupgovenorates")]
@@ -551,7 +551,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getgovenorateslocation")]
@@ -568,7 +568,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("getGrpGovernLocation")]
@@ -602,7 +602,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getcasecategorybycasegroup")]
@@ -619,7 +619,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getcasetypebycategory")]
@@ -636,7 +636,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpPost]
         [Route("insUpdCaseGroup")]
@@ -652,7 +652,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-          
+
         }
         [HttpPost]
         [Route("deleteCaseGroup")]
@@ -668,7 +668,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-          
+
         }
         [HttpPost]
         [Route("insUpDel_LktGovernorate")]
@@ -684,7 +684,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpPost]
         [Route("insUpDel_LktGroupGovernorate")]
@@ -700,7 +700,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-          
+
         }
         [HttpPost]
         [Route("insUpDel_LktLoction")]
@@ -716,7 +716,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("getunassignedgovernorates")]
@@ -766,7 +766,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("getpartycategory")]
@@ -816,7 +816,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getcorcasetypes")]
@@ -833,7 +833,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpGet]
         [Route("getunassignedcasetypes")]
@@ -850,7 +850,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-           
+
         }
         [HttpGet]
         [Route("getassignedcasetypes")]
@@ -867,7 +867,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
         [HttpPost]
         [Route("insUpDel_CaseType")]
@@ -883,11 +883,8 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
-
-
-
 
         [HttpPost]
         [Route("insert_LKT_Subject")]
@@ -921,7 +918,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
-            
+
         }
 
         [HttpGet]
@@ -954,7 +951,6 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
         }
-
 
         [HttpPost]
         [Route("insUpDel_CorCaseSubject")]
@@ -1003,19 +999,20 @@ namespace WebAPI.Controllers
             {
 
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
-                
+
             }
-            
+
 
         }
 
         [HttpGet]
-        [Route("GetAllCaseCategoryDetails")]
+        [Route("getallcasecategorydetails")]
         public IActionResult GetAllCaseCategoryDetails()
         {
+            List<CaseCategoryDetails> model = new List<CaseCategoryDetails>();
+
             try
             {
-                List<CaseCategoryDetails> model = new List<CaseCategoryDetails>();
                 model = _caseService.GetAllCaseCategoryDetails();
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
@@ -1023,9 +1020,9 @@ namespace WebAPI.Controllers
             {
 
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
-                
+
             }
-         
+
         }
 
         [HttpGet]
@@ -1041,7 +1038,6 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
@@ -1062,7 +1058,7 @@ namespace WebAPI.Controllers
 
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
-           
+
         }
 
         [HttpPost]

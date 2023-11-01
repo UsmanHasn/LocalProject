@@ -118,7 +118,7 @@ namespace Service.Concrete
                 Console.Write(ex);
                 return null;
             }
-           
+
         }
         public bool AddCaseDocuments(CaseDocumentModel caseDocumentModel, string userName)
         {
@@ -263,7 +263,6 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("Sjc_Update_CaseTypesLookup", spParams);
             return true;
         }
-
         public CaseModel GetCaseDetail(int CaseId)
         {
             SqlParameter[] param = new SqlParameter[1];
@@ -271,7 +270,6 @@ namespace Service.Concrete
             var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseDetail", param).FirstOrDefault();
             return data;
         }
-
         public List<CaseParties> GetCasePartiesDetail(int CaseId)
         {
             SqlParameter[] param = new SqlParameter[1];
@@ -286,7 +284,6 @@ namespace Service.Concrete
             parameters[1] = new SqlParameter("CaseStatusName", CaseStatusName);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseBasicModel>("sjc_GetCaseByStatusAndUser", parameters).ToList();
         }
-
         public bool DeleteCaseParties(CasePartiesDelete deleteCaseParties)
         {
             SqlParameter[] spParams = new SqlParameter[1];
@@ -556,7 +553,6 @@ namespace Service.Concrete
             SqlParameter[] parameters = new SqlParameter[0];
             return _systemSettingRepository.ExecuteStoredProcedure<LKT_SubjectModel>("sjc_GetLKT_Subject", parameters).ToList();
         }
-
         public string InsUpdCaseCategoryDetails(CaseCategoryDetails caseCategoryDetails, string userName)
         {
             try
@@ -565,22 +561,22 @@ namespace Service.Concrete
 
 
                 spParams[0] = new SqlParameter("CaseCatDtlId", caseCategoryDetails.CaseCatDtlId);
-                spParams[1] = new SqlParameter("CaseCateggoryId", caseCategoryDetails.CaseCategoryId);
-                spParams[2] = new SqlParameter("Description_en", caseCategoryDetails.Descriptionen);
-                spParams[3] = new SqlParameter("Description_ar", caseCategoryDetails.Descriptionar);
+                spParams[1] = new SqlParameter("CaseCateggoryId", caseCategoryDetails.CaseCateggoryId);
+                spParams[2] = new SqlParameter("Description_en", caseCategoryDetails.Description_en);
+                spParams[3] = new SqlParameter("Description_ar", caseCategoryDetails.Description_ar);
                 spParams[4] = new SqlParameter("ImageUrl", caseCategoryDetails.ImageUrl);
-                spParams[5] = new SqlParameter("@ServiceUsers_en", caseCategoryDetails.ServiceUsersen);
-                spParams[6] = new SqlParameter("@ServiceUsers_ar", caseCategoryDetails.ServiceUsersar);
-                spParams[7] = new SqlParameter("Procedure_en", caseCategoryDetails.Procedureen);
-                spParams[8] = new SqlParameter("Procedure_ar", caseCategoryDetails.Procedurear);
-                spParams[9] = new SqlParameter("ReqdDocs_en", caseCategoryDetails.ReqdDocsen);
-                spParams[10] = new SqlParameter("ReqdDocs_ar", caseCategoryDetails.ReqdDocsar);
-                spParams[11] = new SqlParameter("ReqdApprovals_en", caseCategoryDetails.ReqdApprovalsen);
-                spParams[12] = new SqlParameter("ReqdApprovals_ar", caseCategoryDetails.ReqdApprovalsar);
-                spParams[13] = new SqlParameter("ServiceFee_en", caseCategoryDetails.ServiceFeeen);
-                spParams[14] = new SqlParameter("ServiceFee_ar", caseCategoryDetails.ServiceFeear);
-                spParams[15] = new SqlParameter("DeliveryTime_en", caseCategoryDetails.DeliveryTimeen);
-                spParams[16] = new SqlParameter("DeliveryTime_ar", caseCategoryDetails.DeliveryTimear);
+                spParams[5] = new SqlParameter("@ServiceUsers_en", caseCategoryDetails.ServiceUsers_en);
+                spParams[6] = new SqlParameter("@ServiceUsers_ar", caseCategoryDetails.ServiceUsers_ar);
+                spParams[7] = new SqlParameter("Procedure_en", caseCategoryDetails.Procedure_en);
+                spParams[8] = new SqlParameter("Procedure_ar", caseCategoryDetails.Procedure_ar);
+                spParams[9] = new SqlParameter("ReqdDocs_en", caseCategoryDetails.ReqdDocs_en);
+                spParams[10] = new SqlParameter("ReqdDocs_ar", caseCategoryDetails.ReqdDocs_ar);
+                spParams[11] = new SqlParameter("ReqdApprovals_en", caseCategoryDetails.ReqdApprovals_en);
+                spParams[12] = new SqlParameter("ReqdApprovals_ar", caseCategoryDetails.ReqdApprovals_ar);
+                spParams[13] = new SqlParameter("ServiceFee_en", caseCategoryDetails.ServiceFee_en);
+                spParams[14] = new SqlParameter("ServiceFee_ar", caseCategoryDetails.ServiceFee_ar);
+                spParams[15] = new SqlParameter("DeliveryTime_en", caseCategoryDetails.DeliveryTime_en);
+                spParams[16] = new SqlParameter("DeliveryTime_ar", caseCategoryDetails.DeliveryTime_ar);
                 spParams[17] = new SqlParameter("ReqdDocTypeIds", caseCategoryDetails.ReqdDocTypeIds);
                 spParams[18] = new SqlParameter("VisibleToRoleId", caseCategoryDetails.VisibleToRoleIds);
                 spParams[19] = new SqlParameter("@Action", caseCategoryDetails.CaseCatDtlId > 0 ? "u" : "i");
@@ -609,8 +605,6 @@ namespace Service.Concrete
             }
             catch (Exception ex)
             {
-
-
                 return null;
             }
 
@@ -619,15 +613,11 @@ namespace Service.Concrete
         {
             try
             {
-                SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("CaseCatDtlId", CaseCatDtlId);
-                var data = _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryDetails>("sjc_getCaseCategoryDetailsbyId", param).FirstOrDefault();
-                return data;
+                var data = _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryDetails>("sjc_getCaseCategoryDetailsbyId", new Microsoft.Data.SqlClient.SqlParameter("CaseCatDtlId", CaseCatDtlId));
+                return data.FirstOrDefault();
             }
             catch (Exception ex)
             {
-
-
                 return null;
             }
 
@@ -638,22 +628,22 @@ namespace Service.Concrete
             {
                 SqlParameter[] spParams = new SqlParameter[21];
                 spParams[0] = new SqlParameter("CaseCatDtlId", caseCategoryDetails.CaseCatDtlId);
-                spParams[1] = new SqlParameter("CaseCateggoryId", caseCategoryDetails.CaseCategoryId);
-                spParams[2] = new SqlParameter("Description_en", caseCategoryDetails.Descriptionen);
-                spParams[3] = new SqlParameter("Description_ar", caseCategoryDetails.Descriptionar);
+                spParams[1] = new SqlParameter("CaseCateggoryId", caseCategoryDetails.CaseCateggoryId);
+                spParams[2] = new SqlParameter("Description_en", caseCategoryDetails.Description_en);
+                spParams[3] = new SqlParameter("Description_ar", caseCategoryDetails.Description_ar);
                 spParams[4] = new SqlParameter("ImageUrl", caseCategoryDetails.ImageUrl);
-                spParams[5] = new SqlParameter("@ServiceUsers_en", caseCategoryDetails.ServiceUsersen);
-                spParams[6] = new SqlParameter("@ServiceUsers_ar", caseCategoryDetails.ServiceUsersar);
-                spParams[7] = new SqlParameter("Procedure_en", caseCategoryDetails.Procedureen);
-                spParams[8] = new SqlParameter("Procedure_ar", caseCategoryDetails.Procedurear);
-                spParams[9] = new SqlParameter("ReqdDocs_en", caseCategoryDetails.ReqdDocsen);
-                spParams[10] = new SqlParameter("ReqdDocs_ar", caseCategoryDetails.ReqdDocsar);
-                spParams[11] = new SqlParameter("ReqdApprovals_en", caseCategoryDetails.ReqdApprovalsen);
-                spParams[12] = new SqlParameter("ReqdApprovals_ar", caseCategoryDetails.ReqdApprovalsar);
-                spParams[13] = new SqlParameter("ServiceFee_en", caseCategoryDetails.ServiceFeeen);
-                spParams[14] = new SqlParameter("ServiceFee_ar", caseCategoryDetails.ServiceFeear);
-                spParams[15] = new SqlParameter("DeliveryTime_en", caseCategoryDetails.DeliveryTimeen);
-                spParams[16] = new SqlParameter("DeliveryTime_ar", caseCategoryDetails.DeliveryTimear);
+                spParams[5] = new SqlParameter("@ServiceUsers_en", caseCategoryDetails.ServiceUsers_en);
+                spParams[6] = new SqlParameter("@ServiceUsers_ar", caseCategoryDetails.ServiceUsers_ar);
+                spParams[7] = new SqlParameter("Procedure_en", caseCategoryDetails.Procedure_en);
+                spParams[8] = new SqlParameter("Procedure_ar", caseCategoryDetails.Procedure_ar);
+                spParams[9] = new SqlParameter("ReqdDocs_en", caseCategoryDetails.ReqdDocs_en);
+                spParams[10] = new SqlParameter("ReqdDocs_ar", caseCategoryDetails.ReqdDocs_ar);
+                spParams[11] = new SqlParameter("ReqdApprovals_en", caseCategoryDetails.ReqdApprovals_en);
+                spParams[12] = new SqlParameter("ReqdApprovals_ar", caseCategoryDetails.ReqdApprovals_ar);
+                spParams[13] = new SqlParameter("ServiceFee_en", caseCategoryDetails.ServiceFee_en);
+                spParams[14] = new SqlParameter("ServiceFee_ar", caseCategoryDetails.ServiceFee_ar);
+                spParams[15] = new SqlParameter("DeliveryTime_en", caseCategoryDetails.DeliveryTime_en);
+                spParams[16] = new SqlParameter("DeliveryTime_ar", caseCategoryDetails.DeliveryTime_ar);
                 spParams[17] = new SqlParameter("ReqdDocTypeIds", caseCategoryDetails.ReqdDocTypeIds);
                 spParams[18] = new SqlParameter("VisibleToRoleId", caseCategoryDetails.VisibleToRoleIds);
                 spParams[19] = new SqlParameter("@Action", "d");
@@ -671,22 +661,18 @@ namespace Service.Concrete
             }
 
         }
-
-
         public List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId)
         {
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("CaseGrpCatTypeId ", CaseGrpCatTypeId);
             return _systemSettingRepository.ExecuteStoredProcedure<CORCaseSubjectModel>("sjc_GetUnAssignedSubject", spParams).ToList();
         }
-
         public List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId)
         {
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("CaseGrpCatTypeId ", CaseGrpCatTypeId);
             return _systemSettingRepository.ExecuteStoredProcedure<CORCaseSubjectModel>("sjc_GetAssignedSubject", spParams).ToList();
         }
-
         public void InsUpDel_CorCaseSubject(CORCaseSubject cORCaseSubject)
         {
             string sId = "";
