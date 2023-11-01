@@ -23,4 +23,10 @@ namespace Service.Models
         public int Sequence { get; set; }
         public int PageId { get; set; }
     }
+
+    public class paginationMenu
+    {
+        public List<MenuModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
+    }
 }

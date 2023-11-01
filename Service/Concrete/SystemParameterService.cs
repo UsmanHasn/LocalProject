@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Interface;
 using Domain.Entities;
+using MailKit.Search;
 using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
@@ -70,10 +71,33 @@ namespace Service.Concrete
 
         }
 
-        public List<SystemParameterModel> GetAllsystemParameter()
+        public paginationSystemParameterModel GetAllsystemParameter(int pageSize, int pageNumber, string? SearchText)
         {
-            SqlParameter[] spParams = new SqlParameter[0];
-            return _systemSettingRepository.ExecuteStoredProcedure<SystemParameterModel>("sjc_GetSystemSettings", spParams).ToList();
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("pageSize", pageSize);
+            param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
+            var model =_systemSettingRepository.ExecuteStoredProcedure<SystemParameterModel>("sjc_GetSystemSettings", param).ToList();
+            int countItem = 0;
+            if (SearchText != null)
+            {
+                SqlParameter[] paramSearch = new SqlParameter[1];
+                paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetSystemSettingsCount", paramSearch).FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            else
+            {
+                var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetSystemSettingsCount").FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            paginationSystemParameterModel paginationSystemParameterModel = new paginationSystemParameterModel()
+            {
+                PaginatedData = model,
+                TotalCount = countItem
+            };
+            return paginationSystemParameterModel;
         }
 
         public SystemParameterModel GetsystemParameterById(int Id)
