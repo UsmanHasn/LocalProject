@@ -205,6 +205,7 @@ namespace WebAPI.Controllers
             }
             
         }
+
         [HttpPost]
         [Route("DeleteAction")]
         public void DeleteAction(ActionType model, string userName)
@@ -1187,6 +1188,39 @@ namespace WebAPI.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("InsUpdRequestLinkSource")]
+        public void InsUpdRequestLinkSource(RequestLinkSource model, string userName)
+        {
+            try
+            {
+                _lookupService.InsUpdRequestLinkSource(model, userName);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+        }
+
+        [HttpGet]
+        [Route("GetRequestLinkSourceById")]
+        public IActionResult GetRequestLinkSourceById(int id)
+        {
+            RequestLinkSource requestLinkSource = new RequestLinkSource();
+            try
+            {
+                requestLinkSource = _lookupService.GetRequestLinkSourceById(id);
+                return new JsonResult(new { data = requestLinkSource, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
         [HttpGet]
         [Route("getrequireddocuments")]
         public IActionResult getrequireddocuments(string docIds)
@@ -1240,5 +1274,42 @@ namespace WebAPI.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("GetRequestLinkSourceList")]
+        public IActionResult GetRequestLinkSourceList()
+        {
+            List<RequestLinkSource> model = new List<RequestLinkSource>();
+            try
+            {
+                model = _lookupService.GetRequestLinkSourceList();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpPost]
+        [Route("DeleteRequestLinkSource")]
+        public void DeleteRequestLinkSource(RequestLinkSource model, string userName)
+        {
+            try
+            {
+                _lookupService.DeleteRequestLinkSource(model, userName);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+
     }
 }

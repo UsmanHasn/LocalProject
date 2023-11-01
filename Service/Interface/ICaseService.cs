@@ -25,32 +25,28 @@ namespace Service.Interface
         public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
         CaseModel GetCasesByUserName(string CreatedBy);
         CaseModel GetCasesByCaseId(string CaseId);
-
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
         bool UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
         public List<CaseTypesLookupModel> GetAllCaseTypeLookup();
-
         public CaseTypesLookupModel GetCaseTypeLookupById(int CaseTypeId);
         public List<CourtTypeLookupModel> GetAllCourtTypeLookup();
-
         public CaseModel GetCaseDetail(int CaseId);
         public List<CaseParties> GetCasePartiesDetail(int CaseId);
         List<CaseBasicModel> GetCasesByStatusName(string UserName, string CaseStatusName);
-
         bool DeleteCaseParties(CasePartiesDelete deleteCaseParties);
         List<CaseGroupModel> GetCaseGroup();
         List<CaseGroupCountValues> GetCaseGroupCountValues();
         List<GovernoratesModel> GetGovernoratesByCaseGroupId(int caseGroupId);
-        List<LocationModel> GetLocationByGovernorateId(int governorateId);
+        List<LocationModel> GetLocationByGovernorateId(int governorateId, bool isActive);
         List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations();
         List<CaseCategoryGroupModel> GetCategoryByLocationId(int locationId);
-        List<CaseCategoryGroupModel> GetCategoryByGroupId(int caseGroupId);
+        List<CaseCategoryGroupModel> GetCategoryByGroupId(int caseGroupId, bool isActive);
         List<CaseCategoryTypesModel> GetTypeByCategoryId(int categoryId);
         string InsUpDel_CaseGroup(CaseGroupModel caseGroupModel, string dmlType);
         string InsUpDel_LktGovernorate(LKTGovernorateModel lktGovernorateModel, string dmlType);
         string InsUpDel_LktLocation(LKTLocationModel lktGovernorateModel, string dmlType);
         void InsUpDel_LktGroupGovernorate(LKT_GroupGovernoratesModel lKT_GroupGovernoratesModel);
-        List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId);
+        List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId, bool isActive);
         List<LKTGovernorateModel> getAssignedGovernorates(int caseGroupId);
         string InsUpDel_CaseCategory(CaseGroupCategoryModel caseGroupCategoryModel, string dmlType);
         List<LKTPartyCategory> getPartyCategory();
@@ -58,7 +54,7 @@ namespace Service.Interface
         List<CaseCategoryTypesModel> GetCaseCategoryTypes();
         string InsUpDel_CaseType(CaseCategoryTypesModel caseGroupCategoryModel, string dmlType);
         List<LKTPartyType> GetPartyTypes(int caseGroupId, int partyCategoryId);
-        List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId);
+        List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId, bool isActive);
         List<CaseCategoryTypesModel> GetAssignedCaseTypes(int caseGroupId, int caseCategoryId);
 
         string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel, string dmlType);
@@ -75,7 +71,7 @@ namespace Service.Interface
 
 
 
-        List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId);
+        List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId, bool isActive);
 
         List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId);
 
@@ -84,5 +80,6 @@ namespace Service.Interface
         bool InsUpDel_CorAdvanceLinkingConfig(COR_AdvanceLinkingConfigModel cOR_AdvanceLinkingConfigModel);
         List<COR_AdvanceLinkingConfigModel> GetCOR_AdvanceLinkingConfig();
         public COR_AdvanceLinkingConfigModel GetCOR_AdvanceLinkingConfigById(int LinkId);
+        List<LKTLocationModel> getLocationsByCaseGroupId(int caseGroupId);
     }
 }

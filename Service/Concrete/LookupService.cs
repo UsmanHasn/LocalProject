@@ -666,14 +666,12 @@ namespace Service.Concrete
             _languagesRepository.ExecuteStoredProcedure("Sjc_update_CaseGroupStatus", spParams);
             return true;
         }
-
         public LanguageLookupModel GetCode(string code)
         {
             SqlParameter[] spParams = new SqlParameter[1];
             spParams[0] = new SqlParameter("Key", code);
             return _languagesRepository.ExecuteStoredProcedure<LanguageLookupModel>("sjc_GetLanguageCode", spParams).FirstOrDefault();
         }
-
         public SystemParameterModel GetSystemSettingByName(string KeyName)
         {
             SqlParameter[] spParams = new SqlParameter[1];
@@ -722,6 +720,45 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("@UserId", UserId);
             return _languagesRepository.ExecuteStoredProcedure<AccountDetail>("SJC_GetCheckAccountDetail", parameters).FirstOrDefault();
 
+        }
+
+        public void InsUpdRequestLinkSource(RequestLinkSource requestLinkSource, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[4];
+            spParams[0] = new SqlParameter("@Id", requestLinkSource.Id);
+            spParams[1] = new SqlParameter("@NameEn", requestLinkSource.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", requestLinkSource.NameAr);
+            spParams[3] = new SqlParameter("@Action", requestLinkSource.Id > 0 ? "u" : "i");
+            _languagesRepository.ExecuteStoredProcedure("sjc_InsUpdRequestLinkSource", spParams);
+        }
+        public RequestLinkSource GetRequestLinkSourceById(int Id)
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<RequestLinkSource>("sjc_GetRequestLinkSourceById", new Microsoft.Data.SqlClient.SqlParameter("Id", Id));
+            return dataMenu.FirstOrDefault();
+        }
+
+        List<RequestLinkSource> ILookupService.GetRequestLinkSourceList()
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<RequestLinkSource>("sjc_GetRequestLinkSourceList");
+            var model = dataMenu.Select(x => new RequestLinkSource()
+            {
+                Id = x.Id,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
+
+            }).ToList();
+            return model;
+        }
+
+        public void DeleteRequestLinkSource(RequestLinkSource requestLinkSource, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[4];
+            spParams[0] = new SqlParameter("@Id", requestLinkSource.Id);
+            spParams[1] = new SqlParameter("@NameEn", requestLinkSource.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", requestLinkSource.NameAr);
+            spParams[3] = new SqlParameter("@Action",  "d");
+            _languagesRepository.ExecuteStoredProcedure("sjc_InsUpdRequestLinkSource", spParams);
+       
         }
     }
 }
