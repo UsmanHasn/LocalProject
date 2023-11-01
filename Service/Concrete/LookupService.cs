@@ -1,12 +1,14 @@
 ﻿using Data.Interface;
 using Domain.Entities;
 using Domain.Entities.Lookups;
+using MailKit.Search;
 using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -372,11 +374,33 @@ namespace Service.Concrete
             return data;
         }
 
-        public List<GovernatesLookupModel> GetAllGovernateLookup()
+        public paginationGovernates GetAllGovernateLookup(int pageSize, int pageNumber, string? SearchText)
         {
-            SqlParameter[] param = new SqlParameter[0];
-            var data = _languagesRepository.ExecuteStoredProcedure<GovernatesLookupModel>("sjc_GetAllGovernateLookup", param);
-            return data.ToList();
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("pageSize", pageSize);
+            param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
+            var data = _languagesRepository.ExecuteStoredProcedure<GovernatesLookupModel>("sjc_GetAllGovernateLookup", param).ToList();
+            int countItem = 0;
+            if (SearchText != null)
+            {
+                SqlParameter[] paramSearch = new SqlParameter[1];
+                paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_GovernateCount", paramSearch).FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            else
+            {
+                var count = _languagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_GovernateCount").FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            paginationGovernates paginationGovernates = new paginationGovernates()
+            {
+                PaginatedData = data,
+                TotalCount = countItem
+            };
+            return paginationGovernates;
         }
 
         public GovernatesLookupModel GetGovernateLookupById(int governateId)

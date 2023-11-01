@@ -57,7 +57,7 @@ namespace Service.Interface
         List<LocationLookupModel> GelAllLocationLookup();
         LocationLookupModel GelLocationLookupById(int LocationId);
 
-        List<GovernatesLookupModel> GetAllGovernateLookup();
+        paginationGovernates GetAllGovernateLookup(int pageSize, int pageNumber, string? SearchText);
         GovernatesLookupModel GetGovernateLookupById(int governateId);
         List<CaseCategoryLookupModel> GetcaseCategoryLookup();
         List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();

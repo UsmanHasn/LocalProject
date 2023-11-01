@@ -1,10 +1,12 @@
 ﻿using Data.Interface;
 using Domain.Entities;
+using MailKit.Search;
 using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,10 +66,33 @@ namespace Service.Concrete
             }
         }
 
-        public List<PagesModel> GetAllPages()
+        public PageModelPagination GetAllPages(int pageSize, int pageNumber, string? SearchText)
         {
-            SqlParameter[] parameters = new SqlParameter[0];
-            return _pagesRepository.ExecuteStoredProcedure<PagesModel>("sjc_GetPages", parameters).ToList();
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("pageSize", pageSize);
+            param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
+            var data = _pagesRepository.ExecuteStoredProcedure<PagesModel>("sjc_GetPagesPagination", param).ToList();
+            int countItem = 0;
+            if (SearchText != null)
+            {
+                SqlParameter[] paramSearch = new SqlParameter[1];
+                paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                var count = _pagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_PageCount", paramSearch).FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            else
+            {
+                var count = _pagesRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAll_PageCount").FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            PageModelPagination paginatedLanguageLookupModel = new PageModelPagination()
+            {
+                PaginatedData = data,
+                TotalCount = countItem
+            };
+            return paginatedLanguageLookupModel;
         }
 
         public PagesModel GetpagesById(int Id)

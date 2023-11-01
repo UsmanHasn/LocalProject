@@ -10,7 +10,7 @@ namespace Service.Interface
 {
     public interface IPagesService
     {
-        List<PagesModel> GetAllPages();
+        PageModelPagination GetAllPages(int pageSize, int pageNumber, string? SearchText);
         bool Addpages(PagesModel pagesModel, string userName);
         PagesModel GetpagesById(int Id);
         bool Updatepages(PagesModel pagesModel, string userName);

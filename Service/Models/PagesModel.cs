@@ -17,4 +17,9 @@ namespace Service.Models
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
     }
+    public class PageModelPagination
+    {
+        public List<PagesModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
+    }
 }
