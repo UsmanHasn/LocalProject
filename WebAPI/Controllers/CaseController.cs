@@ -555,12 +555,12 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("getgovenorateslocation")]
-        public IActionResult GetGovernoratesLocation(int governorateId)
+        public IActionResult GetGovernoratesLocation(int governorateId, bool isActive)
         {
             List<LocationModel> model = new List<LocationModel>();
             try
             {
-                model = _caseService.GetLocationByGovernorateId(governorateId);
+                model = _caseService.GetLocationByGovernorateId(governorateId, isActive);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -606,12 +606,12 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("getcasecategorybycasegroup")]
-        public IActionResult GetCaseCategoryByGroup(int caseGroupId)
+        public IActionResult GetCaseCategoryByGroup(int caseGroupId, bool isActive)
         {
             List<CaseCategoryGroupModel> model = new List<CaseCategoryGroupModel>();
             try
             {
-                model = _caseService.GetCategoryByGroupId(caseGroupId);
+                model = _caseService.GetCategoryByGroupId(caseGroupId, isActive);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -720,12 +720,12 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("getunassignedgovernorates")]
-        public IActionResult getUnassignedGovernorates(int caseGroupId)
+        public IActionResult getUnassignedGovernorates(int caseGroupId, bool isActive)
         {
             List<LKTGovernorateModel> model = new List<LKTGovernorateModel>();
             try
             {
-                model = _caseService.getUnassignedGovernorates(caseGroupId);
+                model = _caseService.getUnassignedGovernorates(caseGroupId, isActive);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -837,12 +837,12 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("getunassignedcasetypes")]
-        public IActionResult getunassignedcasetypes(int caseGroupId, int caseCategoryId)
+        public IActionResult getunassignedcasetypes(int caseGroupId, int caseCategoryId, bool isActive)
         {
             List<CaseCategoryTypesModel> model = new List<CaseCategoryTypesModel>();
             try
             {
-                model = _caseService.GetUnassignedCaseTypes(caseGroupId, caseCategoryId);
+                model = _caseService.GetUnassignedCaseTypes(caseGroupId, caseCategoryId, isActive);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -923,12 +923,12 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetUnAssignedSubjects")]
-        public IActionResult GetUnAssignedSubjects(int CaseGrpCatTypeId)
+        public IActionResult GetUnAssignedSubjects(int CaseGrpCatTypeId, bool isActive = true)
         {
             List<CORCaseSubjectModel> model = new List<CORCaseSubjectModel>();
             try
             {
-                model = _caseService.GetUnAssignedSubjects(CaseGrpCatTypeId);
+                model = _caseService.GetUnAssignedSubjects(CaseGrpCatTypeId, isActive);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -1106,6 +1106,23 @@ namespace WebAPI.Controllers
             {
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
+        }
+        [HttpGet]
+        [Route("getLocationsByCaseGroup")]
+        public IActionResult getLocationsByCaseGroup(int caseGroupId)
+        {
+            List<LKTLocationModel> model = new List<LKTLocationModel>();
+            try
+            {
+                model = _caseService.getLocationsByCaseGroupId(caseGroupId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
         }
     }
 }

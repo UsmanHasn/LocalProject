@@ -11,6 +11,8 @@ namespace Service.Models
         public long CaseId { get; set; }
         public string? CaseNo { get; set; }
         public string? OriginalCaseNo { get; set; }
+        public int? CourtTypeId { get; set; }
+        public int? CourtBuildingId { get; set; }
         public int CaseGroupId { get; set; }
         public string? caseGroup { get; set; }
         public string? caseGroupAr { get; set; }

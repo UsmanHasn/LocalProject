@@ -31,7 +31,7 @@ namespace Service.Concrete
         }
         public long AddCase(CaseModel caseModel, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[18];
+            SqlParameter[] spParams = new SqlParameter[20];
             spParams[0] = new SqlParameter("CaseId", caseModel.CaseId);
             spParams[1] = new SqlParameter("CaseNo", caseModel.CaseNo);
             spParams[2] = new SqlParameter("CaseGroupId", caseModel.CaseGroupId);
@@ -50,6 +50,8 @@ namespace Service.Concrete
             spParams[15] = new SqlParameter("CaseSource", caseModel.CaseSource);
             spParams[16] = new SqlParameter("LocationId", caseModel.LocationId);
             spParams[17] = new SqlParameter("AdditionalSubjectIds", caseModel.AdditionalSubjectIds);
+            spParams[18] = new SqlParameter("CourtTypeId", caseModel.CourtTypeId);
+            spParams[19] = new SqlParameter("CourtBuildingId", caseModel.CourtBuildingId);
             var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("Sp_dml_cases", spParams).FirstOrDefault();
             return data.CaseId;
         }
@@ -70,7 +72,7 @@ namespace Service.Concrete
             spParams[10] = new SqlParameter("DML", caseParties.CasePartyId > 0 ? "U" : "I");
             spParams[11] = new SqlParameter("PartyNo", caseParties.PartyNo);
             spParams[12] = new SqlParameter("CivilExpiry", caseParties.CivilExpiry);
-            spParams[13] = new SqlParameter("LegalType", caseParties.LegalType);
+            spParams[13] = new SqlParameter("LegalType", caseParties.PartyType == "P" ? null : caseParties.LegalType);
             spParams[14] = new SqlParameter("EntityId", caseParties.EntityId);
             spParams[15] = new SqlParameter("FamilyName", caseParties.FamilyName);
             spParams[16] = new SqlParameter("Email", caseParties.Email);
@@ -307,10 +309,11 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("CaseGroupId", caseGroupId);
             return _systemSettingRepository.ExecuteStoredProcedure<GovernoratesModel>("COR_GetGovernorates", parameters).ToList();
         }
-        public List<LocationModel> GetLocationByGovernorateId(int governorateId)
+        public List<LocationModel> GetLocationByGovernorateId(int governorateId, bool isActive)
         {
-            SqlParameter[] parameters = new SqlParameter[1];
+            SqlParameter[] parameters = new SqlParameter[2];
             parameters[0] = new SqlParameter("@GovernorateId", governorateId);
+            parameters[1] = new SqlParameter("@isActive", isActive);
             return _systemSettingRepository.ExecuteStoredProcedure<LocationModel>("COR_GetLocations", parameters).ToList();
         }
         public List<treeViewGrpGovernLocModel> GetGroupGovernorateLcoations()
@@ -378,10 +381,11 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("LocationId", locationId);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryGroupModel>("COR_GetCaseCategoryByLocationId", parameters).ToList();
         }
-        public List<CaseCategoryGroupModel> GetCategoryByGroupId(int caseGroupId)
+        public List<CaseCategoryGroupModel> GetCategoryByGroupId(int caseGroupId, bool isActive)
         {
-            SqlParameter[] parameters = new SqlParameter[1];
+            SqlParameter[] parameters = new SqlParameter[2];
             parameters[0] = new SqlParameter("CaseGroupId", caseGroupId);
+            parameters[1] = new SqlParameter("isActive", isActive);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryGroupModel>("COR_GetCaseCategoryByGroupId", parameters).ToList();
         }
         public List<CaseCategoryTypesModel> GetTypeByCategoryId(int categoryId)
@@ -450,10 +454,11 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("sp_Dml_LKT_GroupGovernates", parameters);
 
         }
-        public List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId)
+        public List<LKTGovernorateModel> getUnassignedGovernorates(int caseGroupId, bool isActive)
         {
-            SqlParameter[] parameters = new SqlParameter[1];
+            SqlParameter[] parameters = new SqlParameter[2];
             parameters[0] = new SqlParameter("caseGroupId", caseGroupId);
+            parameters[1] = new SqlParameter("isActive", isActive);
             return _systemSettingRepository.ExecuteStoredProcedure<LKTGovernorateModel>("sp_GetUnassignedGovernorates", parameters).ToList();
         }
         public List<LKTGovernorateModel> getAssignedGovernorates(int caseGroupId)
@@ -519,11 +524,12 @@ namespace Service.Concrete
             parameters[1] = new SqlParameter("@PartyCategoryId", partyCategoryId);
             return _systemSettingRepository.ExecuteStoredProcedure<LKTPartyType>("sp_Get_LKT_PartyType", parameters).ToList();
         }
-        public List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId)
+        public List<CaseCategoryTypesModel> GetUnassignedCaseTypes(int caseGroupId, int caseCategoryId, bool isActive)
         {
-            SqlParameter[] parameters = new SqlParameter[2];
+            SqlParameter[] parameters = new SqlParameter[3];
             parameters[0] = new SqlParameter("@CaseGroupId", caseGroupId);
             parameters[1] = new SqlParameter("@CaseCategoryId", caseCategoryId);
+            parameters[2] = new SqlParameter("@isActive", isActive);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseCategoryTypesModel>("sp_Get_Unassinged_COR_CaseTypes", parameters).ToList();
         }
         public List<CaseCategoryTypesModel> GetAssignedCaseTypes(int caseGroupId, int caseCategoryId)
@@ -661,10 +667,13 @@ namespace Service.Concrete
             }
 
         }
-        public List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId)
+
+
+        public List<CORCaseSubjectModel> GetUnAssignedSubjects(int CaseGrpCatTypeId, bool isActive)
         {
-            SqlParameter[] spParams = new SqlParameter[1];
+            SqlParameter[] spParams = new SqlParameter[2];
             spParams[0] = new SqlParameter("CaseGrpCatTypeId ", CaseGrpCatTypeId);
+            spParams[1] = new SqlParameter("isActive ", isActive);
             return _systemSettingRepository.ExecuteStoredProcedure<CORCaseSubjectModel>("sjc_GetUnAssignedSubject", spParams).ToList();
         }
         public List<CORCaseSubjectModel> GetAssignedSubjects(int CaseGrpCatTypeId)
@@ -748,6 +757,20 @@ namespace Service.Concrete
                 SqlParameter[] param = new SqlParameter[1];
                 param[0] = new SqlParameter("LinkId", LinkId);
                 var data = _systemSettingRepository.ExecuteStoredProcedure<COR_AdvanceLinkingConfigModel>("sjc_GetCOR_AdvanceLinkingConfig", param).FirstOrDefault();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public List<LKTLocationModel> getLocationsByCaseGroupId(int caseGroupId)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("CaseGroupId", caseGroupId);
+                var data = _systemSettingRepository.ExecuteStoredProcedure<LKTLocationModel>("sp_GetLocationsByGroupId", param).ToList();
                 return data;
             }
             catch (Exception ex)
