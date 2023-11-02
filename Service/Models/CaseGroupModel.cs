@@ -109,6 +109,7 @@
         public string CaseCategoryAr { get; set; }
         public string CaseCategoryEn { get; set; }
         public string RequestLinkSource { get; set; }
+        public bool IsActive { get; set; }
     }
     public class CaseCategoryTypesModel
     {

@@ -541,7 +541,7 @@ namespace Service.Concrete
         }
         public string InsertLKT_Subject(LKT_SubjectModel lKT_SubjectModel, string dmlType)
         {
-            SqlParameter[] parameters = new SqlParameter[8];
+            SqlParameter[] parameters = new SqlParameter[9];
             parameters[0] = new SqlParameter("SubjectId", lKT_SubjectModel.SubjectId);
             parameters[1] = new SqlParameter("CAAJ_Code", lKT_SubjectModel.CAAJ_Code);
             parameters[2] = new SqlParameter("ACO_Code", lKT_SubjectModel.ACO_Code);
@@ -550,7 +550,7 @@ namespace Service.Concrete
             parameters[5] = new SqlParameter("CreatedBy", lKT_SubjectModel.CreatedBy);
             parameters[6] = new SqlParameter("@DmlType", dmlType);
             parameters[7] = new SqlParameter("@Message", SqlDbType.VarChar, 200) { Direction = ParameterDirection.Output };
-
+            parameters[8] = new SqlParameter("@IsActive", lKT_SubjectModel.IsActive);
             _systemSettingRepository.ExecuteStoredProcedure("sjc_manage_LKT_Subject", parameters);
             return parameters[7].Value.ToString() ?? "";
         }

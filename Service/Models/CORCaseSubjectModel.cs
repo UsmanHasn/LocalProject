@@ -13,7 +13,7 @@ namespace Service.Models
 
         public int SubjectId { get; set; }
         public int AllowOriginalCase { get; set; }
-        public int IsActive { get; set; }
+        public bool IsActive { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? LastModifiedBy { get; set; }
