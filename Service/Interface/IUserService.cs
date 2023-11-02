@@ -40,5 +40,7 @@ namespace Service.Interface
         RevokedTokenModel GetrevokedTokenModel(string? CivilID, string? Token);
 
         bool InsertAlert(int userId, string roleId, string createdBy,string Email,string MobileNo,string Subject,string Msg);
+
+        UserModel GetUserByCivilIdCivilExp(string civilId, DateTime civilExpDate);
     }
 }

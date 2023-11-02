@@ -52,7 +52,7 @@ namespace Service.Concrete
                 WritePermission = x.WritePermission,
                 DeletePermission = x.DeletePermission,
                 userId = x.userId,
-                UsernameEn=x.UsernameEn
+                UsernameEn = x.UsernameEn
             }).ToList();
             return model;
         }
@@ -78,9 +78,9 @@ namespace Service.Concrete
                 DeletePermission = x.DeletePermission,
                 userId = x.userId,
                 UsernameEn = x.UsernameEn,
-                EffectiveFrom= x.EffectiveFrom,
-                EffectiveTo=x.EffectiveTo,
-                CivilExpiryDate=x.CivilExpiryDate
+                EffectiveFrom = x.EffectiveFrom,
+                EffectiveTo = x.EffectiveTo,
+                CivilExpiryDate = x.CivilExpiryDate
             }).ToList();
             return model;
         }
@@ -95,7 +95,7 @@ namespace Service.Concrete
                 DeletePermission = assignRole.DeletePermission,
                 DelegatedByUserId = assignRole.DelegatedUserId,
                 EffFrom = assignRole.EffectiveFrom,
-                EffTo=assignRole.EffectiveTo
+                EffTo = assignRole.EffectiveTo
 
             };
             _userPermissionRepository.Create(userDelegatedPermissions, userName);
@@ -125,7 +125,8 @@ namespace Service.Concrete
         public UserDelegatePermissionModel GetUserPermissionById(int Id)
         {
             var dataMenu = _userPermissionRepository.GetSingle(x => x.Id == Id);
-            UserDelegatePermissionModel userDelegatePermissionModel = new UserDelegatePermissionModel() {
+            UserDelegatePermissionModel userDelegatePermissionModel = new UserDelegatePermissionModel()
+            {
                 UserPermissionId = dataMenu.Id,
                 PageId = dataMenu.PageId,
                 UserId = dataMenu.UserId,
@@ -153,6 +154,14 @@ namespace Service.Concrete
             spParams[2] = new SqlParameter("DelegatedByUserId ", delegatedByUserId);
             _rolesPermissionRepository.ExecuteStoredProcedure("Sjc_delete_UserDelegationPermission", spParams);
             return true;
+        }
+
+        public UserDelegatePermissionModel CheckDelegatedUser(string civilNo)
+        {
+            SqlParameter[] spParams = new SqlParameter[1];
+            spParams[0] = new SqlParameter("CivilNumber ", civilNo);
+           var data= _rolesPermissionRepository.ExecuteStoredProcedure<UserDelegatePermissionModel>("Sjc_CheckDelegatedUserDuplicate", spParams).FirstOrDefault();
+            return data ;
         }
     }
 }

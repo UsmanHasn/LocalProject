@@ -317,5 +317,25 @@ namespace WebAPI.Controllers
             }
 
         }
+
+
+        [HttpGet]
+        [Route("getUserbyCivilIdCivilExp")]
+        public IActionResult GetUserByCivilIdCivilExp(string civilId, DateTime civilExpDate)
+        {
+            UserModel model = new UserModel();
+
+            try
+            {
+                model = _userService.GetUserByCivilIdCivilExp(civilId, civilExpDate);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
     }
 }

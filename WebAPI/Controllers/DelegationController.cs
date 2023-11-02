@@ -147,7 +147,7 @@ namespace WebAPI.Controllers
                 {
                     _userService.AddActivity(Convert.ToInt32(userId), "Delegation", "Delegate Role to " + delegatedUserName, DateTime.Now, userName);
                 }
-                _userService.InsertAlert(model.First().UserId, "", userName, "", "",userName+ " Delegate Role to you", userName + " Delegate Role to you");
+                _userService.InsertAlert(model.First().UserId, "", userName, "", "", userName + " Delegate Role to you", userName + " Delegate Role to you");
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -185,7 +185,30 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-               return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+        }
+
+        [HttpGet]
+        [Route("CheckDelegatedUser")]
+        public IActionResult CheckDelegatedUser(string CivilNo)
+        {
+            try
+            {
+                var data = _delegationService.CheckDelegatedUser(CivilNo);
+                if (data != null)
+                {
+                    return new JsonResult(new { data = data, msg = "exist", status = HttpStatusCode.OK });
+                }
+                else
+                {
+                    return new JsonResult(new { data = data, msg = "notexist", status = HttpStatusCode.OK });
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
         }

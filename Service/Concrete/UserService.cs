@@ -476,5 +476,24 @@ namespace Service.Concrete
         //    _userRepository.Save();
         //    return true;
         //}
+
+
+        public UserModel GetUserByCivilIdCivilExp(string civilId, DateTime civilExpDate)
+        {
+            UserModel user = new UserModel();
+            SqlParameter[] Param = new SqlParameter[2];
+            Param[0] = new SqlParameter("@CivilId", civilId);
+            Param[1] = new SqlParameter("@CivilExpiryDate", civilExpDate);
+            var dataMenu = _userRepository.ExecuteStoredProcedure<UserModel>("sjc_GetUserByCivilIdCivilExp", Param);
+            if (dataMenu.Any())
+            {
+                user = dataMenu.FirstOrDefault();
+                // user.AssignRoleIds = GetAllUserRole(user.Id).Where(x => x.Assigned).Select(x => x.RoleId).ToList();
+                return user;
+            }
+
+            return null;
+        }
+
     }
 }
