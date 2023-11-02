@@ -15,4 +15,9 @@ namespace Service.Models
         public string? createdBy { get; set; }
         public DateTime? createdDate { get; set; }
     }
+    public class paginationSystemParameterModel
+    {
+        public List<SystemParameterModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
+    }
 }

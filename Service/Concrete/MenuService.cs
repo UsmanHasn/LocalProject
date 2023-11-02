@@ -285,5 +285,41 @@ namespace Service.Concrete
             }).ToList();
             return model;
         }
+        public paginationMenu GetMenList(int pageSize, int pageNumber, string? SearchText)
+        {
+            SqlParameter[] param = new SqlParameter[3];
+            param[0] = new SqlParameter("pageSize", pageSize);
+            param[1] = new SqlParameter("pageNumber", pageNumber);
+            param[2] = new SqlParameter("SearchText", SearchText);
+            //spParams[0] = new SqlParameter("MenuId", menuId);
+            var dataMenu = _menuRepository.ExecuteStoredProcedure<MenuModel>("sjc_GetAllMenuList", param);
+            var model = dataMenu.Select(x => new MenuModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                NameAr = x.NameAr,
+                Sequence = x.Sequence
+            }).ToList();
+            int countItem = 0;
+            if (SearchText != null)
+            {
+                SqlParameter[] paramSearch = new SqlParameter[1];
+                paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                var count = _menuRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAllMenuListCount", paramSearch).FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            else
+            {
+                var count = _menuRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetAllMenuListCount").FirstOrDefault();
+                countItem = count.TotalCount;
+            }
+            paginationMenu paginationGovernates = new paginationMenu()
+            {
+                PaginatedData = model,
+                TotalCount = countItem
+            };
+            return paginationGovernates;
+        }
     }
 }

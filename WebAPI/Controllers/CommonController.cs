@@ -699,12 +699,11 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetAllGovernate")]
-        public IActionResult GetAllGovernate()
+        public IActionResult GetAllGovernate(int pageSize, int pageNumber, string? SearchText)
         {
-            List<GovernatesLookupModel> model = new List<GovernatesLookupModel>();
             try
             {
-                model = _lookupService.GetAllGovernateLookup();
+                var model = _lookupService.GetAllGovernateLookup(pageSize, pageNumber, SearchText);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

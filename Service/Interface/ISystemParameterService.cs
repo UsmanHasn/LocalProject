@@ -10,7 +10,7 @@ namespace Service.Interface
 {
     public interface ISystemParameterService
     {
-        List<SystemParameterModel> GetAllsystemParameter();
+        paginationSystemParameterModel GetAllsystemParameter(int pageSize, int pageNumber, string? SearchText);
         bool Add(SystemParameterModel systemParameterModel,string userName);
         SystemParameterModel GetsystemParameterById(int Id);
         bool UpdatesystemParameter(SystemParameterModel systemParameterModel, string userName);

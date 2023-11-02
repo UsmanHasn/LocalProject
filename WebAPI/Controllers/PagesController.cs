@@ -23,14 +23,14 @@ namespace WebAPI.Controllers
         [HttpGet]
         [Route("getall")]
       //  [ServiceFilter(typeof(TokenBasedAuthorizeFilter))]
-        public IActionResult GetAll()
+        public IActionResult GetAll(int pageSize, int pageNumber, string? SearchText)
         {
             // string token = GetTokenFromRequest();
 
             //var check = GetCurrentUser();
             try
             {
-                var pagesModel = _IpagesService.GetAllPages();
+                var pagesModel = _IpagesService.GetAllPages(pageSize, pageNumber, SearchText);
                 return new JsonResult(new { data = pagesModel, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

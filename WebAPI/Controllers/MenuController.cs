@@ -33,6 +33,22 @@ namespace WebAPI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetMenuList")]
+        public IActionResult GetMenuList(int pageSize, int pageNumber, string? SearchText)
+        {
+            try
+            {
+                var model = menuService.GetMenList(pageSize, pageNumber, SearchText);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
 
         [HttpGet]
         [Route("GetMenu")]

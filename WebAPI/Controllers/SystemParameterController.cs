@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MailKit.Search;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Concrete;
 using Service.Interface;
 using Service.Models;
+using System.Drawing.Printing;
 using System.Net;
 
 namespace WebAPI.Controllers
@@ -19,11 +21,11 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("getallsystemparameter")]
-        public IActionResult GetAllSystemParmeter()
+        public IActionResult GetAllSystemParmeter(int pageSize, int pageNumber, string? SearchText)
         {
             try
             {
-                var systemParameterModel = _isystemParameterService.GetAllsystemParameter();
+                var systemParameterModel = _isystemParameterService.GetAllsystemParameter(pageSize, pageNumber, SearchText);
                 return new JsonResult(new { data = systemParameterModel, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

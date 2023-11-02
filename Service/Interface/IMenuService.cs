@@ -15,6 +15,7 @@ namespace Service.Interface
         List<MenuModel> GetAllMenuCompany();
 
         List<MenuModel> GetMenu();
+        paginationMenu GetMenList(int pageSize, int pageNumber, string? SearchText);
         bool Add(MenuModel menuViewModel,string username);
         MenuModel GetMenuById(int Id);
         bool UpdateMenu(int Id, MenuModel menuViewModel, string username);

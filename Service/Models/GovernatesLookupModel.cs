@@ -19,4 +19,9 @@ namespace Service.Models
         public DateTime LastModifiedDate { get; set; }
     
     }
+    public class paginationGovernates
+    {
+        public List<GovernatesLookupModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
+    }
 }
