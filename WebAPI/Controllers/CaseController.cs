@@ -47,8 +47,16 @@ namespace WebAPI.Controllers
         {
             try
             {
-                _caseService.AddCaseParties(caseParties, userName);
-                return new JsonResult(new { data = caseParties, status = HttpStatusCode.OK });
+                CasePartiesResponse response = _caseService.AddCaseParties(caseParties, userName);
+                if (response.status == 200)
+                {
+                    return new JsonResult(new { data = caseParties, status = HttpStatusCode.OK });
+                }
+                else 
+                {
+                    return new JsonResult(new { data = response, status = HttpStatusCode.Forbidden });
+                }
+                
             }
             catch (Exception ex)
             {

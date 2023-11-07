@@ -56,9 +56,9 @@ namespace Service.Concrete
             return data.CaseId;
         }
 
-        public bool AddCaseParties(CaseParties caseParties, string userName)
+        public CasePartiesResponse AddCaseParties(CaseParties caseParties, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[31];
+            SqlParameter[] spParams = new SqlParameter[34];
             spParams[0] = new SqlParameter("CasePartyId", caseParties.CasePartyId);
             spParams[1] = new SqlParameter("CaseId", caseParties.CaseId);
             spParams[2] = new SqlParameter("PartyType", caseParties.PartyType);
@@ -90,9 +90,11 @@ namespace Service.Concrete
             spParams[28] = new SqlParameter("AddressLine1", caseParties.AddressLine1);
             spParams[29] = new SqlParameter("AddressLine2", caseParties.AddressLine2);
             spParams[30] = new SqlParameter("CompanyName", caseParties.CompanyName);
-
-            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_caseparties", spParams);
-            return true;
+            spParams[31] = new SqlParameter("LinkCaseParty", caseParties.LinkCaseParty);
+            spParams[32] = new SqlParameter("AddressNo", caseParties.AddressNo);
+            spParams[33] = new SqlParameter("BuildingNo", caseParties.BuildingNo);
+            CasePartiesResponse response = _systemSettingRepository.ExecuteStoredProcedure<CasePartiesResponse>("Sp_dml_caseparties", spParams).FirstOrDefault();
+            return response;
         }
         public List<CaseModel> GetAllCases(string CivilNo)
         {
