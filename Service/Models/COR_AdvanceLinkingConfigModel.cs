@@ -19,5 +19,11 @@ namespace Service.Models
         public string? LinkSources { get; set; }
         public string? RoleId { get; set; }
 
+        public bool ShowRelatedCourtsOnly { get; set; }
+        public string RequiredDocIds { get; set; }
+        public string OptionalDocIds { get; set;}
+        public int FirstPartyTypeId { get; set;}
+        public int SecondPartyTypeId { get; set;}
+
     }
 }
