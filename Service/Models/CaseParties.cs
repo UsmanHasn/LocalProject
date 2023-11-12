@@ -54,7 +54,7 @@
 
     public class CasePartiesDelete
     {
-        public int CasePartyId { get; set; }
+        public long CasePartyId { get; set; }
     }
     public class CasePartiesResponse
     {

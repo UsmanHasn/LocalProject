@@ -512,10 +512,11 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("DeleteCaseParties")]
-        public IActionResult DeleteCaseParties(CasePartiesDelete deleteCaseParties, long CasePartyId)
+        public IActionResult DeleteCaseParties(long CasePartyId)
         {
             try
             {
+                CasePartiesDelete deleteCaseParties = new CasePartiesDelete() { CasePartyId = CasePartyId };
                 _caseService.DeleteCaseParties(deleteCaseParties);
                 return new JsonResult(new { data = deleteCaseParties, status = HttpStatusCode.OK });
             }
