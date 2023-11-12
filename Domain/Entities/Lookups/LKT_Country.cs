@@ -13,11 +13,16 @@ namespace Domain.Entities.Lookups
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Code { get; set; }
-        [MaxLength(50)]
-        [Required]
+       
+        
         public string Name { get; set; }
-        [MaxLength(50)]
-        [Required]
+       
+        
         public string NameAr { get; set; }
+
+        public string CodeISONum { get; set; }
+        public string CodeISO3 { get; set; }
+        public string DialingCode { get; set; }
+
     }
 }

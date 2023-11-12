@@ -103,7 +103,7 @@ namespace WebAPI.Controllers
             List<CountryModel> model = new List<CountryModel>();
             try
             {
-                model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Code = x.Code, Name = x.Name, NameAr = x.NameAr }).ToList();
+                model = _lookupService.GetCountryLookups().Select(x => new CountryModel() { Id = x.Id, Code = x.CodeISONum, Name = x.Name, NameAr = x.NameAr }).ToList();
                 //var json = new Dictionary<string, string>();
                 //foreach (var item in model)
                 //{
