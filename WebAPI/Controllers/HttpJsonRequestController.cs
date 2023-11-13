@@ -48,8 +48,8 @@ namespace WebAPI.Controllers
                     ("http://"+ SjcConstants.baseIp + "84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<CompanyApiResponseModel>(httpStringResponse.data);
-                var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
-                return new JsonResult(new { companydata = response, signatory = responseSignatory, status = HttpStatusCode.OK});
+                //var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
+                return new JsonResult(new { companydata = response, signatory = response.Signatories, status = HttpStatusCode.OK});
             }
             catch (Exception ex)
             {
