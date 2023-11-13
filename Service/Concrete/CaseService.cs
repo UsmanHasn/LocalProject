@@ -1,13 +1,16 @@
 ﻿using Data.Concrete;
 using Data.Interface;
 using Domain.Entities;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using Service.Interface;
 using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,6 +105,49 @@ namespace Service.Concrete
             parameters[0] = new SqlParameter("CivilNo", CivilNo);
             return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetCaseByCivilNo", parameters).ToList();
         }
+        public paginationRequestModel GetAllRequest(int? caseId, int? pageSize, int? pageNumber, string? SearchText)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[4];
+
+                param[0] = new SqlParameter("pageSize", pageSize);
+                param[1] = new SqlParameter("pageNumber", pageNumber);
+                param[2] = new SqlParameter("SearchText", SearchText);
+                if (caseId == 0)
+                {
+                    param[3] = new SqlParameter("caseId", null);
+                }
+                else
+                {
+                    param[3] = new SqlParameter("caseId", caseId);
+                }
+                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestModel>("sjc_GetRequest", param).ToList();
+                int countItem = 0;
+                if (SearchText != null)
+                {
+                    SqlParameter[] paramSearch = new SqlParameter[1];
+                    paramSearch[0] = new SqlParameter("SearchText", SearchText);
+
+                    var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetRequestCount", paramSearch).FirstOrDefault();
+                    countItem = count.TotalCount;
+                }
+                else
+                {
+                    var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetRequestCount").FirstOrDefault();
+                    countItem = count.TotalCount;
+                }
+                paginationRequestModel model = new paginationRequestModel()
+                {
+                    PaginatedData = data,
+                    TotalCount = countItem
+                };
+                return model;
+
+            }
+            catch (Exception ex) { }
+            return null;
+        }
         public CaseModel GetCaseById(long caseId)
         {
             SqlParameter[] parameters = new SqlParameter[1];
@@ -178,8 +224,11 @@ namespace Service.Concrete
         {
             SqlParameter[] parameters = new SqlParameter[2];
             parameters[0] = new SqlParameter("CivilNo", CivilNo);
-            parameters[1] = new SqlParameter("CasaStatusId", CaseStatusId);
-            return _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetPendingCase", parameters).ToList();
+            if (CaseStatusId == 0)
+            { parameters[1] = new SqlParameter("CasaStatusId", null); }
+            else { parameters[1] = new SqlParameter("CasaStatusId", CaseStatusId); }
+            var model=_systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetPendingCase", parameters).ToList();
+            return model;
         }
 
         public List<PaymentActionModel> BindPaymentDraw()
@@ -779,6 +828,74 @@ namespace Service.Concrete
             {
                 return null;
             }
+        }
+        public List<RequestEvenLog> GetAllRequestEventLog(int requestId,bool userFlag)
+        {
+            try
+            {
+                
+                    SqlParameter[] param = new SqlParameter[2];
+                param[0] = new SqlParameter("requestId", requestId);
+                if(userFlag == false)
+                {
+                    param[1] = new SqlParameter("userFlag", null);
+                }
+                else
+                {
+                    param[1] = new SqlParameter("userFlag", userFlag);
+                }
+
+                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestEvenLog>("sjc_GetRequestEventLog", param).ToList();              
+                return data;
+
+            }
+            catch (Exception ex) { }
+            return null;
+        }
+
+        public bool InsertRequestEventLog(RequestEvenLog evenLog)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[13];
+
+                param[0] = new SqlParameter("@RequestId", evenLog.RequestId);
+                param[1] = new SqlParameter("@LoggedBy", evenLog.LoggedBy);
+                param[2] = new SqlParameter("@Description", evenLog.Description);
+                param[3] = new SqlParameter("@EventId", null);
+                param[4] = new SqlParameter("@ActionId", null);
+                param[5] = new SqlParameter("@StatusId", null);
+                param[6] = new SqlParameter("@UserIP", evenLog.UserIP);
+                param[7] = new SqlParameter("@UserHostName", evenLog.UserHostName);
+                param[8] = new SqlParameter("@UserAgent", evenLog.UserAgent);
+                param[9] = new SqlParameter("@ShowToRequestor", evenLog.ShowToRequestor);
+                param[10] = new SqlParameter("@Amount", evenLog.Amount);
+                param[11] = new SqlParameter("@RefNo", evenLog.RefNo);
+                param[12] = new SqlParameter("@PaymentRequestId", evenLog.PaymentRequestId);
+
+                _systemSettingRepository.ExecuteStoredProcedure("sjc_InsertRequestEventLog", param);
+             
+                return true;
+
+            }
+            catch (Exception ex) { }
+            return false ;
+        }
+
+
+        public RequestModel sjc_GetRequest_caseId(int? caseId)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+
+                param[0] =  new SqlParameter("caseId", caseId);
+                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestModel>("sjc_GetRequest_caseId", param).FirstOrDefault();
+                return data;
+
+            }
+            catch (Exception ex) { }
+            return null;
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Service.Concrete;
 using Service.Interface;
 using Service.Models;
+using System.Drawing.Printing;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata;
@@ -73,6 +74,23 @@ namespace WebAPI.Controllers
             try
             {
                 model = _caseService.GetAllCases(CivilNo);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetRequest")]
+        public IActionResult GetRequest(int? caseId, int? pageSize, int? pageNumber, string? SearchText)
+        {
+            try
+            {
+                var model = _caseService.GetAllRequest(caseId, pageSize, pageNumber, SearchText);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -1133,6 +1151,59 @@ namespace WebAPI.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("GetRequestEventLog")]
+        public IActionResult GetRequestEventLog(int requestId , bool userFlag )
+        {
+            try
+            {
+                var model = _caseService.GetAllRequestEventLog(requestId, userFlag);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpPost]
+        [Route("InsertRequestEventLog")]
+        public IActionResult InsertRequestEventLog([FromBody] RequestEvenLog evenLog)
+        {
+            try
+            {
+                var model = _caseService.InsertRequestEventLog(evenLog);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+
+        [HttpGet]
+        [Route("GetRequest_caseId")]
+        public IActionResult GetRequest_caseId(int? caseId)
+        {
+            try
+            {
+                var model = _caseService.sjc_GetRequest_caseId(caseId);
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
     }
 }
 

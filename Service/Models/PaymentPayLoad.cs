@@ -9,9 +9,10 @@ namespace Service.Models
 {
     public class PaymentPayLoad
     {
-        public long RequestId { get; set; }
+        public string RequestId { get; set; }
+        public string RequestUrl { get; set; }
         public long UserId { get; set; }
-        public long tid { get; set; }
+        public long? tid { get; set; }
         public long? merchant_id { get; set; }
         public string? order_id { get; set; }
         public Decimal amount { get; set; }

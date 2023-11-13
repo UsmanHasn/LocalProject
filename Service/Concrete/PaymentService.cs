@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Utilities;
 using System.Security.Cryptography;
+using MailKit.Search;
+using System.Drawing.Printing;
 
 namespace Service.Concrete
 {
@@ -28,12 +30,13 @@ namespace Service.Concrete
 
         public PaginatedTransactionModel GetPaymentResponse(int pageSize, int pageNumber, string? SearchText)
         {
-            try { 
-            SqlParameter[] param = new SqlParameter[3];
-            param[0] = new SqlParameter("pageSize", pageSize);
-            param[1] = new SqlParameter("pageNumber", pageNumber);
-            param[2] = new SqlParameter("SearchText", SearchText);
-            var data = _PaymentdecryptResponseRepository.ExecuteStoredProcedure<PaymentdecryptResponseModel>("GetPaymentResponse", param).ToList();
+            try
+            {
+                SqlParameter[] param = new SqlParameter[3];
+                param[0] = new SqlParameter("pageSize", pageSize);
+                param[1] = new SqlParameter("pageNumber", pageNumber);
+                param[2] = new SqlParameter("SearchText", SearchText);
+                var data = _PaymentdecryptResponseRepository.ExecuteStoredProcedure<PaymentdecryptResponseModel>("GetPaymentResponse", param).ToList();
                 int countItem = 0;
                 if (SearchText != null)
                 {
@@ -48,14 +51,14 @@ namespace Service.Concrete
                     var count = _PaymentdecryptResponseRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetPaymentResponseCount").FirstOrDefault();
                     countItem = count.TotalCount;
                 }
-                PaginatedTransactionModel paginatedTransactionModel =new PaginatedTransactionModel()
+                PaginatedTransactionModel paginatedTransactionModel = new PaginatedTransactionModel()
                 {
                     PaginatedData = data,
                     TotalCount = countItem
                 };
                 return paginatedTransactionModel;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -119,7 +122,7 @@ namespace Service.Concrete
         { // Create an array of SqlParameter objects to pass the values
             try
             {
-                SqlParameter[] spParams = new SqlParameter[10]; // Adjust the size based on the number of parameters in your stored procedure
+                SqlParameter[] spParams = new SqlParameter[11]; // Adjust the size based on the number of parameters in your stored procedure
 
                 spParams[0] = new SqlParameter("@RequestId ", PaymentPayLoad.RequestId);
                 spParams[1] = new SqlParameter("@UserId ", PaymentPayLoad.UserId);
@@ -131,12 +134,30 @@ namespace Service.Concrete
                 spParams[7] = new SqlParameter("@redirect_url ", PaymentPayLoad.redirect_url);
                 spParams[8] = new SqlParameter("@cancel_url ", PaymentPayLoad.cancel_url);
                 spParams[9] = new SqlParameter("@language ", PaymentPayLoad.language);
+                spParams[10] = new SqlParameter("@RequestUrl ", PaymentPayLoad.RequestUrl);
                 _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentRequest", spParams);
-            }catch(Exception e )
+            }
+            catch (Exception e)
             {
 
             }
             return true;
+        }
+
+        public PaymentPayLoad GetPaymentRequestDetail(string requestId)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("requestId", requestId);
+                return _PaymentdecryptResponseRepository.ExecuteStoredProcedure<PaymentPayLoad>("GetPaymentResponse", param).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+
         }
     }
 }

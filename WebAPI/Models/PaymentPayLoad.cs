@@ -4,10 +4,11 @@ namespace WebAPI.Models
 {
     public class PaymentPayLoad
     {
-        public long RequestId { get; set; }
+        public string RequestId { get; set; }
+        public string RequestUrl { get; set; }
         public long UserId { get; set; }
         [IgnoreDataMember]
-        public long tid { get; set; }
+        public long? tid { get; set; }
         [IgnoreDataMember]
         public long? merchant_id { get; set; }
         public string? order_id { get; set; }

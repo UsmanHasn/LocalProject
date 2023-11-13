@@ -81,5 +81,10 @@ namespace Service.Interface
         List<COR_AdvanceLinkingConfigModel> GetCOR_AdvanceLinkingConfig();
         public COR_AdvanceLinkingConfigModel GetCOR_AdvanceLinkingConfigById(int LinkId);
         List<LKTLocationModel> getLocationsByCaseGroupId(int caseGroupId);
+
+        paginationRequestModel GetAllRequest(int? caseId, int? pageSize, int? pageNumber, string? SearchText);
+        List<RequestEvenLog> GetAllRequestEventLog(int requestId, bool userFlag);
+        RequestModel sjc_GetRequest_caseId(int? caseId);
+        bool InsertRequestEventLog(RequestEvenLog evenLog);
     }
 }

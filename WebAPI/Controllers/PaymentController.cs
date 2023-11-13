@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
                 CCACrypto ccaCrypto = new CCACrypto();
                 DateTime now = DateTime.Now;
                 long timestamp = now.Ticks;
-                payLoad.tid = timestamp + payLoad.RequestId + payLoad.UserId;
+                payLoad.tid = timestamp  + payLoad.UserId;
                 payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
                 payLoad.order_id = timestamp.ToString()+"R"+payLoad.RequestId +"U"+ payLoad.UserId;
 
@@ -58,6 +58,7 @@ namespace WebAPI.Controllers
                 payloadService.RequestId = payLoad.RequestId;
                 payloadService.UserId = payLoad.UserId;
                 payloadService.currency = payLoad.currency;
+                payloadService.RequestUrl = payLoad.RequestUrl;//used for redirection to page from which request was generated from 
                 _IpaymentService.InsertPaymentRequest(payloadService);
                 PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
                 paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
@@ -70,38 +71,7 @@ namespace WebAPI.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
-        [Route("PaymentRedirection")]
-        public IActionResult PaymentRedirection(Models.PaymentPayLoad payLoad)
-        {
-            try
-            {
-                string? workingKey = Configuration["Payment:workingKey"];//put in the 32bit alpha numeric key in the quotes provided here 	
-                CCACrypto ccaCrypto = new CCACrypto();
-                DateTime now = DateTime.Now;
-                long timestamp = now.Ticks;
-                payLoad.tid = timestamp;
-                payLoad.merchant_id = Convert.ToInt64(Configuration["Payment:merchant_id"]);
-                payLoad.order_id = timestamp.ToString();
-                payLoad.currency = Configuration["Payment:_currency"];
-                payLoad.amount = 10;
-                payLoad.language = Configuration["Payment:_language"];
-                payLoad.redirect_url = Configuration["Payment:redirect_url"];
-
-                payLoad.cancel_url = Configuration["Payment:cancel_url"];
-                string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
-                PaymentPayloadEncResponse paymentPayloadEncResponse = new PaymentPayloadEncResponse();
-                paymentPayloadEncResponse.strEncRequest = ccaCrypto.Encrypt(ccaRequest, workingKey);
-                string redirectu = Configuration["Payment:_Transaction_Url"] + "" + paymentPayloadEncResponse.strEncRequest + "&access_code=" + Configuration["Payment:_strAccessCode"];
-                return RedirectPermanent(redirectu);
-            }
-            catch (Exception es)
-            {
-
-            }
-            return BadRequest();
-        }
-
+        
         [HttpPost]
         [Route("PaymentResponse")]
         public IActionResult ProcessResponse([FromForm] PaymentDecResponse data)
@@ -178,7 +148,13 @@ namespace WebAPI.Controllers
                 responseModel.merchant_param7 = Params["merchant_param7"];
                 _IpaymentService.InsertIntoPaymentResponse(responseModel);
 
-                return RedirectPermanent(Configuration["Payment:AngularResponseUrl"].ToString());
+
+                string[] responseUsersegments = responseModel.order_id.Split('U');
+                string[] responseRequestsegments = responseUsersegments[0].Split('R');
+
+                var getRequestDetail = _IpaymentService.GetPaymentRequestDetail(responseRequestsegments[1]);
+                var url = Configuration["Payment:AngularResponseUrl"].ToString() + getRequestDetail.RequestUrl;
+                return RedirectPermanent(url);
             }
             catch (Exception es)
             {

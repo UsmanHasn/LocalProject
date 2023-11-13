@@ -23,6 +23,7 @@ namespace Service.Models
         public string? LocationName { get; set; }
         public string? LocationNameAr { get; set; }
         public string? CourtName { get; set; }
+        public string? courtNameAr { get; set; }
         public int CaseTypeId { get; set; }
         public string? CaseType { get; set; }
         public int CaseCategoryId { get; set; }
@@ -46,6 +47,7 @@ namespace Service.Models
         public string? CourtTypeName { get; set; }
         public string? CourtBuildingName { get; set; }
         public string? CaseTypeName { get; set; }
+        public string? CaseTypeAr { get; set; }
         public string? Fee { get; set; }
         public string? AdditionalSubjectIds { get; set; }
     }
@@ -64,5 +66,38 @@ namespace Service.Models
         public string? nameAr { get; set;}
     public byte[]? fileStream { get; set; }
 
+    }
+
+    public class RequestModel
+    {
+        public int CaseId { get; set; }
+        public string CaseNo { get; set; }
+        public int CourtTypeId { get; set; }
+        public int CourtBuildingId { get; set; }
+        public int CaseTypeId { get; set; }
+        public int CaseCategoryId { get; set; }
+        public int CaseStatusId { get; set; }
+        public int CaseSubCategoryId { get; set; }
+        public DateTime FiledOn { get; set; }
+        public string Subject { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string LastModifiedBy { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public bool Deleted { get; set; }
+        public string CaseStatusNameAr { get; set; }
+        public string CaseStatusName { get; set; }
+        public string CourtNameAr { get; set; }
+        public string CourtName { get; set; }
+        public string CaseCatNameAr { get; set; }
+        public string CaseCatName { get; set; }
+        public string CaseTypeAr { get; set; }
+        public decimal? Fee { get; set; }
+        public string CaseType { get; set; }
+    }
+    public class paginationRequestModel
+    {
+        public List<RequestModel> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
     }
 }
