@@ -192,11 +192,11 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("CheckDelegatedUser")]
-        public IActionResult CheckDelegatedUser(string CivilNo)
+        public IActionResult CheckDelegatedUser(string CivilNo, int delegatedUserBy)
         {
             try
             {
-                var data = _delegationService.CheckDelegatedUser(CivilNo);
+                var data = _delegationService.CheckDelegatedUser(CivilNo, delegatedUserBy);
                 if (data != null)
                 {
                     return new JsonResult(new { data = data, msg = "exist", status = HttpStatusCode.OK });

@@ -156,11 +156,12 @@ namespace Service.Concrete
             return true;
         }
 
-        public UserDelegatePermissionModel CheckDelegatedUser(string civilNo)
+        public UserDelegatePermissionModel CheckDelegatedUser(string civilNo, int delegatedUserBy)
         {
-            SqlParameter[] spParams = new SqlParameter[1];
+            SqlParameter[] spParams = new SqlParameter[2];
             spParams[0] = new SqlParameter("CivilNumber ", civilNo);
-           var data= _rolesPermissionRepository.ExecuteStoredProcedure<UserDelegatePermissionModel>("Sjc_CheckDelegatedUserDuplicate", spParams).FirstOrDefault();
+            spParams[1] = new SqlParameter("DelegatedByUserId ", delegatedUserBy);
+            var data= _rolesPermissionRepository.ExecuteStoredProcedure<UserDelegatePermissionModel>("Sjc_CheckDelegatedUserDuplicate", spParams).FirstOrDefault();
             return data ;
         }
     }

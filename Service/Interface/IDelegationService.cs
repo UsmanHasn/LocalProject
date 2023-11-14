@@ -21,6 +21,6 @@ namespace Service.Interface
         UserDelegatePermissionModel GetUserPermissionById(int Id);
         bool DeleteUserDelegation(int userId, int delegatedByUserId);
 
-        UserDelegatePermissionModel CheckDelegatedUser(string civilNo);
+        UserDelegatePermissionModel CheckDelegatedUser(string civilNo,int delegatedUserBy);
     }
 }
