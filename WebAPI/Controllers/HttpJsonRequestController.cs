@@ -45,17 +45,17 @@ namespace WebAPI.Controllers
             {
                 //Get Personal Information
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<CompanyApiRequestModel, CompanyApiResponseModel>
-                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/CompanyInformation/" + companyApiRequest.CompanyNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<CompanyApiResponseModel>(httpStringResponse.data);
                 //var responseSignatory = JsonConvert.DeserializeObject<Signatories>(response.Signatories);
-                return new JsonResult(new { companydata = response, signatory = response.Signatories, status = HttpStatusCode.OK});
+                return new JsonResult(new { companydata = response, signatory = response.Signatories, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
             {
                 return null;
             }
-           
+
             return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
         }
         [HttpPost]
@@ -68,14 +68,14 @@ namespace WebAPI.Controllers
             {
                 //Get Personal Information
                 var responseString = await httpClientHelper.MakeHttpRequestJsonString<PersonalApiRequestModel, PersonalApiResponseModel>
-                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/PersonInformationV2/" + personalApiRequest.CardCivilNo + "/" + personalApiRequest.cardExpiryDate, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
                 response = JsonConvert.DeserializeObject<PersonalApiResponseModel>(httpStringResponse.data);
 
             }
             catch (Exception ex)
             {
-                return null;                
+                return null;
             }
             if (response != null)
             {
@@ -113,7 +113,7 @@ namespace WebAPI.Controllers
                     new SqlParameter("VisaNumber", response.visaNumber),
                     new SqlParameter("VisaExpiryDate", response.visaNumberExpirydate),
                     new SqlParameter("DateofDeath", response.dateOfDeath),
-                    new SqlParameter("Email", personalApiRequest.email),
+                    new SqlParameter("Email", string.IsNullOrEmpty(personalApiRequest.email) ? (string.IsNullOrEmpty(response.emailAddress) ? response.CurrentAddress.emailAddress : response.emailAddress) : personalApiRequest.email),
                     new SqlParameter("BuildingNumber", response.buildingNumber),
                     new SqlParameter("City", response.city),
                     new SqlParameter("WayNumber", response.wayNumber),
@@ -138,9 +138,9 @@ namespace WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    
+
                 }
-                
+
                 //Get Lawyer Info
                 string lawyerWorkPlaceCode = await jsonRequestManager.LawyerInfo_UpsertLawyer(personalApiRequest.CardCivilNo, personalApiRequest.email);
             }
@@ -151,7 +151,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetLawyerByCivilNo(string civilNo)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://"+ SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<LawyerJsonModel>, HttpResponseModel<LawyerJsonModel>>("https://" + SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
             var response = new List<LawyerJsonModel>();
             response.AddRange(responseLaywer.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
@@ -162,7 +162,7 @@ namespace WebAPI.Controllers
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/LawyerInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -236,13 +236,13 @@ namespace WebAPI.Controllers
 
                 return "";
             }
-            
+
         }
         private async Task InstituteInfo_UpsertInstitute(string workplaceCode)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
             var responseInstituteString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                ("http://"+ SjcConstants.baseIp + "84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
+                ("http://" + SjcConstants.baseIp + "84/api/GovServ/InstitutionInformation/" + workplaceCode, HttpMethod.Get, null, null);
             HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseInstituteString);
             InstituteApiModel responseInstitute = JsonConvert.DeserializeObject<InstituteApiModel>(httpStringResponse.data);
             BodyObject instituteBody = responseInstitute.Body;
@@ -356,7 +356,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetExpertbyCivilNo(string civilNo)
         {
             HttpClientHelper httpClientHelper = new HttpClientHelper();
-            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://"+ SjcConstants.baseIp + "84/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
+            var responseLaywer = await httpClientHelper.MakeHttpRequest<HttpResponseModel<ExpertApiResponseModel>, HttpResponseModel<ExpertApiResponseModel>>("https://" + SjcConstants.baseIp + "84/api/GovServ/getExpertInformation?expertCivilNO=" + civilNo, HttpMethod.Get, null, null);
             var response = new List<ExpertApiResponseModel>();
             response.AddRange(responseLaywer.data);
             return new JsonResult(new { data = response, status = HttpStatusCode.OK });
@@ -367,7 +367,7 @@ namespace WebAPI.Controllers
             {
                 HttpClientHelper httpClientHelper = new HttpClientHelper();
                 var responseLawyerString = await httpClientHelper.MakeHttpRequestJsonString<string, string>
-                    ("http://"+ SjcConstants.baseIp + "84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/getExpertInformation/" + civilNo, HttpMethod.Get, null, null);
                 HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseLawyerString);
                 if (httpStringResponse.data.Contains("Error"))
                 {
@@ -426,7 +426,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-              return  new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
             }
         }
@@ -450,6 +450,93 @@ namespace WebAPI.Controllers
                 return null;
             }
 
+            return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
+        }
+        [HttpPost]
+        [Route("getpersonalinfobypassport")]
+        public async Task<IActionResult> GetPersonalInfoByPassport(PassportApiRequestModel personalApiRequest)
+        {
+            HttpClientHelper httpClientHelper = new HttpClientHelper();
+            var response = new PassportApiResponseModel();
+            try
+            {
+                //Get Personal Information
+                var responseString = await httpClientHelper.MakeHttpRequestJsonString<PassportApiRequestModel, PassportApiResponseModel>
+                    ("http://" + SjcConstants.baseIp + "84/api/GovServ/PersonInformationByPassport/" + personalApiRequest.CountryCode + "/" + personalApiRequest.PassportNo + "/" + personalApiRequest.ExpiryDate, HttpMethod.Get, null, null);
+                HttpStringResponseModel httpStringResponse = JsonConvert.DeserializeObject<HttpStringResponseModel>(responseString);
+                response = JsonConvert.DeserializeObject<PassportApiResponseModel>(httpStringResponse.data);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            if (response != null)
+            {
+                /*
+                    here we will call Expert api and check if it is expert then insert into experts
+                    http://sjcintgerationsvc/api/GovServ/getExpertInformation/personalApiRequest.CardCivilNo
+                    this api returns placecode which will pass to instituteapi and get all lawyer in that institute we will insert all these lawyers
+                    http://sjcintgerationsvc/api/GovServ/InstitutionInformation?code={371}
+                */
+                SqlParameter[] parameters = new SqlParameter[33]
+                {
+                    new SqlParameter("UserName", response.fullname_en),
+                    new SqlParameter("UserNameAr", response.fullname),
+                    new SqlParameter("CivilNumber", response.civilNumber),
+                    new SqlParameter("CivilExpiryDate", personalApiRequest.ExpiryDate),
+                    new SqlParameter("Nationalitycode", response.Nationalitycode),
+                    new SqlParameter("Nationalitydesc_en", response.Nationalitydesc_en),
+                    new SqlParameter("Nationalitydesc_ar", response.Nationalitydesc_ar),
+                    new SqlParameter("DateOfBirth", response.dateOfBirth),
+                    new SqlParameter("CountryCode", response.passportCountryCode),
+                    new SqlParameter("Countrydesc_ar", response.Countrydesc_ar),
+                    new SqlParameter("title_ar", response.title_ar),
+                    new SqlParameter("name_1_ar", response.name_1_ar),
+                    new SqlParameter("name_2_ar", response.name_2_ar),
+                    new SqlParameter("name_3_ar", response.name_3_ar),
+                    new SqlParameter("name_4_ar", response.name_4_ar),
+                    new SqlParameter("name_5_ar", response.name_5_ar),
+                    new SqlParameter("name_6_ar", response.name_6_ar),
+                    new SqlParameter("Wilayatcode", response.Wilayatcode),
+                    new SqlParameter("Wilayatdesc_ar", response.Wilayatdesc_ar),
+                    new SqlParameter("Towncode", response.Towncode),
+                    new SqlParameter("Towndesc_ar", response.Towndesc_ar),
+                    new SqlParameter("PassportNumber", response.passportNumber),
+                    new SqlParameter("PassportExpiryDate", response.passportExpireDate),
+                    new SqlParameter("VisaNumber", response.visaNumber),
+                    new SqlParameter("VisaExpiryDate", response.visaNumberExpirydate),
+                    new SqlParameter("DateofDeath", response.dateOfDeath),
+                    new SqlParameter("Email", string.IsNullOrEmpty(response.emailAddress) ? response.CurrentAddress.emailAddress : response.emailAddress),
+                    new SqlParameter("BuildingNumber", response.buildingNumber),
+                    new SqlParameter("City", response.city),
+                    new SqlParameter("WayNumber", response.wayNumber),
+                    new SqlParameter("PhoneNumber", response.mobileNumber),
+                    new SqlParameter("TelephoneNumber", response.telephoneNumber),
+                    new SqlParameter("Gender", response.Gender)
+                };
+                try
+                {
+                    Console.WriteLine(parameters);
+                    _userRepository.ExecuteStoredProcedure("UpsertUsers", parameters);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+                //Get Expert Info
+                try
+                {
+                    await jsonRequestManager.ExpertInfo_UpsertExpert(response.civilNumber);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                //Get Lawyer Info
+                string lawyerWorkPlaceCode = await jsonRequestManager.LawyerInfo_UpsertLawyer(response.civilNumber, response.emailAddress);
+            }
             return new JsonResult(new { data = (response != null ? response : null), status = HttpStatusCode.OK });
         }
     }

@@ -61,7 +61,7 @@ namespace Service.Concrete
 
         public CasePartiesResponse AddCaseParties(CaseParties caseParties, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[34];
+            SqlParameter[] spParams = new SqlParameter[38];
             spParams[0] = new SqlParameter("CasePartyId", caseParties.CasePartyId);
             spParams[1] = new SqlParameter("CaseId", caseParties.CaseId);
             spParams[2] = new SqlParameter("PartyType", caseParties.PartyType);
@@ -96,6 +96,10 @@ namespace Service.Concrete
             spParams[31] = new SqlParameter("LinkCaseParty", caseParties.LinkCaseParty);
             spParams[32] = new SqlParameter("AddressNo", caseParties.AddressNo);
             spParams[33] = new SqlParameter("BuildingNo", caseParties.BuildingNo);
+            spParams[34] = new SqlParameter("SearchBy", caseParties.SearchBy);
+            spParams[35] = new SqlParameter("PassportNo", caseParties.PassportNo);
+            spParams[36] = new SqlParameter("PassportExpiry", caseParties.PassportExpiryDate);
+            spParams[37] = new SqlParameter("PassportCountryCode", caseParties.PassportCountryCode);
             CasePartiesResponse response = _systemSettingRepository.ExecuteStoredProcedure<CasePartiesResponse>("Sp_dml_caseparties", spParams).FirstOrDefault();
             return response;
         }

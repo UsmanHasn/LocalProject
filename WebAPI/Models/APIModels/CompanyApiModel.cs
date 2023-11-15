@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace WebAPI.Models.APIModels
@@ -131,10 +132,75 @@ namespace WebAPI.Models.APIModels
         public string Code { get; set; }
         public object Text { get; set; }
     }
-
-    public class Mortgages
+    public class ContractAuthenticator
     {
+        public string code { get; set; }
+        public string nameAr { get; set; }
+        public string nameEn { get; set; }
     }
+    public class CoverageType
+    {
+        public string code { get; set; }
+        public string nameAr { get; set; }
+        public string nameEn { get; set; }
+    }
+    public class Mortgage
+    {
+        public Mortgage mortgage { get; set; }
+    }
+
+    public class Mortgage2
+    {
+        public string contractNumber { get; set; }
+        public string contractDate { get; set; }
+        public object loanNumber { get; set; }
+        public string amount { get; set; }
+        public string currency { get; set; }
+        public MortgageType mortgageType { get; set; }
+        public MortgageGrade mortgageGrade { get; set; }
+        public Mortgagee mortgagee { get; set; }
+        public string mortgageDuration { get; set; }
+        public ContractAuthenticator contractAuthenticator { get; set; }
+        public CoverageType coverageType { get; set; }
+        public string registrationDate { get; set; }
+    }
+    public class Company
+    {
+        public string crNumber { get; set; }
+        public string companyNameArabic { get; set; }
+        public string companyNameEnglish { get; set; }
+        public string companyNameWithLegalArabic { get; set; }
+        public string companyNameWithLegalEnglish { get; set; }
+        public Country country { get; set; }
+        public LegalStatus legalStatus { get; set; }
+        public RegistrationStatus registrationStatus { get; set; }
+        public string registrationDate { get; set; }
+        public string establishmentDate { get; set; }
+        public string subjectToForeignInvestment { get; set; }
+        public string expiryDate { get; set; }
+        public string isExpired { get; set; }
+    }
+    public class Mortgagee
+    {
+        public Company company { get; set; }
+    }
+
+    public class MortgageGrade
+    {
+        [JsonProperty("@code")]
+        public string code { get; set; }
+        public string nameAr { get; set; }
+        public string nameEn { get; set; }
+    }
+
+    public class MortgageType
+    {
+        [JsonProperty("@code")]
+        public string code { get; set; }
+        public string nameAr { get; set; }
+        public string nameEn { get; set; }
+    }
+
 
     public class Nationality
     {
@@ -204,7 +270,7 @@ namespace WebAPI.Models.APIModels
         public PlacesOfActivities PlacesOfActivities { get; set; }
         public Investors Investors { get; set; }
         public Signatories Signatories { get; set; }
-        public Mortgages Mortgages { get; set; }
+        //public List<Mortgage> Mortgages { get; set; }
         public object LegalSubStatus { get; set; }
     }
 

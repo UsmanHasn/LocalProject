@@ -50,6 +50,10 @@
         public string? CompanyName { get; set; }
         public string? AddressNo { get; set; }
         public string? BuildingNo { get; set; }
+        public string? SearchBy { get; set; }
+        public string? PassportNo { get; set; }
+        public string? PassportCountryCode { get; set; }
+        public DateTime? PassportExpiryDate { get; set; }
     }
 
     public class CasePartiesDelete
