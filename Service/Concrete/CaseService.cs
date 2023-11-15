@@ -220,15 +220,48 @@ namespace Service.Concrete
             return dataMenu.ToList();
         }
 
-        public List<CaseModel> GetAllPendingCase(string CivilNo, int CaseStatusId)
+        public paginationRequestModel GetAllPendingCase(string CivilNo, int CaseStatusId,int pageSize,int pageNumber,string ? SearchText)
         {
-            SqlParameter[] parameters = new SqlParameter[2];
-            parameters[0] = new SqlParameter("CivilNo", CivilNo);
-            if (CaseStatusId == 0)
-            { parameters[1] = new SqlParameter("CasaStatusId", null); }
-            else { parameters[1] = new SqlParameter("CasaStatusId", CaseStatusId); }
-            var model=_systemSettingRepository.ExecuteStoredProcedure<CaseModel>("sjc_GetPendingCase", parameters).ToList();
-            return model;
+            try
+            {
+                SqlParameter[] param = new SqlParameter[5];
+
+                param[0] = new SqlParameter("pageSize", pageSize);
+                param[1] = new SqlParameter("pageNumber", pageNumber);
+                param[2] = new SqlParameter("SearchText", SearchText);
+                param[3] = new SqlParameter("CivilNo", CivilNo);
+                if (CaseStatusId == 0)
+                { param[4] = new SqlParameter("CasaStatusId", null); }
+                else { param[4] = new SqlParameter("CasaStatusId", CaseStatusId); }
+                
+                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestModel>("sjc_GetPendingCase", param).ToList();
+                int countItem = 0;
+                if (SearchText != null)
+                {
+                    SqlParameter[] paramSearch = new SqlParameter[2];
+                    paramSearch[0] = new SqlParameter("SearchText", SearchText);
+                    paramSearch[1] = new SqlParameter("CasaStatusId", null);
+                    var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetPendingRequestCount", paramSearch).FirstOrDefault();
+                    countItem = count.TotalCount;
+                }
+                else
+                {
+                    SqlParameter[] paramSearch = new SqlParameter[2];
+                    paramSearch[0] = new SqlParameter("SearchText", null);
+                    paramSearch[1] = new SqlParameter("CasaStatusId", null);
+                    var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetPendingRequestCount", paramSearch).FirstOrDefault();
+                    countItem = count.TotalCount;
+                }
+                paginationRequestModel model = new paginationRequestModel()
+                {
+                    PaginatedData = data,
+                    TotalCount = countItem
+                };
+                return model;
+
+            }
+            catch (Exception ex) { }
+            return null;
         }
 
         public List<PaymentActionModel> BindPaymentDraw()

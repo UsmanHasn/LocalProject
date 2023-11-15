@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -273,12 +274,11 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetPendingCase")]
-        public IActionResult GetPendingCase(string CivilNo, int CaseStatusId)
+        public IActionResult GetPendingCase(string CivilNo, int CaseStatusId, int pageSize, int pageNumber, string? SearchText)
         {
-            List<CaseModel> model = new List<CaseModel>();
             try
             {
-                model = _caseService.GetAllPendingCase(CivilNo, CaseStatusId);
+                var model = _caseService.GetAllPendingCase( CivilNo,  CaseStatusId,  pageSize,  pageNumber, SearchText);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

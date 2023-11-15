@@ -20,7 +20,7 @@ namespace Service.Interface
         bool DeleteCaseDocument(CaseDocumentModel caseDocumentModel, string userName);
         UpdateStatusResponse UpdateCaseStatus(long caseId, string caseStatus, string userName);
         List<CaseModel> GetAllCases();
-        List<CaseModel> GetAllPendingCase(string CivilNo, int CaseStatusId);
+        paginationRequestModel GetAllPendingCase(string CivilNo, int CaseStatusId, int pageSize, int pageNumber, string? SearchText);
         public List<PaymentActionModel> BindPaymentDraw();
         public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
         CaseModel GetCasesByUserName(string CreatedBy);
