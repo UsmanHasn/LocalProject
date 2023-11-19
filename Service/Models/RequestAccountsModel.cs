@@ -35,5 +35,7 @@ namespace Service.Models
 
         public string? RequestStatusNameEn { get; set; }
         public string? RequestStatusNameAr { get; set; }
+        public string? UserName { get; set; }
+        public string? UserNameAr { get; set; }
     }
 }
