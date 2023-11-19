@@ -483,7 +483,7 @@ namespace WebAPI.Controllers
                     new SqlParameter("UserName", response.fullname_en),
                     new SqlParameter("UserNameAr", response.fullname),
                     new SqlParameter("CivilNumber", response.civilNumber),
-                    new SqlParameter("CivilExpiryDate", personalApiRequest.ExpiryDate),
+                    new SqlParameter("CivilExpiryDate", response.visaNumberExpirydate),
                     new SqlParameter("Nationalitycode", response.Nationalitycode),
                     new SqlParameter("Nationalitydesc_en", response.Nationalitydesc_en),
                     new SqlParameter("Nationalitydesc_ar", response.Nationalitydesc_ar),
