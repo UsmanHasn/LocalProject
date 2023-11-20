@@ -9,7 +9,8 @@ namespace Service.Models
 {
     public class PaymentPayLoad
     {
-        public string RequestId { get; set; }
+        public long RequestId { get; set; }
+        public string RequestNo { get; set; }
         public string RequestUrl { get; set; }
         public long UserId { get; set; }
         public long? tid { get; set; }

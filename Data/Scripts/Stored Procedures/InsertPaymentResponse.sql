@@ -1,72 +1,156 @@
-﻿Alter PROCEDURE [dbo].[InsertPaymentResponse]    
-    @order_id VARCHAR(255) null,     
-    @tracking_id VARCHAR(255)null,     
-    @bank_ref_no VARCHAR(255)null,     
-    @order_status VARCHAR(255)null,     
-    @failure_message VARCHAR(255)null,     
-    @payment_mode VARCHAR(255)null,     
-    @card_name VARCHAR(255)null,     
-    @status_code VARCHAR(255)null,     
-    @status_message VARCHAR(255)null,     
-    @currency VARCHAR(255)null,     
-    @amount VARCHAR(255)null,     
-    @billing_name VARCHAR(255)null,     
-    @billing_address VARCHAR(255)null,     
-    @billing_city VARCHAR(255)null,     
-    @billing_state VARCHAR(255)null,     
-    @billing_zip VARCHAR(255)null,     
-    @billing_country VARCHAR(255)null,     
-    @billing_tel VARCHAR(255)null,     
-    @billing_email VARCHAR(255)null,     
-    @merchant_param1 VARCHAR(255)null,     
-    @merchant_param2 VARCHAR(255)null,     
-    @merchant_param3 VARCHAR(255)null,     
-    @merchant_param4 VARCHAR(255)null,     
-    @merchant_param5 VARCHAR(255)null,     
-    @vault VARCHAR(255)null,     
-    @offer_type VARCHAR(255)null,     
-    @offer_code VARCHAR(255)null,     
-    @discount_value VARCHAR(255)null,     
-    @mer_amount VARCHAR(255)null,     
-    @eci_value VARCHAR(255)null,     
-    @retry VARCHAR(255)null,     
-    @response_code INT null,     
-    @billing_notes VARCHAR(255)null,     
-    @trans_date VARCHAR(255)null,     
-    @bin_country VARCHAR(255)null,     
-    @card_type VARCHAR(255)null,     
-    @saveCard VARCHAR(255)null,     
-    @order_date_time VARCHAR(255)null,     
-    @token_number VARCHAR(255)null,     
-    @token_eligibility VARCHAR(255)null,  
- @Request_Id Bigint,  
- @UserId Bigint  
-AS    
-BEGIN    
-    INSERT INTO [SJCESP_DEV].[dbo].PaymentResponse (order_id, tracking_id, bank_ref_no, order_status, failure_message, payment_mode, card_name, status_code, status_message, currency, amount, billing_name, billing_address, billing_city, billing_state, billing_zip, 
-	billing_country, billing_tel, billing_email, merchant_param1, merchant_param2, merchant_param3, merchant_param4, merchant_param5, vault, offer_type, offer_code, discount_value, mer_amount, eci_value, retry, response_code, billing_notes, trans_date, bin_country, 
-	card_type, saveCard, order_date_time, token_number, token_eligibility,Request_Id,UserId)    
-    VALUES (@order_id, @tracking_id, @bank_ref_no, @order_status, @failure_message, @payment_mode, @card_name, @status_code, @status_message, @currency, @amount, @billing_name, @billing_address, @billing_city, @billing_state, @billing_zip, @billing_country, 
-	@billing_tel, @billing_email, @merchant_param1, @merchant_param2, @merchant_param3, @merchant_param4, @merchant_param5, @vault, @offer_type, @offer_code, @discount_value, @mer_amount, @eci_value, @retry, @response_code, @billing_notes, @trans_date, @bin_country, 
-	@card_type, @saveCard, @order_date_time, @token_number, @token_eligibility,@Request_Id,@UserId)
+USE [SJCESP_DEV]
+GO
+
+/****** Object:  StoredProcedure [dbo].[InsertPaymentResponse]    Script Date: 11/20/2023 5:54:59 AM ******/
+DROP PROCEDURE [dbo].[InsertPaymentResponse]
+GO
+
+/****** Object:  StoredProcedure [dbo].[InsertPaymentResponse]    Script Date: 11/20/2023 5:54:59 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
 
 
-	INSERT INTO [SJCESP_DEV].[dbo]..[RequestEventLog]
-           ([RequestId]
-           ,[LoggedOn]
-           ,[LoggedBy]
-           ,[Description]
-           ,[ShowToRequestor]
-           ,[Amount]
-           ,[RefNo]
-           ,[PaymentRequestId])
-     VALUES
-           (@Request_Id
-           ,Getdate()
-           ,(select [UserName] from [SJCESP_DEV].[dbo].[SEC_Users] where [UserId]= @UserId)
-           , Concat(@order_status , ' ' ,@status_message)
-           ,1
-           ,@amount
-           ,@order_id
-           ,@tracking_id) ;
-END 
+CREATE PROCEDURE [dbo].[InsertPaymentResponse]      
+    @order_id VARCHAR(50),
+    @tracking_id VARCHAR(50),
+    @bank_ref_no VARCHAR(50),
+    @order_status VARCHAR(50),
+    @failure_message TEXT,
+    @payment_mode VARCHAR(50),
+    @card_name VARCHAR(50),
+    @status_code VARCHAR(50),
+    @status_message TEXT,
+    @currency VARCHAR(10),
+    @amount DECIMAL(10, 3),
+    @billing_name VARCHAR(100),
+    @billing_address TEXT,
+    @billing_city VARCHAR(50),
+    @billing_state VARCHAR(50),
+    @billing_zip VARCHAR(20),
+    @billing_country VARCHAR(50),
+    @billing_tel VARCHAR(20),
+    @billing_email VARCHAR(100),
+    @merchant_param1 VARCHAR(100),
+    @merchant_param2 VARCHAR(100),
+    @merchant_param3 VARCHAR(100),
+    @merchant_param4 VARCHAR(100),
+    @merchant_param5 VARCHAR(100),
+    @discount_value DECIMAL(10, 2),
+    @mer_amount DECIMAL(10, 3),
+    @retry VARCHAR(10),
+    @response_code VARCHAR(50),
+    @bin_country VARCHAR(50),
+    @card_type VARCHAR(50),
+    @saveCard CHAR(1)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @RequestId BIGINT;
+    SELECT @RequestId = [RequestId] FROM [SJCESP_DEV].[dbo].[PaymentRequest] WHERE order_id = @order_id;
+
+    DECLARE @PaymentRequestId BIGINT;
+    SELECT @PaymentRequestId = [PaymentRequestId] FROM [SJCESP_DEV].[dbo].[PaymentRequest] WHERE order_id = @order_id;
+
+    INSERT INTO [SJCESP_DEV].[dbo].[PaymentResponse] (
+        PaymentRequestId,
+        order_id,
+        tracking_id,
+        bank_ref_no,
+        order_status,
+        failure_message,
+        payment_mode,
+        card_name,
+        status_code,
+        status_message,
+        currency,
+        amount,
+        billing_name,
+        billing_address,
+        billing_city,
+        billing_state,
+        billing_zip,
+        billing_country,
+        billing_tel,
+        billing_email,
+        merchant_param1,
+        merchant_param2,
+        merchant_param3,
+        merchant_param4,
+        merchant_param5,
+        discount_value,
+        mer_amount,
+        retry,
+        response_code,
+        trans_date,
+        bin_country,
+        card_type,
+        saveCard,
+        order_date_time
+    )
+    VALUES (
+        @PaymentRequestId,
+        @order_id,
+        @tracking_id,
+        @bank_ref_no,
+        @order_status,
+        @failure_message,
+        @payment_mode,
+        @card_name,
+        @status_code,
+        @status_message,
+        @currency,
+        @amount,
+        @billing_name,
+        @billing_address,
+        @billing_city,
+        @billing_state,
+        @billing_zip,
+        @billing_country,
+        @billing_tel,
+        @billing_email,
+        @merchant_param1,
+        @merchant_param2,
+        @merchant_param3,
+        @merchant_param4,
+        @merchant_param5,
+        @discount_value,
+        @mer_amount,
+        @retry,
+        @response_code,
+        GETDATE(),
+        @bin_country,
+        @card_type,
+        @saveCard,
+        GETDATE()
+    );
+  
+    INSERT INTO [dbo].[RequestEventLog]  
+    (
+        [RequestId],
+        [LoggedOn],
+        [LoggedBy],
+        [Description],
+        [ShowToRequestor],
+        [Amount],
+        [RefNo],
+        [PaymentRequestId]
+    )  
+    VALUES  
+    (
+        @RequestId,
+        GETDATE(),
+        (SELECT [UserName] FROM [SJCESP_DEV].[dbo].[SEC_Users] WHERE [UserId] = (SELECT [UserId] FROM [SJCESP_DEV].[dbo].[PaymentRequest] WHERE order_id = @order_id)),
+        CONCAT(@order_status, ' ', @status_message),
+        1,
+        @amount,
+        @order_id,
+        @PaymentRequestId
+    );
+END
+GO
+
+

@@ -83,7 +83,7 @@ namespace Service.Interface
         List<LKTLocationModel> getLocationsByCaseGroupId(int caseGroupId);
 
         paginationRequestModel GetAllRequest(int? caseId, int? pageSize, int? pageNumber, string? SearchText);
-        List<RequestEvenLog> GetAllRequestEventLog(int requestId, bool userFlag);
+        paginationRequestEvenLog GetAllRequestEventLog(int requestId, bool userFlag, int pageSize, int pageNumber, string? SearchText);
         RequestModel sjc_GetRequest_caseId(int? caseId);
         bool InsertRequestEventLog(RequestEvenLog evenLog);
     }

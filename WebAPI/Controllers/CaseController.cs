@@ -1154,11 +1154,11 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetRequestEventLog")]
-        public IActionResult GetRequestEventLog(int requestId , bool userFlag )
+        public IActionResult GetRequestEventLog(int requestId , bool userFlag, int pageSize, int pageNumber, string? SearchText)
         {
             try
             {
-                var model = _caseService.GetAllRequestEventLog(requestId, userFlag);
+                var model = _caseService.GetAllRequestEventLog( requestId,  userFlag,  pageSize,  pageNumber,  SearchText);
                 return new JsonResult(new { data = model, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

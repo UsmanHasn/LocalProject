@@ -24,4 +24,9 @@ namespace Service.Models
         public string? RefNo { get; set; }
         public int? PaymentRequestId { get; set; }
     }
+    public class paginationRequestEvenLog
+    {
+        public List<RequestEvenLog> PaginatedData { get; set; }
+        public int TotalCount { get; set; }
+    }
 }

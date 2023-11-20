@@ -866,24 +866,49 @@ namespace Service.Concrete
                 return null;
             }
         }
-        public List<RequestEvenLog> GetAllRequestEventLog(int requestId,bool userFlag)
+        public paginationRequestEvenLog GetAllRequestEventLog(int requestId,bool userFlag, int pageSize, int pageNumber, string? SearchText)
         {
+           
             try
             {
-                
-                    SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("requestId", requestId);
-                if(userFlag == false)
+                SqlParameter[] param = new SqlParameter[5];
+
+                param[0] = new SqlParameter("pageSize", pageSize);
+                param[1] = new SqlParameter("pageNumber", pageNumber);
+                param[2] = new SqlParameter("SearchText", SearchText);
+                param[3] = new SqlParameter("requestId", requestId);
+                if(userFlag == false) param[4] = new SqlParameter("userFlag", null);
+              else   param[4] = new SqlParameter("userFlag", userFlag); 
+
+                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestEvenLog>("sjc_GetRequestEventLog", param).ToList();
+                int countItem = 0;
+                if (SearchText != null)
                 {
-                    param[1] = new SqlParameter("userFlag", null);
+                    SqlParameter[] paramSearch = new SqlParameter[3];
+                    paramSearch[0] = new SqlParameter("SearchText", SearchText);
+                    paramSearch[1] = new SqlParameter("requestId", requestId);
+                    if (userFlag == false) paramSearch[2] = new SqlParameter("userFlag", null);
+                    else paramSearch[2] = new SqlParameter("userFlag", userFlag);
+
+                    var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetRequestEventLogCount", paramSearch).FirstOrDefault();
+                    countItem = count.TotalCount;
                 }
                 else
                 {
-                    param[1] = new SqlParameter("userFlag", userFlag);
+                    SqlParameter[] paramSearch = new SqlParameter[3];
+                    paramSearch[0] = new SqlParameter("SearchText", null);
+                    paramSearch[1] = new SqlParameter("requestId", requestId);
+                    if (userFlag == false) paramSearch[2] = new SqlParameter("userFlag", null);
+                    else paramSearch[2] = new SqlParameter("userFlag", userFlag);
+                    var count = _systemSettingRepository.ExecuteStoredProcedure<TotalCountModel>("sjc_GetRequestEventLogCount", paramSearch).FirstOrDefault();
+                    countItem = count.TotalCount;
                 }
-
-                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestEvenLog>("sjc_GetRequestEventLog", param).ToList();              
-                return data;
+                paginationRequestEvenLog model = new paginationRequestEvenLog()
+                {
+                    PaginatedData = data,
+                    TotalCount = countItem
+                };
+                return model;
 
             }
             catch (Exception ex) { }
