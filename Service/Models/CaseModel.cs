@@ -50,6 +50,8 @@ namespace Service.Models
         public string? CaseTypeAr { get; set; }
         public string? Fee { get; set; }
         public string? AdditionalSubjectIds { get; set; }
+        public int? LinkSourceId { get; set; }
+        public int? ExternalEntityId { get; set; }
 
     }
     public class CaseDocumentsModel

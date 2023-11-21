@@ -38,6 +38,7 @@ namespace WebAPI.Controllers
                 { ".doc", "application/msword" },
                 { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
                 { ".jpeg", "image/jpeg" },
+                 { ".jpg", "image/jpeg" },
                 // Add more mappings for other file types as needed
             };
 

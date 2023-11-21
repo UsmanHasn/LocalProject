@@ -1309,7 +1309,23 @@ namespace WebAPI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetExternalEntity")]
+        public IActionResult GetExternalEntity()
+        {
+            List<LookupsModel>  model = new List<LookupsModel>();
+            try
+            {
+                model = _lookupService.getExternalEntity();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
 
+            }
+
+        }
 
     }
 }

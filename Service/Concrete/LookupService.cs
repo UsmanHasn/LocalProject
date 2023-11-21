@@ -760,5 +760,10 @@ namespace Service.Concrete
             _languagesRepository.ExecuteStoredProcedure("sjc_InsUpdRequestLinkSource", spParams);
        
         }
+        public List<LookupsModel> getExternalEntity()
+        {
+            SqlParameter[] spParams = new SqlParameter[0];
+            return _languagesRepository.ExecuteStoredProcedure<LookupsModel>("sjc_getLktExternalEntity", spParams).ToList();
+        }
     }
 }

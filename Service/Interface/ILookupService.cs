@@ -99,6 +99,6 @@ namespace Service.Interface
 
         void DeleteRequestLinkSource(RequestLinkSource requestLinkSource, string userName);
 
-
+        List<LookupsModel> getExternalEntity();
     }
 }
