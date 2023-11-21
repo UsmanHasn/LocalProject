@@ -246,7 +246,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("updateRequestAccountHistory")]
-        public IActionResult updateRequestAccountHistory(int requestId, int responseStatusId, string rejectedReason)
+        public IActionResult updateRequestAccountHistory(int requestId, int responseStatusId, string? rejectedReason)
         {
             try
             {

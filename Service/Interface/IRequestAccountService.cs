@@ -22,7 +22,7 @@ namespace Service.Interface
         List<RequestAccountsModel> GetAllApproved(int userId);
         List<RequestAccountsModel> GetAllForAdmin(string ActionTypeId, string CivilNo, string UserName);
 
-        bool UpdateRequestAccountHistory(int requestId, int responseStatusId, string rejectedReason);
+        bool UpdateRequestAccountHistory(int requestId, int responseStatusId, string? rejectedReason);
 
         public SYS_SystemSettings GetRequestStatusIdFromSystemSetting(string keyName); 
     }

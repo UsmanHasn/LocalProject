@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using Domain.Modeles;
 using Service.Models;
 using System;
 using System.Collections.Generic;
@@ -86,5 +87,9 @@ namespace Service.Interface
         paginationRequestEvenLog GetAllRequestEventLog(int requestId, bool userFlag, int pageSize, int pageNumber, string? SearchText);
         RequestModel sjc_GetRequest_caseId(int? caseId);
         bool InsertRequestEventLog(RequestEvenLog evenLog);
+
+        List<DocumentTypeModel> getdocumentType();
+
+        bool DeleteAdvanceLinking(int linkId);
     }
 }

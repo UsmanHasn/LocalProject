@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Modeles;
 using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -1104,6 +1105,25 @@ namespace WebAPI.Controllers
             }
 
         }
+
+
+        [HttpDelete]
+        [Route("delete_CorAdvanceLinkingConfig")]
+        public IActionResult delete_CorAdvanceLinkingConfig(int linkId)
+        {
+            try
+            {
+                _caseService.DeleteAdvanceLinking(linkId);
+                return new JsonResult(new { data = linkId, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
         [HttpGet]
         [Route("GetCorAdvanceLinkingConfigbyId")]
         public IActionResult GetCorAdvanceLinkingConfigbyId(int LinkId)
@@ -1204,6 +1224,23 @@ namespace WebAPI.Controllers
 
         }
 
+
+
+        [HttpGet]
+        [Route("GetDoctype")]
+        public IActionResult GetDoctype()
+        {
+            try
+            {
+                List<DocumentTypeModel> model = new List<DocumentTypeModel>();
+                model = _caseService.getdocumentType();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+        }
     }
 }
 

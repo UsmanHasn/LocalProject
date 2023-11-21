@@ -11,6 +11,7 @@ namespace Service.Models
         public int Id { get; set; }
         public string? CivilNo { get; set; }
         public string? CRNo { get; set; }
+        public string? CompanyName { get; set; }
         public bool IsActive { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreateDate { get;}

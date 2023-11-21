@@ -30,13 +30,14 @@ namespace Service.Concrete
 
         public bool AddLinkCompany(LinkCompanyModel linkCompanyModel, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[6];
+            SqlParameter[] spParams = new SqlParameter[7];
             spParams[0] = new SqlParameter("Id", linkCompanyModel.Id);
             spParams[1] = new SqlParameter("CivilNo", linkCompanyModel.CivilNo);
             spParams[2] = new SqlParameter("CRNo", linkCompanyModel.CRNo);
             spParams[3] = new SqlParameter("IsActive", linkCompanyModel.IsActive);
             spParams[4] = new SqlParameter("CreatedBy", userName);
             spParams[5] = new SqlParameter("LastModifiedBy", userName);
+            spParams[6] = new SqlParameter("CompanyNo", linkCompanyModel.CompanyName);
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_linktocompany", spParams);
             return true;
         }
@@ -84,6 +85,7 @@ namespace Service.Concrete
             var data = _systemSettingRepository.ExecuteStoredProcedure<RequestAccountsModel>("sjc_GetRequestAccount", spParams).ToList();
             var model = data.Select(x => new RequestAccountsModel()
             {
+                RequestId=x.RequestId,
                 ActionTypeId = x.ActionTypeId,
                 NameEn = x.NameEn,
                 NameAr = x.NameAr,
@@ -132,14 +134,14 @@ namespace Service.Concrete
             return _systemSettingRepository.ExecuteStoredProcedure<SYS_SystemSettings>("sjc_GetKeyValueByKeyName", spParams).FirstOrDefault();
         }
 
-        public bool UpdateRequestAccountHistory(int requestId,int responseStatusId,string rejectedReason)
+        public bool UpdateRequestAccountHistory(int requestId, int responseStatusId, string? rejectedReason)
         {
             SqlParameter[] spParams = new SqlParameter[5];
             spParams[0] = new SqlParameter("RequestId", requestId);
             spParams[1] = new SqlParameter("RequestStatusId", responseStatusId);
             spParams[2] = new SqlParameter("AssignedTo", 1);
             spParams[3] = new SqlParameter("ResponseStatusId", responseStatusId);
-            spParams[4] = new SqlParameter("RejectedReason", rejectedReason);
+            spParams[4] = new SqlParameter("RejectedReason", rejectedReason == null ? "" : rejectedReason);
 
             _systemSettingRepository.ExecuteStoredProcedure("Sp_RequestAccountsHistory", spParams);
             return true;

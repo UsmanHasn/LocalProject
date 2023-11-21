@@ -1,6 +1,7 @@
 ﻿using Data.Concrete;
 using Data.Interface;
 using Domain.Entities;
+using Domain.Modeles;
 using MailKit.Search;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -807,7 +808,7 @@ namespace Service.Concrete
         {
             try
             {
-                SqlParameter[] parameters = new SqlParameter[11];
+                SqlParameter[] parameters = new SqlParameter[17];
                 parameters[0] = new SqlParameter("LinkId", cOR_AdvanceLinkingConfigModel.LinkId);
                 parameters[1] = new SqlParameter("CaseGroupId", cOR_AdvanceLinkingConfigModel.CaseGroupId);
                 parameters[2] = new SqlParameter("LocationId", cOR_AdvanceLinkingConfigModel.LocationId);
@@ -818,7 +819,13 @@ namespace Service.Concrete
                 parameters[7] = new SqlParameter("LinkGroupId", cOR_AdvanceLinkingConfigModel.LinkGroupId);
                 parameters[8] = new SqlParameter("LinkSources", cOR_AdvanceLinkingConfigModel.LinkSources);
                 parameters[9] = new SqlParameter("RoleId", cOR_AdvanceLinkingConfigModel.RoleId);
-                parameters[10] = new SqlParameter("Action", cOR_AdvanceLinkingConfigModel.LinkId > 0 ? "U" : "I");
+                parameters[10] = new SqlParameter("ShowRelatedCourtsOnly", cOR_AdvanceLinkingConfigModel.ShowRelatedCourtsOnly);
+                parameters[11] = new SqlParameter("RequiredDocIds", cOR_AdvanceLinkingConfigModel.RequiredDocIds);
+                parameters[12] = new SqlParameter("OptionalDocIds", cOR_AdvanceLinkingConfigModel.OptionalDocIds);
+                parameters[13] = new SqlParameter("FirstPartyTypeId", cOR_AdvanceLinkingConfigModel.FirstPartyTypeId);
+                parameters[14] = new SqlParameter("SecondPartyTypeId", cOR_AdvanceLinkingConfigModel.SecondPartyTypeId);
+                parameters[15] = new SqlParameter("Deleted", false);
+                parameters[16] = new SqlParameter("Action", cOR_AdvanceLinkingConfigModel.LinkId > 0 ? "U" : "I");
                 _systemSettingRepository.ExecuteStoredProcedure("sjc_InsUpdDltCOR_AdvanceLinkingConfig", parameters);
                 return true;
             }
@@ -960,6 +967,28 @@ namespace Service.Concrete
             }
             catch (Exception ex) { }
             return null;
+        }
+
+        public List<DocumentTypeModel> getdocumentType()
+        {
+            SqlParameter[] parameters = new SqlParameter[0];
+            return _systemSettingRepository.ExecuteStoredProcedure<DocumentTypeModel>("SP_GetDocumentType", parameters).ToList();
+        }
+
+        public bool DeleteAdvanceLinking(int linkId)
+        {
+            try
+            {
+                SqlParameter[] parameters = new SqlParameter[2];
+                parameters[0] = new SqlParameter("LinkId", linkId);
+                parameters[1] = new SqlParameter("Action","D");
+                _systemSettingRepository.ExecuteStoredProcedure("sjc_DltCOR_AdvanceLinkingConfig", parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
