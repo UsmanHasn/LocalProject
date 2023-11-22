@@ -923,7 +923,6 @@ namespace Service.Concrete
             catch (Exception ex) { }
             return null;
         }
-
         public bool InsertRequestEventLog(RequestEvenLog evenLog)
         {
             try
@@ -952,8 +951,6 @@ namespace Service.Concrete
             catch (Exception ex) { }
             return false ;
         }
-
-
         public RequestModel sjc_GetRequest_caseId(int? caseId)
         {
             try
@@ -989,6 +986,20 @@ namespace Service.Concrete
             {
                 return false;
             }
+        }
+        public List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+
+                param[0] = new SqlParameter("statusId", statusId);
+                var data = _systemSettingRepository.ExecuteStoredProcedure<AvailableActionOnStatus>("sjc_GetActionforAvailableStatus", param).ToList();
+                return data;
+
+            }
+            catch (Exception ex) { }
+            return null;
         }
     }
 }

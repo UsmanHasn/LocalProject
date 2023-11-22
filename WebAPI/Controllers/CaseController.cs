@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata;
 using System.Xml.Linq;
+using WebAPI.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
@@ -208,7 +209,7 @@ namespace WebAPI.Controllers
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
-                        CaseDocumentModel caseDocumentModel = new CaseDocumentModel()
+                        Service.Models.CaseDocumentModel caseDocumentModel = new Service.Models.CaseDocumentModel()
                         {
                             CaseId = Convert.ToInt64(caseId),
                             DocumentId = Convert.ToInt64(documentId),
@@ -238,7 +239,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                CaseDocumentModel caseDocumentModel = new CaseDocumentModel()
+                Service.Models.CaseDocumentModel caseDocumentModel = new Service.Models.CaseDocumentModel()
                 {
                     CaseId = Convert.ToInt64(caseId),
                     DocumentId = Convert.ToInt64(documentId),
@@ -1213,8 +1214,14 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var model = _caseService.sjc_GetRequest_caseId(caseId);
-                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+                var Datamodel = _caseService.sjc_GetRequest_caseId(caseId);
+                var ActionBasedOnStatus = _caseService.GetActionforAvailableStatus(Datamodel.CaseStatusId);
+                GetRequestInfoAndActions Result = new GetRequestInfoAndActions()
+                {
+                    Request = Datamodel,
+                    GetAvailableActionOnStatuses = ActionBasedOnStatus,
+                };
+                return new JsonResult(new { data = Result, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
             {

@@ -91,5 +91,7 @@ namespace Service.Interface
         List<DocumentTypeModel> getdocumentType();
 
         bool DeleteAdvanceLinking(int linkId);
+
+        List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId);
     }
 }
