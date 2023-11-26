@@ -1,13 +1,10 @@
-﻿CReate PROCEDURE [dbo].[sjc_GetRequest]    
-@caseId  INT = NULL,
- @SearchText NVARCHAR(MAX) = NULL, -- The text to search for                        
-  @PageSize INT = 500,          
-  @PageNumber INT = 1          
+  
+Alter PROCEDURE [dbo].[sjc_GetRequestCount]    
+ @SearchText NVARCHAR(MAX) = NULL    
 AS                          
-BEGIN                          
-  DECLARE @Offset INT          
-  SET @Offset = (@PageNumber - 1) * @PageSize   
-  SELECT     
+BEGIN    
+with reultset as (  
+  SELECT     Distinct
     C.[CaseId],  
     C.CaseNo,  
     C.CourtTypeId,  
@@ -16,8 +13,6 @@ BEGIN
     C.CaseCategoryId,  
     C.CaseSubCategoryId,  
     C.FiledOn,  
-	C.CaseStatusId,
-	C.fee,
     C.Subject,  
     C.CreatedBy,  
     C.CreatedDate,  
@@ -51,7 +46,9 @@ BEGIN
      OR CC.NameEn LIKE N'%' + @SearchText + N'%'  
      OR CT.NameAr LIKE N'%' + @SearchText + N'%'  
      OR CT.NameEn LIKE N'%' + @SearchText + N'%')  
-    AND C.CaseStatusId != 1 AND C.CaseId=Isnull(@caseId,C.CaseId) 
-    ORDER BY C.CaseStatusId OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY      
-End    
-
+    AND C.CaseStatusId != 1  
+ )                        
+ SELECT     
+     Count([CaseId]) as TotalCount  
+       FROM reultset as C    
+End   

@@ -9,7 +9,7 @@ namespace Service.Models
     public class RequestEvenLog
     {
         public long LogId { get; set; }
-        public int RequestId { get; set; }
+        public long RequestId { get; set; }
         public DateTime? LoggedOn { get; set; }
         public string? LoggedBy { get; set; }
         public string? Description { get; set; }
@@ -22,11 +22,11 @@ namespace Service.Models
         public bool? ShowToRequestor { get; set; }
         public string? Amount { get; set; }
         public string? RefNo { get; set; }
-        public int? PaymentRequestId { get; set; }
+        public long? PaymentRequestId { get; set; }
     }
     public class paginationRequestEvenLog
     {
         public List<RequestEvenLog> PaginatedData { get; set; }
-        public int TotalCount { get; set; }
+        public long TotalCount { get; set; }
     }
 }

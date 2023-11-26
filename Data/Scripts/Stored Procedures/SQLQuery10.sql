@@ -1,18 +1,4 @@
-USE [SJCESP_DEV]
-GO
-
-/****** Object:  StoredProcedure [dbo].[sjc_GetActionforAvailableStatus]    Script Date: 11/23/2023 4:48:57 AM ******/
-DROP PROCEDURE [dbo].[sjc_GetActionforAvailableStatus]
-GO
-
-/****** Object:  StoredProcedure [dbo].[sjc_GetActionforAvailableStatus]    Script Date: 11/23/2023 4:48:57 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
--- =============================================  
+﻿-- =============================================  
 -- Author:  <Author,,Name>  
 -- Create date: <Create Date,,>  
 -- Description: <Description,,>  
@@ -27,7 +13,14 @@ BEGIN
  SET NOCOUNT ON;  
   
     -- Insert statements for procedure here  
-
+  ( SELECT *
+    FROM YourTableName
+    WHERE EXISTS (
+        SELECT value
+        FROM STRING_SPLIT(YourColumnName, ',')
+        WHERE LTRIM(RTRIM(value)) = @searchItem)
+		) as cte 
+  
 SELECT RA.ActionId  
       ,RA.NameEn  
       ,RA.NameAr  
@@ -48,7 +41,4 @@ SELECT RA.ActionId
  and RA.IsActive =1 and RA.Deleted = 0  
 END  
   
-
-GO
-
 

@@ -310,11 +310,11 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("UpdateCase")]
-        public IActionResult UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName)
+        public IActionResult UpdateCase(long caseId, string caseStatusId, Decimal fee, int paymentDrawId, int exempted, string userName,string Comment)
         {
             try
             {
-                _caseService.UpdateCase(caseId, caseStatusId, fee, paymentDrawId, exempted, userName);
+                _caseService.UpdateCase(caseId, caseStatusId, fee, paymentDrawId, exempted, userName, Comment);
                 return new JsonResult(new { data = new { CaseId = caseId, CaseStatus = caseStatusId, fee = fee, paymentDrawId = paymentDrawId, exempted = exempted }, status = HttpStatusCode.OK });
             }
             catch (Exception ex)
@@ -1210,12 +1210,12 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetRequest_caseId")]
-        public IActionResult GetRequest_caseId(int? caseId)
+        public IActionResult GetRequest_caseId(int? caseId,long roleId)
         {
             try
             {
                 var Datamodel = _caseService.sjc_GetRequest_caseId(caseId);
-                var ActionBasedOnStatus = _caseService.GetActionforAvailableStatus(Datamodel.CaseStatusId);
+                var ActionBasedOnStatus = _caseService.GetActionforAvailableStatus(Datamodel.CaseStatusId,  roleId);
                 GetRequestInfoAndActions Result = new GetRequestInfoAndActions()
                 {
                     Request = Datamodel,
@@ -1245,6 +1245,78 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+        }
+
+        [HttpPost]
+        [Route("uploaddocumentEventLog")]
+        public IActionResult uploaddocumentEventLog(long caseId, long documentId, int documentType, string description, string userName, long actionId)
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                string folderName = Path.Combine("Assets", "Case Document");
+                var pathTotSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    string folderPath = Path.Combine(pathTotSave, caseId.ToString());
+                    fullPath = Path.Combine(pathTotSave, caseId.ToString(), fileName);
+                    var dbPath = Path.Combine(folderName, caseId.ToString(), fileName);
+                    DirectoryInfo di = new DirectoryInfo(folderPath);
+                    if (!di.Exists)
+                    {
+                        di.Create();
+                    }
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                        Service.Models.CaseDocumentModel caseDocumentModel = new Service.Models.CaseDocumentModel()
+                        {
+                            CaseId = caseId,
+                            DocumentId = documentId,
+                            DocumentPath = dbPath,
+                            Description = description,
+                            DocumentType = documentType
+                        };
+                        _caseService.AddCaseEventDocuments(caseDocumentModel,userName,actionId);
+
+                    }
+                    return new JsonResult(new { data = dbPath, status = HttpStatusCode.OK });
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+        [HttpPost]
+        [Route("deletecaseeventdocument")]
+        public IActionResult DeleteCaseEventDocument(long caseId, long documentId, int documentType, string description, string userName)
+        {
+            try
+            {
+                Service.Models.CaseDocumentModel caseDocumentModel = new Service.Models.CaseDocumentModel()
+                {
+                    CaseId = caseId,
+                    DocumentId = documentId,
+                    DocumentPath = description,
+                    Description = description,
+                    DocumentType = documentType
+                };
+                _caseService.DeleteCaseDocument(caseDocumentModel, userName);
+                return new JsonResult(new { data = documentId, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
         }

@@ -23,7 +23,7 @@ namespace Service.Interface
         List<CaseModel> GetAllCases();
         paginationRequestModel GetAllPendingCase(string CivilNo, int CaseStatusId, int pageSize, int pageNumber, string? SearchText);
         public List<PaymentActionModel> BindPaymentDraw();
-        public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName);
+        public bool UpdateCase(long caseId, string caseStatusId, Decimal fee, int paymentDrawId, int exempted, string userName, string Comment);
         CaseModel GetCasesByUserName(string CreatedBy);
         CaseModel GetCasesByCaseId(string CaseId);
         bool AddCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, string userName);
@@ -92,6 +92,7 @@ namespace Service.Interface
 
         bool DeleteAdvanceLinking(int linkId);
 
-        List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId);
+        List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId, long roleId);
+        bool AddCaseEventDocuments(CaseDocumentModel caseDocumentModel, string userName,long actionId);
     }
 }

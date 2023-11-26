@@ -278,15 +278,17 @@ namespace Service.Concrete
             return dataMenu.ToList();
         }
 
-        public bool UpdateCase(long caseId, string caseStatusId, int fee, int paymentDrawId, int exempted, string userName)
+        public bool UpdateCase(long caseId, string caseStatusId, Decimal fee, int paymentDrawId, int exempted, string userName, string Comment)
         {
-            SqlParameter[] parameters = new SqlParameter[6];
+            SqlParameter[] parameters = new SqlParameter[7];
             parameters[0] = new SqlParameter("CaseId", caseId);
             parameters[1] = new SqlParameter("CaseStatusId", caseStatusId);
             parameters[2] = new SqlParameter("Fee", fee);
             parameters[3] = new SqlParameter("PaymentDrawId", paymentDrawId);
             parameters[4] = new SqlParameter("Exempted", exempted);
             parameters[5] = new SqlParameter("UserName", userName);
+            parameters[6] = new SqlParameter("Comment", Comment);
+            
             _systemSettingRepository.ExecuteStoredProcedure("sjc_UpdateCase", parameters);
             return true;
         }
@@ -987,19 +989,33 @@ namespace Service.Concrete
                 return false;
             }
         }
-        public List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId)
+        public List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId, long roleId)
         {
             try
             {
-                SqlParameter[] param = new SqlParameter[1];
+                SqlParameter[] param = new SqlParameter[2];
 
                 param[0] = new SqlParameter("statusId", statusId);
+                param[1] = new SqlParameter("roleId", roleId);
                 var data = _systemSettingRepository.ExecuteStoredProcedure<AvailableActionOnStatus>("sjc_GetActionforAvailableStatus", param).ToList();
                 return data;
 
             }
             catch (Exception ex) { }
             return null;
+        }
+        public bool AddCaseEventDocuments(CaseDocumentModel caseDocumentModel, string userName, long actionId)
+        {
+            SqlParameter[] spParams = new SqlParameter[7];
+            spParams[0] = new SqlParameter("CaseDocumentId", caseDocumentModel.DocumentId);
+            spParams[1] = new SqlParameter("CaseId", caseDocumentModel.CaseId);
+            spParams[2] = new SqlParameter("DocumentType", caseDocumentModel.DocumentType);
+            spParams[3] = new SqlParameter("DocumentPath", caseDocumentModel.DocumentPath);
+            spParams[4] = new SqlParameter("Description", caseDocumentModel.Description);
+            spParams[5] = new SqlParameter("DML", caseDocumentModel.DocumentId == 0 ? "I" : "U");
+            spParams[6] = new SqlParameter("UploadedBy", userName);
+            _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_casedocument", spParams);
+            return true;
         }
     }
 }

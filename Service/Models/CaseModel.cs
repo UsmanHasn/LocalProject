@@ -95,7 +95,7 @@ namespace Service.Models
         public string? CaseCatNameAr { get; set; }
         public string? CaseCatName { get; set; }
         public string? CaseTypeAr { get; set; }
-        public string? Fee { get; set; }
+        public decimal? Fee { get; set; }
         public string? CaseType { get; set; }
     }
     public class paginationRequestModel
