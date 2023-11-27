@@ -1017,5 +1017,23 @@ namespace Service.Concrete
             _systemSettingRepository.ExecuteStoredProcedure("Sp_dml_casedocument", spParams);
             return true;
         }
+
+        public bool UpateRequestEventLogView(long? caseId, long LogId, bool ShowToRequestor)
+        {
+            try
+            {
+                SqlParameter[] spParams = new SqlParameter[3];
+                spParams[0] = new SqlParameter("@ShowToRequestor", ShowToRequestor);
+                spParams[1] = new SqlParameter("@RequestId", caseId);
+                spParams[2] = new SqlParameter("@LogId", LogId);
+                _systemSettingRepository.ExecuteStoredProcedure("UpateRequestEventLogView", spParams);
+                return true;
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return false;
+        }
     }
 }
