@@ -14,6 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="VebdorDll\MCPG.CCAV.Util.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
