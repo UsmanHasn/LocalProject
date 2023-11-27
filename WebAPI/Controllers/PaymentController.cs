@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
             catch (Exception ex)
             {
                 // Log the exception
-                return StatusCode(500, "Internal server error");
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
         }
 
@@ -132,9 +132,9 @@ namespace WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
-                    return StatusCode(500, "Internal server error");
-                }
+                // Log the exception
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
             }
 
         [HttpGet]
@@ -148,9 +148,9 @@ namespace WebAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
-                    return StatusCode(500, "Internal server error");
-                }
+                // Log the exception
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
             }
         }
     }
