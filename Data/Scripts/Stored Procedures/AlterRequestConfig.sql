@@ -2,4 +2,6 @@ select *from [RequestConfig]
 select * from [dbo].[RequestAction]
 select * from COR_CaseStatus
 
-update [RequestConfig] set ispaymentrequired =1 where ConfigId=5
+select * from PaymentResponse  order by PaymentResponseId desc
+
+select * from RequestEventLog  order by LogId desc
