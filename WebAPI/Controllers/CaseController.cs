@@ -1320,6 +1320,22 @@ namespace WebAPI.Controllers
                 return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
             }
         }
+        [HttpGet]
+        [Route("UpateRequestEventLogView")]
+        public IActionResult UpateRequestEventLogView(long? caseId, long LogId, bool ShowToRequestor)
+        {
+            try
+            {
+                var Datamodel = _caseService.UpateRequestEventLogView(caseId, LogId, ShowToRequestor);
+                return new JsonResult(new { data = Datamodel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
     }
 }
 
