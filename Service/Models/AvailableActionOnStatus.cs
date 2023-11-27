@@ -22,5 +22,6 @@ namespace Service.Models
         public bool Deleted { get; set; }
         public int? NextStatusId { get; set; }
         public int? StatusId { get; set; }
+        public bool? ispaymentrequired { get; set; }
     }
 }
