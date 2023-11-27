@@ -1,39 +1,68 @@
-﻿
-Alter PROCEDURE [dbo].[InsertPaymentRequest]        
-      @RequestId Nvarchar(25),      
-    @UserId BIGINT,      
-    @tid BIGINT,      
-    @merchant_id BIGINT,      
-    @order_id VARCHAR(255),      
-    @amount DECIMAL,      
-    @currency VARCHAR(255),      
-    @redirect_url VARCHAR(255),      
-    @cancel_url VARCHAR(255),      
-    @language VARCHAR(255) ,    
- @RequestUrl varchar(max) -- used for redirection back to angular after sucess or failure of payment Request    
-AS      
-BEGIN      
-    INSERT INTO [PaymentRequest] (RequestId, UserId, tid, merchant_id, order_id, amount, currency, redirect_url, cancel_url, language,RequestUrl)      
-    VALUES (@RequestId, @UserId, @tid, @merchant_id, @order_id, @amount, @currency, @redirect_url, @cancel_url, @language,@RequestUrl);    
-	
-	
+Alter PROCEDURE [dbo].[InsertPaymentRequest]              
+    @RequestNo Nvarchar(100),    
+    @RequestId   BIGINT =  null,                 
+    @UserId BIGINT,          
+    @merchant_id BIGINT,            
+    @order_id VARCHAR(255),            
+    @amount DECIMAL,            
+    @currency VARCHAR(255),            
+    @redirect_url VARCHAR(255),            
+    @cancel_url VARCHAR(255),            
+    @language VARCHAR(255) ,          
+    @RequestFromUrl varchar(max) -- used for redirection back to angular after sucess or failure of payment Request          
+AS            
+BEGIN            
 
-INSERT INTO [dbo].[RequestEventLog]
-           ([RequestId]
-           ,[LoggedOn]
-           ,[LoggedBy]
-           ,[Description]
-           ,[ShowToRequestor]
-           ,[Amount]
-           ,[RefNo]
-           ,[PaymentRequestId])
-     VALUES
-           (@RequestId
-           ,Getdate()
-           ,(select [UserName] from [SJCESP_DEV].[dbo].[SEC_Users] where [UserId]= @UserId)
-           ,'Payment Request has been sent to payment gateway'
-           ,1
-           ,@amount
-           ,@order_id
-           ,@tid)  
-END;
+ DECLARE @UserName VARCHAR(155);  
+    SELECT @UserName = [UserName] FROM [SJCESP_DEV].[dbo].[SEC_Users] WHERE UserId = @UserId;  
+	SELECT @RequestId = CaseId FROM [SJCESP_DEV].[dbo].[Requests] WHERE CaseNo = @RequestNo;
+
+Declare @tid Bigint;  
+  
+ INSERT INTO [dbo].[PaymentRequest]  
+           ([RequestId]  
+           ,[RequestNo]  
+           ,[merchantid]  
+           ,[currency]  
+           ,[redirect_url]  
+           ,[cancel_url]  
+           ,[language]  
+           ,[order_id]  
+     ,[RequestFromUrl]  
+     ,[CreatedDate]  
+     ,[CreatedBy]  
+           ,[UserId])  
+     VALUES  
+           (@RequestId  
+           ,@RequestNo  
+           ,@merchant_id  
+           ,@currency  
+           ,@redirect_url  
+           ,@cancel_url  
+           ,@language  
+           ,@order_id  
+     ,@RequestFromUrl  
+     ,GETDATE()  
+     ,@UserName   
+           ,@UserId)  
+       
+SET @tid = SCOPE_IDENTITY();  
+INSERT INTO [dbo].[RequestEventLog]      
+           ([RequestId]      
+           ,[LoggedOn]      
+           ,[LoggedBy]      
+           ,[Description]      
+           ,[ShowToRequestor]      
+           ,[Amount]      
+           ,[RefNo]      
+           ,[PaymentRequestId])      
+     VALUES      
+           (@RequestId      
+           ,Getdate()      
+           ,@UserName  
+           ,Concat('Payment Request has been sent to payment gateway amount = ',@amount)      
+           ,1      
+           ,@amount      
+           ,@order_id      
+           ,@tid)        
+END; 
