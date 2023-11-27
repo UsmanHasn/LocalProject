@@ -71,43 +71,43 @@ namespace Service.Concrete
         {
             try
             {
-                var spParams = new List<SqlParameter>
-            {
-                new SqlParameter("@order_id", paymentDecryptResponse.OrderId),
-                new SqlParameter("@tracking_id", paymentDecryptResponse.TrackingId),
-                new SqlParameter("@bank_ref_no", paymentDecryptResponse.BankRefNo),
-                new SqlParameter("@order_status", paymentDecryptResponse.OrderStatus),
-                new SqlParameter("@failure_message", paymentDecryptResponse.FailureMessage),
-                new SqlParameter("@payment_mode", paymentDecryptResponse.PaymentMode),
-                new SqlParameter("@card_name", paymentDecryptResponse.CardName),
-                new SqlParameter("@status_code", paymentDecryptResponse.StatusCode),
-                new SqlParameter("@status_message", paymentDecryptResponse.StatusMessage),
-                new SqlParameter("@currency", paymentDecryptResponse.Currency),
-                new SqlParameter("@amount", paymentDecryptResponse.Amount),
-                new SqlParameter("@billing_name", paymentDecryptResponse.BillingName),
-                new SqlParameter("@billing_address", paymentDecryptResponse.BillingAddress),
-                new SqlParameter("@billing_city", paymentDecryptResponse.BillingCity),
-                new SqlParameter("@billing_state", paymentDecryptResponse.BillingState),
-                new SqlParameter("@billing_zip", paymentDecryptResponse.BillingZip),
-                new SqlParameter("@billing_country", paymentDecryptResponse.BillingCountry),
-                new SqlParameter("@billing_tel", paymentDecryptResponse.BillingTel),
-                new SqlParameter("@billing_email", paymentDecryptResponse.BillingEmail),
+                SqlParameter[] spParams = new SqlParameter[31];
+                
+                spParams[0] = new SqlParameter("@order_id", paymentDecryptResponse.OrderId);
+                spParams[1] = new SqlParameter("@tracking_id", paymentDecryptResponse.TrackingId);
+                spParams[2] = new SqlParameter("@bank_ref_no", paymentDecryptResponse.BankRefNo);
+                spParams[3] = new SqlParameter("@order_status", paymentDecryptResponse.OrderStatus);
+                spParams[4] = new SqlParameter("@failure_message", paymentDecryptResponse.FailureMessage);
+                spParams[5] = new SqlParameter("@payment_mode", paymentDecryptResponse.PaymentMode);
+                spParams[6] = new SqlParameter("@card_name", paymentDecryptResponse.CardName);
+                spParams[7] = new SqlParameter("@status_code", paymentDecryptResponse.StatusCode);
+                spParams[8] = new SqlParameter("@status_message", paymentDecryptResponse.StatusMessage);
+                spParams[9] = new SqlParameter("@currency", paymentDecryptResponse.Currency);
+                spParams[10] = new SqlParameter("@amount", paymentDecryptResponse.Amount);
+                spParams[11] = new SqlParameter("@billing_name", paymentDecryptResponse.BillingName);
+                spParams[12] = new SqlParameter("@billing_address", paymentDecryptResponse.BillingAddress);
+                spParams[13] = new SqlParameter("@billing_city", paymentDecryptResponse.BillingCity);
+                spParams[14] = new SqlParameter("@billing_state", paymentDecryptResponse.BillingState);
+                spParams[15] = new SqlParameter("@billing_zip", paymentDecryptResponse.BillingZip);
+                spParams[16] = new SqlParameter("@billing_country", paymentDecryptResponse.BillingCountry);
+                spParams[17] = new SqlParameter("@billing_tel", paymentDecryptResponse.BillingTel);
+                spParams[18] = new SqlParameter("@billing_email", paymentDecryptResponse.BillingEmail);
                 // Map other parameters similarly
-                new SqlParameter("@merchant_param1", paymentDecryptResponse.MerchantParam1),
-                new SqlParameter("@merchant_param2", paymentDecryptResponse.MerchantParam2),
-                new SqlParameter("@merchant_param3", paymentDecryptResponse.MerchantParam3),
-                new SqlParameter("@merchant_param4", paymentDecryptResponse.MerchantParam4),
-                new SqlParameter("@merchant_param5", paymentDecryptResponse.MerchantParam5),
-                new SqlParameter("@discount_value", paymentDecryptResponse.DiscountValue),
-                new SqlParameter("@mer_amount", paymentDecryptResponse.MerAmount),
-                new SqlParameter("@retry", paymentDecryptResponse.Retry),
-                new SqlParameter("@response_code", paymentDecryptResponse.ResponseCode),
-                new SqlParameter("@bin_country", paymentDecryptResponse.BinCountry),
-                new SqlParameter("@card_type", paymentDecryptResponse.CardType),
-                new SqlParameter("@saveCard", paymentDecryptResponse.SaveCard),
-            };
+                spParams[19] = new SqlParameter("@merchant_param1", paymentDecryptResponse.MerchantParam1);
+                spParams[20] = new SqlParameter("@merchant_param2", paymentDecryptResponse.MerchantParam2);
+                spParams[21] = new SqlParameter("@merchant_param3", paymentDecryptResponse.MerchantParam3);
+                spParams[22] = new SqlParameter("@merchant_param4", paymentDecryptResponse.MerchantParam4);
+                spParams[23] = new SqlParameter("@merchant_param5", paymentDecryptResponse.MerchantParam5);
+                spParams[24] = new SqlParameter("@discount_value", paymentDecryptResponse.DiscountValue);
+                spParams[25] = new SqlParameter("@mer_amount", paymentDecryptResponse.MerAmount);
+                spParams[26] = new SqlParameter("@retry", paymentDecryptResponse.Retry);
+                spParams[27] = new SqlParameter("@response_code", paymentDecryptResponse.ResponseCode);
+                spParams[28] = new SqlParameter("@bin_country", paymentDecryptResponse.BinCountry);
+                spParams[29] = new SqlParameter("@card_type", paymentDecryptResponse.CardType);
+                spParams[30] = new SqlParameter("@saveCard", paymentDecryptResponse.SaveCard);
+            
 
-                _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentResponse", spParams.ToArray());
+                _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentResponse", spParams);
 
                 return true;
             }
