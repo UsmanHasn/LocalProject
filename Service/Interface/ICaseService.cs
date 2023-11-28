@@ -95,5 +95,7 @@ namespace Service.Interface
         List<AvailableActionOnStatus> GetActionforAvailableStatus(int? statusId, long roleId);
         bool AddCaseEventDocuments(CaseDocumentModel caseDocumentModel, string userName,long actionId);
         bool UpateRequestEventLogView(long? caseId, long LogId, bool ShowToRequestor) ;
+
+        PaymentStatus GetPaymentStatus(string? orderId);
     }
 }

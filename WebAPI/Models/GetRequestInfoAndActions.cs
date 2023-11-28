@@ -6,5 +6,7 @@ namespace WebAPI.Models
     {
         public RequestModel Request { get; set; }
         public List<AvailableActionOnStatus> GetAvailableActionOnStatuses { get; set; }
+
+        public PaymentStatus? paymentStatus { get; set; }
     }
 }

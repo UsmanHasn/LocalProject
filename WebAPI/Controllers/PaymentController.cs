@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
                 payLoad.redirect_url = _configuration["Payment:redirect_url"];
                 payLoad.cancel_url = _configuration["Payment:cancel_url"];
 
-                string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
+                string ccaRequest = $"tid={payLoad.tid}&merchant_id={payLoad.merchant_id}&order_id={payLoad.order_id}&merchant_param1={payLoad.RequestId}&merchant_param2={payLoad.RequestNo}&amount={payLoad.amount}&currency={HttpUtility.UrlEncode(payLoad.currency)}&redirect_url={HttpUtility.UrlEncode(payLoad.redirect_url)}&cancel_url={HttpUtility.UrlEncode(payLoad.cancel_url)}&language={HttpUtility.UrlEncode(payLoad.language)}&";
 
                 _paymentService.InsertPaymentRequest(payLoad);
 
@@ -126,7 +126,7 @@ namespace WebAPI.Controllers
 
 
                     var getRequestDetail = _paymentService.GetPaymentRequestDetail(responseModel.OrderId);
-                    var url = $"{_configuration["Payment:AngularResponseUrl"]}{getRequestDetail.RequestUrl}";
+                    var url = $"{_configuration["Payment:AngularResponseUrl"]}{getRequestDetail.RequestUrl}&order_id={responseModel.OrderId}";
 
                     return RedirectPermanent(url);
                 }

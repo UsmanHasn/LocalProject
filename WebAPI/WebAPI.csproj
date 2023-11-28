@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="VebdorDll\MCPG.CCAV.Util.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MailKit" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
@@ -51,6 +47,9 @@
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\..\..\Document\ASP.Net_Kit_Version_3.5\ASP.Net_Kit_Version_3.5\CUSTOM_CHECKOUT_FORM_KIT\MCPG.ASP.net.ENC\bin\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="MCPG.ASP.net.ENC">
+      <HintPath>VebdorDll\MCPG.ASP.net.ENC.dll</HintPath>
     </Reference>
     <Reference Include="MCPG.CCAV.Util">
       <HintPath>..\..\..\Document\ASP.Net_Kit_Version_3.5\ASP.Net_Kit_Version_3.5\CUSTOM_CHECKOUT_FORM_KIT\MCPG.ASP.net.ENC\bin\MCPG.CCAV.Util.dll</HintPath>

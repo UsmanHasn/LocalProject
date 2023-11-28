@@ -1,23 +1,8 @@
 ﻿using Data.Interface;
 using Domain.Entities;
-using Domain.Entities.Lookups;
 using Microsoft.Data.SqlClient;
 using Service.Interface;
 using Service.Models;
-using Service.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using Org.BouncyCastle.Utilities;
-using System.Security.Cryptography;
-using MailKit.Search;
-using System.Drawing.Printing;
-using System.Reflection;
-using Microsoft.AspNetCore.Http;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Service.Concrete
 {
@@ -72,7 +57,7 @@ namespace Service.Concrete
             try
             {
                 SqlParameter[] spParams = new SqlParameter[31];
-                
+
                 spParams[0] = new SqlParameter("@order_id", paymentDecryptResponse.OrderId);
                 spParams[1] = new SqlParameter("@tracking_id", paymentDecryptResponse.TrackingId);
                 spParams[2] = new SqlParameter("@bank_ref_no", paymentDecryptResponse.BankRefNo);
@@ -105,7 +90,7 @@ namespace Service.Concrete
                 spParams[28] = new SqlParameter("@bin_country", paymentDecryptResponse.BinCountry);
                 spParams[29] = new SqlParameter("@card_type", paymentDecryptResponse.CardType);
                 spParams[30] = new SqlParameter("@saveCard", paymentDecryptResponse.SaveCard);
-            
+
 
                 _PaymentdecryptResponseRepository.ExecuteStoredProcedure("InsertPaymentResponse", spParams);
 
