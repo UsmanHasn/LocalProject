@@ -126,7 +126,7 @@ namespace WebAPI.Controllers
 
 
                     var getRequestDetail = _paymentService.GetPaymentRequestDetail(responseModel.OrderId);
-                    var url = $"{_configuration["Payment:AngularResponseUrl"]}{getRequestDetail.RequestUrl}?id=+{getRequestDetail.RequestId}";
+                    var url = $"{_configuration["Payment:AngularResponseUrl"]}{getRequestDetail.RequestUrl}";
 
                     return RedirectPermanent(url);
                 }
