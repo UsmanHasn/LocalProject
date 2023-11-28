@@ -1210,17 +1210,20 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("GetRequest_caseId")]
-        public IActionResult GetRequest_caseId(int? caseId,long roleId)
+        public IActionResult GetRequest_caseId(int? caseId,long roleId, string? orderId)
         {
             try
             {
                 var Datamodel = _caseService.sjc_GetRequest_caseId(caseId);
                 var ActionBasedOnStatus = _caseService.GetActionforAvailableStatus(Datamodel.CaseStatusId,  roleId);
+                PaymentStatus paymentStatus = _caseService.GetPaymentStatus(orderId);
                 GetRequestInfoAndActions Result = new GetRequestInfoAndActions()
                 {
                     Request = Datamodel,
                     GetAvailableActionOnStatuses = ActionBasedOnStatus,
+                    paymentStatus = paymentStatus
                 };
+
                 return new JsonResult(new { data = Result, status = HttpStatusCode.OK });
             }
             catch (Exception ex)

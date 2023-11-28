@@ -1035,5 +1035,19 @@ namespace Service.Concrete
             }
             return false;
         }
+
+        public PaymentStatus GetPaymentStatus(string? orderId)
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+
+                param[0] = new SqlParameter("@order_id", orderId);
+                return _systemSettingRepository.ExecuteStoredProcedure<PaymentStatus>("GetPaymentStatus", param).FirstOrDefault(); 
+
+            }
+            catch (Exception ex) { }
+            return null;
+        }
     }
 }
