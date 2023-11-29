@@ -52,6 +52,10 @@ namespace Service.Models
         public string? AdditionalSubjectIds { get; set; }
         public int? LinkSourceId { get; set; }
         public int? ExternalEntityId { get; set; }
+        public string? RequestByType { get; set; }
+        public int? UserId { get; set; }
+        public int? EntityId { get; set; }
+        public string? CrNo { get; set; }
 
     }
     public class CaseDocumentsModel
@@ -102,5 +106,21 @@ namespace Service.Models
     {
         public List<RequestModel> PaginatedData { get; set; }
         public int TotalCount { get; set; }
+    }
+    public class RequestorDetail
+    {
+        public string? FullName { get; set; }
+        public string? CivilNo { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? RoleType { get; set; }
+        public string? CompanyEntityName { get; set; }
+    }
+    public class RequestorDetailRequest
+    {
+        public string? RequestType { get; set; }
+        public string? RequestBy { get; set; }
+        public string? CRNo { get; set; }
+        public int? @EntityId { get; set; }
     }
 }

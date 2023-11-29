@@ -1339,6 +1339,22 @@ namespace WebAPI.Controllers
             }
 
         }
+        [HttpPost]
+        [Route("GetRequestorDetail")]
+        public IActionResult GetRequestorDetail(RequestorDetailRequest requestorDetailRequest)
+        {
+            try
+            {
+                var Datamodel = _caseService.GetRequestorDetail(requestorDetailRequest);
+                return new JsonResult(new { data = Datamodel, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
     }
 }
 

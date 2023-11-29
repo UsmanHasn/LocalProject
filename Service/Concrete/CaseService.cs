@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static Azure.Core.HttpHeader;
@@ -35,7 +36,7 @@ namespace Service.Concrete
         }
         public long AddCase(CaseModel caseModel, string userName)
         {
-            SqlParameter[] spParams = new SqlParameter[22];
+            SqlParameter[] spParams = new SqlParameter[25];
             spParams[0] = new SqlParameter("CaseId", caseModel.CaseId);
             spParams[1] = new SqlParameter("CaseNo", caseModel.CaseNo);
             spParams[2] = new SqlParameter("CaseGroupId", caseModel.CaseGroupId);
@@ -45,8 +46,8 @@ namespace Service.Concrete
             spParams[6] = new SqlParameter("CaseSubCategoryId", caseModel.CaseSubCategoryId);
             spParams[7] = new SqlParameter("FiledOn", caseModel.FiledOn);
             spParams[8] = new SqlParameter("Subject", caseModel.Subject);
-            spParams[9] = new SqlParameter("CreatedBy", userName);
-            spParams[10] = new SqlParameter("LastModifiedBy", userName);
+            spParams[9] = new SqlParameter("CreatedBy", caseModel.UserId);
+            spParams[10] = new SqlParameter("LastModifiedBy", caseModel.UserId);
             spParams[11] = new SqlParameter("Deleted", false);
             spParams[12] = new SqlParameter("DML", caseModel.CaseId > 0 ? "U" : "I");
             spParams[13] = new SqlParameter("CaseStatusId", caseModel.CaseStatusId);
@@ -58,6 +59,9 @@ namespace Service.Concrete
             spParams[19] = new SqlParameter("CourtBuildingId", caseModel.CourtBuildingId);
             spParams[20] = new SqlParameter("LinkSourceId", caseModel.LinkSourceId);
             spParams[21] = new SqlParameter("ExternalEntityId", caseModel.ExternalEntityId);
+            spParams[22] = new SqlParameter("RequestByType", caseModel.RequestByType);
+            spParams[23] = new SqlParameter("CrNo", caseModel.CrNo);
+            spParams[24] = new SqlParameter("EntityId", caseModel.EntityId);
             var data = _systemSettingRepository.ExecuteStoredProcedure<CaseModel>("Sp_dml_cases", spParams).FirstOrDefault();
             return data.CaseId;
         }
@@ -1047,6 +1051,23 @@ namespace Service.Concrete
 
             }
             catch (Exception ex) { }
+            return null;
+        }
+        public RequestorDetail GetRequestorDetail(RequestorDetailRequest requestorDetailRequest) 
+        {
+            try
+            {
+                SqlParameter[] spParams = new SqlParameter[4];
+                spParams[0] = new SqlParameter("@RequestByType", requestorDetailRequest.RequestType);
+                spParams[1] = new SqlParameter("@RequestBy", requestorDetailRequest.RequestBy);
+                spParams[2] = new SqlParameter("@CRNo", requestorDetailRequest.CRNo);
+                spParams[3] = new SqlParameter("@EntityId", requestorDetailRequest.EntityId);
+                var data = _systemSettingRepository.ExecuteStoredProcedure<RequestorDetail>("sp_GetRequestorDetail", spParams).FirstOrDefault();
+                return data;
+            }
+            catch (Exception ex)
+            {
+            }
             return null;
         }
     }
