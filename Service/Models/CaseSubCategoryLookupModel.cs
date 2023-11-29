@@ -9,7 +9,8 @@ namespace Service.Models
     public  class CaseSubCategoryLookupModel
     {
         public long CaseSubCategoryId { get; set; }
-      
+        
+        public long subjectId { get; set; }
         public string NameEn { get; set; }
         public string NameAr { get; set; }
         public long CaseCategoryId { get; set; }

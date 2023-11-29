@@ -62,6 +62,8 @@ namespace Service.Interface
         List<CaseCategoryLookupModel> GetcaseCategoryLookup();
         List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup();
         CaseSubCategoryLookupModel GetcaseSubCategoryLookupById(int caseSubCategoryId);
+
+        List<CaseSubCategoryLookupModel> GetcaseOnlySubCategoryLookup();
         List<CaseCategoryLookupModel> GetcaseCategoryLookup(int CaseTypeId);
         List<CaseSubCategoryLookupModel> GetcaseSubCategoryLookup(int CaseCategoryId);
 
@@ -91,6 +93,8 @@ namespace Service.Interface
 
         AccountDetail CheckAccountDetail(int UserId);
 
+       
+
 
 
         void InsUpdRequestLinkSource(RequestLinkSource requestLinkSource, string userName);
@@ -98,6 +102,22 @@ namespace Service.Interface
         List<RequestLinkSource> GetRequestLinkSourceList();
 
         void DeleteRequestLinkSource(RequestLinkSource requestLinkSource, string userName);
+
+        List<Lkt_RequestEvent> GetAllRequestEvents();
+
+        Lkt_RequestEvent GetRequestEventById(int Id);
+
+        void InsUpdLKT_RequestEvents(Lkt_RequestEvent RequestEvent, string userName);
+
+        void DeleteRequestEvent(Lkt_RequestEvent RequestEvent, string userName);
+
+        void  InsUpdRequestAction(RequestAction requestAction, string userName);
+
+        void DeleteRequestAction(RequestAction requestAction, string userName);
+
+        RequestAction GetRequestActionById(int Id);
+
+        List<RequestAction> GetAllRequestAction();
 
         List<LookupsModel> getExternalEntity();
     }

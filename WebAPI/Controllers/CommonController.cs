@@ -804,6 +804,24 @@ namespace WebAPI.Controllers
             
         }
 
+        [HttpGet]
+        [Route("GetcaseOnlySubCategoryLookup")]
+        public IActionResult GetcaseOnlySubCategoryLookup()
+        {
+            List<CaseSubCategoryLookupModel> model = new List<CaseSubCategoryLookupModel>();
+            try
+            {
+                model = _lookupService.GetcaseOnlySubCategoryLookup().ToList() ;
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
         [HttpPost]
         [Route("UpdateCaseTypeLookup")]
         public IActionResult UpdateCaseTypeLookup(CaseTypesLookupModel caseTypesLookupModel, long CaseTypeId)
@@ -1327,5 +1345,151 @@ namespace WebAPI.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("GetAllRequestEvents")]
+        public IActionResult GetAllRequestEvents()
+        {
+            List<Lkt_RequestEvent> model = new List<Lkt_RequestEvent>();
+            try
+            {
+                model = _lookupService.GetAllRequestEvents();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetRequestEventById")]
+        public IActionResult GetRequestEventById(int Id)
+        {
+            Lkt_RequestEvent RequestEvent = new Lkt_RequestEvent();
+            try
+            {
+                RequestEvent = _lookupService.GetRequestEventById(Id);
+                return new JsonResult(new { data = RequestEvent, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpPost]
+        [Route("InsUpdRequestEvents")]
+        public void InsUpdLKT_RequestEvents(Lkt_RequestEvent model, string userName)
+        {
+            try
+            {
+                _lookupService.InsUpdLKT_RequestEvents(model, userName);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+
+        }
+
+        [HttpPost]
+        [Route("DeleteRequestEvent")]
+        public void DeleteRequestEvent(Lkt_RequestEvent model, string userName)
+        {
+            try
+            {
+                _lookupService.DeleteRequestEvent(model, userName);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+
+        [HttpGet]
+        [Route("GetAllRequestAction")]
+        public IActionResult GetAllRequestAction()
+        {
+            List<RequestAction> model = new List<RequestAction>();
+            try
+            {
+                model = _lookupService.GetAllRequestAction();
+                return new JsonResult(new { data = model, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetRequestActionById")]
+        public IActionResult GetRequestActionById(int Id)
+        {
+            RequestAction requestAction = new RequestAction();
+            try
+            {
+                requestAction = _lookupService.GetRequestActionById(Id);
+                return new JsonResult(new { data = requestAction, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+        }
+
+        [HttpPost]
+        [Route("InsUpdRequestAction")]
+        public void InsUpdRequestAction(RequestAction model, string userName)
+        {
+            try
+            {
+                _lookupService.InsUpdRequestAction(model, userName);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+            }
+
+        }
+
+        [HttpPost]
+        [Route("DeleteRequestAction")]
+        public void DeleteRequestAction(RequestAction model, string userName) 
+        {
+
+            try
+            {
+                _lookupService.DeleteRequestAction(model, userName);
+                new JsonResult(new { data = true, status = HttpStatusCode.OK });
+            }
+            catch (Exception ex)
+            {
+                new JsonResult(new { data = ex, status = HttpStatusCode.InternalServerError });
+
+            }
+
+
+
+        }
+
+       
+
+       
     }
 }

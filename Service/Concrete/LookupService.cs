@@ -1,4 +1,5 @@
 ﻿using Data.Interface;
+using Data.Migrations;
 using Domain.Entities;
 using Domain.Entities.Lookups;
 using MailKit.Search;
@@ -533,9 +534,17 @@ namespace Service.Concrete
         {
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("CaseSubCategoryId", caseSubCategoryId);
-            var data = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseSubCategoryLookup", param).FirstOrDefault();
+            var data = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseNewSubCategorylookup", param).FirstOrDefault();
             return data;
         }
+
+        public List<CaseSubCategoryLookupModel> GetcaseOnlySubCategoryLookup()
+        {
+            SqlParameter[] Params = new SqlParameter[0];
+            var model = _languagesRepository.ExecuteStoredProcedure<CaseSubCategoryLookupModel>("sjc_Get_CaseOnlySubjectCategorylookup", Params).ToList();
+            return model;
+        }
+
 
         public bool AddLanguageLookup(LanguageLookupModel languageLookupModel, string userName)
         {
@@ -756,10 +765,135 @@ namespace Service.Concrete
             spParams[0] = new SqlParameter("@Id", requestLinkSource.Id);
             spParams[1] = new SqlParameter("@NameEn", requestLinkSource.NameEn);
             spParams[2] = new SqlParameter("@NameAr", requestLinkSource.NameAr);
-            spParams[3] = new SqlParameter("@Action",  "d");
+            spParams[3] = new SqlParameter("@Action", "d");
             _languagesRepository.ExecuteStoredProcedure("sjc_InsUpdRequestLinkSource", spParams);
-       
+
         }
+
+        List<Lkt_RequestEvent> ILookupService.GetAllRequestEvents()
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<Lkt_RequestEvent>("sjc_GetAllRequestEvents");
+            var model = dataMenu.Select(x => new Lkt_RequestEvent()
+            {
+                EventId = x.EventId,
+                NameEn = x.NameEn,
+                NameAr = x.NameAr,
+                IsActive = x.IsActive
+
+            }).ToList();
+            return model;
+        }
+
+        public Lkt_RequestEvent GetRequestEventById(int Id)
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<Lkt_RequestEvent>("sjc_GetRequestEventsById", new Microsoft.Data.SqlClient.SqlParameter("EventId", Id));
+            return dataMenu.FirstOrDefault();
+        }
+
+        public void InsUpdLKT_RequestEvents(Lkt_RequestEvent RequestEvent, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[5];
+            spParams[0] = new SqlParameter("@EventId", RequestEvent.EventId);
+            spParams[1] = new SqlParameter("@NameEn", RequestEvent.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", RequestEvent.NameAr);
+            spParams[4] = new SqlParameter("@IsActive", RequestEvent.IsActive);
+            spParams[3] = new SqlParameter("@Action", RequestEvent.EventId > 0 ? "u" : "i");
+
+            _languagesRepository.ExecuteStoredProcedure("sjc_InsUpdLKT_RequestEvents", spParams);
+        }
+
+        public void DeleteRequestEvent(Lkt_RequestEvent RequestEvent, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[5];
+            spParams[0] = new SqlParameter("@EventId", RequestEvent.EventId);
+            spParams[1] = new SqlParameter("@NameEn", RequestEvent.NameEn);
+            spParams[2] = new SqlParameter("@NameAr", RequestEvent.NameAr);
+            spParams[4] = new SqlParameter("@IsActive", RequestEvent.IsActive);
+            spParams[3] = new SqlParameter("@Action", "d");
+
+            _languagesRepository.ExecuteStoredProcedure("sjc_InsUpdLKT_RequestEvents", spParams);
+
+        }
+
+        public void InsUpdRequestAction(RequestAction requestAction, string userName)
+        {
+            SqlParameter[] spParams = new SqlParameter[19];
+            spParams[0] = new SqlParameter("ActionId", requestAction.ActionId);
+            spParams[1] = new SqlParameter("NameEn", requestAction.NameEn);
+            spParams[2] = new SqlParameter("NameAr", requestAction.NameAr);
+            spParams[3] = new SqlParameter("ReqDocIds", requestAction.ReqDocIds);
+            spParams[4] = new SqlParameter("OptionalDocIds", requestAction.OptionalDocIds);
+            spParams[5] = new SqlParameter("IsActive", requestAction.IsActive);
+            spParams[6] = new SqlParameter("CreatedBy", requestAction.CreatedBy);
+            spParams[7] = new SqlParameter("CreatedOn", requestAction.CreatedOn);
+            spParams[8] = new SqlParameter("LastModifiedBy", requestAction.LastModifiedBy);
+            spParams[9] = new SqlParameter("LastModifiedOn", requestAction.LastModifiedOn);
+            spParams[10] = new SqlParameter("DefaultTextEn", requestAction.DefaultTextEn);
+            spParams[11] = new SqlParameter("DefaultTextAr", requestAction.DefaultTextAr);
+            spParams[12] = new SqlParameter("AvailableStatusIds", requestAction.AvailableStatusIds);
+            spParams[13] = new SqlParameter("ActionFor", requestAction.ActionFor);
+            spParams[14] = new SqlParameter("DisplayOrder", requestAction.DisplayOrder);
+            spParams[15] = new SqlParameter("CheckRequired", requestAction.CheckRequired);
+            spParams[16] = new SqlParameter("CaseSubjectIds", requestAction.CaseSubjectIds);
+            spParams[17] = new SqlParameter("Deleted", requestAction.Deleted);
+            spParams[18] = new SqlParameter("Action", requestAction.ActionId > 0 ? "u" : "i");
+
+            _languagesRepository.ExecuteStoredProcedure("sjc_InsUpd_RequestAction", spParams);
+
+
+        }
+
+        public void DeleteRequestAction(RequestAction requestAction, string userName)
+        {
+
+            SqlParameter[] spParams = new SqlParameter[19];
+            spParams[0] = new SqlParameter("ActionId", requestAction.ActionId);
+            spParams[1] = new SqlParameter("NameEn", requestAction.NameEn);
+            spParams[2] = new SqlParameter("NameAr", requestAction.NameAr);
+            spParams[3] = new SqlParameter("ReqDocIds", requestAction.ReqDocIds);
+            spParams[4] = new SqlParameter("OptionalDocIds", requestAction.OptionalDocIds);
+            spParams[5] = new SqlParameter("IsActive", requestAction.IsActive);
+            spParams[6] = new SqlParameter("CreatedBy", requestAction.CreatedBy);
+            spParams[7] = new SqlParameter("CreatedOn", requestAction.CreatedOn);
+            spParams[8] = new SqlParameter("LastModifiedBy", requestAction.LastModifiedBy);
+            spParams[9] = new SqlParameter("LastModifiedOn", requestAction.LastModifiedOn);
+            spParams[10] = new SqlParameter("DefaultTextEn", requestAction.DefaultTextEn);
+            spParams[11] = new SqlParameter("DefaultTextAr", requestAction.DefaultTextAr);
+            spParams[12] = new SqlParameter("AvailableStatusIds", requestAction.AvailableStatusIds);
+            spParams[13] = new SqlParameter("ActionFor", requestAction.ActionFor);
+            spParams[14] = new SqlParameter("DisplayOrder", requestAction.DisplayOrder);
+            spParams[15] = new SqlParameter("CheckRequired", requestAction.CheckRequired);
+            spParams[16] = new SqlParameter("CaseSubjectIds", requestAction.CaseSubjectIds);
+            spParams[17] = new SqlParameter("Deleted", requestAction.Deleted);
+            spParams[18] = new SqlParameter("Action", "d");
+
+            _languagesRepository.ExecuteStoredProcedure("sjc_InsUpd_RequestAction", spParams);
+
+
+        }
+
+        public RequestAction GetRequestActionById(int Id)
+        {
+            var dataMenu = _languagesRepository.ExecuteStoredProcedure<RequestAction>("sjc_GetRequestActionById", new Microsoft.Data.SqlClient.SqlParameter("ActionId", Id));
+            return dataMenu.FirstOrDefault();
+        }
+
+        public List<RequestAction> GetAllRequestAction()
+        {
+            try
+            {
+                SqlParameter[] param = new SqlParameter[0];
+                var data = _languagesRepository.ExecuteStoredProcedure<RequestAction>("sjc_GetRequestActionList", param);
+                return data.ToList();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
+
+
         public List<LookupsModel> getExternalEntity()
         {
             SqlParameter[] spParams = new SqlParameter[0];
